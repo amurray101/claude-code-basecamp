@@ -1826,99 +1826,99 @@ const FEEDBACK_RESPONSE = [
     question: "What are the biggest problems in this feedback?",
     items: [
       {
-        problem: "We crammed too much into each day",
-        analysis: "31% said pacing was 'too fast.' On its own, maybe that's just the less technical folks struggling. But then you look at confidence scores — dead flat across all three days (4.29, 4.28, 4.28). People aren't getting more confident as the week goes on. They wrote things like 'too much content packed into the day' and 'less content at a more reasonable pace.' When confidence doesn't budge despite three days of training, people are drowning in new material before the last batch has sunk in. The 67% who said pacing was fine? They came in with stronger technical backgrounds. The 31% are the people we're losing.",
+        problem: "Too much content per day",
+        analysis: "31% said pacing was too fast. Confidence scores were flat across all three days (4.29, 4.28, 4.28) — people weren't getting more confident as the week went on. Multiple respondents said some version of 'too much content packed into the day.' Those data points together say the same thing: we were putting more into each session than people could absorb. The 67% who said pacing was fine had stronger technical backgrounds coming in. The 31% are the ones we need to design for.",
         implementation: {
-          label: "Spread it across 5 days, move lectures to pre-work",
-          detail: "We went from 3 days to 5. That's ~40% less content per day. All the conceptual stuff — what is Claude Code, how does the model work, what's MCP — moved to self-paced reading people do before showing up. Live time is now 100% hands-on.",
+          label: "Expanded from 3 days to 5, moved lectures to pre-work",
+          detail: "The program runs 5 days now instead of 3 — about 40% less content per day. Conceptual material moved to self-paced pre-work that people do before showing up. Live sessions are hands-on only.",
         },
       },
       {
-        problem: "Lecturing first, building second — backwards",
-        analysis: "The Evals session scored 3.9 — half a point below average — and got the sharpest feedback in the whole dataset: 'too much time on abstract component taxonomy without enough concrete examples.' Same person said 'the build-along afterward was far more effective.' The interactive HTML presentation got the opposite reaction — people loved it because they could touch the tool and build while learning. The pattern is clear: when we talk at people, engagement tanks. When they build, it clicks.",
+        problem: "Lectures before building doesn't work",
+        analysis: "The Evals session scored 3.9 engagement — half a point below average. The feedback was specific: 'too much time on abstract component taxonomy without enough concrete examples.' Same person said 'the build-along afterward was far more effective.' The interactive HTML presentation got the opposite reaction — people liked it because they were using the tool while learning. The pattern is consistent: sessions where people build score higher than sessions where people listen.",
         implementation: {
-          label: "Every session now starts with building, not talking",
-          detail: "We killed the Evals session. Every day opens with a client problem and hands-on work. Day 1: 'Meridian Health's team takes 2-3 days per endpoint — show them how to do it in minutes.' Day 3: 'Arcadia Financial needs compliance gates — build it.' Eval concepts now live in the Applied Research track where people build working harnesses instead of reading taxonomy charts.",
+          label: "Every session starts with building now",
+          detail: "The Evals session is gone. Every day opens with a client scenario and hands-on work. Day 1: 'Meridian Health takes 2-3 days per endpoint — show them how to do it in minutes.' Day 3: 'Arcadia Financial needs compliance gates — build it.' Eval concepts moved to the Applied Research track where people build working harnesses instead of reading taxonomy charts.",
         },
       },
       {
-        problem: "People aren't feeling growth, and the content isn't role-specific",
-        analysis: "Confidence flat. 'Apply independently' went up then back down (4.2, 4.5, 4.3). Day 3's 'realistic work simulation' score dropped to 3.9 — the most technical day felt the least connected to real work. People asked for 'more splits between SA, Engineer, Research' and 'guidance as to what is more relevant for each group.' When everyone sits through the same material regardless of their job, some of it just doesn't land.",
+        problem: "No sense of progress, no role differentiation",
+        analysis: "Confidence flat. 'Apply independently' went up then back down (4.2, 4.5, 4.3) — it should just go up. Day 3 'realistic work simulation' dropped to 3.9 from 4.3-4.4 on Days 1-2, meaning the most technical day felt the least connected to actual work. People asked for 'more splits between SA, Engineer, Research' and 'guidance as to what is more relevant for each group.' A single curriculum for all roles means some content doesn't map to some people's jobs.",
         implementation: {
           label: "Four role tracks with different outcomes per module",
-          detail: "PE Pre-Sales, PE Post-Sales, SA, Applied Research — four tracks. Each module shows you a different outcome based on your role. A PE sees 'Demo the install to a prospect.' An SA sees 'Explain the value prop to a technical audience.' Day 4 splits into dedicated role breakouts. Skill badges give people a visible sense of progress.",
+          detail: "PE Pre-Sales, PE Post-Sales, Solutions Architect, Applied Research. Each module shows a role-specific outcome — a PE sees 'Demo the install to a prospect,' an SA sees 'Explain the value prop to a technical audience.' Day 4 splits into role-specific breakouts. Skill badges give people a way to see their progress.",
         },
       },
       {
-        problem: "Install issues ate into Day 1",
-        analysis: "Several people spent live session time fighting with their setup — npm issues, proxy problems, wrong versions. Every minute on that is a minute not spent on the actual training. Fixable.",
+        problem: "Install issues during live sessions",
+        analysis: "Several people spent Day 1 lab time fighting their setup — npm, proxy, version issues. Time spent on that is time not spent on the training.",
         implementation: {
-          label: "Install happens before Day 1 now",
-          detail: "Participants install the CLI, set up their IDE, and clone the repo as pre-work. Facilitator checklists have backup plans for proxy issues, PATH problems, and WSL quirks. Goal: zero install debugging during live time.",
+          label: "Install happens as pre-work now",
+          detail: "CLI install, IDE setup, and repo clone all happen before Day 1. Facilitator checklists include fallback plans for proxy, PATH, and WSL issues. Goal is zero install debugging during live time.",
         },
       },
     ],
-    signalVsNoise: "Strong signal: pacing/overload (31% + qualitative + flat confidence), Evals bombing (3.9 + specific feedback), role differentiation gap (people asked for it), setup friction (specific, fixable). Weaker signal: Day 3 realism dip (3.9, one day), async preference (one person, but a real gap worth watching). The async request is legit but isn't a systemic problem when 67% said pacing was fine. Worth a light accommodation, not a redesign.",
+    signalVsNoise: "Strong signal: pacing/overload (31% plus qualitative plus flat confidence), Evals session (3.9 plus specific feedback), role differentiation (people asked for it), setup friction (specific and fixable). Weaker signal: Day 3 realism dip (3.9, one day), async preference (one person — real gap but not systemic given 67% said pacing was fine). Worth a light-touch fix, not a redesign.",
   },
   {
     id: "changes",
     number: "02",
-    question: "What would you change for the next cohort?",
+    question: "What specific changes would you make for the next cohort?",
     items: [
       {
-        problem: "Sessions run wall-to-wall with no gaps",
-        analysis: "Day 1 goes 0-5, 5-15, 15-30, 30-40, 40-45 — no room to breathe. Put a 15-minute open block after the midpoint. Questions, troubleshooting, ad-hoc demos — whatever the room needs. Not a break. A 45-minute session becomes 60 with no new content added. Call them 'consolidation blocks' in the facilitator guide so nobody fills them with more slides.",
+        problem: "No gaps between segments",
+        analysis: "Day 1 runs 0-5, 5-15, 15-30, 30-40, 40-45 — back to back. Add a 15-minute open block after the midpoint for questions, troubleshooting, ad-hoc demos. Not a break — an unstructured block. A 45-minute session becomes 60 with no new content added. Label these 'consolidation blocks' in the facilitator guide so instructors don't fill them.",
         implementation: {
-          label: "Facilitator guides flag timing and pacing risks",
-          detail: "Every segment is timed to the minute with pacing notes. Named consolidation blocks aren't in the guide yet — that's the next iteration. Adding 15 minutes of open space after the midpoint is straightforward.",
+          label: "Facilitator guides include timing and pacing notes per segment",
+          detail: "Every segment is timed with pacing risks flagged. Named consolidation blocks aren't in the guide yet — that's the next step.",
         },
       },
       {
-        problem: "No way to verify setup before Day 1",
-        analysis: "Everyone should pass a checklist before showing up: CLI installs, VS Code extension works, repo clones, one Claude Code command runs. If something fails, there's a 30-minute troubleshooting session the night before. Don't let Day 1 become an install debugging workshop.",
+        problem: "No setup verification before Day 1",
+        analysis: "Every participant should pass a checklist before Day 1: CLI installed, VS Code extension working, sample repo cloned, one Claude Code command runs. Failures go to a 30-minute troubleshooting session the night before.",
         implementation: {
-          label: "Pre-work steps are in place; a hard gate is next",
-          detail: "Module 1 walks through install, verify, IDE setup, and repo clone as pre-work. Facilitator checklists cover proxy and VPN fallbacks. An automated script that blocks attendance until setup passes would close the last gap.",
+          label: "Pre-work steps exist — an automated gate is next",
+          detail: "Module 1 walks through install, verify, IDE setup, and repo clone as pre-work. Facilitator checklists cover proxy/VPN fallbacks. An automated verification script would make this a hard gate.",
         },
       },
       {
-        problem: "One deck for everything",
-        analysis: "The best-rated element was 'the HTML presentation with live examples.' Right now one deck covers all sessions. Each day should have its own interactive deck — embedded examples people can run, 'try it' pauses, animated diagrams.",
+        problem: "One slide deck for all sessions",
+        analysis: "The most praised element was the interactive HTML presentation. Each day should have its own deck with embedded examples people can run, pause points, and animated visuals.",
         implementation: {
-          label: "We built a Basecamp deck; per-day decks are next",
-          detail: "There's a 44-slide deck covering all 5 days with speaker notes on every slide. The shared design system makes it easy to spin up per-day decks. Days 4-5 don't use slides (role-play and capstone).",
+          label: "Basecamp deck built — per-day decks are next",
+          detail: "There's a 44-slide deck covering all 5 days with speaker notes on every slide. The shared design system makes it straightforward to build per-day decks. Days 4-5 don't use slides by design.",
         },
       },
       {
-        problem: "Day 3 ends with talking instead of building",
-        analysis: "Day 3 had the lowest 'realistic work simulation' score (3.9). The last 10 minutes are an architecture discussion. Replace it: 'Arcadia's compliance team just added a rule — no API calls without an audit trail. Extend your hooks.' Keep people building right through the end when energy is lowest.",
+        problem: "Day 3 ends with a discussion instead of building",
+        analysis: "Day 3 scored lowest on 'realistic work simulation' (3.9). The last 10 minutes are an architecture discussion. Replace it with a build challenge: 'Arcadia's compliance team added a new requirement — no API calls without an audit trail. Extend your hooks.'",
         implementation: {
-          label: "Day 3 is now the heaviest lab day, framed around a real client",
-          detail: "45 min live + 75 min lab — the longest hands-on block. Framed around Arcadia Financial, a fintech with 60 engineers and hard compliance requirements.",
+          label: "Day 3 is now the heaviest lab day, framed around a client",
+          detail: "45 min live + 75 min lab. Framed around Arcadia Financial — a fintech with 60 engineers and compliance requirements.",
         },
       },
       {
-        problem: "No way to measure confidence growth within a day",
-        analysis: "Two-minute check at the start: 'Rate your confidence on today's skill, 1-5.' Same check at the end. Show the delta. Cross-day averages hide within-day growth.",
+        problem: "No within-day confidence measurement",
+        analysis: "Quick check at the start of each day: 'Rate your confidence on today's skill, 1-5.' Repeat at end. Show the delta.",
         implementation: {
-          label: "Checkpoints and badges show qualitative growth",
-          detail: "Reflection checkpoints and skill badges track progress. Adding a 1-5 rating at each checkpoint would give us the numbers.",
+          label: "Checkpoints and badges show progress — numeric ratings are next",
+          detail: "Reflection checkpoints and skill badges track growth. Adding a 1-5 scale at each checkpoint would give us the trajectory data.",
         },
       },
       {
-        problem: "Days 1-3 don't feel relevant to every role",
-        analysis: "Drop in role-specific moments at transitions: 'Pre-Sales — notice how you'd walk a prospect through this. SA — think about how this scales to 200 developers.' The content for this exists in the per-module competencies. The fix is making it a live habit for the facilitator.",
+        problem: "Days 1-3 don't feel role-specific",
+        analysis: "Add role callouts at transitions: 'Pre-Sales — notice how you'd walk a prospect through this. SA — think about how this scales to 200 developers.' The content exists in the per-module competencies. The change is making it part of live facilitation.",
         implementation: {
-          label: "Role competencies exist in the app; live callouts are next",
-          detail: "Each module already has four different outcome statements by role. The app shows a personalized 'Your outcome' block. Turning these into facilitator talking points during live sessions is the remaining step.",
+          label: "Role competencies are in the app — live callouts are next",
+          detail: "Each module has four different outcome statements by role. The app shows a personalized 'Your outcome' block. Turning these into facilitator talking points is the remaining step.",
         },
       },
       {
-        problem: "No option for people who learn better solo",
-        analysis: "One person asked for an async track. Don't build a whole parallel program for that — but do two things: record every session (available within 2 hours) and offer a 30-minute daily drop-in for people who want to work through it on their own.",
+        problem: "No option for solo learners",
+        analysis: "One person asked for an async track. Don't build a parallel program for that, but do two things: record every session (available within 2 hours) and offer a 30-minute daily drop-in for people who want to work through it independently.",
         implementation: {
           label: "Pre-work and Claude Chat cover part of this",
-          detail: "30-45 min of self-paced pre-work per module. A Simplify toggle for different reading speeds. Claude Chat as always-on office hours. Recordings and structured drop-ins would finish the job.",
+          detail: "30-45 min of self-paced pre-work per module. Simplify toggle for different reading speeds. Claude Chat as on-demand help. Recordings and structured drop-ins would complete it.",
         },
       },
     ],
@@ -1930,31 +1930,31 @@ const FEEDBACK_RESPONSE = [
     items: [
       {
         problem: "Pacing — get 'Too fast' under 15% (was 31%)",
-        analysis: "Ask the pacing question every day, not once at the end. 'Just right' should hit 75%+ on each day. If Day 3 still runs hot, stretch the buffer blocks on that day.",
+        analysis: "Ask the pacing question per day, not once at the end. 'Just right' should be above 75% each day. If Day 3 still runs high, extend the buffer blocks.",
         implementation: {
-          label: "5-day format cuts daily density by ~40%",
-          detail: "3 days became 5. Lectures moved to pre-work. Facilitator guides flag pacing risks segment by segment.",
+          label: "5-day format reduces daily density by ~40%",
+          detail: "3 days became 5. Lectures moved to pre-work. Facilitator guides flag pacing risks per segment.",
         },
       },
       {
         problem: "Confidence — should climb at least +0.5 over the week",
-        analysis: "4.29, 4.28, 4.28 — that flat line was the loudest signal in the data. Measure it daily, same 1-5 scale. Day 1 should be the low point, each day higher. If it plateaus after Day 3, the customer scenario and capstone days aren't building enough real confidence.",
+        analysis: "4.29, 4.28, 4.28 — flat. Measure daily on the same 1-5 scale. Day 1 should be lowest, each day higher. If it plateaus after Day 3, the later days need to build more real confidence.",
         implementation: {
           label: "Checkpoints and badges track growth",
-          detail: "Reflection checkpoints and earnable badges show progress. A before/after confidence rating at each checkpoint would give us the slope.",
+          detail: "Reflection checkpoints and skill badges show progress. Before/after confidence ratings at each checkpoint would give us the slope.",
         },
       },
       {
-        problem: "Engagement — no session below 4.2 (Evals hit 3.9)",
-        analysis: "3.9 was a clear miss. With build-first design across every session, nothing should drop that low. Measure per session, not per day. Anything under 4.0 gets the same treatment: cut the abstract framing, start with building.",
+        problem: "Engagement — no session below 4.2 (Evals was 3.9)",
+        analysis: "3.9 was a clear miss. With build-first design across every session, nothing should score that low. Measure per session. Anything under 4.0 gets the same fix: cut abstract framing, start with building.",
         implementation: {
-          label: "No lecture-first sessions left in the program",
-          detail: "Every session opens with a client problem and hands-on work. Interactive presentations replace slide decks.",
+          label: "No lecture-first sessions remain",
+          detail: "Every session opens with a client problem and hands-on work. Interactive presentations replace passive slides.",
         },
       },
       {
         problem: "'Apply independently' — should end at 4.5+ (was 4.3)",
-        analysis: "It went 4.2, 4.5, 4.3 — up then down. Over five days it should keep climbing. The Day 5 capstone is the real test: blind brief, no help, build and present. If that score is below 4.3, the middle days need to let go of the scaffolding sooner.",
+        analysis: "Went 4.2, 4.5, 4.3 — up then down. Over five days it should keep climbing. Day 5 capstone is the real test: blind brief, no help, build and present. If that score is below 4.3, the middle days need to let go of the scaffolding sooner.",
         implementation: {
           label: "Day 5 capstone tests real independence",
           detail: "Blind customer brief, time limit, peer scoring. If someone can go from a cold brief to a working demo under pressure, they're ready.",
@@ -1962,33 +1962,32 @@ const FEEDBACK_RESPONSE = [
       },
       {
         problem: "NPS — target 50+ (was 35)",
-        analysis: "35 with 18% detractors means some people were unhappy. Target: 50+ with detractors under 10% and promoters over 60%. Under 45 means the core problems aren't fixed. Over 55 means we nailed it.",
+        analysis: "35 with 18% detractors means real dissatisfaction. Target: 50+ with detractors under 10%, promoters over 60%. Under 45 means the core problems aren't fixed.",
         implementation: {
-          label: "NPS tells us if everything else worked",
-          detail: "It's the final scorecard. Fix the structural issues, NPS follows.",
+          label: "NPS is the overall scorecard",
+          detail: "Fix the structural issues, NPS follows.",
         },
       },
       {
         problem: "Setup — zero live minutes on install problems",
-        analysis: "Two things to track: how many people need install help during the live session (target: zero) and what percentage completed the pre-work checkpoint (target: 100%). If someone shows up without a working setup, the checkpoint process broke.",
+        analysis: "Track two things: how many people need install help during live time (target: zero) and pre-work checkpoint completion (target: 100%). If someone shows up without a working setup, the checkpoint process didn't work.",
         implementation: {
           label: "Install is pre-work now",
-          detail: "CLI, IDE, and repo clone all happen before Day 1. Facilitator checklists cover the common failure modes.",
+          detail: "CLI, IDE, and repo clone happen before Day 1. Facilitator checklists cover common failure modes.",
         },
       },
       {
         problem: "Role relevance — new metric, target 4.3+",
-        analysis: "Add a daily question: 'Today's content was relevant to my role' (1-5). Cut by role. If SAs score lower than PEs on Days 1-3, those days need more SA-flavored moments.",
+        analysis: "New daily question: 'Today's content was relevant to my role' (1-5). Segment by role — if SAs score lower than PEs on Days 1-3, those days need more SA-relevant moments.",
         implementation: {
           label: "Four role paths with per-module outcomes",
           detail: "Each module shows role-specific outcomes. The survey question tells us whether people feel it.",
         },
       },
     ],
-    summary: "Cohort 2 works if everyone shows up Day 1 with a working install, grows more confident each day, never sits through a session below 4.2, feels the content is relevant to their job (4.3+), and walks out Day 5 telling a colleague to sign up (NPS 50+).",
+    summary: "Cohort 2 works if everyone arrives Day 1 with a working install, grows more confident each day, never sits through a session below 4.2, rates the content as relevant to their role (4.3+), and walks out Day 5 ready to recommend it to a colleague (NPS 50+).",
   },
 ]
-
 // ─── CURRICULUM PLAN CONTENT (Part 1 Questions) ───
 function CurriculumPlanContent() {
   const sectionStyle = { marginBottom: 56 };
