@@ -1936,9 +1936,18 @@ function CurriculumPlanContent() {
           <h2 style={h1Style}>Curriculum Arc</h2>
         </div>
         <div style={accentLine(C.orange)} />
-        <p style={pStyle}>Basecamp is a five-day, progressive curriculum where each day builds on the one before it. The program follows a deliberate arc: from individual tool proficiency (Days 1–3) to customer-facing skills (Day 4) to integrated performance under pressure (Day 5). Every session produces a concrete artifact the learner uses in the field.</p>
+        <p style={pStyle}>Basecamp is structured in three phases: a common skills foundation, five days of progressive hands-on modules, and role-specific specialization. Before anyone touches Claude Code, every participant goes through the same foundational onboarding — ensuring a shared baseline of company context, product knowledge, and technical understanding regardless of role or background.</p>
 
-        <h3 style={h2Style}>Sequence and Progression</h3>
+        <h3 style={h2Style}>Phase 1: Common Skills Foundation (Self-Paced Pre-Work)</h3>
+        <p style={pStyle}>Before the live sessions begin, all participants complete a self-paced foundation covering seven sections (~20 minutes total). This shared baseline ensures everyone arrives on Day 1 with the same context:</p>
+        <p style={bulletStyle}><span style={dot}>•</span> <strong>Anthropic's mission and values:</strong> Who we are, why the company was founded, what it means to be a Public Benefit Corporation, and the working principles that shape how we build and sell. This matters because every customer conversation reflects our values — trainees need to internalize the "safety as science" ethos, not just know the product features.</p>
+        <p style={bulletStyle}><span style={dot}>•</span> <strong>The full Anthropic product suite:</strong> Claude.ai, Cowork, Claude Code, and the API — how each surface works, who it serves, and when to recommend one over another. Trainees learn the complete platform so they can position Claude Code within the broader ecosystem rather than pitching it in isolation.</p>
+        <p style={bulletStyle}><span style={dot}>•</span> <strong>Claude Code deep-dive:</strong> The agentic loop (read → plan → act → verify), the interaction model, how it differs from autocomplete tools, context window mechanics, and the model family (Opus, Sonnet, Haiku). This is where trainees build the mental model they'll use for every demo and customer conversation.</p>
+        <p style={bulletStyle}><span style={dot}>•</span> <strong>Configuration, security, and enterprise deployment:</strong> CLAUDE.md, hooks, permissions, the defense-in-depth security model, managed settings, cloud deployment options (Bedrock, Vertex, Foundry), and cost/ROI math. These are the topics that come up in every enterprise sales conversation.</p>
+        <p style={pStyle}>The foundation also includes a "Simplify" toggle on every page — plain-language alternatives for participants who are newer to technical concepts. After completing foundations, each participant selects one of four role-specific paths (PE Pre-Sales, PE Post-Sales, Solutions Architect, Applied Research), which shapes how every subsequent module frames its competency outcomes.</p>
+
+        <h3 style={h2Style}>Phase 2: Progressive Hands-On Modules (Days 1–5)</h3>
+        <p style={pStyle}>With the shared foundation in place, the five-day curriculum builds progressively from individual tool proficiency (Days 1–3) to customer-facing skills (Day 4) to integrated performance under pressure (Day 5). Every session produces a concrete artifact the learner uses in the field.</p>
         <div style={{ borderRadius: 10, overflow: "hidden", border: `1px solid ${C.lightGray}`, margin: "16px 0 24px" }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
@@ -1962,8 +1971,9 @@ function CurriculumPlanContent() {
           </table>
         </div>
 
-        <h3 style={h2Style}>How Each Session Builds on the Last</h3>
-        <p style={pStyle}>The curriculum uses a scaffolded dependency chain. Each day's skills are prerequisites for the next:</p>
+        <h3 style={h2Style}>How Each Phase Builds on the Last</h3>
+        <p style={pStyle}>The curriculum uses a scaffolded dependency chain. The common foundation feeds into the daily modules, and each day's skills are prerequisites for the next:</p>
+        <p style={bulletStyle}><span style={dot}>•</span> <strong>Foundations → Day 1:</strong> Understanding the product suite and agentic loop from pre-work means Day 1 can go straight to building — no time spent on "what is Claude Code" lectures.</p>
         <p style={bulletStyle}><span style={dot}>•</span> <strong>Day 1 → Day 2:</strong> You must have Claude Code installed and understand the agentic loop before you can learn to steer it with CLAUDE.md and prompt patterns.</p>
         <p style={bulletStyle}><span style={dot}>•</span> <strong>Day 2 → Day 3:</strong> CLAUDE.md conventions and prompt craft are prerequisites for hooks (which enforce conventions) and MCP (which extends Claude's capabilities). Without Day 2's mental model, hooks and MCP are just configuration files.</p>
         <p style={bulletStyle}><span style={dot}>•</span> <strong>Day 3 → Day 4:</strong> Technical depth in the product (Days 1–3) gives you the credibility to handle security objections, architecture questions, and competitive positioning. You can't answer a CISO's questions about sandboxing if you've never configured a hook.</p>
@@ -1983,10 +1993,13 @@ function CurriculumPlanContent() {
           <h2 style={h1Style}>Audience Differentiation</h2>
         </div>
         <div style={accentLine(C.blue)} />
-        <p style={pStyle}>Basecamp serves four roles with significantly different customer touchpoints, technical depths, and success metrics. The curriculum handles this through a shared-foundation / role-specific-breakout model.</p>
+        <p style={pStyle}>Basecamp serves four roles with significantly different customer touchpoints, technical depths, and success metrics. The curriculum handles this through a three-layer model: common foundation → shared technical sessions → role-specific breakouts.</p>
 
-        <h3 style={h2Style}>Shared Sessions (Days 1–3)</h3>
-        <p style={pStyle}>Days 1–3 are shared across all roles. Every participant builds the same technical foundation on Claude Code — install, CLAUDE.md, prompt craft, hooks, MCP, and composed workflows.</p>
+        <h3 style={h2Style}>Common Foundation (Pre-Work)</h3>
+        <p style={pStyle}>All participants start with the same self-paced foundation covering Anthropic's mission and values, the full product suite, and a deep-dive on Claude Code's architecture and capabilities. This shared baseline means every role — regardless of technical depth — arrives on Day 1 understanding the company, the product ecosystem, and how Claude Code fits within it. After completing foundations, each participant selects their role-specific path, which shapes how every subsequent module frames its outcomes.</p>
+
+        <h3 style={h2Style}>Shared Technical Sessions (Days 1–3)</h3>
+        <p style={pStyle}>Days 1–3 are shared across all roles. Every participant builds the same hands-on technical foundation on Claude Code — install, CLAUDE.md, prompt craft, hooks, MCP, and composed workflows. The role-specific competency descriptions (see below) ensure each learner engages with the same material through their own professional lens.</p>
 
         <h3 style={h2Style}>Role-Specific Differentiation</h3>
         <p style={pStyle}>Differentiation happens in three ways:</p>
