@@ -8,33 +8,9 @@ const C = {
   text: "#141413", muted: "#6a685e", faint: "#b0aea5",
 };
 
-// ─── ENV ───
-function getApiKey() {
-  return import.meta.env.VITE_ANTHROPIC_API_KEY || (typeof localStorage !== "undefined" && localStorage.getItem("basecamp-api-key")) || "";
-}
-function setApiKey(key) {
-  try { localStorage.setItem("basecamp-api-key", key); } catch {}
-}
-
-// ─── API KEY ENTRY COMPONENT ───
-function ApiKeyEntry({ onKeySet }) {
-  const [key, setKey] = useState("");
-  return (
-    <div style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 8 }}>
-      <input
-        type="password"
-        value={key}
-        onChange={e => setKey(e.target.value)}
-        onKeyDown={e => { if (e.key === "Enter" && key.trim()) { setApiKey(key.trim()); onKeySet(); } }}
-        placeholder="sk-ant-..."
-        style={{ flex: 1, fontFamily: "var(--mono)", fontSize: 11, padding: "7px 12px", border: "1px solid #e8e6dc", borderRadius: 6, background: "#faf9f5", color: "#141413", outline: "none" }}
-      />
-      <button
-        onClick={() => { if (key.trim()) { setApiKey(key.trim()); onKeySet(); } }}
-        style={{ fontFamily: "var(--sans)", fontSize: 11, color: "#d97757", background: "transparent", border: "1px solid #d9775730", borderRadius: 6, padding: "7px 14px", cursor: "pointer" }}
-      >Connect</button>
-    </div>
-  );
+// ─── HELPERS ───
+function openInClaude(prompt) {
+  window.open(`https://claude.ai/new?q=${encodeURIComponent(prompt)}`, "_blank", "noopener,noreferrer");
 }
 
 // ─── PERSISTENT PROGRESS (localStorage) ───
@@ -67,115 +43,6 @@ function saveProgress(data) {
   try {
     localStorage.setItem("basecamp-progress", JSON.stringify(data));
   } catch {}
-}
-
-// ─── CLAUDE CHAT COMPONENT ───
-function ClaudeChat({ prompt, onClose }) {
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const bottomRef = useRef(null);
-
-  const scrollToBottom = useCallback(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, []);
-
-  useEffect(() => { scrollToBottom(); }, [messages, scrollToBottom]);
-
-  const callClaude = useCallback(async (msgs) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-api-key": getApiKey(),
-          "anthropic-version": "2023-06-01",
-          "anthropic-dangerous-direct-browser-access": "true",
-        },
-        body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          system: "You are a senior Anthropic colleague helping a new GTM team member during Claude Code Basecamp onboarding. Be warm, direct, and Socratic. Push them to think about how Claude Code applies to their specific role. Keep responses concise — 2-3 paragraphs max. Ask follow-up questions.",
-          messages: msgs,
-        }),
-      });
-      const data = await response.json();
-      const text = data.content?.filter(b => b.type === "text").map(b => b.text).join("\n") || "I wasn't able to respond — try again.";
-      return text;
-    } catch (err) {
-      setError("Couldn't reach Claude. Check your connection and try again.");
-      return null;
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    const init = async () => {
-      const userMsg = { role: "user", content: prompt };
-      setMessages([userMsg]);
-      const reply = await callClaude([userMsg]);
-      if (reply) setMessages(prev => [...prev, { role: "assistant", content: reply }]);
-    };
-    init();
-  }, [prompt, callClaude]);
-
-  const sendMessage = async () => {
-    if (!input.trim() || loading) return;
-    const userMsg = { role: "user", content: input.trim() };
-    const newMsgs = [...messages, userMsg];
-    setMessages(newMsgs);
-    setInput("");
-    const reply = await callClaude(newMsgs);
-    if (reply) setMessages(prev => [...prev, { role: "assistant", content: reply }]);
-  };
-
-  return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", flexDirection: "column", background: "rgba(20,20,19,0.5)", backdropFilter: "blur(4px)" }} onClick={onClose}>
-      <div style={{ flex: 1, maxWidth: 640, width: "100%", margin: "0 auto", display: "flex", flexDirection: "column" }} onClick={e => e.stopPropagation()}>
-        <div style={{ flex: 1 }} />
-        <div style={{ background: C.bg, borderRadius: "16px 16px 0 0", border: `1px solid ${C.lightGray}`, borderBottom: "none", maxHeight: "75vh", display: "flex", flexDirection: "column", boxShadow: "0 -8px 32px rgba(0,0,0,0.08)" }}>
-          <div style={{ padding: "16px 20px", borderBottom: `1px solid ${C.lightGray}`, display: "flex", justifyContent: "space-between", alignItems: "center", flexShrink: 0 }}>
-            <div>
-              <div style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 500, color: C.dark }}>Thinking with Claude</div>
-              <div style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.faint, marginTop: 2 }}>Your Basecamp colleague</div>
-            </div>
-            <button onClick={onClose} style={{ background: "none", border: "none", fontSize: 20, color: C.faint, cursor: "pointer", padding: "4px 8px" }}>×</button>
-          </div>
-          <div style={{ flex: 1, overflow: "auto", padding: "16px 20px" }}>
-            {messages.map((m, i) => (
-              <div key={i} style={{ marginBottom: 16 }}>
-                <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 1.5, color: m.role === "user" ? C.orange : C.blue, textTransform: "uppercase", marginBottom: 6 }}>
-                  {m.role === "user" ? "You" : "Claude"}
-                </div>
-                <div style={{ fontFamily: "var(--sans)", fontSize: 14, lineHeight: 1.7, color: C.muted, whiteSpace: "pre-wrap" }}>{m.content}</div>
-              </div>
-            ))}
-            {loading && (
-              <div style={{ fontFamily: "var(--mono)", fontSize: 11, color: C.faint, opacity: 0.7 }}>
-                Claude is thinking<span style={{ animation: "pulse 1.5s infinite" }}>...</span>
-              </div>
-            )}
-            {error && <div style={{ fontFamily: "var(--sans)", fontSize: 13, color: "#a32d2d", marginTop: 8 }}>{error}</div>}
-            <div ref={bottomRef} />
-          </div>
-          <div style={{ padding: "12px 20px 16px", borderTop: `1px solid ${C.lightGray}`, display: "flex", gap: 10, flexShrink: 0 }}>
-            <input
-              value={input}
-              onChange={e => setInput(e.target.value)}
-              onKeyDown={e => e.key === "Enter" && sendMessage()}
-              placeholder="Continue the conversation..."
-              style={{ flex: 1, fontFamily: "var(--sans)", fontSize: 14, padding: "10px 14px", border: `1px solid ${C.lightGray}`, borderRadius: 8, background: C.bg, color: C.dark, outline: "none" }}
-            />
-            <button onClick={sendMessage} disabled={loading || !input.trim()} style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 500, color: C.bg, background: loading ? C.faint : C.orange, border: "none", borderRadius: 8, padding: "10px 18px", cursor: loading ? "wait" : "pointer", transition: "background 0.2s" }}>Send</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 }
 
 // ─── TERMINAL BLOCK COMPONENT ───
@@ -652,7 +519,7 @@ const FOUNDATIONS = [
         "- Never commit .env files",
       ]},
       { type: "text", value: "CLAUDE.md files are hierarchical. A root CLAUDE.md sets project-wide rules, while CLAUDE.md files in subdirectories can add or override rules for specific packages. In a monorepo, the frontend team's CLAUDE.md might specify React patterns, while the backend team's specifies API conventions — all inheriting from a shared root.", simple: "You can layer CLAUDE.md files. A top-level one sets rules for the whole project, and additional CLAUDE.md files in subfolders can add or change rules for specific parts. In a large project with multiple teams (a \"monorepo\"), the frontend team can have their own rules while the backend team has different ones, and both inherit the shared basics from the top-level file." },
-      { type: "placeholder", title: "Advanced CLAUDE.md patterns for enterprise teams", why: "The basics of CLAUDE.md are covered, but enterprise deployments need more: the .claude/rules/ directory for modular, file-per-topic rules with path-specific YAML frontmatter; the @import syntax for pulling in shared instructions across repos; claudeMdExcludes for monorepos where some packages should be ignored; and patterns for keeping CLAUDE.md under 200 lines as it grows. These are the patterns SAs and PEs will need when a 50-person team asks 'how do we scale this across 20 repos?' We'll go into this in more detail in the role-specific tracks coming up.", topics: [".claude/rules/", "@import syntax", "Path-specific rules", "claudeMdExcludes", "Monorepo strategies", "Size management"] },
+      { type: "placeholder", title: "Advanced CLAUDE.md patterns for enterprise teams", why: "When a team scales beyond a handful of developers, a single CLAUDE.md file isn't enough. Here's how enterprise teams structure their configuration. The .claude/rules/ directory lets you split rules into modular files — one per topic (e.g., testing-conventions.md, api-patterns.md, security-requirements.md). Each rule file can include YAML frontmatter with a 'paths' field that scopes it to specific directories using glob patterns, so your React component rules only activate when Claude is working in src/components/. The @import syntax (@path/to/shared-rules.md) lets you pull instructions from other files — even across repos via symlinks — so an org-wide style guide lives in one place and every repo inherits it. For monorepos, claudeMdExcludes lets you skip packages that shouldn't load CLAUDE.md files (e.g., third-party vendored code or legacy modules you don't want Claude touching). As a practical example: Meridian Health's monorepo has a root CLAUDE.md with org-wide standards (TypeScript strict, no any types, HIPAA logging requirements), a packages/api/CLAUDE.md with backend conventions (Express patterns, Prisma ORM usage), a packages/web/CLAUDE.md with frontend conventions (React hooks, Tailwind classes), and .claude/rules/hipaa-compliance.md with path-scoped rules that only activate for files handling patient data. The total across all files stays under 200 lines per scope. We'll go into this in more detail in the role-specific tracks coming up.", topics: [".claude/rules/", "@import syntax", "Path-specific rules", "claudeMdExcludes", "Monorepo strategies", "Size management"] },
       { type: "heading", value: "Slash commands and custom commands", simple: "Shortcuts that trigger common workflows with a single command" },
       { type: "text", value: "Slash commands are shortcuts that trigger predefined workflows. Claude Code ships with built-in commands like /review (code review), /test (run tests), and /commit (stage and commit changes). But the real power is custom commands — teams can create their own.", simple: "Slash commands are one-word shortcuts you type to kick off a task. Claude Code comes with built-in ones like /review (review code for issues), /test (run tests), and /commit (save your changes). The real value is that teams can create their own custom commands for workflows they repeat often." },
       { type: "terminal", title: "Custom slash commands", lines: [
@@ -708,8 +575,8 @@ const FOUNDATIONS = [
       ]},
       { type: "heading", value: "MCP in Claude Code", simple: "Connecting Claude to your company's other tools and systems" },
       { type: "text", value: "Claude Code can connect to MCP (Model Context Protocol) servers, just like Claude.ai. But in a coding context, this means connecting Claude to your customer's internal tools — Jira for ticket context, Datadog for error logs, Confluence for documentation, Figma for design specs. It's the bridge between 'AI coding assistant' and 'AI that understands our whole engineering workflow.'", simple: "MCP (Model Context Protocol) is a way for Claude to talk to other software tools. For example, Claude could pull ticket details from Jira (a project tracker), read error logs from Datadog (a monitoring tool), or look at design files in Figma. It turns Claude from just a coding helper into something that understands your entire engineering workflow." },
-      { type: "text", value: "MCP also expands who can get value from Claude Code. When non-developer users — product managers, data analysts, technical writers — can pull context from internal APIs, monitoring dashboards, or documentation systems through MCP connectors, Claude Code becomes accessible well beyond the engineering team. Enterprise sales won't hinge on MCP alone, but the data connections it provides turn Claude Code from a developer-only tool into something useful across technical roles. The MCP ecosystem has 1000+ pre-built connectors, and custom servers can be built in an afternoon.", simple: "MCP is often the feature that turns a maybe into a yes for big companies. When a customer sees that Claude can plug into their own internal systems -- deployment tools, monitoring dashboards, internal APIs -- it stops looking like just a coding helper and starts looking like a platform. There are over 1,000 ready-made connectors, and building a custom one takes an afternoon." },
-      { type: "placeholder", title: "Monitoring, observability, and usage tracking", why: "Enterprise customers will ask: 'How do I see what Claude Code is doing across my org?' Claude Code supports OpenTelemetry for usage metrics, ConfigChange hooks for audit logging, and console-level dashboards for spend tracking. This matters for security teams, finance teams, and engineering leadership who need visibility without blocking adoption. We need a section that teaches trainees to answer the 'how do I monitor this at scale?' question.", topics: ["OpenTelemetry integration", "Usage dashboards", "ConfigChange hooks for audit", "Per-team spend tracking", "Session analytics"] },
+      { type: "text", value: "MCP also expands who can get value from Claude Code. When non-developer users — product managers, data analysts, technical writers — can pull context from internal APIs, monitoring dashboards, or documentation systems through MCP connectors, Claude Code becomes accessible well beyond the engineering team. Enterprise sales won't hinge on MCP alone, but the data connections it provides turn Claude Code from a developer-only tool into something useful across technical roles. The MCP ecosystem has 1000+ pre-built connectors, and custom servers can be built in an afternoon.", simple: "MCP also expands who can benefit from Claude Code beyond just developers. When product managers, data analysts, or technical writers can pull context from internal systems through MCP connectors -- project trackers, dashboards, documentation -- Claude Code becomes useful across many technical roles, not just engineering. Enterprise deals won't depend on MCP alone, but it makes the tool accessible to a much wider set of users. There are over 1,000 ready-made connectors, and building a custom one takes an afternoon." },
+      { type: "placeholder", title: "Monitoring, observability, and usage tracking", why: "Enterprise customers will ask: 'How do I see what Claude Code is doing across my org?' Claude Code has a full observability stack. OpenTelemetry integration (opt-in via CLAUDE_CODE_ENABLE_TELEMETRY=1) exports session counts, token usage, cost per model, lines of code changed, and tool permission decisions — all as standard OTel metrics you can pipe into Prometheus, Grafana, or any existing monitoring setup. ConfigChange hooks fire when settings are modified and can block unauthorized changes, giving security teams an audit trail. The Anthropic Console provides workspace-level spend limits and usage reporting. In-session, /cost shows token usage for API users and /stats shows usage patterns for subscribers. This matters for security teams (who touched what?), finance teams (what's it costing us?), and engineering leadership (is it actually being adopted?) — the three stakeholders who gate every enterprise rollout.", topics: ["OpenTelemetry metrics and events", "Anthropic Console spend limits", "ConfigChange hooks for audit", "/cost and /stats commands", "Prometheus / Grafana integration"] },
       { type: "reflect", prompt: "A CISO at a Fortune 500 company asks: 'How do I know Claude Code won't push untested code to production?' Walk through how you'd answer using CLAUDE.md, hooks, and the permissions model." },
     ],
   },
@@ -824,8 +691,8 @@ const FOUNDATIONS = [
         { title: "Phase 2: Team (5–25 developers)", desc: "Standardize CLAUDE.md across repos, add hooks for quality gates, connect MCP to internal tools. Goal: show team-level productivity gains.", simpleDesc: "Expand to a full team. Standardize the CLAUDE.md file across all code repositories so everyone gets consistent behavior. Add hooks (automated checks that run before or after Claude takes an action, like requiring tests to pass). Connect MCP servers (plugins that let Claude talk to internal tools like Jira or Datadog). The goal: show measurable productivity improvements across the team, not just individual success stories." },
         { title: "Phase 3: Organization (25+ developers)", desc: "Deploy via Bedrock/Vertex, enforce managed settings, add GitHub Actions automation, roll out training. Goal: make Claude Code part of the engineering platform.", simpleDesc: "Go company-wide. Deploy through the cloud provider (Bedrock or Vertex) so IT can manage it centrally. Lock down settings with managed configuration so the security team is comfortable. Turn on GitHub Actions automation so Claude helps on every pull request. Run training sessions so everyone knows how to use it well. The goal: Claude Code becomes a standard part of how the company builds software, like version control or CI/CD." },
       ]},
-      { type: "placeholder", title: "Migration patterns from competing tools", why: "Most enterprise prospects aren't starting from zero — they already use Copilot, Cursor, or Cody. We need a playbook for coexistence and migration: how Claude Code runs alongside Copilot (they serve different purposes), what the first 30 days look like for a team switching from Cursor, how to preserve existing customizations while adding agentic capabilities. This is the #1 conversation in competitive deals, and right now trainees have to figure it out on their own.", topics: ["Copilot coexistence", "Cursor migration", "First 30 days playbook", "Side-by-side evaluation framework", "Developer change management"] },
-      { type: "placeholder", title: "Customer case studies and voice of the customer", why: "Nothing closes a deal like another customer's story. We need 3-5 real (or realistic anonymized) case studies: what the team looked like before Claude Code, what they deployed, what changed in 90 days. Include specifics — time saved, adoption curve, unexpected use cases, what almost went wrong. Trainees should be able to reference these in customer conversations.", topics: ["Fintech case study", "Healthcare / regulated", "Large enterprise (500+ devs)", "Startup / fast-moving team", "Migration from competitor"] },
+      { type: "placeholder", title: "Migration patterns from competing tools", why: "Most enterprise prospects aren't starting from zero — they already use Copilot, Cursor, or Cody. The good news: Claude Code doesn't require replacing anything. Here's the coexistence playbook. Copilot and Claude Code serve different layers: Copilot handles line-level autocomplete inside the editor (fast, low-effort suggestions while typing), while Claude Code handles project-level agentic tasks (multi-file refactors, test generation, debugging across modules). Many teams run both — Copilot for the small stuff, Claude Code for the big stuff. Don't position it as a replacement; position it as a new capability they didn't have. For teams coming from Cursor: Cursor is an AI-native editor that replaces VS Code. Claude Code is editor-agnostic — it works in their existing VS Code, JetBrains, terminal, or browser. The migration path is additive: keep your editor, add Claude Code alongside it. For the first 30 days, follow this playbook: Week 1, install Claude Code and use it for codebase Q&A and small fixes only (low risk, immediate value). Week 2, write a CLAUDE.md and use it for a real task — a refactor or feature the team has been deferring. Week 3, add hooks and connect one MCP server (Jira or Slack — whichever the team uses most). Week 4, run a retrospective: what worked, what didn't, what to expand. A side-by-side evaluation works well: give three developers the same task, have one use Copilot only, one use Claude Code only, and one use both. Compare time to completion, code quality, and test coverage. The results speak for themselves. Example: Prism Analytics ran this evaluation on a database migration task. The Copilot-only developer finished in 6 hours with 70% test coverage. The Claude Code developer finished in 2 hours with 95% test coverage. The developer using both finished in 90 minutes — Copilot for quick edits while Claude Code handled the multi-file migration logic.", topics: ["Copilot coexistence", "Cursor migration", "First 30 days playbook", "Side-by-side evaluation framework", "Developer change management"] },
+      { type: "placeholder", title: "Customer case studies and voice of the customer", why: "Nothing closes a deal like another customer's story. Build a library of 3-5 case studies covering different industries, team sizes, and adoption stages. Each should follow a consistent structure: the team before Claude Code (size, stack, pain points), what they deployed (which features, what configuration, how long setup took), what changed in 90 days (measurable outcomes like hours saved, PR cycle time reduction, or onboarding acceleration), and what surprised them (unexpected use cases, initial resistance, what almost went wrong). When choosing which stories to bring into a sales call, match on two dimensions: industry similarity (a fintech prospect trusts a fintech story) and problem similarity (a team struggling with test coverage trusts a story about test coverage, even from a different industry). The second dimension is often more powerful — a healthcare company that cut migration time by 70% resonates with any prospect facing migration pain, regardless of industry. Trainees should internalize 2-3 stories deeply enough to tell them without notes: the company, the problem, the number, and the quote. A sentence like 'a 40-person fintech team reduced their PR cycle time by 60% in the first quarter' changes a room.", topics: ["Fintech case study", "Healthcare / regulated", "Large enterprise (500+ devs)", "Startup / fast-moving team", "Migration from competitor"] },
       { type: "reflect", prompt: "A VP of Engineering asks: 'We have 200 developers on AWS. What does a Claude Code rollout look like and what will it cost us?' Sketch out the deployment architecture, phasing plan, and back-of-napkin cost estimate." },
     ],
   },
@@ -861,8 +728,8 @@ steps: [
         challenge: "You're onboarding Meridian Health's backend team. Install Claude Code in both the terminal and VS Code on their sample API repo. Then deliver their first win: use Claude Code to add a /health endpoint with tests — the kind of task that normally takes their team half a day of boilerplate. Do it from both the CLI and IDE, then explain to the team lead how the agentic approach changes their velocity on this type of work.",
     output: "Working install (CLI + IDE) + first agentic task recording + client talking points",
     gaps: [
-      { title: "Troubleshooting installation in customer environments", why: "The happy path install takes 5 minutes. The unhappy path — corporate proxies, VPN issues, Node version conflicts, WSL edge cases, Docker container installs — is what PEs actually spend time on in the field. The docs have a full troubleshooting page with 20+ known issues. We need a hands-on exercise where trainees debug common failures: TLS/SSL errors behind corporate proxies, PATH misconfigurations, conflicting npm vs. native installs, and sandbox setup on WSL2. Without this, the first customer install that doesn't go smoothly will be a scramble.", topics: ["Corporate proxy / VPN", "TLS/SSL certificate errors", "PATH conflicts", "WSL2 sandbox setup", "Docker installs", "/doctor command"] },
-      { title: "Narrating the agentic loop during a live demo", why: "Day 1 teaches you to use Claude Code, but not how to explain what's happening while a customer watches. Live demo narration is a distinct skill: calling out when Claude is reading files vs. planning vs. acting, handling the moment when Claude makes a mistake (it will), and pacing the demo so the audience follows the agentic loop rather than just seeing text scroll. We should add a 'demo narration' exercise where trainees practice talking through the loop in real time.", topics: ["Live narration technique", "Recovering from mistakes", "Pacing and pausing", "What to highlight vs. skip", "Handling audience questions mid-demo"] },
+      { title: "Troubleshooting installation in customer environments", why: "The happy path install takes 5 minutes. The unhappy path is what PEs actually spend time on. Here are the five most common failures and how to fix each one. (1) TLS/SSL errors behind corporate proxies: the customer's network intercepts HTTPS traffic with a custom certificate authority. Fix: set NODE_EXTRA_CA_CERTS to point to their corporate CA bundle, or export HTTPS_PROXY with the proxy URL. (2) 'command not found' after install: the install succeeded but the binary isn't in PATH. Fix: on macOS, add /usr/local/bin or ~/.claude/bin to the shell profile; on Linux, check ~/.local/bin; on Windows, ensure the install path is in the system PATH. (3) Conflicting installations: the customer previously installed via npm and now the native install conflicts. Fix: remove the npm version (npm uninstall -g @anthropic-ai/claude-code) before installing natively. (4) WSL2 sandbox setup: Claude Code's sandbox requires bubblewrap and socat on WSL2, which aren't installed by default. Fix: apt install bubblewrap socat. (5) Docker installs hang: the install script hangs in Docker containers that lack a proper TTY. Fix: run in non-interactive mode or use the direct binary download. Exercise: intentionally misconfigure your PATH, run claude, observe the error, then fix it. Then run 'claude /doctor' — this built-in diagnostic command checks for common issues including invalid settings, MCP errors, and update status.", topics: ["Corporate proxy / VPN", "TLS/SSL certificate errors", "PATH conflicts", "WSL2 sandbox setup", "Docker installs", "/doctor command"] },
+      { title: "Narrating the agentic loop during a live demo", why: "Using Claude Code and demoing it are different skills. When a customer watches Claude work, they see text scrolling fast. Your job is to make the invisible visible. Here's a narration framework for each phase of the agentic loop. Read phase: 'Watch what Claude does first — it's reading the existing route handlers to understand the project's patterns. It hasn't written a single line yet. This is the difference from autocomplete tools that start generating immediately.' Plan phase: 'Now it's formulating a plan. See how it lists the steps before acting? In Plan Mode, you can review this before Claude touches any files.' Act phase: 'Now it's writing the code. Notice it's matching the async/await pattern from the existing routes — that came from the CLAUDE.md conventions.' Verify phase: 'It's running the tests automatically. If any fail, it'll read the error and fix the code — you don't have to tell it to.' When Claude makes a mistake (and it will): don't skip it. Say: 'This is actually a great moment — watch how it reads the test failure, identifies the issue, and self-corrects. This error-recovery loop is what makes it agentic, not just generative.' Exercise: pair up with a cohort partner. One person runs a Claude Code task while the other narrates out loud what's happening at each phase. Then switch. Record yourself — you'll use this narration technique in every customer demo.", topics: ["Live narration technique", "Recovering from mistakes", "Pacing and pausing", "What to highlight vs. skip", "Handling audience questions mid-demo"] },
     ],
     color: C.orange,
     competencies: {
@@ -906,7 +773,7 @@ steps: [
         challenge: "Lumen's CTO hands you access to their monorepo and says: 'Our new hires take three weeks to get productive. Can Claude Code fix that?' Start by exploring the codebase to discover their conventions, then write a CLAUDE.md that captures the team's patterns. Prove it works by using Claude to refactor their messiest utility module — with tests and docs that match the conventions you documented. Show the CTO a before/after that makes the case for org-wide adoption.",
     output: "CLAUDE.md template library + prompt pattern cheat sheet + client before/after comparison",
     gaps: [
-      { title: "Common failure patterns and how to recover", why: "The docs identify five anti-patterns that trip up even experienced users: the 'kitchen sink' session (cramming too many tasks into one context), correcting Claude repeatedly instead of starting fresh, over-specifying CLAUDE.md to the point where it constrains more than it helps, the trust-then-verify gap (accepting changes without reviewing), and infinite exploration (Claude reads the entire codebase looking for context when a specific pointer would suffice). We need an exercise where trainees intentionally trigger these failures, recognize the symptoms, and practice the recovery — /clear, /rewind, /compact with instructions, starting a fresh session.", topics: ["Kitchen sink sessions", "Over-specified CLAUDE.md", "Correction spirals", "Trust-then-verify gap", "Context exhaustion", "When to start fresh"] },
+      { title: "Common failure patterns and how to recover", why: "Five anti-patterns trip up even experienced users. Learn to recognize the symptoms and apply the right fix. (1) The kitchen sink session: you ask Claude to refactor the auth module, then add API tests, then update the docs, then fix linting — all in one session. By the fourth task, Claude has forgotten the context from the first. Symptom: Claude starts asking questions it already answered, or repeats work. Fix: use /clear between unrelated tasks, or start a new session. One task per session is the default; combine only when tasks are tightly related. (2) The correction spiral: Claude gets something wrong and you say 'no, not like that, do it this way.' Then it overcorrects. You correct again. Three rounds in, the output is worse than the original. Fix: if you've corrected twice and it's not converging, use /clear and rephrase your original prompt with more specifics. Starting fresh with a better prompt beats iterating on a bad thread. (3) Over-specified CLAUDE.md: you add so many rules that Claude can't satisfy all of them simultaneously, or it spends so many tokens processing instructions that there's less room for actual work. Symptom: Claude's output feels rigid or formulaic, or it ignores rules that conflict. Fix: keep CLAUDE.md under 200 lines; use .claude/rules/ for path-specific details instead of putting everything in the root file. (4) Trust-then-verify gap: in auto-accept mode, Claude makes 15 file changes and you commit without reviewing. Two hours later, a subtle bug surfaces. Fix: after any large change, run 'git diff' and review before committing. Use post-edit hooks to run tests automatically so bugs are caught immediately. (5) Infinite exploration: you ask Claude to 'understand the codebase' and it reads 200 files looking for context. Symptom: high token usage, slow response, no useful output. Fix: be specific — 'read src/auth/ and explain the session handling' instead of 'understand the project.' Exercise: intentionally trigger pattern #1 — run three unrelated tasks in one session until you notice context degradation. Then practice the recovery: /compact with the instruction 'summarize only the current task,' or /clear and restart.", topics: ["Kitchen sink sessions", "Over-specified CLAUDE.md", "Correction spirals", "Trust-then-verify gap", "Context exhaustion", "When to start fresh"] },
     ],
     color: C.blue,
     deepDive: true,
@@ -941,8 +808,8 @@ steps: [
         challenge: "Arcadia's Head of Engineering wants a proof-of-concept by end of day. Build the workflow their compliance team requires: a hook that blocks any commit without passing lint, type checks, and tests. Then connect a mock Jira MCP server so developers can say 'pick up JIRA-1234' and Claude pulls the ticket context automatically. Add a deploy-check Skill their team lead can share via git. Demo the full loop: Claude reads a Jira ticket, implements the feature, passes the quality gates, and runs the deploy checklist — all without the developer leaving their terminal.",
     output: "Custom hook + MCP server + Skill + client integration architecture guide",
     gaps: [
-      { title: "Agent teams and multi-agent orchestration", why: "Claude Code can run multiple agents in parallel — a writer agent implementing code while a reviewer agent checks it, or fan-out patterns where agents work on different files simultaneously. This is a ~7x token cost multiplier but dramatically accelerates large tasks. Enterprise customers with big codebases will ask about this. We need a hands-on exercise: set up a writer/reviewer agent team, run a fan-out task across multiple files, observe how teammate mode coordinates them, and understand the cost tradeoffs. The Agent SDK pieces are covered conceptually but trainees need to build and run a real multi-agent workflow.", topics: ["Writer/reviewer pattern", "Fan-out across files", "Teammate mode", "Cost management (7x multiplier)", "When to use vs. single agent", "Agent SDK configuration"] },
-      { title: "Plugins and code intelligence", why: "Plugins extend Claude Code with third-party capabilities — the most important being code intelligence plugins that give Claude precise symbol navigation (go-to-definition, find-references) instead of relying on text search. This dramatically improves accuracy on large codebases but isn't covered anywhere in the training. We should add a walkthrough of installing a code intelligence plugin, observing how it changes Claude's behavior on a large repo, and understanding the /plugins marketplace.", topics: ["Code intelligence plugins", "Symbol navigation vs. text search", "Plugin marketplace", "Installing and managing plugins", "Impact on large codebases"] },
+      { title: "Agent teams and multi-agent orchestration", why: "Claude Code can run multiple agents in parallel, coordinating them to tackle tasks that would overwhelm a single agent. The two most common patterns: Writer/Reviewer — one agent writes code while another reviews it in real time, catching issues before they accumulate. Think of it as pair programming where both programmers are AI. Fan-out — a coordinator agent breaks a large task into pieces and dispatches subagents to work on different files simultaneously. A migration across 50 files that takes a single agent 30 minutes can be done in 5 minutes with fan-out. The tradeoff is cost: agent teams use roughly 7x the tokens of a single agent because each agent maintains its own context. For a task that costs $0.50 solo, expect ~$3.50 with a team. This means agent teams are best for large, time-sensitive tasks — not everyday coding. Here's how to set one up: create agent configuration files in .claude/agents/ that define each agent's role, tools, and model. For example, a security-reviewer.md agent that only has Read and Grep tools (can't edit) and uses a system prompt focused on vulnerability detection. In teammate mode, agents share a task list and can hand work to each other. Exercise: configure a writer agent and a reviewer agent. Have the writer implement a new API endpoint while the reviewer watches for security issues and test coverage gaps. Observe how they coordinate — the reviewer might flag a missing input validation, and the writer fixes it without you intervening. Then check /cost to see the token impact compared to doing the same task with a single agent.", topics: ["Writer/reviewer pattern", "Fan-out across files", "Teammate mode", "Cost management (7x multiplier)", "When to use vs. single agent", "Agent SDK configuration"] },
+      { title: "Plugins and code intelligence", why: "By default, Claude Code finds code by searching text — running grep to look for function names, class definitions, and import statements. This works but it's imprecise, especially in large codebases where the same name might appear in hundreds of places. Code intelligence plugins give Claude the same 'go to definition' and 'find all references' capabilities that your IDE has, letting it navigate code by meaning rather than text matching. The difference is dramatic: without a code intelligence plugin, if you ask Claude to refactor a function called 'processPayment,' it searches for that string across every file. With a plugin, it jumps directly to the definition, finds every call site through the language server, and knows which 'processPayment' you mean when there are three across different modules. To try it: run /plugins in a Claude Code session to browse the marketplace. Install a code intelligence plugin for your language (TypeScript, Python, Go, etc.). Then ask Claude to refactor a function in a large repo and watch the difference — fewer files read, faster execution, more accurate changes. For customer conversations, this is relevant when a prospect says 'our codebase is 2 million lines — can Claude Code handle that?' The answer is yes, especially with code intelligence plugins that give Claude precise navigation instead of brute-force search. Exercise: open a large repo without a code intelligence plugin and ask Claude to find all callers of a specific function. Note how many files it reads. Then install the plugin and run the same query — the difference in speed and accuracy makes the case.", topics: ["Code intelligence plugins", "Symbol navigation vs. text search", "Plugin marketplace", "Installing and managing plugins", "Impact on large codebases"] },
     ],
     color: C.green,
     competencies: {
@@ -1505,7 +1372,7 @@ function PersonaGrid({ items, delay }) {
 }
 
 // ─── CONTENT RENDERER ───
-function ContentBlock({ block, idx, onReflect, simplified }) {
+function ContentBlock({ block, idx, simplified }) {
   const delay = `${0.08 + idx * 0.04}s`;
   const v = (simplified && block.simple) ? block.simple : block.value;
   if (block.type === "text") return <p style={{ ...st.bodyText, ...st.fadeUp, animationDelay: delay }}>{v}</p>;
@@ -1617,17 +1484,10 @@ function ContentBlock({ block, idx, onReflect, simplified }) {
     <div style={{ margin: "16px 0 20px", padding: "20px 24px", background: C.orange + "06", borderRadius: 10, border: `1px solid ${C.orange}20`, ...st.fadeUp, animationDelay: delay }}>
       <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 2, color: C.orange, textTransform: "uppercase", marginBottom: 8 }}>Pause and think</div>
       <p style={{ fontFamily: "var(--serif)", fontSize: 15, fontStyle: "italic", color: C.muted, lineHeight: 1.6, margin: "0 0 12px" }}>{block.prompt}</p>
-      {getApiKey() ? (
-        <button onClick={() => onReflect(block.prompt)} style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.orange, background: "transparent", border: `1px solid ${C.orange}30`, borderRadius: 6, padding: "7px 16px", cursor: "pointer", transition: "all 0.2s" }}
+      <button onClick={() => openInClaude(`I'm going through Claude Code Basecamp onboarding. Here's what I'm reflecting on: "${block.prompt}" — Help me think through this. Ask me follow-up questions. Be a thoughtful colleague, not a lecturer.`)} style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.orange, background: "transparent", border: `1px solid ${C.orange}30`, borderRadius: 6, padding: "7px 16px", cursor: "pointer", transition: "all 0.2s" }}
           onMouseEnter={e => { e.currentTarget.style.background = C.orange + "10"; }}
           onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
         >Think through this with Claude →</button>
-      ) : (
-        <div>
-          <p style={{ fontFamily: "var(--sans)", fontSize: 11, color: C.faint, margin: "0 0 4px" }}>Enter your Anthropic API key to discuss this with Claude. Your key stays in your browser only.</p>
-          <ApiKeyEntry onKeySet={() => onReflect(block.prompt)} />
-        </div>
-      )}
     </div>
   );
 
@@ -2298,7 +2158,6 @@ export default function App() {
   const [activeModule, setActiveModule] = useState(null);
   const [completed, setCompleted] = useState(new Set());
   const [foundationsDone, setFoundationsDone] = useState(false);
-  const [chatPrompt, setChatPrompt] = useState(null);
   const [showMethodology, setShowMethodology] = useState(false);
   const [simplified, setSimplified] = useState(false);
   const [facilitatorModule, setFacilitatorModule] = useState(null);
@@ -2387,10 +2246,6 @@ export default function App() {
     };
   }
 
-  const openReflect = (prompt) => {
-    setChatPrompt(`I'm going through Claude Code Basecamp onboarding (${PATHS.find(p => p.id === path)?.label || "pre-path selection"}). Here's what I'm reflecting on: "${prompt}" — Help me think through this. Ask me follow-up questions. Be a thoughtful colleague, not a lecturer.`);
-  };
-
   if (phase === "loading") return <div style={{ minHeight: "100vh", background: C.bg }} />;
 
   const progress = Math.round((completed.size / MODULES.length) * 100);
@@ -2399,7 +2254,6 @@ export default function App() {
   return (
     <div style={st.page} ref={contentRef}>
       <ProgressIndicator foundationsDone={foundationsDone} foundationStep={foundationStep} totalFoundations={FOUNDATIONS.length} completedModules={completed.size} totalModules={MODULES.length} />
-      {chatPrompt && getApiKey() && <ClaudeChat prompt={chatPrompt} onClose={() => setChatPrompt(null)} />}
 
       {/* ═══ NAME INPUT MODAL ═══ */}
       {showNameInput && (
@@ -2600,7 +2454,7 @@ export default function App() {
               <button onClick={() => setSimplified(s => !s)} style={{ background: simplified ? C.blue + "12" : "transparent", border: `1px solid ${simplified ? C.blue + "40" : C.lightGray}`, borderRadius: 6, padding: "5px 12px", cursor: "pointer", fontFamily: "var(--sans)", fontSize: 11, color: simplified ? C.blue : C.faint, transition: "all 0.2s", whiteSpace: "nowrap", flexShrink: 0 }}>{simplified ? "Simplified" : "Simplify"}</button>
             </div>
             <div style={{ height: 24 }} />
-            {(subPage >= 0 && currentFoundation.pages ? currentFoundation.pages[subPage].content : currentFoundation.content).map((block, idx) => <ContentBlock key={idx} block={block} idx={idx} onReflect={openReflect} simplified={simplified} />)}
+            {(subPage >= 0 && currentFoundation.pages ? currentFoundation.pages[subPage].content : currentFoundation.content).map((block, idx) => <ContentBlock key={idx} block={block} idx={idx} simplified={simplified} />)}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 36, paddingTop: 20, borderTop: `1px solid ${C.lightGray}` }}>
               {(foundationStep > 0 || subPage >= 0) ? (
                 <button onClick={() => {
@@ -2947,18 +2801,6 @@ export default function App() {
             />
 
             <div style={{ display: "flex", gap: 12, ...st.fadeUp, animationDelay: "0.4s" }}>
-              {getApiKey() ? (
-                <button onClick={() => {
-                  setChatPrompt(`I'm starting Module ${mod.id}: "${mod.title}" from Claude Code Basecamp. My role: ${selectedPath?.label}. The challenge: "${mod.challenge}" — guide me interactively. Ask questions, push my thinking, give real feedback. Don't lecture.`);
-                }} style={{ ...st.primaryBtnCustom, background: mod.color }}
-                  onMouseEnter={e => e.currentTarget.style.opacity = "0.88"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}
-                >{isComplete ? "Revisit" : "Start building"} →</button>
-              ) : (
-                <div style={{ flex: 1 }}>
-                  <p style={{ fontFamily: "var(--sans)", fontSize: 11, color: C.faint, margin: "0 0 6px" }}>Enter your Anthropic API key to start an interactive session with Claude. Your key stays in your browser.</p>
-                  <ApiKeyEntry onKeySet={() => setChatPrompt(`I'm starting Module ${mod.id}: "${mod.title}" from Claude Code Basecamp. My role: ${selectedPath?.label}. The challenge: "${mod.challenge}" — guide me interactively. Ask questions, push my thinking, give real feedback. Don't lecture.`)} />
-                </div>
-              )}
               {!isComplete && (
                 <button onClick={() => {
                   setCompleted(prev => new Set([...prev, mod.id]));
@@ -2979,6 +2821,26 @@ export default function App() {
                 >Mark complete</button>
               )}
             </div>
+
+            {/* Next: back to hub to see badges */}
+            {isComplete && (() => {
+              const nextMod = MODULES.find(m => m.id === mod.id + 1);
+              return (
+                <div style={{ marginTop: 24, padding: "20px 24px", background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}`, display: "flex", justifyContent: "space-between", alignItems: "center", ...st.fadeUp, animationDelay: "0.46s" }}>
+                  <div>
+                    <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 1.5, color: C.green, textTransform: "uppercase", marginBottom: 4 }}>
+                      {nextMod ? "Up next" : "All days complete"}
+                    </div>
+                    <div style={{ fontFamily: "var(--serif)", fontSize: 17, color: C.dark }}>
+                      {nextMod ? `${nextMod.day}: ${nextMod.title}` : "Head back to see your progress and badges"}
+                    </div>
+                  </div>
+                  <button onClick={() => { setActiveModule(null); setPhase("hub"); window.scrollTo({ top: 0, behavior: "instant" }); }} style={{ ...st.primaryBtnCustom, background: nextMod ? nextMod.color : C.green, flexShrink: 0 }}
+                    onMouseEnter={e => e.currentTarget.style.opacity = "0.88"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+                  >{nextMod ? "Continue →" : "View progress →"}</button>
+                </div>
+              );
+            })()}
 
             {/* Gentle checkpoint nudge */}
             {!isComplete && !checkpointsCompleted.includes(mod.id) && KNOWLEDGE_CHECKPOINTS[mod.id] && (
