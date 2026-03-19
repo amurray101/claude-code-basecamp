@@ -1823,22 +1823,22 @@ const FEEDBACK_RESPONSE = [
   {
     id: "diagnosis",
     number: "01",
-    question: "What are the biggest problems in this feedback?",
+    question: "What are the biggest problems in this feedback? How would you change it for the next cohort?",
     items: [
       {
         problem: "Too much content per day",
-        analysis: "31% said pacing was too fast. Confidence scores were flat across all three days (4.29, 4.28, 4.28) — people weren't getting more confident as the week went on. Multiple respondents said some version of 'too much content packed into the day.' Those data points together say the same thing: we were putting more into each session than people could absorb. The 67% who said pacing was fine had stronger technical backgrounds coming in. The 31% are the ones we need to design for.",
+        analysis: "31% said pacing was too fast and confidence scores were flat across all three days (4.29, 4.28, 4.28) — people weren't getting more confident as the week went on. Multiple respondents said some version of 'too much content packed into the day.' We were putting more into each session than people could absorb. Those who fared better likely had stronger technical backgrounds coming in, but we need to design for everyone.",
         implementation: {
           label: "Expanded from 3 days to 5, moved lectures to pre-work",
-          detail: "The program runs 5 days now instead of 3 — about 40% less content per day. Conceptual material moved to self-paced pre-work that people do before showing up. Live sessions are hands-on only.",
+          detail: "The program runs 5 days now instead of 3 — about 40% less content per day. Conceptual material is moved to self-paced pre-work, leaving live time to focus on hands-on exercises.",
         },
       },
       {
         problem: "Lectures before building doesn't work",
-        analysis: "The Evals session scored 3.9 engagement — half a point below average. The feedback was specific: 'too much time on abstract component taxonomy without enough concrete examples.' Same person said 'the build-along afterward was far more effective.' The interactive HTML presentation got the opposite reaction — people liked it because they were using the tool while learning. The pattern is consistent: sessions where people build score higher than sessions where people listen.",
+        analysis: "The Evals session scored 3.9 engagement — half a point below average. The feedback was specific: 'too much time on abstract component taxonomy without enough concrete examples.' Same person said 'the build-along afterward was far more effective.' Sessions where people got hands-on and built themselves scored higher than listening-only lectures.",
         implementation: {
           label: "Every session starts with building now",
-          detail: "The Evals session is gone. Every day opens with a client scenario and hands-on work. Day 1: 'Meridian Health takes 2-3 days per endpoint — show them how to do it in minutes.' Day 3: 'Arcadia Financial needs compliance gates — build it.' Eval concepts moved to the Applied Research track where people build working harnesses instead of reading taxonomy charts.",
+          detail: "Every day opens with a client scenario and hands-on work. Day 1: 'Meridian Health takes 2-3 days per endpoint — show them how to do it in minutes.' Day 3: 'Arcadia Financial needs compliance gates — build it.' Eval concepts moved to the Applied Research track where people build working harnesses instead of reading taxonomy charts.",
         },
       },
       {
@@ -1858,134 +1858,43 @@ const FEEDBACK_RESPONSE = [
         },
       },
     ],
-    signalVsNoise: "Strong signal: pacing/overload (31% plus qualitative plus flat confidence), Evals session (3.9 plus specific feedback), role differentiation (people asked for it), setup friction (specific and fixable). Weaker signal: Day 3 realism dip (3.9, one day), async preference (one person — real gap but not systemic given 67% said pacing was fine). Worth a light-touch fix, not a redesign.",
-  },
-  {
-    id: "changes",
-    number: "02",
-    question: "What specific changes would you make for the next cohort?",
-    items: [
-      {
-        problem: "No gaps between segments",
-        analysis: "Day 1 runs 0-5, 5-15, 15-30, 30-40, 40-45 — back to back. Add a 15-minute open block after the midpoint for questions, troubleshooting, ad-hoc demos. Not a break — an unstructured block. A 45-minute session becomes 60 with no new content added. Label these 'consolidation blocks' in the facilitator guide so instructors don't fill them.",
-        implementation: {
-          label: "Facilitator guides include timing and pacing notes per segment",
-          detail: "Every segment is timed with pacing risks flagged. Named consolidation blocks aren't in the guide yet — that's the next step.",
-        },
-      },
-      {
-        problem: "No setup verification before Day 1",
-        analysis: "Every participant should pass a checklist before Day 1: CLI installed, VS Code extension working, sample repo cloned, one Claude Code command runs. Failures go to a 30-minute troubleshooting session the night before.",
-        implementation: {
-          label: "Pre-work steps exist — an automated gate is next",
-          detail: "Module 1 walks through install, verify, IDE setup, and repo clone as pre-work. Facilitator checklists cover proxy/VPN fallbacks. An automated verification script would make this a hard gate.",
-        },
-      },
-      {
-        problem: "One slide deck for all sessions",
-        analysis: "The most praised element was the interactive HTML presentation. Each day should have its own deck with embedded examples people can run, pause points, and animated visuals.",
-        implementation: {
-          label: "Basecamp deck built — per-day decks are next",
-          detail: "There's a 44-slide deck covering all 5 days with speaker notes on every slide. The shared design system makes it straightforward to build per-day decks. Days 4-5 don't use slides by design.",
-        },
-      },
-      {
-        problem: "Day 3 ends with a discussion instead of building",
-        analysis: "Day 3 scored lowest on 'realistic work simulation' (3.9). The last 10 minutes are an architecture discussion. Replace it with a build challenge: 'Arcadia's compliance team added a new requirement — no API calls without an audit trail. Extend your hooks.'",
-        implementation: {
-          label: "Day 3 is now the heaviest lab day, framed around a client",
-          detail: "45 min live + 75 min lab. Framed around Arcadia Financial — a fintech with 60 engineers and compliance requirements.",
-        },
-      },
-      {
-        problem: "No within-day confidence measurement",
-        analysis: "Quick check at the start of each day: 'Rate your confidence on today's skill, 1-5.' Repeat at end. Show the delta.",
-        implementation: {
-          label: "Checkpoints and badges show progress — numeric ratings are next",
-          detail: "Reflection checkpoints and skill badges track growth. Adding a 1-5 scale at each checkpoint would give us the trajectory data.",
-        },
-      },
-      {
-        problem: "Days 1-3 don't feel role-specific",
-        analysis: "Add role callouts at transitions: 'Pre-Sales — notice how you'd walk a prospect through this. SA — think about how this scales to 200 developers.' The content exists in the per-module competencies. The change is making it part of live facilitation.",
-        implementation: {
-          label: "Role competencies are in the app — live callouts are next",
-          detail: "Each module has four different outcome statements by role. The app shows a personalized 'Your outcome' block. Turning these into facilitator talking points is the remaining step.",
-        },
-      },
-      {
-        problem: "No option for solo learners",
-        analysis: "One person asked for an async track. Don't build a parallel program for that, but do two things: record every session (available within 2 hours) and offer a 30-minute daily drop-in for people who want to work through it independently.",
-        implementation: {
-          label: "Pre-work and Claude Chat cover part of this",
-          detail: "30-45 min of self-paced pre-work per module. Simplify toggle for different reading speeds. Claude Chat as on-demand help. Recordings and structured drop-ins would complete it.",
-        },
-      },
-    ],
+    signalVsNoise: "Some of this feedback points to real structural problems. Some of it is individual preference. Here's how we separated the two. The clearest problems — the ones we're most confident need fixing — showed up in multiple places at once. Pacing and overload appeared in the survey numbers (31% said too fast), in the written comments ('too much content'), and in the confidence data (flat across all three days). When three different data sources say the same thing, that's a real problem. The Evals session scored low (3.9) and got specific, actionable feedback about what went wrong — that's a real problem. People asked for role-specific content in their own words — that's a real gap. Setup friction showed up in multiple reports and has a clear fix — that's worth addressing. Other feedback was real but narrower. Day 3's realism score dipped to 3.9, but it was one day and one metric — worth watching, not worth redesigning around. One person asked for a fully async track. That's a valid preference and points to a real learning style gap, but 67% said pacing was fine in the live format. We addressed it with a light-touch accommodation (self-paced pre-work, Claude Chat for on-demand help) rather than building a parallel program.",
   },
   {
     id: "measurement",
-    number: "03",
+    number: "02",
     question: "How do you know if the changes worked?",
     items: [
       {
-        problem: "Pacing — get 'Too fast' under 15% (was 31%)",
-        analysis: "Ask the pacing question per day, not once at the end. 'Just right' should be above 75% each day. If Day 3 still runs high, extend the buffer blocks.",
-        implementation: {
-          label: "5-day format reduces daily density by ~40%",
-          detail: "3 days became 5. Lectures moved to pre-work. Facilitator guides flag pacing risks per segment.",
-        },
-      },
-      {
-        problem: "Confidence — should climb at least +0.5 over the week",
-        analysis: "4.29, 4.28, 4.28 — flat. Measure daily on the same 1-5 scale. Day 1 should be lowest, each day higher. If it plateaus after Day 3, the later days need to build more real confidence.",
-        implementation: {
-          label: "Checkpoints and badges track growth",
-          detail: "Reflection checkpoints and skill badges show progress. Before/after confidence ratings at each checkpoint would give us the slope.",
-        },
-      },
-      {
-        problem: "Engagement — no session below 4.2 (Evals was 3.9)",
-        analysis: "3.9 was a clear miss. With build-first design across every session, nothing should score that low. Measure per session. Anything under 4.0 gets the same fix: cut abstract framing, start with building.",
-        implementation: {
-          label: "No lecture-first sessions remain",
-          detail: "Every session opens with a client problem and hands-on work. Interactive presentations replace passive slides.",
-        },
-      },
-      {
-        problem: "'Apply independently' — should end at 4.5+ (was 4.3)",
-        analysis: "Went 4.2, 4.5, 4.3 — up then down. Over five days it should keep climbing. Day 5 capstone is the real test: blind brief, no help, build and present. If that score is below 4.3, the middle days need to let go of the scaffolding sooner.",
-        implementation: {
-          label: "Day 5 capstone tests real independence",
-          detail: "Blind customer brief, time limit, peer scoring. If someone can go from a cold brief to a working demo under pressure, they're ready.",
-        },
-      },
-      {
         problem: "NPS — target 50+ (was 35)",
-        analysis: "35 with 18% detractors means real dissatisfaction. Target: 50+ with detractors under 10%, promoters over 60%. Under 45 means the core problems aren't fixed.",
-        implementation: {
-          label: "NPS is the overall scorecard",
-          detail: "Fix the structural issues, NPS follows.",
-        },
+        analysis: "The single best measure of whether the program works as a whole. 35 with 18% detractors means people left unsatisfied. Target: 50+ with detractors under 10% and promoters over 60%. Under 45 means the core problems aren't fixed.",
       },
       {
-        problem: "Setup — zero live minutes on install problems",
-        analysis: "Track two things: how many people need install help during live time (target: zero) and pre-work checkpoint completion (target: 100%). If someone shows up without a working setup, the checkpoint process didn't work.",
-        implementation: {
-          label: "Install is pre-work now",
-          detail: "CLI, IDE, and repo clone happen before Day 1. Facilitator checklists cover common failure modes.",
-        },
+        problem: "Day-over-day confidence slope",
+        analysis: "Cohort 1 was flat: 4.29, 4.28, 4.28. The number that matters isn't the absolute score — it's the slope. Measure daily on the same 1-5 scale. Day 1 should be lowest, each day higher. A flat or declining line means the program isn't building felt mastery, regardless of what the content covers.",
       },
       {
-        problem: "Role relevance — new metric, target 4.3+",
-        analysis: "New daily question: 'Today's content was relevant to my role' (1-5). Segment by role — if SAs score lower than PEs on Days 1-3, those days need more SA-relevant moments.",
-        implementation: {
-          label: "Four role paths with per-module outcomes",
-          detail: "Each module shows role-specific outcomes. The survey question tells us whether people feel it.",
-        },
+        problem: "Per-session engagement floor — no session below 4.2",
+        analysis: "The Evals session hit 3.9. Measure engagement per session, not per day — a strong morning can mask a weak afternoon. Any session below 4.0 is a structural problem with that session, not a fluke.",
+      },
+      {
+        problem: "30-day field application rate",
+        analysis: "The metric that matters most and the one Cohort 1 didn't track: are people using what they learned? Survey participants 30 days after the program. Ask: 'Have you used Claude Code in a customer conversation, demo, or deployment since Basecamp?' and 'Which specific skills from the program have you applied?' A training program that scores well on day-of surveys but doesn't change behavior in the field hasn't worked.",
+      },
+      {
+        problem: "Time to first customer use",
+        analysis: "How many days after completing Basecamp does someone use Claude Code with a customer for the first time? Shorter is better. If people leave Day 5 feeling ready but don't use it for six weeks, there's a transfer gap between the training environment and the real one.",
+      },
+      {
+        problem: "Pre-work completion rate — target 100%",
+        analysis: "If people show up without doing the pre-work, the live session breaks down — the facilitator ends up lecturing on material that should have been read. Track completion. If it drops below 90%, the pre-work is either too long, too hard to access, or not seen as valuable.",
+      },
+      {
+        problem: "Role relevance — target 4.3+",
+        analysis: "New daily question: 'Today's content was relevant to my role' (1-5). Segment by role. If SAs score lower than PEs on shared days, those days need more SA-relevant framing. This tells us whether the four-path system is landing or just decorative.",
       },
     ],
-    summary: "Cohort 2 works if everyone arrives Day 1 with a working install, grows more confident each day, never sits through a session below 4.2, rates the content as relevant to their role (4.3+), and walks out Day 5 ready to recommend it to a colleague (NPS 50+).",
+    summary: "Cohort 2 works if NPS hits 50+, confidence climbs each day, no session scores below 4.2, and — most importantly — people are using Claude Code with customers within 30 days of finishing the program.",
   },
 ]
 // ─── CURRICULUM PLAN CONTENT (Part 1 Questions) ───
@@ -2077,9 +1986,7 @@ function CurriculumPlanContent() {
         <p style={pStyle}>Basecamp serves four roles with significantly different customer touchpoints, technical depths, and success metrics. The curriculum handles this through a shared-foundation / role-specific-breakout model.</p>
 
         <h3 style={h2Style}>Shared Sessions (Days 1–3)</h3>
-        <p style={pStyle}>Days 1–3 are shared across all roles. Every participant builds the same technical foundation on Claude Code — install, CLAUDE.md, prompt craft, hooks, MCP, and composed workflows. This is intentional:</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Credibility requires depth.</strong> A Pre-Sales PE who can't explain hooks loses the room when a customer asks about guardrails. An SA who has never written a CLAUDE.md can't design an adoption strategy. Shared technical foundations ensure everyone can go deep when the conversation demands it.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Cross-role learning.</strong> When a Pre-Sales PE and a Post-Sales PE work through the same lab, they develop shared vocabulary and see each other's perspectives. The Pre-Sales PE learns what the handoff looks like; the Post-Sales PE learns what was promised.</p>
+        <p style={pStyle}>Days 1–3 are shared across all roles. Every participant builds the same technical foundation on Claude Code — install, CLAUDE.md, prompt craft, hooks, MCP, and composed workflows.</p>
 
         <h3 style={h2Style}>Role-Specific Differentiation</h3>
         <p style={pStyle}>Differentiation happens in three ways:</p>
@@ -2100,10 +2007,10 @@ function CurriculumPlanContent() {
         <p style={bulletStyle}><span style={dot}>•</span> <strong>Applied Research:</strong> Focus on the technical depth of what Claude Code can and can't do. Practice honest capability assessment.</p>
 
         <h3 style={h3Style}>3. Capstone brief selection (Day 5)</h3>
-        <p style={pStyle}>Capstone briefs are matched to role. A Pre-Sales PE receives a brief that requires a compelling demo and clear next-steps ask. A Post-Sales PE receives a brief that requires a working implementation and handoff documentation. An SA receives a brief that requires an adoption strategy with architecture diagrams and ROI estimates.</p>
+        <p style={pStyle}>Capstone briefs are matched to role. For example, a Pre-Sales PE receives a brief that requires a compelling demo and clear next-steps ask.</p>
 
         <h3 style={h2Style}>Handling Varying Technical Depth</h3>
-        <p style={pStyle}>The cohort will include people who write code daily (Applied Research) and people who haven't opened a terminal in months (some Pre-Sales PEs). Three design choices address this:</p>
+        <p style={pStyle}>The cohort will include people of varying technical background. To address this, the training has:</p>
         <p style={bulletStyle}><span style={dot}>•</span> <strong>Simplify toggle:</strong> Every content page has a "Simplify" button that swaps technical language for plain-English explanations. This lets less technical participants keep up without slowing down the room.</p>
         <p style={bulletStyle}><span style={dot}>•</span> <strong>Contextual exercises:</strong> Steps are tagged by context (terminal, VS Code, Claude, browser). Participants who are comfortable in the terminal can move faster; those who need more guidance can follow the explicit commands.</p>
         <p style={bulletStyle}><span style={dot}>•</span> <strong>Facilitator guide pacing notes:</strong> The facilitator guide for each module includes pacing advice for mixed-depth rooms — which steps to narrate slowly, which to skip for advanced groups, and when to pair technical with non-technical participants.</p>
@@ -2143,17 +2050,12 @@ function CurriculumPlanContent() {
         </div>
 
         <h3 style={h2Style}>Live Instruction</h3>
-        <p style={pStyle}>Live sessions are facilitator-led and focus on demonstration, narration, and discussion — never lecture. The facilitator guide for each module includes:</p>
-        <p style={bulletStyle}><span style={dot}>•</span> Timed segments with narration scripts (what to say as you demo, word for word)</p>
-        <p style={bulletStyle}><span style={dot}>•</span> Setup checklists (repos to clone, tools to pre-install, backup plans)</p>
-        <p style={bulletStyle}><span style={dot}>•</span> Key moments to highlight (e.g., "When Claude self-corrects after a test failure — don't skip this, it's the most powerful demo moment")</p>
-        <p style={bulletStyle}><span style={dot}>•</span> Pacing notes for mixed-depth rooms</p>
-        <p style={pStyle}>Live sessions follow the "I do, we do, you do" progression: facilitator demos first, then the group works together on a guided exercise, then individuals tackle the lab independently.</p>
+        <p style={pStyle}>Live sessions are facilitator-led and focus on demonstration, narration, and discussion — never lecture. Live sessions follow the "I do, we do, you do" progression: facilitator demos first, then the group works together on a guided exercise, then individuals tackle the lab independently.</p>
 
         <h3 style={h2Style}>Hands-On Labs</h3>
         <p style={pStyle}>Labs are structured as step-by-step walkthroughs embedded directly in the web application. Each step includes:</p>
         <p style={bulletStyle}><span style={dot}>•</span> A description of what to do and why</p>
-        <p style={bulletStyle}><span style={dot}>•</span> Copy-pasteable commands (with a copy button for terminal commands)</p>
+        <p style={bulletStyle}><span style={dot}>•</span> Copy-pasteable commands</p>
         <p style={bulletStyle}><span style={dot}>•</span> Expected output so learners can self-verify</p>
         <p style={bulletStyle}><span style={dot}>•</span> Tips for common pitfalls</p>
         <p style={bulletStyle}><span style={dot}>•</span> Material references that link to printable cheat sheets</p>
@@ -2174,7 +2076,7 @@ function CurriculumPlanContent() {
           <h2 style={h1Style}>Competency Outcomes</h2>
         </div>
         <div style={accentLine(C.orange)} />
-        <p style={pStyle}>These are what each role should be able to <em>do</em> — not just know — by the end of the program. Each outcome is tied to a specific day's module.</p>
+        <p style={pStyle}>These are what each role should be able to do by the end of the program. Each outcome is tied to a specific day's module.</p>
 
         {[
           { role: "PE Pre-Sales", color: C.orange, outcomes: [
@@ -2263,6 +2165,9 @@ function CurriculumPlanContent() {
         <p style={bulletStyle}><span style={dot}>•</span> <strong>Alumni community and feedback loop:</strong> A Slack channel or Notion database where Basecamp graduates share field reports — what worked, what didn't, which customer scenarios came up that we didn't cover.</p>
         <p style={bulletStyle}><span style={dot}>•</span> <strong>Adaptive difficulty:</strong> Use the credential system to unlock advanced paths. Learners who complete all Day 1–3 badges with strong checkpoint scores could get an accelerated Day 4 with harder customer scenarios.</p>
         <p style={bulletStyle}><span style={dot}>•</span> <strong>Localization and async delivery:</strong> The current design assumes a facilitated, synchronous cohort. For global teams, I'd build an async-first version with video content, auto-graded exercises, and optional live office hours.</p>
+        <p style={bulletStyle}><span style={dot}>•</span> <strong>Visual polish:</strong> The app needs a pass on formatting, spacing, and visual consistency. Some sections are dense, some cards don't align well at different screen sizes, and the typography could be tighter throughout.</p>
+        <p style={bulletStyle}><span style={dot}>•</span> <strong>Copy editing:</strong> A full copy edit across every section — tighten the language, cut redundancy, make sure the tone is consistent from foundations through the facilitator guides.</p>
+        <p style={bulletStyle}><span style={dot}>•</span> <strong>Navigation:</strong> Moving between sections, finding the facilitator guide, and getting back to where you were can be clunky. The app would benefit from persistent navigation, breadcrumbs, or a sidebar that shows where you are in the program.</p>
       </div>
     </>
   );
@@ -2363,23 +2268,6 @@ function FeedbackResponsePage({ onBack }) {
         </p>
       </div>
 
-      {/* Cohort 1 summary stats */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 10, margin: "36px 0 40px", ...st.fadeUp, animationDelay: "0.1s" }}>
-        {[
-          { stat: "35", label: "NPS", sub: "n=17" },
-          { stat: "4.1", label: "Met expectations", sub: "1-5 avg" },
-          { stat: "31%", label: "Said 'Too fast'", sub: "pacing" },
-          { stat: "3.9", label: "Evals engagement", sub: "lowest session" },
-          { stat: "flat", label: "Confidence trend", sub: "4.29→4.28→4.28" },
-          { stat: "3.9", label: "Day 3 realism", sub: "work simulation" },
-        ].map((s, i) => (
-          <div key={i} style={{ background: C.cream, border: `1px solid ${C.lightGray}`, borderRadius: 10, padding: "16px 14px", textAlign: "center" }}>
-            <div style={{ fontFamily: "var(--serif)", fontSize: 22, color: s.stat === "flat" || parseFloat(s.stat) < 4.0 || s.stat === "31%" ? C.orange : C.green, lineHeight: 1.2 }}>{s.stat}</div>
-            <div style={{ fontFamily: "var(--sans)", fontSize: 11, color: C.muted, marginTop: 4 }}>{s.label}</div>
-            <div style={{ fontFamily: "var(--mono)", fontSize: 9, color: C.faint, marginTop: 2 }}>{s.sub}</div>
-          </div>
-        ))}
-      </div>
 
       {/* Sections */}
       {FEEDBACK_RESPONSE.map((section, si) => (
@@ -2402,11 +2290,13 @@ function FeedbackResponsePage({ onBack }) {
               </div>
 
               {/* Implementation */}
+              {item.implementation && (
               <div style={{ padding: "16px 20px", background: C.bg, borderRadius: 10, border: `1px solid ${C.lightGray}`, borderLeft: `3px solid ${C.orange}` }}>
                 <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.orange, marginBottom: 8 }}>What we changed</div>
                 <div style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 500, color: C.dark, marginBottom: 4 }}>{item.implementation.label}</div>
                 <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.muted, lineHeight: 1.6, margin: 0 }}>{item.implementation.detail}</p>
               </div>
+              )}
             </div>
           ))}
 
