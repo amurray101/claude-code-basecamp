@@ -2371,7 +2371,12 @@ export default function App() {
     if (data.moduleSubProgress) setModuleSubProgress(data.moduleSubProgress);
     if (data.checkpointsCompleted?.length) setCheckpointsCompleted(data.checkpointsCompleted);
     if (data.certificateEarnedDate) setCertificateEarnedDate(data.certificateEarnedDate);
-    if (data.foundationsDone && data.path) setPhase("hub");
+    // Check for hash-based deep link
+    const hash = window.location.hash.replace("#", "");
+    const hashPhases = ["facilitator", "materials", "deliverables", "feedback-response"];
+    if (hash && hashPhases.includes(hash)) {
+      setPhase(hash);
+    } else if (data.foundationsDone && data.path) setPhase("hub");
     else if (data.foundationsDone) setPhase("path-select");
     else setPhase("welcome");
   }, []);
@@ -2424,6 +2429,17 @@ export default function App() {
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [foundationStep, phase, activeModule, showMethodology, subPage, facilitatorModule]);
+
+  // Sync URL hash with phase for shareable links
+  useEffect(() => {
+    if (phase === "loading") return;
+    const hashPhases = ["facilitator", "materials", "deliverables", "feedback-response"];
+    if (hashPhases.includes(phase)) {
+      window.history.replaceState(null, "", "#" + phase);
+    } else {
+      window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    }
+  }, [phase]);
 
   // Bridge for inline material references in steps
   if (typeof window !== "undefined") {
