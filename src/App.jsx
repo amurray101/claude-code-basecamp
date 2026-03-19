@@ -1765,10 +1765,13 @@ function PathSelectPage({ onSelect }) {
                 }}
               >
                 <div style={{ flex: 1 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 3 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 3, flexWrap: "wrap" }}>
                     <span style={{ fontFamily: "var(--sans)", fontSize: 15, fontWeight: 500, color: C.dark }}>{p.label}</span>
                     {outcomes && (
                       <span style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 0.5, color: C.orange, background: C.orange + "10", padding: "2px 8px", borderRadius: 10 }}>{outcomes.verb}</span>
+                    )}
+                    {p.id !== "pe-pre" && (
+                      <span style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 0.5, color: C.faint, background: C.lightGray + "60", padding: "2px 8px", borderRadius: 10 }}>Work in progress</span>
                     )}
                   </div>
                   <div style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.faint, lineHeight: 1.5 }}>{p.desc}</div>
@@ -2494,10 +2497,7 @@ export default function App() {
               onMouseLeave={e => e.currentTarget.style.opacity = "1"}
             >Begin foundations →</button>
             <p style={{ fontFamily: "var(--mono)", fontSize: 11, color: C.faint, marginTop: 12 }}>~20 min foundations · then 5 days of hands-on modules</p>
-            <div style={{ display: "flex", gap: 20, marginTop: 20 }}>
-              <button onClick={() => setPhase("deliverables")} style={{ background: "none", border: "none", fontFamily: "var(--mono)", fontSize: 10, color: C.gray, cursor: "pointer", padding: 0, textDecoration: "underline", textUnderlineOffset: 3, opacity: 0.6 }}>Written deliverables →</button>
-              <button onClick={() => setPhase("facilitator")} style={{ background: "none", border: "none", fontFamily: "var(--mono)", fontSize: 10, color: C.gray, cursor: "pointer", padding: 0, textDecoration: "underline", textUnderlineOffset: 3, opacity: 0.6 }}>Facilitator guide →</button>
-            </div>
+            <button onClick={() => setPhase("facilitator")} style={{ background: "none", border: "none", fontFamily: "var(--mono)", fontSize: 10, color: C.gray, cursor: "pointer", marginTop: 20, padding: 0, textDecoration: "underline", textUnderlineOffset: 3, opacity: 0.6 }}>Facilitator guide →</button>
           </div>
         </div>
       )}
@@ -2709,6 +2709,9 @@ export default function App() {
             <h1 style={{ ...st.heroTitle, fontSize: 36 }}>Facilitator<br /><span style={{ color: C.blue }}>guide.</span></h1>
             <p style={st.heroBody}>Session plans, timing, talking points, and key moments for each module. These pages are for the instructor — trainees follow the main flow.</p>
           </div>
+          <div style={{ margin: "28px 0 0", padding: "16px 20px", background: C.blue + "06", borderRadius: 10, border: `1px solid ${C.blue}20`, ...st.fadeUp, animationDelay: "0.12s" }}>
+            <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.muted, lineHeight: 1.6, margin: 0 }}>This is the area of the program I would have liked to spend more time on. The facilitator guides have the structural bones — session plans, segment timing, setup checklists, and key moments — but with more time I'd develop richer coaching notes, branching paths for different cohort dynamics, and more detailed recovery playbooks for when sessions go off-script.</p>
+          </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 10, marginTop: 36 }}>
             {FACILITATOR_GUIDES.map((g, i) => {
               const mod = MODULES.find(m => m.id === g.moduleId);
@@ -2733,25 +2736,11 @@ export default function App() {
           {/* Slide deck link */}
           <div style={{ marginTop: 36, padding: "18px 22px", background: C.cream, borderRadius: 10, border: `1px solid ${C.lightGray}`, ...st.fadeUp, animationDelay: "0.6s" }}>
             <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: C.faint, marginBottom: 8 }}>Accompaniment slide deck</div>
+            <div style={{ padding: "12px 16px", background: C.blue + "06", borderRadius: 8, border: `1px solid ${C.blue}20`, marginBottom: 12 }}>
+              <p style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.muted, lineHeight: 1.5, margin: 0 }}>The slide deck is another area I would have liked to invest more time. The current deck covers the core content across all 5 days with speaker notes, but with more time I'd build per-session interactive decks with embedded live examples, animated diagrams, and "try it yourself" pause points — the format that scored highest in Cohort 1 feedback.</p>
+            </div>
             <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.muted, lineHeight: 1.5, margin: "0 0 12px" }}>44-slide interactive deck covering all 5 days: agentic fundamentals, CLAUDE.md and prompt craft, hooks/MCP/integrations, customer scenarios, and the capstone format. Each slide includes facilitator speaker notes (press 'S' to open speaker view).</p>
             <a href={import.meta.env.BASE_URL + "slides/basecamp-deck.html"} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.blue, textDecoration: "none", border: `1px solid ${C.blue}30`, borderRadius: 6, padding: "6px 14px", display: "inline-block" }}>Open slide deck →</a>
-          </div>
-          {/* Feedback response link */}
-          <div style={{ marginTop: 16, ...st.fadeUp, animationDelay: "0.65s" }}>
-            <button onClick={() => setPhase("feedback-response")}
-              style={{ ...st.pathCard, borderColor: C.green + "40" }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = C.green; e.currentTarget.style.background = C.green + "04"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = C.green + "40"; e.currentTarget.style.background = C.bg; }}
-            >
-              <div>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2 }}>
-                  <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.green }}>Cohort 1</span>
-                  <span style={{ fontFamily: "var(--sans)", fontSize: 15, fontWeight: 500, color: C.dark }}>Interview Questions</span>
-                </div>
-                <div style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.faint }}>Diagnosis, changes, and measurement plan based on program feedback data</div>
-              </div>
-              <span style={{ color: C.green, fontSize: 18, fontWeight: 300 }}>{"\u2192"}</span>
-            </button>
           </div>
         </div>
       )}
