@@ -2741,6 +2741,7 @@ export default function App() {
                     <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 2 }}>
                       <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.blue }}>{g.day}</span>
                       <span style={{ fontFamily: "var(--sans)", fontSize: 15, fontWeight: 500, color: C.dark }}>{g.title}</span>
+                      {g.moduleId === 2 && <span style={{ fontFamily: "var(--mono)", fontSize: 9, color: C.blue, background: C.blue + "10", padding: "2px 8px", borderRadius: 10 }}>Deep dive</span>}
                     </div>
                     <div style={{ fontFamily: "var(--mono)", fontSize: 11, color: C.faint }}>{g.duration}</div>
                   </div>

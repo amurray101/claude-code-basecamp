@@ -363,6 +363,24 @@
     section[data-background-color="#1A1A1A"] h3 {
       color: white;
     }
+
+    /* WIP badge on every slide */
+    .reveal .slides section::after {
+      content: "Slide design WIP";
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+      font-size: 10px;
+      letter-spacing: 0.5px;
+      color: #b0aea5;
+      background: rgba(176, 174, 165, 0.1);
+      border: 1px solid rgba(176, 174, 165, 0.25);
+      border-radius: 10px;
+      padding: 3px 10px;
+      pointer-events: none;
+      z-index: 10;
+    }
   </style>
 </head>
 <body>
@@ -722,6 +740,31 @@
         </aside>
       </section>
 
+      <!-- SLIDE 12b — WELCOME BACK + DAY 1 LEARNINGS -->
+      <section>
+        <h2>Welcome Back</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Before we dive in &mdash; what stuck from yesterday?</p>
+        <div class="card-grid card-grid-3" style="margin-top: var(--space-lg);">
+          <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--accent-coral);">
+            <h4 style="color: var(--accent-coral);">What clicked?</h4>
+            <p>What's the one thing from Day 1 that changed how you think about Claude Code?</p>
+          </div>
+          <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--accent-teal);">
+            <h4 style="color: var(--accent-teal);">What did you try?</h4>
+            <p>Did anyone experiment with Claude Code after the session? What did you build or explore?</p>
+          </div>
+          <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--accent-sage);">
+            <h4 style="color: var(--accent-sage);">What's still fuzzy?</h4>
+            <p>Any questions or concepts from Day 1 you want to revisit before we move forward?</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[FACILITATION]</strong> Spend 5 minutes here. This serves three purposes: (1) retrieval practice &mdash; recalling Day 1 concepts strengthens retention, (2) surfacing gaps before building on them, (3) warming up the room so people are comfortable speaking before the hands-on work.</p>
+          <p><strong>[PROMPT IF QUIET]</strong> "Who saw Claude read the codebase before you typed anything? What did that feel like compared to autocomplete tools?" or "Anyone try explaining the agentic loop to someone outside this room? How did it go?"</p>
+          <p><strong>[BRIDGE]</strong> "Great. Yesterday you installed Claude Code and watched it work. Today you're going to learn to steer it &mdash; starting with the most important file in any Claude Code deployment."</p>
+        </aside>
+      </section>
+
       <!-- SLIDE 13 — CLIENT SCENARIO: LUMEN LOGISTICS -->
       <section data-background-color="#1A1A1A">
         <div class="client-scenario">
@@ -948,53 +991,166 @@
         </aside>
       </section>
 
-      <!-- SLIDE 21 — BRIDGE TO LAB -->
+      <!-- SLIDE 21 — GUIDED LAB: LUMEN'S MONOREPO -->
       <section class="slide-exercise">
         <div class="exercise-header">
-          <span class="exercise-badge">LAB</span>
-          <span class="exercise-time">60 min</span>
+          <span class="exercise-badge">GUIDED LAB</span>
+          <span class="exercise-time">30 min</span>
         </div>
         <h2>Write the CLAUDE.md That Tames Lumen's Monorepo</h2>
-        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Fork the messy repo, explore the codebase, write a CLAUDE.md, then prove it works.</p>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Follow along step by step. We'll do this together, pausing at each stage.</p>
         <div class="exercise-steps">
           <div class="step">
             <span class="step-number">1</span>
             <div class="step-content">
-              <h4>Explore without a CLAUDE.md</h4>
-              <p>Watch Claude struggle with inconsistent conventions</p>
+              <h4>Clone and explore the codebase <span style="color: var(--text-secondary); font-weight: 400; font-size: 0.85em;">(3 min)</span></h4>
+              <p>Clone the messy repo. Before launching Claude, browse the directory structure yourself. Notice: mixed coding styles, missing docs, inconsistent test patterns. Write down 3 conventions you can identify.</p>
             </div>
           </div>
           <div class="step">
             <span class="step-number">2</span>
             <div class="step-content">
-              <h4>Write your CLAUDE.md</h4>
-              <p>Capture the patterns you discover. 30-80 lines.</p>
+              <h4>The "before" &mdash; Claude without a CLAUDE.md <span style="color: var(--text-secondary); font-weight: 400; font-size: 0.85em;">(5 min)</span></h4>
+              <p>Launch Claude Code and ask it to refactor <code>src/utils/helpers.js</code>. Don't give it any guidance &mdash; just "improve code quality, add error handling, write tests." Examine the output: Did it use async/await or Promises? Where did it put the tests? Did it follow any consistent style? Save this output &mdash; you'll compare it later.</p>
             </div>
           </div>
           <div class="step">
             <span class="step-number">3</span>
             <div class="step-content">
-              <h4>Refactor the messiest module</h4>
-              <p>Prove your CLAUDE.md works: conventions, tests, docs</p>
+              <h4>Draft your CLAUDE.md &mdash; Architecture &amp; Conventions <span style="color: var(--text-secondary); font-weight: 400; font-size: 0.85em;">(5 min)</span></h4>
+              <p>Create a CLAUDE.md at the repo root. Start with two sections: <strong>Architecture</strong> (where things live: routes, utils, tests) and <strong>Conventions</strong> (async/await, JSDoc, import ordering). Use what you observed in Step 1. Keep it under 30 lines for now.</p>
             </div>
           </div>
           <div class="step">
             <span class="step-number">4</span>
             <div class="step-content">
-              <h4>Pitch the CTO</h4>
-              <p>Show the before/after to your partner. Make the case for org-wide adoption.</p>
+              <h4>Add Testing &amp; Commit sections <span style="color: var(--text-secondary); font-weight: 400; font-size: 0.85em;">(3 min)</span></h4>
+              <p>Add a <strong>Testing</strong> section (framework, coverage expectations, co-located test files) and a <strong>Before committing</strong> section (lint + test commands). Your CLAUDE.md should now be 20&ndash;40 lines covering all four key sections.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">5</span>
+            <div class="step-content">
+              <h4>The "after" &mdash; Claude with your CLAUDE.md <span style="color: var(--text-secondary); font-weight: 400; font-size: 0.85em;">(5 min)</span></h4>
+              <p>Exit Claude and relaunch so it picks up your CLAUDE.md. Ask the exact same refactoring question from Step 2. Compare the output side-by-side: async/await consistency, test placement, documentation style. Call out every difference you spot.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">6</span>
+            <div class="step-content">
+              <h4>Iterate &mdash; ask Claude what's missing <span style="color: var(--text-secondary); font-weight: 400; font-size: 0.85em;">(4 min)</span></h4>
+              <p>Ask Claude: "What conventions did you infer from the existing code that I should add to my CLAUDE.md?" Review its suggestions. Add 2&ndash;3 that make sense. This is the iteration loop you'll use with every customer: write, observe, refine.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">7</span>
+            <div class="step-content">
+              <h4>Pitch the before/after to a partner <span style="color: var(--text-secondary); font-weight: 400; font-size: 0.85em;">(5 min)</span></h4>
+              <p>Pair up. Show your partner the Step 2 output (without CLAUDE.md) and the Step 5 output (with CLAUDE.md). Explain what changed and why. Practice the one-sentence pitch: "CLAUDE.md turns your team's unwritten conventions into instructions Claude follows automatically." Then swap.</p>
             </div>
           </div>
         </div>
         <aside class="notes">
-          <p><strong>[BRIDGE]</strong> "You've seen the theory. Now build the real thing. The Lumen CTO is waiting."</p>
-          <p><strong>[WATCH FOR]</strong> CLAUDE.md files over 200 lines (coach restraint). Trainees skipping the before/after comparison (the before is essential for the contrast). Trainees who finish early — give them the failure patterns exercise.</p>
+          <p><strong>[FACILITATION]</strong> Walk through this together. Do Steps 1&ndash;2 as a group with screen sharing, then let trainees work Steps 3&ndash;6 individually while you circulate. Reconvene for Step 7 as paired practice.</p>
+          <p><strong>[WATCH FOR]</strong> CLAUDE.md files over 80 lines (coach restraint &mdash; 30-40 lines is ideal). Trainees skipping the before/after comparison (the "before" is essential for the contrast). Trainees who finish Steps 3&ndash;4 quickly &mdash; have them try the session management commands (/compact, /cost) while waiting.</p>
+          <p><strong>[KEY MOMENT]</strong> Step 5 is the most important moment. When Claude's output visibly changes based on a file the trainee just wrote, that's the "aha." Narrate it: "Same task, same repo, completely different output. That's what 30 lines of documentation does."</p>
         </aside>
       </section>
 
       <!-- ============================================================
            SECTION 3 — DAY 3: EXTEND & CUSTOMIZE
            ============================================================ -->
+
+      <!-- SLIDE 21b — DEBRIEF: WHAT DID YOU LEARN? -->
+      <section>
+        <h2>Debrief: What Did You Learn?</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Let's hear from the room. Raise your hand or drop in chat.</p>
+        <div class="card-grid card-grid-3" style="margin-top: var(--space-lg);">
+          <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--accent-coral);">
+            <h4 style="color: var(--accent-coral);">Biggest surprise</h4>
+            <p>What did Claude do that you didn't expect &mdash; good or bad?</p>
+          </div>
+          <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--accent-teal);">
+            <h4 style="color: var(--accent-teal);">CLAUDE.md insight</h4>
+            <p>What section of your CLAUDE.md had the most visible impact on output quality?</p>
+          </div>
+          <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--accent-sage);">
+            <h4 style="color: var(--accent-sage);">Customer angle</h4>
+            <p>How would you explain the before/after to a non-technical buyer in one sentence?</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[FACILITATION]</strong> Spend 5&ndash;7 minutes here. Go around the room or take 3&ndash;4 volunteers. The goal is to surface insights the group can learn from &mdash; not just confirm everyone completed the steps.</p>
+          <p><strong>[LISTEN FOR]</strong> Trainees who noticed Claude reading the CLAUDE.md first on startup (the "aha"). Trainees who were surprised by what Claude inferred vs. what it needed to be told. Anyone who over-specified and saw quality drop &mdash; this is a great teaching moment.</p>
+          <p><strong>[PROMPT IF QUIET]</strong> "Did anyone's CLAUDE.md make things worse? What happened?" This usually gets a laugh and a good discussion about restraint.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 21c — SHARE: BEST CLAUDE.md PATTERNS -->
+      <section>
+        <h2>Share: Best CLAUDE.md Patterns</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Show your CLAUDE.md to the group. What's worth stealing?</p>
+        <div style="display: flex; gap: var(--space-xl); align-items: flex-start;">
+          <div style="flex: 1;">
+            <div class="card" style="border-left: 4px solid var(--accent-coral); padding: var(--space-lg);">
+              <h4>What to share</h4>
+              <ul style="font-size: var(--text-sm); padding-left: var(--space-lg); color: var(--text-secondary);">
+                <li>Your final CLAUDE.md (screen share or read it aloud)</li>
+                <li>The specific line(s) that made the biggest difference</li>
+                <li>Anything you added after Claude suggested it in Step 6</li>
+              </ul>
+            </div>
+          </div>
+          <div style="flex: 1;">
+            <div class="card" style="border-left: 4px solid var(--accent-teal); padding: var(--space-lg);">
+              <h4 style="color: var(--accent-teal);">Patterns to highlight</h4>
+              <ul style="font-size: var(--text-sm); padding-left: var(--space-lg); color: var(--text-secondary);">
+                <li><strong>Architecture section:</strong> Did it reduce Claude's startup time?</li>
+                <li><strong>Conventions section:</strong> Did it fix the async/await inconsistency?</li>
+                <li><strong>Testing section:</strong> Did Claude co-locate tests correctly?</li>
+                <li><strong>Length:</strong> Who kept it shortest? Did shorter work better?</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[FACILITATION]</strong> Ask 2&ndash;3 trainees to screen share their CLAUDE.md. Have the group vote on the best one. Collect the winning patterns &mdash; these become shared team assets.</p>
+          <p><strong>[KEY INSIGHT]</strong> The best CLAUDE.md files are usually the shortest. If someone wrote 60+ lines, ask: "Which lines could you remove without losing quality?" This teaches the restraint principle.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 21d — KEY TAKEAWAYS: DAY 2 -->
+      <section>
+        <h2>Day 2 Takeaways</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Three things to carry into every customer conversation</p>
+        <div class="exercise-steps">
+          <div class="step">
+            <span class="step-number">1</span>
+            <div class="step-content">
+              <h4>The before/after is your best demo</h4>
+              <p>Show Claude struggling without a CLAUDE.md, then thriving with one. This 60-second comparison wins more conversations than any feature walkthrough.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">2</span>
+            <div class="step-content">
+              <h4>Write the first CLAUDE.md together with the customer</h4>
+              <p>Don't hand them a template. Sit with their tech lead, explore their codebase, and co-author the file. This forces the team to articulate conventions they've never written down &mdash; valuable even without Claude Code.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">3</span>
+            <div class="step-content">
+              <h4>Shorter is better. Iterate, don't over-specify.</h4>
+              <p>Start with 20&ndash;30 lines covering architecture, conventions, testing, and commit rules. Observe Claude's output. Add what's missing. Remove what's redundant. The best CLAUDE.md files are living documents, not specifications.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[CLOSE]</strong> "You now have the most important skill in the program: the ability to make Claude Code match any team's conventions with a single file. Tomorrow, we'll build on this &mdash; hooks that enforce those conventions automatically, MCP servers that pull context from external tools, and composed workflows that tie it all together."</p>
+          <p><strong>[PREVIEW]</strong> "Day 3 is Arcadia Financial &mdash; a fintech with hard compliance requirements. Everything you built today is the foundation for what we build tomorrow."</p>
+        </aside>
+      </section>
 
       <!-- SLIDE 22 — DAY 3 DIVIDER -->
       <section class="slide-divider" data-background-color="var(--bg-secondary)">
