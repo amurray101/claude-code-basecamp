@@ -340,11 +340,11 @@ const FOUNDATIONS = [
       { type: "diagram" },
       { type: "stats", heading: "Fast Stats", items: [
         { stat: "72.7%", label: "SWE-bench Verified score — the industry benchmark for real-world coding ability", source: "Anthropic Sonnet 4 model card, May 2025" },
-        { stat: "200K", label: "Token context window — Claude reads entire codebases, not just open files", source: "Anthropic API documentation, docs.anthropic.com" },
-        { stat: "~$6/day", label: "Average cost per developer — 90% of users spend less than $12/day", source: "Anthropic Claude Code costs documentation, docs.anthropic.com/en/docs/claude-code/costs" },
-        { stat: "3", label: "Cloud deployment options — AWS Bedrock, Google Vertex AI, Microsoft Foundry", source: "Anthropic enterprise deployment docs, docs.anthropic.com/en/docs/claude-code/bedrock-vertex" },
-        { stat: "24", label: "Hook events available for custom automation — from pre-commit to post-edit to CI/CD", source: "Anthropic hooks documentation, docs.anthropic.com/en/docs/claude-code/hooks" },
-        { stat: "4", label: "Permission modes — default, plan, auto-accept, and headless for CI/CD pipelines", source: "Anthropic permissions documentation, docs.anthropic.com/en/docs/claude-code/security" },
+        { stat: "200K", label: "Token context window — Claude reads entire codebases, not just open files", source: "API docs", sourceUrl: "https://docs.anthropic.com" },
+        { stat: "~$6/day", label: "Average cost per developer — 90% of users spend less than $12/day", source: "Costs docs", sourceUrl: "https://docs.anthropic.com/en/docs/claude-code/costs" },
+        { stat: "3", label: "Cloud deployment options — AWS Bedrock, Google Vertex AI, Microsoft Foundry", source: "Deployment docs", sourceUrl: "https://docs.anthropic.com/en/docs/claude-code/bedrock-vertex" },
+        { stat: "24", label: "Hook events available for custom automation — from pre-commit to post-edit to CI/CD", source: "Hooks docs", sourceUrl: "https://docs.anthropic.com/en/docs/claude-code/hooks" },
+        { stat: "4", label: "Permission modes — default, plan, auto-accept, and headless for CI/CD pipelines", source: "Security docs", sourceUrl: "https://docs.anthropic.com/en/docs/claude-code/security" },
       ]},
       { type: "heading", value: "Four ways to use Claude Code", simple: "The four places you can run Claude Code" },
       { type: "text", value: "Claude Code isn't locked to one environment. It meets developers where they already work — terminal, desktop, phone, or browser. Each surface has a distinct strength, and knowing when to reach for which one is part of what makes your demos and customer conversations land.", simple: "You can use Claude Code in four different places: the command line (terminal), a desktop app, your phone, or a web browser. Each one is better for different situations. Knowing which to recommend helps you match the tool to how someone actually works." },
@@ -715,7 +715,7 @@ const MODULES = [
     modality: { live: "45 min", lab: "45 min", selfPaced: "30 min pre-work" },
 steps: [
       { title: "Install and authenticate", context: "terminal", desc: "Install Claude Code globally, authenticate with your Anthropic account, and verify the installation.", commands: ["npm install -g @anthropic-ai/claude-code", "claude auth", "claude --version"], expected: "You should see a success message with the installed version number, a browser window to log in, and the version number confirming everything works.", materialRef: { id: "M1", note: "Follow along with the Install & First Run cheat sheet for troubleshooting tips" }, tip: "If you're on a company network that blocks the browser redirect, ask your facilitator for the manual token flow." },
-      { title: "Set up your IDE and clone the repo", context: "vscode", desc: "Open VS Code (or JetBrains) and install the Claude Code extension. Search for 'Claude Code' in the Extensions marketplace and click Install. Then open the Command Palette and run 'Claude Code: Sign In' to authenticate. Once your IDE is ready, clone the sample Express API we'll use as our playground.", commands: ["git clone https://github.com/anthropics/claude-code-sample-api.git", "cd claude-code-sample-api", "npm install"], tip: "In JetBrains, the plugin is available in the JetBrains Marketplace under the same name. The setup flow is similar." },
+      { title: "Set up your IDE and clone the repo", context: "vscode", desc: "Open VS Code (or JetBrains) and install the Claude Code extension. Search for 'Claude Code' in the Extensions marketplace and click Install. Then open the Command Palette and run 'Claude Code: Sign In' to authenticate. Once your IDE is ready, clone the sample Express API we'll use as our playground.", commands: ["git clone https://github.com/amurray101/claude-code-sample-api.git", "cd claude-code-sample-api", "npm install"], tip: "In JetBrains, the plugin is available in the JetBrains Marketplace under the same name. The setup flow is similar." },
       { title: "Launch Claude Code", context: "terminal", desc: "Start an interactive Claude Code session. Watch how it reads the directory structure and key files automatically — this is the agentic difference.", commands: ["claude"], tip: "Notice how Claude reads your package.json, directory structure, and any CLAUDE.md file before you even type a prompt. This is context gathering — the first step of the agentic loop." },
       { title: "Your first agentic task", context: "claude", desc: "Give Claude a real task that requires reading existing code, planning changes, and modifying multiple files. Type this prompt into the Claude Code session:", prompt: "Add a GET /health endpoint that returns { status: 'ok', timestamp: Date.now(), uptime: process.uptime() }. Put it in the existing routes file. Then write a test for it using the same testing patterns as the existing tests.", expected: "Claude should: 1) Read the existing route files and test files, 2) Plan the changes, 3) Add the endpoint, 4) Write a matching test, 5) Optionally run the test to verify." },
       { title: "Verify and compare surfaces", context: "terminal", desc: "Run the tests to verify Claude's work, then open the same repo in VS Code to compare the IDE experience. Notice how the terminal gives you raw speed while the IDE gives you inline diffs and a visual file tree.", commands: ["npm test"], expected: "All tests should pass, including the new health endpoint test.", tip: "Open the Claude Code panel in VS Code (click the Claude icon in the sidebar or use Cmd/Ctrl+Shift+P → 'Claude Code: Open') and try a similar prompt like 'Add a GET /version endpoint that returns the package version from package.json. Write a test for it.' Compare the experience: both surfaces use the same agentic engine underneath." },
@@ -749,7 +749,7 @@ steps: [
     modality: { live: "60 min", lab: "60 min", selfPaced: "30 min pre-work" },
 steps: [
       { title: "Set the scene: Lumen\'s problem", desc: "Before touching any code, internalize the customer scenario. Lumen Logistics has 40 developers, zero documentation, and a 3-week ramp time for new hires. The CTO wants Claude Code to fix this. Your job today: prove that a single file \u2014 CLAUDE.md \u2014 can transform how Claude understands and works within their codebase.", narration: "Open with: 'Imagine you\'re walking into Lumen Logistics. Their CTO tells you: our new hires take three weeks to get productive because nothing is written down. Can Claude Code fix that?' Pause. Let that land. The answer is yes \u2014 and the key is CLAUDE.md.", timing: "2 min" },
-      { title: "Fork and clone the messy repo", context: "terminal", desc: "We\'ve prepared a repo with no documentation, inconsistent patterns, and no CLAUDE.md. Fork it to your account and clone locally.", commands: ["git clone https://github.com/anthropics/basecamp-messy-repo.git", "cd basecamp-messy-repo", "npm install"], narration: "As you clone: 'This repo is designed to be messy on purpose. Mixed coding styles, no docs, no tests in some modules. It\'s what a real customer codebase looks like on day one.'", timing: "3 min" },
+      { title: "Fork and clone the messy repo", context: "terminal", desc: "We\'ve prepared a repo with no documentation, inconsistent patterns, and no CLAUDE.md. Fork it to your account and clone locally.", commands: ["git clone https://github.com/amurray101/basecamp-messy-repo.git", "cd basecamp-messy-repo", "npm install"], narration: "As you clone: 'This repo is designed to be messy on purpose. Mixed coding styles, no docs, no tests in some modules. It\'s what a real customer codebase looks like on day one.'", timing: "3 min" },
       { title: "Explore the codebase without Claude", context: "terminal", desc: "Before writing a CLAUDE.md, understand what you\'re working with. Browse the directory structure and notice the inconsistencies.", commands: ["ls -la src/", "cat package.json"], keyPoint: "You have to understand the conventions before you can teach them to Claude. This exploration step is what you\'d do in a real customer engagement \u2014 and it\'s what you\'d coach the customer\'s tech lead to do.", timing: "3 min" },
       { title: "The 'before' \u2014 Claude without CLAUDE.md", context: "claude", desc: "Launch Claude Code in the messy repo. Without a CLAUDE.md, Claude infers conventions from the code itself \u2014 sometimes right, sometimes wrong. Ask it to refactor a module and watch where it guesses.", prompt: "Refactor src/utils/helpers.js \u2014 improve the code quality, add error handling, and write tests.", narration: "After Claude finishes: 'Look at the output. Did it use async/await or Promises? Did it add JSDoc or just inline comments? Did it put the test file in the right place? It made choices \u2014 but they were guesses. In a customer codebase with strong conventions, guesses create inconsistency.'", keyPoint: "This is the most important demo moment in the entire program. The 'before' output isn\'t bad \u2014 it\'s just inconsistent. That\'s the problem CLAUDE.md solves.", timing: "8 min" },
       { title: "Write your CLAUDE.md", context: "file", materialRef: { id: "M2a", note: "Use the CLAUDE.md Builder worksheet to structure your file" }, desc: "CLAUDE.md has four key sections: Architecture (where things live), Conventions (how to write code), Testing (what 'tested' means), and Before Committing (the checklist). Create one now.", code: "# Project: Basecamp Sample App\n\n## Architecture\n- Express.js backend with route handlers in /src/routes/\n- Utility modules in /src/utils/\n- Tests live next to source files: foo.ts \u2192 foo.test.ts\n\n## Conventions\n- Use async/await, never raw Promises\n- All functions need JSDoc comments\n- Error handling: always use try/catch with specific error types\n- Imports: group by external, internal, types\n\n## Testing\n- Framework: Jest with supertest for API tests\n- Every route needs at least one happy path and one error test\n- Run `npm test` before committing\n\n## Before committing\n- Run `npm run lint && npm test`\n- Never commit .env or node_modules", codeTitle: "CLAUDE.md", tip: "In a customer engagement, writing the first CLAUDE.md together is a powerful onboarding moment. It forces the team to articulate conventions they\'ve never written down \u2014 which is itself valuable even without Claude Code.", timing: "8 min" },
@@ -769,7 +769,6 @@ steps: [
       { title: "Common failure patterns and how to recover", why: "Five anti-patterns trip up even experienced users: kitchen-sink sessions that exhaust context, correction spirals that degrade output, over-specified CLAUDE.md files that conflict, skipping review in auto-accept mode, and open-ended exploration that burns tokens. A pattern-recognition exercise would build the diagnostic instinct trainees need in the field.", topics: ["Kitchen sink sessions", "Over-specified CLAUDE.md", "Correction spirals", "Trust-then-verify gap", "Context exhaustion", "When to start fresh"] },
     ],
     color: C.blue,
-    deepDive: true,
     competencies: {
       "pe-pre": "Write a CLAUDE.md for a prospect's repo during a live evaluation, showing how context transforms output quality — a best practice you can teach in every technical evaluation",
       "pe-post": "Pair-program with a customer engineering team to author CLAUDE.md files tailored to their codebase, conventions, and CI/CD pipeline",
@@ -1217,7 +1216,7 @@ const MATERIAL_META = {
 };
 
 // ─── STEP-BY-STEP EXERCISE COMPONENT ───
-function ExerciseSteps({ steps, color }) {
+function ExerciseSteps({ steps, color, simplified }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
       {steps.map((step, i) => (
@@ -1259,19 +1258,19 @@ function ExerciseSteps({ steps, color }) {
                 <span style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.muted, lineHeight: 1.5 }}>{step.tip}</span>
               </div>
             )}
-            {step.narration && (
+            {!simplified && step.narration && (
               <div style={{ margin: "10px 0 0", padding: "12px 16px", background: "#f0eee8", borderRadius: 8, borderLeft: `3px solid ${C.orange}` }}>
                 <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, color: C.orange, textTransform: "uppercase", marginBottom: 6 }}>Facilitator script</div>
                 <p style={{ fontFamily: "var(--serif)", fontSize: 13.5, color: C.dark, lineHeight: 1.65, margin: 0, fontStyle: "italic" }}>{step.narration}</p>
               </div>
             )}
-            {step.keyPoint && (
+            {!simplified && step.keyPoint && (
               <div style={{ margin: "8px 0 0", padding: "10px 14px", borderRadius: 6, background: C.green + "08", border: `1px solid ${C.green}20`, display: "flex", gap: 8, alignItems: "flex-start" }}>
                 <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.green, flexShrink: 0, marginTop: 2 }}>KEY POINT</span>
                 <span style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.dark, lineHeight: 1.5 }}>{step.keyPoint}</span>
               </div>
             )}
-            {step.timing && (
+            {!simplified && step.timing && (
               <div style={{ display: "inline-block", margin: "6px 0 0", padding: "3px 10px", background: C.faint + "15", borderRadius: 12 }}>
                 <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.faint }}>{"\u23F1"} {step.timing}</span>
               </div>
@@ -1448,7 +1447,7 @@ function ContentBlock({ block, idx, simplified }) {
           <div key={i} style={{ background: C.cream, border: `1px solid ${C.lightGray}`, borderRadius: 10, padding: "24px 20px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", textAlign: "center", aspectRatio: "1 / 1" }}>
             <div style={{ fontFamily: "var(--serif)", fontSize: 28, fontWeight: 400, color: C.orange, lineHeight: 1.2, marginBottom: 10 }}>{s.stat}</div>
             <div style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.muted, lineHeight: 1.5 }}>{s.label}</div>
-            {s.source && <div style={{ fontFamily: "var(--mono)", fontSize: 9, color: C.faint, marginTop: 8, lineHeight: 1.4 }}>{s.source}</div>}
+            {s.source && (s.sourceUrl ? <a href={s.sourceUrl} target="_blank" rel="noopener noreferrer" style={{ display: "inline-block", fontFamily: "var(--mono)", fontSize: 9, color: C.blue, background: C.blue + "08", border: `1px solid ${C.blue}20`, borderRadius: 10, padding: "2px 8px", marginTop: 8, textDecoration: "none", transition: "all 0.2s" }} onMouseEnter={e => { e.currentTarget.style.background = C.blue + "15"; }} onMouseLeave={e => { e.currentTarget.style.background = C.blue + "08"; }}>{s.source} ↗</a> : <div style={{ fontFamily: "var(--mono)", fontSize: 9, color: C.faint, marginTop: 8, lineHeight: 1.4 }}>{s.source}</div>)}
           </div>
         ))}
       </div>
@@ -2873,16 +2872,11 @@ export default function App() {
                   <div style={st.eyebrow}>{mod.day} · Module {mod.id} of 5</div>
                 </div>
               </div>
-              <h1 style={{ fontFamily: "var(--serif)", fontSize: 36, fontWeight: 400, color: C.dark, margin: "0 0 8px" }}>{mod.title}</h1>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
+                <h1 style={{ fontFamily: "var(--serif)", fontSize: 36, fontWeight: 400, color: C.dark, margin: "0 0 8px" }}>{mod.title}</h1>
+                <button onClick={() => setSimplified(s => !s)} style={{ background: simplified ? C.blue + "12" : "transparent", border: `1px solid ${simplified ? C.blue + "40" : C.lightGray}`, borderRadius: 6, padding: "5px 12px", cursor: "pointer", fontFamily: "var(--sans)", fontSize: 11, color: simplified ? C.blue : C.faint, transition: "all 0.2s", whiteSpace: "nowrap", flexShrink: 0 }}>{simplified ? "Simplified" : "Simplify"}</button>
+              </div>
               <p style={{ ...st.bodyText, maxWidth: 540, fontSize: 16, marginBottom: 28 }}>{mod.subtitle}</p>
-            </div>
-
-            {/* Modality breakdown */}
-            <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap", ...st.fadeUp, animationDelay: "0.08s" }}>
-              {mod.modality.live && <span style={{ ...st.modalityTag, background: C.orange + "10", color: C.orange, borderColor: C.orange + "30" }}>🎤 Live: {mod.modality.live}</span>}
-              {mod.modality.lab && mod.modality.lab !== "integrated" && <span style={{ ...st.modalityTag, background: C.green + "10", color: C.green, borderColor: C.green + "30" }}>🔬 Lab: {mod.modality.lab}</span>}
-              {mod.modality.lab === "integrated" && <span style={{ ...st.modalityTag, background: C.green + "10", color: C.green, borderColor: C.green + "30" }}>🔬 Integrated lab</span>}
-              {mod.modality.selfPaced && mod.modality.selfPaced !== "none" && <span style={{ ...st.modalityTag, background: C.blue + "10", color: C.blue, borderColor: C.blue + "30" }}>📖 Self-paced: {mod.modality.selfPaced}</span>}
             </div>
 
             {/* Role-specific competency */}
@@ -2921,7 +2915,7 @@ export default function App() {
                 <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 2, color: mod.color, textTransform: "uppercase", marginBottom: 4 }}>Step-by-step walkthrough</div>
                 <p style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.faint, margin: "0 0 12px", lineHeight: 1.5 }}>Follow each step in order. Commands with a copy button can be pasted directly into your terminal.</p>
                 <div style={{ border: `1px solid ${C.lightGray}`, borderRadius: 12, padding: "4px 20px", background: C.bg }}>
-                  <ExerciseSteps steps={mod.steps} color={mod.color} />
+                  <ExerciseSteps steps={mod.steps} color={mod.color} simplified={simplified} />
                 </div>
               </div>
             )}
@@ -2947,13 +2941,6 @@ export default function App() {
               <div style={st.statLabel}>You'll produce</div>
               <div style={st.statValue}>{mod.output}</div>
             </div>
-
-            {mod.deepDive && (
-              <div style={{ background: C.blue + "06", borderRadius: 10, padding: "16px 20px", border: `1px solid ${C.blue}20`, marginBottom: 20, ...st.fadeUp, animationDelay: "0.28s" }}>
-                <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 2, color: C.blue, textTransform: "uppercase", marginBottom: 6 }}>Deep dive module</div>
-                <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.muted, lineHeight: 1.5, margin: 0 }}>This module has been fully built out with a slide deck, hands-on lab, and leave-behind reference. It's the session you'd experience live in Basecamp.</p>
-              </div>
-            )}
 
             {mod.gaps && (
               <div style={{ marginBottom: 20, ...st.fadeUp, animationDelay: "0.3s" }}>
@@ -3102,7 +3089,6 @@ export default function App() {
                         {done && <span style={{ fontSize: 10, fontFamily: "var(--sans)", fontWeight: 500, color: mod.color, background: mod.color + "12", padding: "2px 8px", borderRadius: 10 }}>Complete</span>}
                         {!done && subProg === "checkpoint-done" && <span style={{ fontSize: 10, fontFamily: "var(--sans)", fontWeight: 500, color: mod.color, background: mod.color + "10", padding: "2px 8px", borderRadius: 10 }}>Checkpoint done</span>}
                         {!done && subProg === "started" && <span style={{ fontSize: 10, fontFamily: "var(--sans)", fontWeight: 400, color: C.faint, background: C.lightGray + "60", padding: "2px 8px", borderRadius: 10 }}>In progress</span>}
-                        {mod.deepDive && !done && !subProg && <span style={{ fontSize: 10, fontFamily: "var(--mono)", color: C.blue, background: C.blue + "10", padding: "2px 8px", borderRadius: 10 }}>Deep dive</span>}
                       </div>
                       <div style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.faint, marginTop: 2 }}>{mod.skills.join(" · ")}</div>
                     </div>
