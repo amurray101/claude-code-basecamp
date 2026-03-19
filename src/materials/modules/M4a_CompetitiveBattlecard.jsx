@@ -245,6 +245,37 @@ export default function M4a_CompetitiveBattlecard() {
           ))}
         </div>
 
+        {/* Competitive Reframe */}
+        <div
+          style={{
+            background: C.cream,
+            border: `1px solid ${C.blue}`,
+            borderLeft: `4px solid ${C.blue}`,
+            borderRadius: 6,
+            padding: '14px 18px',
+            marginBottom: 16,
+          }}
+        >
+          <div
+            style={{
+              fontFamily: 'var(--mono)',
+              fontSize: 10,
+              fontWeight: 700,
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em',
+              color: C.blue,
+              marginBottom: 6,
+            }}
+          >
+            Competitive Reframe
+          </div>
+          <div style={{ ...bodyText, color: C.muted, fontSize: 11, lineHeight: 1.7 }}>
+            Compare to an engineering hire ($15&ndash;25K/month fully loaded), not a Copilot seat
+            ($19/month). Different category, different value proposition. Claude Code doesn&rsquo;t
+            do one thing faster &mdash; it does things that weren&rsquo;t possible before.
+          </div>
+        </div>
+
         {/* Closing Question */}
         <div style={calloutBox}>
           <div

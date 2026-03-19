@@ -347,42 +347,6 @@ export default function F7b_CostROI() {
           ))}
         </div>
 
-        {/* Competitive Reframe */}
-        <div
-          style={{
-            background: C.cream,
-            border: `1px solid ${C.lightGray}`,
-            borderLeft: `4px solid ${C.blue}`,
-            borderRadius: 6,
-            padding: '16px 20px',
-            marginBottom: 28,
-          }}
-        >
-          <div
-            style={{
-              ...monoLabel,
-              fontWeight: 600,
-              color: C.blue,
-              marginBottom: 8,
-            }}
-          >
-            Competitive Reframe
-          </div>
-          <p
-            style={{
-              fontFamily: 'var(--sans)',
-              fontSize: 13,
-              color: C.dark,
-              lineHeight: 1.65,
-              margin: 0,
-            }}
-          >
-            Compare to an engineering hire ($15&ndash;25K/month fully loaded), not a Copilot seat
-            ($19/month). Different category, different value proposition. Claude Code doesn&rsquo;t
-            do one thing faster &mdash; it does things that weren&rsquo;t possible before.
-          </p>
-        </div>
-
         {/* Back-of-Napkin Template */}
         <h2 style={sectionHeading}>Back-of-Napkin Template</h2>
         <div
