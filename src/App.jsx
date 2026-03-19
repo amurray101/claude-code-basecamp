@@ -9,8 +9,33 @@ const C = {
 };
 
 // ─── ENV ───
-const ANTHROPIC_API_KEY = import.meta.env.VITE_ANTHROPIC_API_KEY || "";
-const CHAT_ENABLED = Boolean(ANTHROPIC_API_KEY);
+function getApiKey() {
+  return import.meta.env.VITE_ANTHROPIC_API_KEY || (typeof localStorage !== "undefined" && localStorage.getItem("basecamp-api-key")) || "";
+}
+function setApiKey(key) {
+  try { localStorage.setItem("basecamp-api-key", key); } catch {}
+}
+
+// ─── API KEY ENTRY COMPONENT ───
+function ApiKeyEntry({ onKeySet }) {
+  const [key, setKey] = useState("");
+  return (
+    <div style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 8 }}>
+      <input
+        type="password"
+        value={key}
+        onChange={e => setKey(e.target.value)}
+        onKeyDown={e => { if (e.key === "Enter" && key.trim()) { setApiKey(key.trim()); onKeySet(); } }}
+        placeholder="sk-ant-..."
+        style={{ flex: 1, fontFamily: "var(--mono)", fontSize: 11, padding: "7px 12px", border: "1px solid #e8e6dc", borderRadius: 6, background: "#faf9f5", color: "#141413", outline: "none" }}
+      />
+      <button
+        onClick={() => { if (key.trim()) { setApiKey(key.trim()); onKeySet(); } }}
+        style={{ fontFamily: "var(--sans)", fontSize: 11, color: "#d97757", background: "transparent", border: "1px solid #d9775730", borderRadius: 6, padding: "7px 14px", cursor: "pointer" }}
+      >Connect</button>
+    </div>
+  );
+}
 
 // ─── PERSISTENT PROGRESS (localStorage) ───
 const PROGRESS_DEFAULTS = {
@@ -66,7 +91,7 @@ function ClaudeChat({ prompt, onClose }) {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-api-key": ANTHROPIC_API_KEY,
+          "x-api-key": getApiKey(),
           "anthropic-version": "2023-06-01",
           "anthropic-dangerous-direct-browser-access": "true",
         },
@@ -361,16 +386,28 @@ const FOUNDATIONS = [
       { type: "text", value: "Before we dive into Claude Code, you need to see the full board. Anthropic's products are a composable stack. Claude Code is one surface in this system, and understanding where it fits influences how you talk about it with customers.", simple: "Before we get into Claude Code specifically, let's look at the big picture. Anthropic makes several products that work like building blocks -- each one is useful on its own, but they're designed to snap together. Claude Code is one of those blocks, and knowing how the pieces fit helps you explain it to customers." },
       { type: "overview", heading: "What we'll cover", items: [
         { label: "Product surfaces", desc: "Claude.ai, the API, and Claude Code — and how they connect" },
+        { label: "Cowork", desc: "Claude.ai's agentic execution mode — AI that acts, not just answers" },
         { label: "Model family", desc: "Opus, Sonnet, and Haiku — when to use each" },
         { label: "Extension layers", desc: "MCP, Skills, and Projects — the customization toolkit" },
       ]},
       { type: "outcomes", items: [
         "Map the full Anthropic product stack and explain how each surface connects to the API",
+        "Differentiate Cowork from chat and from Claude Code — and know when to recommend each to a customer",
         "Recommend the right Claude model (Opus, Sonnet, Haiku) for a given customer use case",
         "Identify which extension layers (MCP, Skills, Projects) solve a customer's specific workflow needs",
       ]},
       { type: "platform-diagram" },
-      { type: "text", value: "Every surface talks to the same API. Claude.ai gives non-technical users chat, Projects, and Skills. The API lets developers build custom applications. And Claude Code — the focus of this track — gives developers an agentic coding partner directly in their terminal, desktop app, mobile app, or through the browser.", simple: "All of Anthropic's products connect to the same core engine through an API (Application Programming Interface -- think of it as a shared back door that lets different apps talk to Claude's brain). Claude.ai is the web app for everyday users who want to chat, organize work into Projects, and use pre-built Skills. The API is for developers who want to build their own apps on top of Claude. And Claude Code -- the main topic of this course -- is a coding assistant that works right inside a developer's terminal (command line), desktop app, phone, or browser." },
+      { type: "text", value: "Every surface talks to the same API. Claude.ai gives non-technical users chat, Projects, Skills, and Cowork — an agentic execution mode where Claude works autonomously on multi-step tasks. The API lets developers build custom applications. And Claude Code — the focus of this track — gives developers an agentic coding partner directly in their terminal, desktop app, mobile app, or through the browser.", simple: "All of Anthropic's products connect to the same core engine through an API (Application Programming Interface -- think of it as a shared back door that lets different apps talk to Claude's brain). Claude.ai is the web app for everyday users who want to chat, organize work into Projects, use pre-built Skills, and use Cowork to hand off tasks that Claude completes on its own. The API is for developers who want to build their own apps on top of Claude. And Claude Code -- the main topic of this course -- is a coding assistant that works right inside a developer's terminal (command line), desktop app, phone, or browser." },
+      { type: "heading", value: "Cowork: agentic execution in Claude.ai", simple: "Claude.ai's mode for handing off tasks to Claude" },
+      { type: "text", value: "Chat is for thinking together. Cowork is for delegating. When a user starts a Cowork task, Claude doesn't just respond — it plans, executes multi-step workflows, connects to external tools through connectors, and delivers finished work. It's the same agentic reasoning loop that powers Claude Code, but for non-coding knowledge work: research, analysis, content creation, data processing, and cross-tool workflows.", simple: "Regular chat is a back-and-forth conversation — you ask, Claude answers, you ask again. Cowork is different: you hand off a whole task, and Claude works on it independently. It makes a plan, takes multiple steps, connects to your other tools (like email, calendar, or documents), and comes back with finished work. Think of chat as brainstorming with a colleague, and Cowork as giving an assignment to a capable assistant." },
+      { type: "models", items: [
+        { name: "Connectors", color: C.green, desc: "Cowork connects to the tools your team already uses — Gmail, Google Calendar, Google Drive, Slack, Notion, and more. Claude can read emails, check calendars, search documents, and post messages as part of a multi-step workflow. No API keys or developer setup required.", tag: "External integrations", simpleDesc: "Connectors let Claude plug into everyday work tools like Gmail, Google Calendar, Google Drive, Slack, and Notion. Claude can read your emails, check your schedule, search your documents, and send messages -- all as part of completing a task you've handed off. No coding or technical setup required." },
+        { name: "Autonomous reasoning", color: C.orange, desc: "Cowork uses the same plan-execute-evaluate loop as Claude Code. It breaks complex tasks into steps, calls connectors to gather information, evaluates intermediate results, adjusts its approach, and delivers a complete output — not a suggestion, but finished work.", tag: "Think → Act → Deliver", simpleDesc: "When you give Cowork a task, Claude doesn't just answer in one shot. It breaks the task into steps, gathers information from your connected tools, checks its own work, adjusts if something's off, and delivers a finished result. It's doing real work, not just suggesting what you could do." },
+        { name: "Permission modes", color: C.blue, desc: "Three levels of autonomy let users control how much independence Claude has. 'Ask Me First' confirms each action. 'Informed Autonomy' acts but reports back. 'Full Autonomy' lets Claude work independently and deliver results. Teams typically start cautious and expand as trust builds.", tag: "Trust at your pace", simpleDesc: "You control how much freedom Claude gets. 'Ask Me First' means Claude checks with you before every step. 'Informed Autonomy' means Claude goes ahead but tells you what it did. 'Full Autonomy' means Claude handles everything and just gives you the result. Most people start cautious and give Claude more independence as they get comfortable." },
+      ]},
+      { type: "text", value: "Cowork matters for your customer conversations because it expands the buyer beyond engineering. When a marketing lead, operations manager, or analyst sees Claude autonomously research a topic, pull data from their existing tools, and produce a formatted deliverable — that's a different conversation than 'we have a chatbot.' Cowork turns Claude from a tool individuals use into a platform teams depend on.", simple: "Cowork is important to understand because it helps you talk to people outside of engineering. When a marketing manager sees Claude independently research a topic, pull data from their email and documents, and produce a polished report — that's very different from showing them a chatbot. Cowork makes Claude relevant to entire organizations, not just developers." },
+      { type: "heading", value: "Cowork vs. Claude Code", simple: "When to recommend Cowork vs. Claude Code" },
+      { type: "text", value: "Both Cowork and Claude Code use agentic reasoning — but they serve different users doing different work. Claude Code is for developers working in code: it reads repositories, edits files, runs tests, and commits changes. Cowork is for knowledge workers doing non-code tasks: research, analysis, content creation, and cross-tool workflows. In enterprise deployments, both typically coexist — engineering teams use Claude Code, while the rest of the organization uses Cowork through Claude.ai. Knowing which to recommend for which persona is a key part of the customer conversation.", simple: "Both Cowork and Claude Code let Claude work independently on tasks, but they're built for different people. Claude Code is for programmers -- it works with code files, runs tests, and makes commits. Cowork is for everyone else -- it helps with research, writing, data analysis, and coordinating across tools like email and documents. In a large company, developers might use Claude Code while marketing, operations, and finance teams use Cowork. Knowing which to suggest to which person is an important skill." },
       { type: "heading", value: "The model family", simple: "The different versions of Claude" },
       { type: "models", items: [
         { name: "Claude Opus", color: C.orange, desc: "Maximum intelligence. Complex reasoning, nuanced analysis, research synthesis. High-stakes decisions where depth matters more than speed.", tag: "Deepest reasoning", simpleDesc: "The most powerful version of Claude. Think of it as the senior expert you bring in for the hardest problems -- it takes more time and costs more, but it catches things the others might miss. Best for complicated decisions where getting it right matters more than getting it fast." },
@@ -1569,13 +1606,16 @@ function ContentBlock({ block, idx, onReflect, simplified }) {
     <div style={{ margin: "16px 0 20px", padding: "20px 24px", background: C.orange + "06", borderRadius: 10, border: `1px solid ${C.orange}20`, ...st.fadeUp, animationDelay: delay }}>
       <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 2, color: C.orange, textTransform: "uppercase", marginBottom: 8 }}>Pause and think</div>
       <p style={{ fontFamily: "var(--serif)", fontSize: 15, fontStyle: "italic", color: C.muted, lineHeight: 1.6, margin: "0 0 12px" }}>{block.prompt}</p>
-      {CHAT_ENABLED ? (
+      {getApiKey() ? (
         <button onClick={() => onReflect(block.prompt)} style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.orange, background: "transparent", border: `1px solid ${C.orange}30`, borderRadius: 6, padding: "7px 16px", cursor: "pointer", transition: "all 0.2s" }}
           onMouseEnter={e => { e.currentTarget.style.background = C.orange + "10"; }}
           onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
         >Think through this with Claude →</button>
       ) : (
-        <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: C.faint }}>Chat available in internal version</span>
+        <div>
+          <p style={{ fontFamily: "var(--sans)", fontSize: 11, color: C.faint, margin: "0 0 4px" }}>Enter your Anthropic API key to discuss this with Claude. Your key stays in your browser only.</p>
+          <ApiKeyEntry onKeySet={() => onReflect(block.prompt)} />
+        </div>
       )}
     </div>
   );
@@ -2348,7 +2388,7 @@ export default function App() {
   return (
     <div style={st.page} ref={contentRef}>
       <ProgressIndicator foundationsDone={foundationsDone} foundationStep={foundationStep} totalFoundations={FOUNDATIONS.length} completedModules={completed.size} totalModules={MODULES.length} />
-      {chatPrompt && CHAT_ENABLED && <ClaudeChat prompt={chatPrompt} onClose={() => setChatPrompt(null)} />}
+      {chatPrompt && getApiKey() && <ClaudeChat prompt={chatPrompt} onClose={() => setChatPrompt(null)} />}
 
       {/* ═══ NAME INPUT MODAL ═══ */}
       {showNameInput && (
@@ -2896,14 +2936,17 @@ export default function App() {
             />
 
             <div style={{ display: "flex", gap: 12, ...st.fadeUp, animationDelay: "0.4s" }}>
-              {CHAT_ENABLED ? (
+              {getApiKey() ? (
                 <button onClick={() => {
                   setChatPrompt(`I'm starting Module ${mod.id}: "${mod.title}" from Claude Code Basecamp. My role: ${selectedPath?.label}. The challenge: "${mod.challenge}" — guide me interactively. Ask questions, push my thinking, give real feedback. Don't lecture.`);
                 }} style={{ ...st.primaryBtnCustom, background: mod.color }}
                   onMouseEnter={e => e.currentTarget.style.opacity = "0.88"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}
                 >{isComplete ? "Revisit" : "Start building"} →</button>
               ) : (
-                <div style={{ flex: 1, fontFamily: "var(--mono)", fontSize: 12, color: C.faint, background: C.cream, borderRadius: 8, padding: "14px 24px", textAlign: "center", border: `1px solid ${C.lightGray}` }}>Chat available in internal version</div>
+                <div style={{ flex: 1 }}>
+                  <p style={{ fontFamily: "var(--sans)", fontSize: 11, color: C.faint, margin: "0 0 6px" }}>Enter your Anthropic API key to start an interactive session with Claude. Your key stays in your browser.</p>
+                  <ApiKeyEntry onKeySet={() => setChatPrompt(`I'm starting Module ${mod.id}: "${mod.title}" from Claude Code Basecamp. My role: ${selectedPath?.label}. The challenge: "${mod.challenge}" — guide me interactively. Ask questions, push my thinking, give real feedback. Don't lecture.`)} />
+                </div>
               )}
               {!isComplete && (
                 <button onClick={() => {
