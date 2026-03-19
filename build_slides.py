@@ -827,8 +827,6 @@ make_section_divider("DAY 5", "Ship It",
 make_content_slide(
     "The Capstone Format",
     [
-        "120 minutes. Fully integrated. No safety net.",
-        "",
         "Brief distribution                              0:00",
         "Analysis — understand the customer              0:15",
         "Build — create your demo with Claude Code       0:30",

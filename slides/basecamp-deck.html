@@ -363,6 +363,44 @@
     section[data-background-color="#1A1A1A"] h3 {
       color: white;
     }
+
+    /* Small WIP badge on every slide */
+    .reveal .slides section::after {
+      content: "Slide design WIP";
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+      font-size: 10px;
+      letter-spacing: 0.5px;
+      color: #b0aea5;
+      background: rgba(176, 174, 165, 0.1);
+      border: 1px solid rgba(176, 174, 165, 0.25);
+      border-radius: 10px;
+      padding: 3px 10px;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    /* Large WIP banner on slides 1-12 */
+    .reveal .slides > section:nth-child(-n+12)::before {
+      content: "Slides WIP \2014  skip to slide 13 for take-home slides \2192";
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono, 'IBM Plex Mono', monospace);
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      color: #d97757;
+      background: rgba(217, 119, 87, 0.08);
+      border: 1.5px solid rgba(217, 119, 87, 0.3);
+      border-radius: 8px;
+      padding: 10px 24px;
+      pointer-events: none;
+      z-index: 10;
+      white-space: nowrap;
+    }
   </style>
 </head>
 <body>
