@@ -320,7 +320,7 @@ Run the following checks:
             Enterprise Pitch
           </div>
           <div style={{ ...bodyText, fontStyle: 'italic', color: C.muted }}>
-            "MCP is often the unlock for enterprise deals. When a customer connects Claude Code to their Jira, Datadog, and internal APIs &mdash; it stops being a dev tool and becomes an engineering platform."
+            "MCP expands who gets value from Claude Code. When non-developer users can pull context from Jira, Datadog, and internal APIs through MCP connectors &mdash; Claude Code becomes accessible well beyond the engineering team."
           </div>
         </div>
       </div>
