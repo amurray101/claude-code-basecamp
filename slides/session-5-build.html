@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Session 5: Build — API, Code & Infrastructure — Becoming an Anthropic Pro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css">
+  <link rel="stylesheet" href="shared/theme.css">
+  <link rel="stylesheet" href="shared/icons.css">
+  <link rel="stylesheet" href="shared/diagrams.css">
+  <link rel="stylesheet" href="shared/animations.css">
+  <style>
+    /* === SESSION 5 LOCAL STYLES === */
+
+    /* Tool use loop diagram */
+    .tool-loop {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-sm);
+      margin: var(--space-lg) auto;
+      max-width: 800px;
+    }
+    .tool-loop-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      justify-content: center;
+    }
+    .tool-loop-step {
+      padding: var(--space-sm) var(--space-md);
+      background: var(--bg-white);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      text-align: center;
+      min-width: 100px;
+    }
+    .tool-loop-step.highlight {
+      background: var(--accent-coral);
+      color: white;
+    }
+    .tool-loop-step.tool-call {
+      background: var(--accent-teal);
+      color: white;
+    }
+    .tool-loop-step.result {
+      background: var(--accent-sage);
+      color: white;
+    }
+    .loop-arrow-down {
+      font-size: var(--text-xl);
+      color: var(--border-medium);
+    }
+    .loop-arrow-right {
+      font-size: var(--text-xl);
+      color: var(--border-medium);
+    }
+    .loop-return {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      font-style: italic;
+      margin-top: var(--space-xs);
+    }
+    .loop-return-arrow {
+      width: 80px;
+      height: 30px;
+      border: 2px solid var(--border-medium);
+      border-top: none;
+      border-left: none;
+      border-radius: 0 0 var(--radius-md) 0;
+      position: relative;
+    }
+
+    /* Message cards visual */
+    .message-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-width: 500px;
+      margin: var(--space-md) auto;
+    }
+    .msg-card {
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-medium);
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .msg-card.user {
+      background: var(--accent-peach);
+      color: var(--text-primary);
+      align-self: flex-end;
+    }
+    .msg-card.assistant {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      align-self: flex-start;
+    }
+    .msg-card.system {
+      background: var(--accent-coral);
+      color: white;
+      align-self: stretch;
+      font-style: italic;
+    }
+    .msg-role {
+      font-size: var(--text-xs);
+      font-weight: var(--weight-bold);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      opacity: 0.7;
+      min-width: 60px;
+    }
+    .recap-badge {
+      display: inline-block;
+      background: var(--accent-terracotta);
+      color: white;
+      font-size: var(--text-xs);
+      font-weight: var(--weight-bold);
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-sm);
+    }
+
+    /* Pricing tier cards */
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-lg);
+      margin: var(--space-lg) 0;
+    }
+    .pricing-card {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--border-light);
+      text-align: center;
+    }
+    .pricing-card.featured {
+      border-color: var(--accent-coral);
+      box-shadow: var(--shadow-medium);
+    }
+    .pricing-card .model-name {
+      font-size: var(--text-lg);
+      font-weight: var(--weight-bold);
+      margin-bottom: var(--space-sm);
+    }
+    .pricing-card .price {
+      font-size: var(--text-2xl);
+      font-weight: var(--weight-bold);
+      color: var(--accent-coral);
+    }
+    .pricing-card .price-unit {
+      font-size: var(--text-xs);
+      color: var(--text-secondary);
+    }
+    .pricing-card .price-detail {
+      font-size: var(--text-sm);
+      color: var(--text-secondary);
+      margin-top: var(--space-xs);
+    }
+    .pricing-badge {
+      display: inline-block;
+      background: var(--accent-peach);
+      color: var(--accent-terracotta);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-bold);
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      margin-top: var(--space-sm);
+    }
+
+    /* Quadrant chart */
+    .quadrant-chart {
+      position: relative;
+      width: 600px;
+      height: 420px;
+      margin: var(--space-lg) auto 0;
+      border-left: 2px solid var(--text-primary);
+      border-bottom: 2px solid var(--text-primary);
+    }
+    .quadrant-chart .axis-label {
+      position: absolute;
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      color: var(--text-secondary);
+    }
+    .quadrant-chart .axis-label.x-start {
+      bottom: -28px;
+      left: 0;
+    }
+    .quadrant-chart .axis-label.x-end {
+      bottom: -28px;
+      right: 0;
+    }
+    .quadrant-chart .axis-label.y-start {
+      left: -120px;
+      bottom: 0;
+    }
+    .quadrant-chart .axis-label.y-end {
+      left: -120px;
+      top: 0;
+    }
+    .quadrant-chart .axis-label.x-title {
+      bottom: -48px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-weight: var(--weight-bold);
+      color: var(--text-primary);
+    }
+    .quadrant-chart .axis-label.y-title {
+      left: -140px;
+      top: 50%;
+      transform: rotate(-90deg) translateX(-50%);
+      transform-origin: left center;
+      font-weight: var(--weight-bold);
+      color: var(--text-primary);
+    }
+    .quadrant-item {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transform: translate(-50%, -50%);
+    }
+    .quadrant-dot {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: var(--weight-bold);
+      font-size: var(--text-xs);
+      box-shadow: var(--shadow-medium);
+    }
+    .quadrant-dot-label {
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      margin-top: var(--space-xs);
+      white-space: nowrap;
+    }
+
+    /* Three-cloud visual */
+    .cloud-layout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2xl);
+      margin: var(--space-xl) auto;
+    }
+    .cloud-center {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+    .cloud-center .icon-box {
+      width: 90px;
+      height: 90px;
+      border-radius: var(--radius-full);
+      background: var(--accent-coral);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: var(--weight-bold);
+      font-size: var(--text-xl);
+      box-shadow: var(--shadow-medium);
+    }
+    .cloud-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--space-xs);
+    }
+    .cloud-box {
+      width: 110px;
+      height: 70px;
+      border-radius: var(--radius-lg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: var(--weight-bold);
+      font-size: var(--text-sm);
+      box-shadow: var(--shadow-card);
+      color: white;
+    }
+    .cloud-box.aws { background: #FF9900; }
+    .cloud-box.gcp { background: #4285F4; }
+    .cloud-box.azure { background: #0078D4; }
+    .cloud-connector {
+      width: 60px;
+      height: 2px;
+      background: var(--border-medium);
+      position: relative;
+    }
+    .cloud-connector::after {
+      content: '';
+      position: absolute;
+      right: -4px;
+      top: -4px;
+      width: 0;
+      height: 0;
+      border-left: 6px solid var(--border-medium);
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+    }
+
+    /* Bookshelf visual for Skills */
+    .bookshelf {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      justify-content: center;
+      margin: var(--space-xl) auto;
+      padding: var(--space-md) var(--space-xl) var(--space-lg);
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      max-width: 700px;
+      border-bottom: 4px solid var(--border-medium);
+    }
+    .book {
+      width: 100px;
+      border-radius: 4px 6px 6px 4px;
+      padding: var(--space-md) var(--space-sm);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-bold);
+      color: white;
+      text-align: center;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      transform: rotate(180deg);
+      line-height: 1.3;
+      box-shadow: var(--shadow-card);
+    }
+    .book:nth-child(1) { background: var(--accent-coral); height: 160px; }
+    .book:nth-child(2) { background: var(--accent-teal); height: 180px; }
+    .book:nth-child(3) { background: var(--accent-sage); height: 150px; }
+    .book:nth-child(4) { background: var(--accent-terracotta); height: 170px; }
+
+    /* Architecture stack polished (override for key visual) */
+    .layer-stack-polished {
+      max-width: 950px;
+      gap: 5px;
+    }
+    .layer-stack-polished .layer {
+      min-height: 64px;
+      border-radius: var(--radius-lg);
+      padding: var(--space-md) var(--space-2xl);
+      transition: all 0.6s ease;
+    }
+    .layer-stack-polished .layer-label {
+      font-size: var(--text-lg);
+      min-width: 180px;
+    }
+    .layer-stack-polished .layer-contents {
+      font-size: var(--text-base);
+      letter-spacing: 0.02em;
+    }
+
+    /* Agenda items */
+    .agenda-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-lg);
+      margin-top: var(--space-xl);
+    }
+    .agenda-item {
+      display: flex;
+      gap: var(--space-md);
+      align-items: flex-start;
+      padding: var(--space-md) var(--space-lg);
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+    }
+    .agenda-number {
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      border-radius: var(--radius-full);
+      background: var(--accent-coral);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: var(--weight-bold);
+    }
+    .agenda-item h4 {
+      margin-bottom: 2px;
+      color: var(--text-primary);
+    }
+    .agenda-item p {
+      font-size: var(--text-sm);
+      margin: 0;
+      color: var(--text-secondary);
+    }
+
+    /* Key takeaway cards */
+    .takeaway-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+      margin-top: var(--space-lg);
+    }
+    .takeaway-card {
+      display: flex;
+      gap: var(--space-md);
+      align-items: flex-start;
+      padding: var(--space-lg);
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      border-left: 4px solid var(--accent-coral);
+    }
+    .takeaway-card .takeaway-num {
+      font-size: var(--text-2xl);
+      font-weight: var(--weight-bold);
+      color: var(--accent-coral);
+      line-height: 1;
+    }
+    .takeaway-card h4 {
+      color: var(--text-primary);
+      margin-bottom: var(--space-xs);
+    }
+    .takeaway-card p {
+      font-size: var(--text-sm);
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- ============================================================
+           SLIDE 1 — TITLE
+           ============================================================ -->
+      <section class="slide-title">
+        <div class="title-accent-bar"></div>
+        <div class="session-number">SESSION 5</div>
+        <h1>Build</h1>
+        <p class="subtitle">API, Code &amp; Infrastructure</p>
+        <div class="session-meta">
+          <span class="duration">60-75 min</span>
+          <span class="dot-separator">&#183;</span>
+          <span>Session 5</span>
+          <span class="dot-separator">&#183;</span>
+          <span class="loop-badge build" style="margin: 0;">BUILD</span>
+        </div>
+        <aside class="notes">
+          <p><strong>[TIMING]</strong> Full session: 60-75 min. Part 1 (API): ~20 min. Part 2 (Claude Code): ~15 min. Part 3 (MCP + Architecture): ~15 min. Part 4 (Competitive): ~5 min. Wrap-up: ~5-10 min.</p>
+          <p><strong>[TRANSITION]</strong> Welcome her back. This is the "infrastructure" session -- we are pulling back the curtain on how everything she has been using actually works. Frame it as: "Today we go behind the scenes. Everything you have used in Sessions 1-4 is built on a foundation. Understanding that foundation will make you dangerous in client conversations."</p>
+          <p><strong>[KEY MOMENT]</strong> Set the tone: this is not about becoming a developer. It is about understanding the architecture well enough to advise clients and hold her own with engineers. The consultant lens is the frame for the whole session.</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 2 — AGENDA
+           ============================================================ -->
+      <section>
+        <h2>Today's Roadmap</h2>
+        <div class="agenda-grid">
+          <div class="agenda-item">
+            <div class="agenda-number">1</div>
+            <div>
+              <h4>The API</h4>
+              <p>The foundation under everything. ~20 min</p>
+            </div>
+          </div>
+          <div class="agenda-item">
+            <div class="agenda-number">2</div>
+            <div>
+              <h4>Claude Code</h4>
+              <p>The AI coding revolution. ~15 min</p>
+            </div>
+          </div>
+          <div class="agenda-item">
+            <div class="agenda-number">3</div>
+            <div>
+              <h4>MCP &amp; Architecture</h4>
+              <p>The protocol and the full stack. ~15 min</p>
+            </div>
+          </div>
+          <div class="agenda-item">
+            <div class="agenda-number">4</div>
+            <div>
+              <h4>Competitive Landscape</h4>
+              <p>Build dimension: Claude vs. the field. ~5 min</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "We have four parts today. Each one builds on the last, and by the end you will see the entire Anthropic ecosystem in a single picture."</p>
+          <p><strong>[CHECK]</strong> Quick retrieval from Sessions 3-4 before diving in: "What is the difference between Chat and Cowork?" "Name three connectors." "When would you use a scheduled task vs. a one-off Cowork session?"</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 3 — SECTION DIVIDER: Part 1 - The API
+           ============================================================ -->
+      <section class="slide-divider" data-background-color="var(--bg-secondary)">
+        <div class="loop-badge build">BUILD</div>
+        <div class="part-label">Part 1</div>
+        <h2>The API</h2>
+        <p class="part-description">The foundation under everything</p>
+        <div class="duration-badge">~20 min</div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "So far, you have been using Claude through beautiful interfaces -- chat windows, desktop apps, scheduled tasks. But underneath all of that is a single engine: the API. Understanding it is like understanding how a car engine works before you advise someone on buying a fleet."</p>
+          <p><strong>[KEY MOMENT]</strong> Frame everything through the Bain consultant lens. She does not need to write API calls -- she needs to understand the concepts well enough to have an informed conversation about AI strategy.</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 4 — Restaurant Analogy (Side-by-Side KEY VISUAL)
+           ============================================================ -->
+      <section>
+        <h2>What the API Actually Is</h2>
+        <div class="side-by-side">
+          <div class="side-card side-before">
+            <div class="icon icon-lg icon-chat" style="margin-bottom: var(--space-md);">
+              <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+            </div>
+            <h3>CLAUDE.AI</h3>
+            <p style="font-size: var(--text-lg); font-weight: var(--weight-semibold); color: var(--text-primary); margin-bottom: var(--space-sm);">The Restaurant</p>
+            <p>The chef decides the menu, the presentation, the pace. You sit down and eat.</p>
+          </div>
+          <div class="vs-badge">vs</div>
+          <div class="side-card side-after">
+            <div class="icon icon-lg icon-api" style="margin-bottom: var(--space-md);">
+              <svg viewBox="0 0 24 24"><path d="M14 12l-2 2-2-2 2-2 2 2zm-2-6l2.12 2.12 2.5-2.5L12 1 7.38 5.62l2.5 2.5L12 6zm-6 6l2.12-2.12-2.5-2.5L1 12l4.62 4.62 2.5-2.5L6 12zm12 0l-2.12 2.12 2.5 2.5L23 12l-4.62-4.62-2.5 2.5L18 12zm-6 6l-2.12-2.12-2.5 2.5L12 23l4.62-4.62-2.5-2.5L12 18z"/></svg>
+            </div>
+            <h3>THE API</h3>
+            <p style="font-size: var(--text-lg); font-weight: var(--weight-semibold); color: var(--text-primary); margin-bottom: var(--space-sm);">Calling the Chef Directly</p>
+            <p>You specify every ingredient, the plating, the timing. You build your own experience.</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Here is the simplest way to think about it."</p>
+          <p><strong>[KEY MOMENT]</strong> Linger on this analogy. Say: "Claude.ai is like going to a restaurant -- the chef decides the menu, the presentation, the pace. The API is like getting the chef's number and calling them directly -- you tell them exactly what to cook, how to plate it, and when to deliver it. Companies use the API to build Claude into their own products."</p>
+          <p>The "aha" moment: "Every time you have chatted with Claude in these sessions, behind the scenes, the claude.ai web app was making API calls on your behalf. The API IS the actual product. Everything else is a user interface on top of it."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 5 — Process Flow: API Round-Trip
+           ============================================================ -->
+      <section>
+        <h2>The API Round-Trip</h2>
+        <div class="process-flow" style="margin-top: var(--space-xl);">
+          <div class="flow-step">
+            <div class="step-label">Your Code</div>
+            <div class="step-desc">Application logic</div>
+          </div>
+          <div class="flow-arrow">&#8594;</div>
+          <div class="flow-step primary">
+            <div class="step-label">JSON Request</div>
+            <div class="step-desc">Model, messages, tools, params</div>
+          </div>
+          <div class="flow-arrow">&#8594;</div>
+          <div class="flow-step secondary">
+            <div class="step-label">API</div>
+            <div class="step-desc">api.anthropic.com</div>
+          </div>
+          <div class="flow-arrow">&#8594;</div>
+          <div class="flow-step primary">
+            <div class="step-label">JSON Response</div>
+            <div class="step-desc">Content, usage, metadata</div>
+          </div>
+          <div class="flow-arrow">&#8594;</div>
+          <div class="flow-step">
+            <div class="step-label">Your App</div>
+            <div class="step-desc">Displays to user</div>
+          </div>
+        </div>
+        <p class="text-center mt-lg" style="color: var(--text-secondary); font-size: var(--text-sm);">Every chat message, every Cowork action, every scheduled task follows this exact pattern.</p>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Here is what actually happens when you send a message."</p>
+          <p>Walk through each step: "Your code -- whether that is claude.ai or a custom app -- packages up a JSON request with the model name, the conversation history, any tools, and parameters like temperature. It sends that to the API. The API returns JSON with Claude's response. Your app displays it."</p>
+          <p><strong>[CHECK]</strong> "Does this make sense? Every single thing you have done with Claude in these sessions follows this exact five-step pattern."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 6 — Messages: Conversation Stack
+           ============================================================ -->
+      <section>
+        <h2>Messages &amp; Conversations</h2>
+        <div style="display: flex; gap: var(--space-2xl); align-items: flex-start; margin-top: var(--space-lg);">
+          <div style="flex: 1;">
+            <div class="message-stack">
+              <div class="recap-badge">FULL HISTORY SENT EVERY TIME</div>
+              <div class="msg-card user">
+                <span class="msg-role">User</span> What market is this client in?
+              </div>
+              <div class="msg-card assistant">
+                <span class="msg-role">Assistant</span> They operate in healthcare SaaS...
+              </div>
+              <div class="msg-card user">
+                <span class="msg-role">User</span> Who are their main competitors?
+              </div>
+              <div class="msg-card assistant">
+                <span class="msg-role">Assistant</span> The top three competitors are...
+              </div>
+            </div>
+          </div>
+          <div style="flex: 0.8;">
+            <div style="background: var(--accent-peach); border-radius: var(--radius-lg); padding: var(--space-lg);">
+              <h4 style="color: var(--accent-terracotta);">The Amnesia Analogy</h4>
+              <p style="font-size: var(--text-sm);">The API has no memory between calls. Every request sends the entire conversation -- like writing a recap memo for someone with amnesia.</p>
+              <p style="font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--text-primary);">Claude.ai handles this invisibly by storing history and replaying it.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Here is something that surprises most people."</p>
+          <p>Key insight: "The API does not have memory between calls. Every time you send a request, you send the ENTIRE conversation history. Claude.ai handles this for you behind the scenes, but if a client builds on the API, they need to manage conversation state themselves."</p>
+          <p><strong>[KEY MOMENT]</strong> "This is why context windows matter so much -- everything needs to fit in one request. And this is where many AI projects underestimate complexity."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 7 — System Prompts: Persistent Frame
+           ============================================================ -->
+      <section>
+        <h2>System Prompts</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">The persistent frame around every conversation</p>
+        <div style="max-width: 650px; margin: 0 auto;">
+          <div style="background: var(--accent-coral); color: white; border-radius: var(--radius-lg) var(--radius-lg) 0 0; padding: var(--space-lg); text-align: center;">
+            <div style="font-size: var(--text-xs); font-weight: var(--weight-bold); text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.8; margin-bottom: var(--space-xs);">System Prompt</div>
+            <div style="font-family: var(--font-mono); font-size: var(--text-sm);">"You are a financial analyst specializing in healthcare SaaS. Use industry-standard frameworks. Be precise with numbers."</div>
+          </div>
+          <div style="background: var(--bg-white); border: 1px solid var(--border-light); border-top: none; padding: var(--space-md) var(--space-lg);">
+            <div class="msg-card user" style="margin-bottom: 6px;">
+              <span class="msg-role">User</span> Analyze this competitor's financials
+            </div>
+            <div class="msg-card assistant">
+              <span class="msg-role">Assistant</span> Based on the healthcare SaaS framework...
+            </div>
+          </div>
+          <div style="background: var(--bg-secondary); border: 1px solid var(--border-light); border-top: none; border-radius: 0 0 var(--radius-lg) var(--radius-lg); padding: var(--space-md) var(--space-lg); text-align: center;">
+            <p style="margin: 0; font-size: var(--text-sm); color: var(--text-secondary);">The system prompt is a job description given before every conversation. Every Project with custom instructions? That becomes the system prompt.</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Remember when you set up Projects with custom instructions? Here is what was actually happening."</p>
+          <p>Say: "The system prompt is like a job description you give Claude before every conversation. It sets the rules, personality, and constraints. A well-crafted system prompt is often the difference between an AI product that feels polished and one that feels janky."</p>
+          <p><strong>[KEY MOMENT]</strong> "This is a skill Bain teams could offer clients -- it is not engineering, it is DESIGN."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 8 — Tool Use / Function Calling (Loop)
+           ============================================================ -->
+      <section>
+        <h2>Tool Use / Function Calling</h2>
+        <p style="color: var(--text-secondary);">How Claude goes from chatbot to agent</p>
+        <div class="tool-loop">
+          <div class="tool-loop-row">
+            <div class="tool-loop-step">User Input</div>
+            <div class="loop-arrow-right">&#8594;</div>
+            <div class="tool-loop-step highlight">Claude Reasons</div>
+            <div class="loop-arrow-right">&#8594;</div>
+            <div class="tool-loop-step tool-call">"I need a tool"</div>
+          </div>
+          <div class="loop-arrow-down">&#8595;</div>
+          <div class="tool-loop-row">
+            <div class="tool-loop-step result">Claude Continues</div>
+            <div class="loop-arrow-right">&#8592;</div>
+            <div class="tool-loop-step">Result Returned</div>
+            <div class="loop-arrow-right">&#8592;</div>
+            <div class="tool-loop-step tool-call">Your Code Executes</div>
+          </div>
+          <div class="loop-return">
+            <span style="font-size: var(--text-xs); color: var(--accent-teal); font-weight: var(--weight-semibold);">&#8634; Loop if more tools needed</span>
+          </div>
+        </div>
+        <p class="text-center" style="font-size: var(--text-sm); color: var(--text-secondary); margin-top: var(--space-md);">This is the foundation of all agentic behavior -- Cowork, connectors, scheduled tasks.</p>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "This is where it gets really interesting. Tool use is what turns a chatbot into an agent."</p>
+          <p>Walk through the loop: "You can give Claude a toolbox -- definitions of functions it can call, like 'search_database' or 'send_email.' Claude decides when to use each tool, constructs the right inputs, and processes the results. It is like giving your assistant a phone and a list of important numbers."</p>
+          <p><strong>[KEY MOMENT]</strong> "A financial services client could give Claude tools for 'look_up_account_balance' and 'submit_transfer_request' and suddenly Claude is a banking assistant that can actually do things. This is the technical mechanism behind every Cowork session you have run."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 9 — Pricing Model (Card Grid)
+           ============================================================ -->
+      <section>
+        <h2>Pricing Model</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-sm);">Per million tokens (input / output)</p>
+        <div class="pricing-cards">
+          <div class="pricing-card">
+            <div class="model-dot haiku" style="margin: 0 auto var(--space-sm);">H</div>
+            <div class="model-name">Haiku 4.5</div>
+            <div class="price">$0.80 <span style="color: var(--text-secondary); font-size: var(--text-base);">/</span> $4</div>
+            <div class="price-detail">Fast, efficient, low-cost</div>
+            <div class="pricing-badge">Best for simple tasks</div>
+          </div>
+          <div class="pricing-card featured">
+            <div class="model-dot sonnet" style="margin: 0 auto var(--space-sm);">S</div>
+            <div class="model-name">Sonnet 4.6</div>
+            <div class="price">$3 <span style="color: var(--text-secondary); font-size: var(--text-base);">/</span> $15</div>
+            <div class="price-detail">Best balance of speed + intelligence</div>
+            <div class="pricing-badge">Most popular</div>
+          </div>
+          <div class="pricing-card">
+            <div class="model-dot opus" style="margin: 0 auto var(--space-sm);">O</div>
+            <div class="model-name">Opus 4.6</div>
+            <div class="price">$5 <span style="color: var(--text-secondary); font-size: var(--text-base);">/</span> $25</div>
+            <div class="price-detail">Maximum capability</div>
+            <div class="pricing-badge">Best for complex analysis</div>
+          </div>
+        </div>
+        <div class="data-callouts" style="margin-top: var(--space-lg);">
+          <div class="data-callout">
+            <div class="value" style="font-size: var(--text-xl);">Caching</div>
+            <div class="label">Cheaper repeated prompts</div>
+          </div>
+          <div class="data-callout">
+            <div class="value" style="font-size: var(--text-xl);">Batch</div>
+            <div class="label">50% off for non-real-time</div>
+          </div>
+          <div class="data-callout">
+            <div class="value" style="font-size: var(--text-xl);">Routing</div>
+            <div class="label">Use the right model per task</div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Let's talk money -- this is where the consultant in you should perk up."</p>
+          <p>Explain the mental model: Input tokens (what you send) are cheaper. Output tokens (what Claude generates) are more expensive. Model tier determines price: Opus is the most expensive, Haiku is the cheapest.</p>
+          <p><strong>[KEY MOMENT]</strong> "AI costs can explode if not managed. A client running 10 million API calls a month needs a model routing strategy. This is a consulting engagement in itself -- Haiku for simple tasks, Sonnet for medium, Opus for hard. Like routing calls to the right support tier."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 10 — Big Number: Cost Reduction
+           ============================================================ -->
+      <section class="slide-stat">
+        <div class="big-number-container">
+          <div class="big-number">67%</div>
+          <div class="big-number-unit">cost reduction</div>
+          <div class="big-number-context">Opus 4.6 vs. Opus 3 -- more capability, less cost</div>
+          <div class="big-number-comparison" style="margin-top: var(--space-xl);">
+            <div class="scale-bar" style="width: 100%;" data-label="Opus 3: $15 / $75 per M tokens"></div>
+            <div class="scale-bar" style="width: 33%;" data-label="Opus 4.6: $5 / $25 per M tokens"></div>
+          </div>
+          <p style="font-size: var(--text-sm); color: var(--text-secondary); margin-top: var(--space-lg);">Each generation: more capability, less cost. The trend line that matters most.</p>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "And here is the trend that should excite any client."</p>
+          <p><strong>[KEY MOMENT]</strong> This is a major talking point for client conversations. Say: "Every model generation gets smarter AND cheaper. Opus 4.6 is dramatically more capable than Opus 3 was, and costs 67% less. This is the opposite of most technology pricing curves."</p>
+          <p>Connect to her world: "For a Bain client evaluating AI investment, this means the ROI equation only gets better over time. Wait-and-see is actually the wrong strategy -- start now, and the economics improve beneath you."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 11 — Platform Availability (Three Clouds)
+           ============================================================ -->
+      <section>
+        <h2>Available Everywhere</h2>
+        <p style="color: var(--text-secondary); text-align: center;">The only frontier model on all three major clouds</p>
+        <div class="cloud-layout">
+          <div class="cloud-node">
+            <div class="cloud-box aws">AWS</div>
+            <div style="font-size: var(--text-xs); color: var(--text-secondary); margin-top: 4px;">Bedrock</div>
+          </div>
+          <div class="cloud-connector"></div>
+          <div class="cloud-center">
+            <div class="icon-box">Claude</div>
+            <div style="font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--text-primary);">API</div>
+          </div>
+          <div class="cloud-connector" style="transform: scaleX(-1);"></div>
+          <div class="cloud-node">
+            <div class="cloud-box gcp">Google</div>
+            <div style="font-size: var(--text-xs); color: var(--text-secondary); margin-top: 4px;">Vertex AI</div>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: var(--space-sm);">
+          <div class="cloud-node" style="display: inline-flex;">
+            <div class="cloud-box azure" style="width: 110px;">Azure</div>
+            <div style="font-size: var(--text-xs); color: var(--text-secondary); margin-top: 4px;">Marketplace</div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: center; gap: var(--space-xl); margin-top: var(--space-lg);">
+          <div style="text-align: center; font-size: var(--text-xs); color: var(--text-secondary);">
+            <span class="competitor-icon chatgpt" style="display: inline-flex; margin-bottom: 4px;">O</span><br>
+            OpenAI: primarily Azure
+          </div>
+          <div style="text-align: center; font-size: var(--text-xs); color: var(--text-secondary);">
+            <span class="competitor-icon gemini" style="display: inline-flex; margin-bottom: 4px;">G</span><br>
+            Gemini: primarily GCP
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Here is a competitive advantage that really matters in enterprise deals."</p>
+          <p>"If a client is already on AWS, they can use Claude through Bedrock without setting up a separate Anthropic account. Same for Google Cloud via Vertex AI. And now Azure too. This removes friction. Being on all three clouds is a major competitive advantage."</p>
+          <p><strong>[KEY MOMENT]</strong> "OpenAI is primarily on Azure. Gemini is primarily on Google Cloud. Claude is the only frontier model available everywhere. For a client with multi-cloud infrastructure, this is a significant differentiator."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 12 — Exercise: Client Conversation Role-Play
+           ============================================================ -->
+      <section class="slide-exercise">
+        <div class="exercise-header">
+          <span class="exercise-badge">ROLE-PLAY</span>
+          <span class="exercise-time">5 min</span>
+        </div>
+        <h2>The Client Conversation</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">"A mid-size insurance company wants to build an AI claims processing assistant. They are deciding between Claude and ChatGPT. What questions do you ask?"</p>
+        <div class="card-grid card-grid-2" style="font-size: var(--text-sm);">
+          <div class="card">
+            <h4>1. Primary use case?</h4>
+            <p>Claims processing needs accuracy + long docs</p>
+          </div>
+          <div class="card">
+            <h4>2. Cloud infrastructure?</h4>
+            <p>AWS = Bedrock easy. Azure = OpenAI easier.</p>
+          </div>
+          <div class="card">
+            <h4>3. Agentic capabilities?</h4>
+            <p>Claude has a significant lead here</p>
+          </div>
+          <div class="card">
+            <h4>4. Compliance needs?</h4>
+            <p>HIPAA, SOC 2 -- both offer, different approaches</p>
+          </div>
+          <div class="card">
+            <h4>5. Budget model?</h4>
+            <p>Compare token pricing at expected volume</p>
+          </div>
+          <div class="card">
+            <h4>6. Image generation?</h4>
+            <p>If yes, ChatGPT wins this category</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Time to put on your consultant hat. Let's role-play."</p>
+          <p><strong>[DEMO]</strong> Set the scene: "You are a Bain consultant. Your client, a mid-size insurance company, wants to build an AI-powered claims processing assistant." Let her work through the questions -- guide her but let her lead.</p>
+          <p>Her framework at the end: "There is rarely a single right answer. The recommendation depends on the client's specific situation. But for most enterprise use cases involving text processing, analysis, safety-critical decisions, or agentic workflows, Claude is the stronger recommendation."</p>
+          <p><strong>[CHECK]</strong> Can she articulate WHY you would ask each question? The reasoning matters more than the answers.</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 13 — SECTION DIVIDER: Part 2 - Claude Code
+           ============================================================ -->
+      <section class="slide-divider" data-background-color="var(--bg-secondary)">
+        <div class="loop-badge build">BUILD</div>
+        <div class="part-label">Part 2</div>
+        <h2>Claude Code</h2>
+        <p class="part-description">The AI coding revolution</p>
+        <div class="duration-badge">~15 min</div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Now let's talk about the product that is generating more revenue than almost anything else in AI right now."</p>
+          <p>Frame for her: "You are not a developer -- though you do build things. But you need to understand Claude Code because: (1) it is a $2.5B revenue product and a major competitive differentiator, (2) you will work with engineers at Bain who use it, and (3) it is the most visible sign of AI's impact on knowledge work."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 14 — Code Assistant vs. Code Agent (Side-by-Side)
+           ============================================================ -->
+      <section>
+        <h2>What Claude Code Is</h2>
+        <div class="side-by-side" style="margin-top: var(--space-xl);">
+          <div class="side-card side-before">
+            <div class="icon icon-lg" style="background: var(--brand-copilot); color: white; border-radius: var(--radius-md); margin-bottom: var(--space-md);">
+              <svg viewBox="0 0 24 24"><path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.8l6.5 3.25L12 11.3 5.5 8.05 12 4.8z"/></svg>
+            </div>
+            <h3>Code Assistant</h3>
+            <p style="font-size: var(--text-lg); font-weight: var(--weight-semibold); color: var(--text-primary); margin-bottom: var(--space-sm);">Like Autocomplete</p>
+            <p>Suggests individual lines of code within your editor. You stay in control, it fills in the blanks.</p>
+            <p style="font-size: var(--text-xs); color: var(--text-light);">GitHub Copilot, Cursor</p>
+          </div>
+          <div class="vs-badge">vs</div>
+          <div class="side-card side-after">
+            <div class="icon icon-lg icon-code" style="margin-bottom: var(--space-md);">
+              <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H4V8h16v10z" fill="currentColor"/><text x="7" y="16" font-size="8" font-family="monospace" fill="currentColor">&gt;_</text></svg>
+            </div>
+            <h3>Code Agent</h3>
+            <p style="font-size: var(--text-lg); font-weight: var(--weight-semibold); color: var(--text-primary); margin-bottom: var(--space-sm);">Like a Colleague</p>
+            <p>Takes on entire tasks autonomously. Writes, runs, debugs, and iterates -- in your real environment.</p>
+            <p style="font-size: var(--text-xs); color: var(--accent-terracotta); font-weight: var(--weight-semibold);">Claude Code</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "First, let's understand what makes Claude Code different from what most people think of as AI coding tools."</p>
+          <p><strong>[KEY MOMENT]</strong> "Claude Code is a command-line tool that operates as an autonomous coding agent. It has access to your filesystem, can read and write code files, execute commands in the terminal, and interact with development tools. Unlike AI code assistants that suggest individual lines, Claude Code takes on entire tasks: 'implement user authentication,' 'refactor the database layer,' 'write comprehensive tests for this module.'"</p>
+          <p>The analogy: "The difference between autocomplete and a colleague."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 15 — Revenue & Impact (Data Callouts)
+           ============================================================ -->
+      <section>
+        <h2>Why It Matters</h2>
+        <p style="color: var(--text-secondary); text-align: center; margin-bottom: var(--space-sm);">Even for non-developers</p>
+        <div class="data-callouts" style="margin-top: var(--space-2xl);">
+          <div class="data-callout">
+            <div class="value">$2.5B</div>
+            <div class="label">Annual run-rate revenue</div>
+            <div class="label" style="font-size: var(--text-xs); color: var(--text-light);">By February 2026</div>
+          </div>
+          <div class="data-callout">
+            <div class="value" style="color: var(--accent-teal);">2x</div>
+            <div class="label">Weekly users growth</div>
+            <div class="label" style="font-size: var(--text-xs); color: var(--text-light);">Since January 2026</div>
+          </div>
+          <div class="data-callout">
+            <div class="value" style="color: var(--accent-sage);">#1</div>
+            <div class="label">Adopted coding agent</div>
+            <div class="label" style="font-size: var(--text-xs); color: var(--text-light);">Market leader</div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Let me give you the numbers that tell the story."</p>
+          <p><strong>[KEY MOMENT]</strong> Let these numbers land. "$2.5 billion annual run-rate revenue. Weekly active users doubled since January. It is the number one adopted coding agent in the market."</p>
+          <p>"Many developers report they have stopped writing code by hand for entire categories of work. This is not a niche tool -- it is reshaping how software gets built."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 16 — Vibe Coding Callout
+           ============================================================ -->
+      <section class="slide-callout" data-background-color="var(--accent-peach)">
+        <blockquote>VIBE CODING:<br>Describe it, ship it.</blockquote>
+        <p class="callout-context">Non-programmers are now shipping software by describing what they want in natural language. The term "vibe coding" means building software through conversation rather than traditional programming.</p>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "And here is why this matters to you personally."</p>
+          <p><strong>[KEY MOMENT]</strong> "This is a cultural moment. The term 'vibe coding' -- coined in this context -- means using AI to build software through conversation rather than traditional programming. This is directly relevant to your world: incoming MBAs and consultants can now prototype products, build internal tools, and ship experiments without waiting for engineering resources."</p>
+          <p>"You can describe a tool you need in plain English, and Claude Code will build it. No keyboard needed -- you can literally speak your instructions with voice mode."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 17 — Claude Code Features (Icon Grid)
+           ============================================================ -->
+      <section>
+        <h2>Key Features</h2>
+        <div class="icon-grid icon-grid-3x3 icon-grid-compact stagger-children" style="margin-top: var(--space-md);">
+          <div class="icon-grid-item">
+            <div class="icon icon-md icon-voice" style="margin: 0 auto var(--space-sm);">
+              <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/></svg>
+            </div>
+            <h4>Voice Mode</h4>
+            <p>Speak coding instructions</p>
+          </div>
+          <div class="icon-grid-item">
+            <div class="icon icon-md" style="background: var(--accent-teal); color: white; border-radius: var(--radius-md); margin: 0 auto var(--space-sm);">
+              <svg viewBox="0 0 24 24"><path d="M20 18c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg>
+            </div>
+            <h4>Remote Sessions</h4>
+            <p>Runs on Anthropic's cloud</p>
+          </div>
+          <div class="icon-grid-item">
+            <div class="icon icon-md icon-scheduled" style="margin: 0 auto var(--space-sm);">
+              <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/><path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            </div>
+            <h4>Scheduled Tasks</h4>
+            <p>Automated maintenance</p>
+          </div>
+          <div class="icon-grid-item">
+            <div class="icon icon-md" style="background: var(--accent-sage); color: white; border-radius: var(--radius-md); margin: 0 auto var(--space-sm);">
+              <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+            </div>
+            <h4>Code Review</h4>
+            <p>Reviews PRs automatically</p>
+          </div>
+          <div class="icon-grid-item">
+            <div class="icon icon-md icon-plugins" style="margin: 0 auto var(--space-sm);">
+              <svg viewBox="0 0 24 24"><path d="M20.5 11H19V7c0-1.1-.9-2-2-2h-4V3.5C13 2.12 11.88 1 10.5 1S8 2.12 8 3.5V5H4c-1.1 0-2 .9-2 2v3.8h1.5c1.52 0 2.75 1.23 2.75 2.75S5.02 16.3 3.5 16.3H2V20c0 1.1.9 2 2 2h3.8v-1.5c0-1.52 1.23-2.75 2.75-2.75s2.75 1.23 2.75 2.75V22H17c1.1 0 2-.9 2-2v-4h1.5c1.38 0 2.5-1.12 2.5-2.5S21.88 11 20.5 11z"/></svg>
+            </div>
+            <h4>Plugins</h4>
+            <p>Domain-specific toolkits</p>
+          </div>
+          <div class="icon-grid-item">
+            <div class="icon icon-md" style="background: var(--accent-coral); color: white; border-radius: var(--radius-md); margin: 0 auto var(--space-sm);">
+              <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            </div>
+            <h4>Agent Teams</h4>
+            <p>Parallel collaborating agents</p>
+          </div>
+          <div class="icon-grid-item">
+            <div class="icon icon-md" style="background: #2D2D2D; color: #4ADE80; border-radius: var(--radius-md); margin: 0 auto var(--space-sm);">
+              <svg viewBox="0 0 24 24"><path d="M4 18h2v-2H4v2zm0-4h2v-2H4v2zm0-4h2V8H4v2zm4 8h12v-2H8v2zm0-4h12v-2H8v2zm0-4h12V8H8v2zM4 4v2h16V4H4z" fill="currentColor"/></svg>
+            </div>
+            <h4>Worktrees</h4>
+            <p>Isolated environments</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Let me give you a quick tour of the features, so you know what exists."</p>
+          <p>Do not go deep on any one feature -- just make sure she knows each exists: "Voice mode lets developers literally talk to their terminal. Remote sessions mean tasks can run for hours on Anthropic's cloud even when you close your laptop. Scheduled tasks automate code reviews and maintenance. Agent teams let multiple Claude Code instances collaborate on complex projects."</p>
+          <p><strong>[CHECK]</strong> "Which of these do you think would be most relevant if a Bain team was using Claude Code?"</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 18 — Claude Code Quadrant (Competitive)
+           ============================================================ -->
+      <section>
+        <h2>Claude Code vs. Competitors</h2>
+        <div class="quadrant-chart" style="margin-left: auto; margin-right: auto;">
+          <div class="axis-label x-start">Assistant</div>
+          <div class="axis-label x-end">Autonomous</div>
+          <div class="axis-label y-start">Standalone</div>
+          <div class="axis-label y-end">Integrated</div>
+          <div class="axis-label x-title">Autonomy Level &#8594;</div>
+          <div class="axis-label y-title">Integration &#8594;</div>
+
+          <!-- Copilot: assistant + integrated (top-left) -->
+          <div class="quadrant-item" style="left: 20%; top: 20%;">
+            <div class="quadrant-dot" style="background: var(--brand-copilot);">Co</div>
+            <div class="quadrant-dot-label">Copilot</div>
+          </div>
+
+          <!-- Cursor: assistant + standalone (bottom-left) -->
+          <div class="quadrant-item" style="left: 30%; top: 70%;">
+            <div class="quadrant-dot" style="background: var(--brand-copilot); opacity: 0.7;">Cu</div>
+            <div class="quadrant-dot-label">Cursor</div>
+          </div>
+
+          <!-- Devin: autonomous + standalone (bottom-right, less mature) -->
+          <div class="quadrant-item" style="left: 75%; top: 75%;">
+            <div class="quadrant-dot" style="background: #7088A0;">D</div>
+            <div class="quadrant-dot-label">Devin</div>
+          </div>
+
+          <!-- Claude Code: autonomous + standalone (bottom-right, dominant) -->
+          <div class="quadrant-item" style="left: 85%; top: 55%;">
+            <div class="quadrant-dot" style="background: var(--brand-claude); box-shadow: 0 0 0 3px rgba(212, 117, 78, 0.3), var(--shadow-medium);">CC</div>
+            <div class="quadrant-dot-label" style="color: var(--accent-coral); font-weight: var(--weight-bold);">Claude Code</div>
+          </div>
+        </div>
+        <p class="text-center" style="font-size: var(--text-sm); color: var(--text-secondary); margin-top: var(--space-xl);">Claude Code is the market leader in autonomous AI coding. Cursor is the best AI editor. Copilot is the best autocomplete.</p>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Here is where the competitors sit."</p>
+          <p>Walk through each quadrant position: "Copilot is integrated into your editor, suggests code -- it is autocomplete on steroids. Cursor is a full editor replacement with AI built in -- great UX. Devin is trying to be autonomous but is less mature and less adopted. Claude Code sits at the top right -- autonomous AND powerful."</p>
+          <p><strong>[KEY MOMENT]</strong> "The honest summary: Claude Code is the market leader in autonomous AI coding. Cursor is the best AI editor (great if you want to stay in control). Copilot is the best autocomplete (least disruptive to existing workflow). For a non-developer, the key insight is: Claude Code represents a fundamentally different paradigm -- AI as an autonomous engineer, not just an assistant."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 19 — SECTION DIVIDER: Part 3 - MCP & Architecture
+           ============================================================ -->
+      <section class="slide-divider" data-background-color="var(--bg-secondary)">
+        <div class="loop-badge build">BUILD</div>
+        <div class="part-label">Part 3</div>
+        <h2>MCP &amp; The Architecture Stack</h2>
+        <p class="part-description">The protocol that connects everything</p>
+        <div class="duration-badge">~15 min</div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Now we get to my favorite part. Remember all those connectors you set up in Session 4 -- Gmail, Calendar, Drive? They all work through a single protocol. Understanding that protocol is understanding the future of AI integration."</p>
+          <p><strong>[KEY MOMENT]</strong> This section builds to the architecture stack diagram -- the most important visual in the entire course. Everything in the first 5 sessions comes together in one picture.</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 20 — USB Analogy (Side-by-Side)
+           ============================================================ -->
+      <section>
+        <h2>MCP: The USB of AI</h2>
+        <div class="side-by-side" style="margin-top: var(--space-lg);">
+          <div class="side-card side-before">
+            <h3>Before MCP</h3>
+            <div style="display: flex; flex-direction: column; gap: 6px; margin: var(--space-md) 0;">
+              <div style="display: flex; align-items: center; gap: var(--space-sm); font-size: var(--text-sm);">
+                <span style="color: var(--text-light);">Gmail</span>
+                <span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-light);">--- custom API ---</span>
+                <span style="color: var(--text-light);">Claude</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--space-sm); font-size: var(--text-sm);">
+                <span style="color: var(--text-light);">Slack</span>
+                <span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-light);">-- different API --</span>
+                <span style="color: var(--text-light);">Claude</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--space-sm); font-size: var(--text-sm);">
+                <span style="color: var(--text-light);">Drive</span>
+                <span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-light);">-- another API ---</span>
+                <span style="color: var(--text-light);">Claude</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--space-sm); font-size: var(--text-sm);">
+                <span style="color: var(--text-light);">Notion</span>
+                <span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--text-light);">-- yet another --</span>
+                <span style="color: var(--text-light);">Claude</span>
+              </div>
+            </div>
+            <p style="font-size: var(--text-sm); color: var(--text-secondary);">Every tool needed its own custom integration. Like having a different charger cable for every device.</p>
+          </div>
+          <div class="side-arrow">&#8594;</div>
+          <div class="side-card side-after">
+            <h3>After MCP</h3>
+            <div style="display: flex; flex-direction: column; gap: 6px; margin: var(--space-md) 0;">
+              <div style="display: flex; align-items: center; gap: var(--space-sm); font-size: var(--text-sm);">
+                <span style="color: var(--text-primary);">Gmail</span>
+                <span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--accent-coral); font-weight: var(--weight-bold);">---- MCP ----</span>
+                <span style="color: var(--text-primary);">Claude</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--space-sm); font-size: var(--text-sm);">
+                <span style="color: var(--text-primary);">Slack</span>
+                <span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--accent-coral); font-weight: var(--weight-bold);">---- MCP ----</span>
+                <span style="color: var(--text-primary);">Claude</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--space-sm); font-size: var(--text-sm);">
+                <span style="color: var(--text-primary);">Drive</span>
+                <span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--accent-coral); font-weight: var(--weight-bold);">---- MCP ----</span>
+                <span style="color: var(--text-primary);">Claude</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: var(--space-sm); font-size: var(--text-sm);">
+                <span style="color: var(--text-primary);">Notion</span>
+                <span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--accent-coral); font-weight: var(--weight-bold);">---- MCP ----</span>
+                <span style="color: var(--text-primary);">Claude</span>
+              </div>
+            </div>
+            <p style="font-size: var(--text-sm); color: var(--text-primary); font-weight: var(--weight-semibold);">One universal standard. Any AI can connect to any tool through a single protocol.</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Let me use an analogy you already understand."</p>
+          <p>"Before USB, every device had its own proprietary connector -- every phone had a different charger cable. USB created a universal standard that any device could use. MCP is the USB of AI. It is an open protocol that lets any AI model connect to any tool through a single standard interface."</p>
+          <p><strong>[KEY MOMENT]</strong> "The Model Context Protocol -- MCP -- was created by Anthropic and released as an open standard. That is a strategic choice: Anthropic created it and open-sourced it, which is a strategic moat disguised as generosity -- similar to how Google created Kubernetes and open-sourced it."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 21 — MCP Architecture (Layer Stack 3 layers)
+           ============================================================ -->
+      <section>
+        <h2>MCP Architecture</h2>
+        <p style="color: var(--text-secondary); text-align: center;">Three layers, fully plug-and-play</p>
+        <div class="layer-stack" style="max-width: 750px; margin-top: var(--space-xl);">
+          <div class="layer layer-ui" style="min-height: 70px;">
+            <div class="layer-label">Host</div>
+            <div class="layer-contents">Claude Desktop &middot; Claude.ai &middot; Claude Code</div>
+          </div>
+          <div class="layer" style="background: var(--accent-peach); color: var(--text-primary); border: 1px solid rgba(212,117,78,0.2); min-height: 55px;">
+            <div class="layer-label">Client</div>
+            <div class="layer-contents">Manages connections to MCP servers</div>
+          </div>
+          <div class="layer layer-integration" style="min-height: 70px;">
+            <div class="layer-label">Servers</div>
+            <div class="layer-contents">Gmail &middot; Calendar &middot; Drive &middot; Slack &middot; Notion &middot; GitHub &middot; ...</div>
+          </div>
+        </div>
+        <div style="text-align: center; margin-top: var(--space-lg);">
+          <div style="background: var(--bg-white); border-radius: var(--radius-lg); padding: var(--space-md) var(--space-lg); display: inline-block; box-shadow: var(--shadow-card);">
+            <p style="margin: 0; font-size: var(--text-sm); color: var(--text-primary);">Same server works with any host. Same host works with any server. <strong style="color: var(--accent-coral);">True plug-and-play.</strong></p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Here is the architecture in three layers."</p>
+          <p>Walk through bottom-up: "At the bottom, MCP Servers wrap external tools -- Gmail, Calendar, etc. -- and expose their capabilities through a standardized interface. In the middle, the Client manages connections to these servers. At the top, the Host is the AI application -- Claude Desktop, Claude.ai, Claude Code."</p>
+          <p>"The key insight: the same MCP server works with any host, and the same host works with any server. If someone builds a great Salesforce MCP server, it instantly works with Claude Desktop, Claude.ai, AND Claude Code."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 22 — MCP Ecosystem (Hub and Spoke)
+           ============================================================ -->
+      <section>
+        <h2>The MCP Ecosystem</h2>
+        <div class="hub-spoke">
+          <div class="hub">
+            <div style="font-size: var(--text-xs); font-weight: var(--weight-bold); letter-spacing: 0.05em;">MCP</div>
+            <div class="hub-label" style="font-size: var(--text-sm);">Protocol</div>
+          </div>
+          <div class="spoke ring-inner" style="--angle: 0deg;">
+            <div class="spoke-label">Gmail</div>
+          </div>
+          <div class="spoke ring-inner" style="--angle: 51deg;">
+            <div class="spoke-label">Calendar</div>
+          </div>
+          <div class="spoke ring-inner" style="--angle: 103deg;">
+            <div class="spoke-label">Drive</div>
+          </div>
+          <div class="spoke ring-middle" style="--angle: 154deg;">
+            <div class="spoke-label">Slack</div>
+          </div>
+          <div class="spoke ring-middle" style="--angle: 206deg;">
+            <div class="spoke-label">Notion</div>
+          </div>
+          <div class="spoke ring-middle" style="--angle: 257deg;">
+            <div class="spoke-label">GitHub</div>
+          </div>
+          <div class="spoke ring-outer" style="--angle: 309deg;">
+            <div class="spoke-label">Custom</div>
+            <div class="spoke-desc">Your own</div>
+          </div>
+        </div>
+        <p class="text-center" style="font-size: var(--text-sm); color: var(--text-secondary); margin-top: 0;">Pre-built connectors at claude.com/connectors &middot; Third-party servers growing rapidly &middot; Anyone can build custom servers</p>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "And the ecosystem is growing fast."</p>
+          <p>Highlight the network effects: "The more MCP servers that exist, the more valuable every MCP-compatible AI becomes. It is becoming an industry standard -- other AI providers are adopting it."</p>
+          <p><strong>[CHECK]</strong> Ask: "When a client asks 'how do we integrate AI into our existing tools?' -- what is the answer?" She should say MCP. "When a client worries about vendor lock-in -- what do you tell them?" MCP's open standard means their integrations would survive switching AI providers.</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 23 — Skills: "Training Manuals" (Bookshelf Visual)
+           ============================================================ -->
+      <section>
+        <h2>Skills: Claude's Training Manuals</h2>
+        <p style="color: var(--text-secondary); text-align: center;">Reusable instruction sets that teach Claude domain-specific knowledge</p>
+        <div class="bookshelf">
+          <div class="book">Financial Analysis</div>
+          <div class="book">Legal Review</div>
+          <div class="book">Bain Frameworks</div>
+          <div class="book">Event Planning</div>
+        </div>
+        <div class="card-grid card-grid-2" style="max-width: 700px; margin: var(--space-md) auto 0;">
+          <div class="card" style="padding: var(--space-md);">
+            <h4 style="font-size: var(--text-sm);">How They Work</h4>
+            <p style="font-size: var(--text-xs);">Text files (SKILL.md) with instructions, examples, and patterns. Loaded into system prompt for a session.</p>
+          </div>
+          <div class="card" style="padding: var(--space-md);">
+            <h4 style="font-size: var(--text-sm);">Bain Use Case</h4>
+            <p style="font-size: var(--text-xs);">Your team could create Skills for case frameworks, deliverable formatting, industry analysis. Codified institutional knowledge.</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "If MCP connectors give Claude hands -- the ability to interact with tools -- Skills give Claude expertise."</p>
+          <p>"A 'financial analysis' skill teaches Claude Bain's frameworks. A 'legal review' skill teaches it contract language. Think of them as training manuals you put on Claude's bookshelf."</p>
+          <p><strong>[KEY MOMENT]</strong> "At Bain, your team could create Skills for 'Bain-style case frameworks,' 'client deliverable formatting,' or 'industry-specific analysis templates.' New associates like you could instantly benefit from codified institutional knowledge."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 24 — THE 6-LAYER ARCHITECTURE STACK (KEY VISUAL)
+           ============================================================ -->
+      <section>
+        <h2 style="text-align: center;">The Complete Anthropic Ecosystem</h2>
+        <div class="layer-stack layer-stack-polished" style="margin-top: var(--space-lg);">
+          <div class="layer layer-ui">
+            <div class="layer-label">User Interfaces</div>
+            <div class="layer-contents">claude.ai &middot; Desktop &middot; Mobile &middot; Excel &middot; PPT</div>
+          </div>
+          <div class="layer" style="background: var(--accent-terracotta); color: white;">
+            <div class="layer-label">Product Features</div>
+            <div class="layer-contents">Chat &middot; Projects &middot; Cowork &middot; Scheduled Tasks</div>
+          </div>
+          <div class="layer layer-intelligence">
+            <div class="layer-label">Intelligence</div>
+            <div class="layer-contents">
+              <span style="display: inline-flex; align-items: center; gap: 6px;">
+                <span class="model-dot opus" style="width: 20px; height: 20px; font-size: 0.5rem;">O</span> Opus 4.6
+              </span>
+              &middot;
+              <span style="display: inline-flex; align-items: center; gap: 6px;">
+                <span class="model-dot sonnet" style="width: 16px; height: 16px; font-size: 0.45rem; background: rgba(255,255,255,0.3);">S</span> Sonnet 4.6
+              </span>
+              &middot;
+              <span style="display: inline-flex; align-items: center; gap: 6px;">
+                <span class="model-dot haiku" style="width: 14px; height: 14px; font-size: 0.4rem; background: rgba(255,255,255,0.3);">H</span> Haiku 4.5
+              </span>
+            </div>
+          </div>
+          <div class="layer layer-integration">
+            <div class="layer-label">Integration</div>
+            <div class="layer-contents">MCP &middot; Connectors &middot; Skills &middot; Plugins</div>
+          </div>
+          <div class="layer layer-api">
+            <div class="layer-label">API</div>
+            <div class="layer-contents">Messages &middot; Tool Use &middot; Streaming &middot; Batch</div>
+          </div>
+          <div class="layer layer-platform">
+            <div class="layer-label">Platform</div>
+            <div class="layer-contents">Anthropic &middot; AWS Bedrock &middot; Vertex AI &middot; Azure</div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "And now -- the slide I have been building toward for five sessions."</p>
+          <p><strong>[KEY MOMENT]</strong> This is THE key visual of the entire course. Build it from bottom to top, pausing at each layer. Let each one land.</p>
+          <p>"Platform layer: where Claude physically runs -- Anthropic's own servers, AWS, Google Cloud, Azure."</p>
+          <p>"API layer: the interface that everything talks through -- Messages, Tool Use, Streaming, Batch processing."</p>
+          <p>"Integration layer: MCP, connectors, Skills, plugins -- all the ways Claude connects to the outside world."</p>
+          <p>"Intelligence layer: the three models -- Opus, Sonnet, Haiku -- the brains of the operation."</p>
+          <p>"Product features: Chat, Projects, Cowork, Scheduled Tasks -- the capabilities built on top of the intelligence."</p>
+          <p>"User interfaces: claude.ai, Desktop, Mobile, Excel, PowerPoint -- where you actually interact with it all."</p>
+          <p>"Everything is built on the API. The API uses models. The models use tools via MCP. The user interfaces orchestrate all of it. When you chat in claude.ai, you are using EVERY layer of this stack."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 25 — Callout: Architecture Insight
+           ============================================================ -->
+      <section class="slide-callout" data-background-color="var(--accent-peach)">
+        <blockquote>This is the entire Anthropic ecosystem in one picture.</blockquote>
+        <p class="callout-context">Everything you have learned across five sessions -- chat, Projects, Cowork, models, connectors, API, Claude Code -- fits into six layers. When a client asks "what is Anthropic?" you can draw this stack.</p>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> Let this sink in.</p>
+          <p><strong>[KEY MOMENT]</strong> Say: "If someone asks you 'what does Anthropic do?' you can now draw this stack on a whiteboard and walk through each layer. That is the level of understanding we have been building toward."</p>
+          <p><strong>[CHECK]</strong> "Can you walk me through the stack from bottom to top? Take your time." Let her practice articulating it.</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 26 — SECTION DIVIDER: Part 4 - Competitive
+           ============================================================ -->
+      <section class="slide-divider" data-background-color="var(--bg-secondary)">
+        <div class="loop-badge build">BUILD</div>
+        <div class="part-label">Part 4</div>
+        <h2>Competitive Landscape</h2>
+        <p class="part-description">The Build dimension</p>
+        <div class="duration-badge">~5 min</div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Quick competitive view -- specifically on the Build dimension. We have done this for Think and Do in previous sessions. Now let's see how Claude stacks up on the infrastructure side."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 27 — Comparison Matrix (Dot Scorecard)
+           ============================================================ -->
+      <section>
+        <h2>Build Dimension: Competitive Scorecard</h2>
+        <div class="comparison-matrix" style="margin-top: var(--space-lg);">
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th class="brand-col claude">Claude</th>
+                <th class="brand-col chatgpt">OpenAI</th>
+                <th class="brand-col gemini">Google</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="dimension">API Maturity</td>
+                <td class="winner"><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot empty"></span></td>
+              </tr>
+              <tr>
+                <td class="dimension">Coding Agent</td>
+                <td class="winner"><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot empty"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot empty"></span><span class="rating-dot empty"></span></td>
+              </tr>
+              <tr>
+                <td class="dimension">Integration Protocol</td>
+                <td class="winner"><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot empty"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot empty"></span></td>
+              </tr>
+              <tr>
+                <td class="dimension">Enterprise Readiness</td>
+                <td class="winner"><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+              </tr>
+              <tr>
+                <td class="dimension">Marketplace</td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot empty"></span></td>
+                <td class="winner"><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot empty"></span><span class="rating-dot empty"></span></td>
+              </tr>
+              <tr>
+                <td class="dimension">Open Source</td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot empty"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot empty"></span></td>
+                <td class="winner"><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Let's see the honest scorecard."</p>
+          <p>Walk through row by row: "API maturity -- Claude and OpenAI are both strong, Google is good. Coding agent -- Claude Code dominates. Integration protocol -- MCP is the only open standard. Enterprise -- all three are competitive. Marketplace -- OpenAI's GPT Store is larger though lower quality. Open source -- Google leads here with TensorFlow, Kubernetes, etc."</p>
+          <p><strong>[KEY MOMENT]</strong> Be honest: "OpenAI has the largest developer community and most ecosystem momentum. Claude has better core technology and the most coherent product suite. Google has the deepest cloud infrastructure and open-source contribution. For a client, the recommendation depends on their existing infrastructure, team capabilities, and use case."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 28 — Competitive Insight Callout
+           ============================================================ -->
+      <section class="slide-callout" data-background-color="var(--accent-peach)">
+        <blockquote>OpenAI has the largest developer community.<br>Claude has the best core technology.<br>Google has the deepest infrastructure.</blockquote>
+        <p class="callout-context">For a client, the recommendation always depends on their existing infrastructure, team capabilities, and specific use case. There is no universal winner -- but Claude's coherent product suite is a compelling argument.</p>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Here is your takeaway for client conversations."</p>
+          <p>"There is rarely a single right answer. The recommendation depends on the client's specific situation. But for most enterprise use cases involving text processing, analysis, safety-critical decisions, or agentic workflows, Claude is the stronger recommendation."</p>
+          <p><strong>[CHECK]</strong> "If a Bain partner asks you 'should we recommend Claude or ChatGPT for a client?' -- what is your first question?" She should ask about the client's use case, infrastructure, and requirements.</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 29 — Key Takeaways
+           ============================================================ -->
+      <section>
+        <h2>Key Takeaways</h2>
+        <div class="takeaway-grid">
+          <div class="takeaway-card">
+            <div class="takeaway-num">1</div>
+            <div>
+              <h4>The API is the foundation</h4>
+              <p>Everything is built on it. Understanding the API means understanding the entire ecosystem.</p>
+            </div>
+          </div>
+          <div class="takeaway-card">
+            <div class="takeaway-num">2</div>
+            <div>
+              <h4>Claude Code changes the game</h4>
+              <p>AI as an autonomous engineer, not just an assistant. $2.5B revenue proves the market agrees.</p>
+            </div>
+          </div>
+          <div class="takeaway-card">
+            <div class="takeaway-num">3</div>
+            <div>
+              <h4>MCP is the future of integration</h4>
+              <p>One protocol, universal connectivity. Anthropic's strategic open-source bet.</p>
+            </div>
+          </div>
+          <div class="takeaway-card">
+            <div class="takeaway-num">4</div>
+            <div>
+              <h4>Six layers, one picture</h4>
+              <p>You can now draw the full architecture stack on a whiteboard and explain every layer.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Let's lock in the four things you should walk away with today."</p>
+          <p>Go through each one. Pause after "Six layers, one picture" and say: "That stack diagram is something you can literally draw on a whiteboard in a client meeting. Practice it."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 30 — Exercise: Explore API / Claude Code
+           ============================================================ -->
+      <section class="slide-exercise">
+        <div class="exercise-header">
+          <span class="exercise-badge">HANDS-ON</span>
+          <span class="exercise-time">5 min</span>
+        </div>
+        <h2>The Client Pitch</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Present to a Bain partner: "Why should the firm adopt Claude for internal productivity?"</p>
+        <div class="exercise-steps">
+          <div class="step">
+            <span class="step-number">1</span>
+            <div class="step-content">
+              <h4>Set the Scene</h4>
+              <p>"Bain is currently paying for ChatGPT Enterprise seats. We are evaluating whether to switch to or supplement with Claude."</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">2</span>
+            <div class="step-content">
+              <h4>Present Claude's Advantages</h4>
+              <p>Cowork, scheduled tasks, Claude Code for Bain Digital, MCP integrations</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">3</span>
+            <div class="step-content">
+              <h4>Acknowledge Trade-offs</h4>
+              <p>Where ChatGPT still wins: image generation, brand familiarity, larger marketplace</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">4</span>
+            <div class="step-content">
+              <h4>Recommend a Phased Rollout</h4>
+              <p>Pilot for case prep and research &#8594; Expand to Cowork &#8594; Evaluate Claude Code for Bain Digital</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "One more exercise before we wrap up."</p>
+          <p><strong>[DEMO]</strong> This is a faded scaffolding exercise. You set up the scenario and the opening framing. She presents the recommendation.</p>
+          <p>She should cover: (1) What Claude offers that ChatGPT does not -- Cowork, scheduled tasks, Claude Code for Bain Digital. (2) Where ChatGPT still wins -- image gen, brand familiarity. (3) A phased rollout recommendation. (4) Pricing comparison at estimated usage.</p>
+          <p><strong>[CHECK]</strong> Is her pitch credible? Does she sound like she knows what she is talking about? That is the goal of this session.</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 31 — Homework
+           ============================================================ -->
+      <section class="slide-homework">
+        <h2>Homework: The Explainer</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Write a one-page document (yes, using Claude) that explains:</p>
+        <div class="prompt-box" style="max-width: 700px; margin: 0 auto var(--space-xl);">
+          "What is Anthropic's Claude, and why should Bain adopt it?"<br><br>
+          Targeted at a Bain partner who is smart but not technical.<br>
+          This is practice for real life -- you will have this conversation.
+        </div>
+        <div class="card-grid card-grid-2" style="max-width: 700px; margin: 0 auto;">
+          <div class="card" style="padding: var(--space-md);">
+            <h4 style="font-size: var(--text-sm);">Also</h4>
+            <p style="font-size: var(--text-xs);">Continue all scheduled tasks. Note any changes you want to make -- we will iterate in Session 6.</p>
+          </div>
+          <div class="card" style="padding: var(--space-md);">
+            <h4 style="font-size: var(--text-sm);">Bonus</h4>
+            <p style="font-size: var(--text-xs);">Draw the 6-layer architecture stack from memory. See if you can explain each layer in one sentence.</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Your homework this week is the most practical one yet."</p>
+          <p>"Write a one-page document -- using Claude, of course -- that explains what Anthropic's Claude is and why Bain should adopt it. Target it at a Bain partner who is smart but not technical. This is not a hypothetical exercise -- you WILL have this conversation in real life."</p>
+          <p>"Also: keep all your scheduled tasks running. Note any changes you want to make. And bonus: try to draw the architecture stack from memory."</p>
+          <p><strong>[CHECK]</strong> "Any questions about the assignment? Remember, we will review it at the start of Session 6."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 32 — Closing: Session 6 Preview
+           ============================================================ -->
+      <section class="slide-closing">
+        <h2>Next: Your AI Life</h2>
+        <p style="color: var(--text-secondary); font-size: var(--text-lg); max-width: 600px; margin: var(--space-md) auto var(--space-lg);">Session 6 puts it all together: your personal AI operating system, teach-back rounds, advanced prompting, and future-proofing.</p>
+        <div class="card-grid card-grid-2" style="max-width: 600px; margin: 0 auto;">
+          <div class="card" style="text-align: center; padding: var(--space-md);">
+            <h4 style="font-size: var(--text-sm);">Four Pillars</h4>
+            <p style="font-size: var(--text-xs);">Design your complete AI workflow across Professional, Community, Relationships, Personal</p>
+          </div>
+          <div class="card" style="text-align: center; padding: var(--space-md);">
+            <h4 style="font-size: var(--text-sm);">Teach-Back Rounds</h4>
+            <p style="font-size: var(--text-xs);">Practice explaining Claude to a dinner party guest, an engineer, a partner, a friend</p>
+          </div>
+        </div>
+        <p class="next-session" style="margin-top: var(--space-xl);">Session 6: "Your AI Life" &mdash; Putting It All Together</p>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Next week is the final session. Everything comes together."</p>
+          <p>"Session 6 is called 'Your AI Life.' We will design your complete personal AI system across four pillars. You will practice explaining Claude in different scenarios. And we will do some advanced prompting techniques."</p>
+          <p>"Between now and then: write that one-pager, keep your scheduled tasks running, and try to draw the architecture stack from memory. See you next week."</p>
+          <p><strong>[KEY MOMENT]</strong> End on warmth. "You now understand how the entire ecosystem works -- from the platform layer to the user interface. That is rare. Most people who use AI have no idea what is happening under the hood. You do."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SLIDE 33 — End Card
+           ============================================================ -->
+      <section class="slide-closing" data-background-color="var(--bg-secondary)">
+        <div class="loop-badge build" style="font-size: var(--text-sm); padding: 6px 20px;">BUILD</div>
+        <h2 style="margin-top: var(--space-md);">Session 5 Complete</h2>
+        <p style="color: var(--text-secondary);">API &middot; Claude Code &middot; MCP &middot; Architecture</p>
+        <div style="margin-top: var(--space-xl); color: var(--text-light); font-size: var(--text-sm);">
+          <p style="margin: 0;">Becoming an Anthropic Pro</p>
+          <p style="margin: var(--space-xs) 0 0;">Taught by Alexa Murray</p>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> Final slide. Let it sit. Thank her for her engagement.</p>
+          <p>"Great session today. You now understand the Build dimension -- API, Claude Code, MCP, and the full architecture. Next week we bring it all together. See you then."</p>
+        </aside>
+      </section>
+
+    </div>
+  </div>
+
+  <div class="session-badge">SESSION 5: BUILD</div>
+  <div class="course-footer">Becoming an Anthropic Pro</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/notes/notes.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: 'c/t',
+      showSlideNumber: 'all',
+      transition: 'none',
+      transitionSpeed: 'fast',
+      backgroundTransition: 'fade',
+      center: true,
+      width: 1280,
+      height: 800,
+      margin: 0.04,
+      plugins: [RevealNotes]
+    });
+  </script>
+</body>
+</html>

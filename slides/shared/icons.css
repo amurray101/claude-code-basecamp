@@ -1,0 +1,130 @@
+/* ============================================================
+   ICONS.CSS — Product icon system
+   19 product icons + concept icons as CSS classes
+   Each icon uses inline SVG for crisp rendering at any size
+   ============================================================ */
+
+/* === BASE ICON STYLES === */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  flex-shrink: 0;
+}
+
+.icon svg {
+  width: 60%;
+  height: 60%;
+  fill: currentColor;
+}
+
+/* Size variants */
+.icon-xs { width: 24px; height: 24px; }
+.icon-sm { width: 32px; height: 32px; }
+.icon-md { width: 48px; height: 48px; }
+.icon-lg { width: 64px; height: 64px; }
+.icon-xl { width: 96px; height: 96px; }
+.icon-2xl { width: 128px; height: 128px; }
+
+/* === PRODUCT ICON COLORS === */
+.icon-chat { background: var(--accent-coral); color: white; border-radius: var(--radius-lg); }
+.icon-desktop { background: var(--accent-teal); color: white; border-radius: var(--radius-md); }
+.icon-mobile { background: var(--accent-coral); color: white; border-radius: var(--radius-lg); }
+.icon-voice { background: var(--accent-sage); color: white; border-radius: var(--radius-full); }
+.icon-cowork { background: var(--accent-teal); color: white; border-radius: var(--radius-md); }
+.icon-code { background: #2D2D2D; color: #4ADE80; border-radius: var(--radius-md); }
+.icon-excel { background: #217346; color: white; border-radius: var(--radius-md); }
+.icon-powerpoint { background: #D24726; color: white; border-radius: var(--radius-md); }
+.icon-chrome { background: #4285F4; color: white; border-radius: var(--radius-full); }
+.icon-api { background: var(--accent-coral); color: white; border-radius: var(--radius-md); }
+.icon-mcp { background: var(--accent-teal); color: white; border-radius: var(--radius-md); }
+.icon-connectors { background: var(--accent-sage); color: white; border-radius: var(--radius-md); }
+.icon-projects { background: var(--accent-peach); color: var(--accent-terracotta); border-radius: var(--radius-md); }
+.icon-memory { background: var(--accent-peach); color: var(--accent-terracotta); border-radius: var(--radius-full); }
+.icon-skills { background: var(--accent-teal); color: white; border-radius: var(--radius-md); }
+.icon-plugins { background: var(--accent-sage); color: white; border-radius: var(--radius-md); }
+.icon-scheduled { background: var(--accent-coral); color: white; border-radius: var(--radius-full); }
+.icon-deep-research { background: var(--accent-teal); color: white; border-radius: var(--radius-md); }
+.icon-artifacts { background: var(--accent-peach); color: var(--accent-terracotta); border-radius: var(--radius-md); }
+
+/* === MODEL ICONS (circles sized by tier) === */
+.model-dot {
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: var(--weight-bold);
+}
+.model-dot.opus { background: var(--accent-coral); width: 56px; height: 56px; font-size: var(--text-sm); }
+.model-dot.sonnet { background: var(--accent-teal); width: 44px; height: 44px; font-size: var(--text-xs); }
+.model-dot.haiku { background: var(--accent-sage); width: 32px; height: 32px; font-size: 0.65rem; }
+
+/* === LOOP ICONS (badge style) === */
+.loop-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 3px 10px;
+  border-radius: var(--radius-xl);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.loop-icon.think { background: rgba(212,117,78,0.12); color: var(--accent-coral); }
+.loop-icon.do { background: rgba(74,140,140,0.12); color: var(--accent-teal); }
+.loop-icon.build { background: rgba(107,158,120,0.12); color: var(--accent-sage); }
+
+/* === COMPETITOR ICONS === */
+.competitor-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  color: white;
+  font-weight: var(--weight-bold);
+  font-size: var(--text-xs);
+}
+.competitor-icon.chatgpt { background: var(--brand-chatgpt); }
+.competitor-icon.gemini { background: var(--brand-gemini); }
+.competitor-icon.perplexity { background: var(--brand-perplexity); }
+.competitor-icon.copilot { background: var(--brand-copilot); }
+.competitor-icon.grok { background: var(--brand-grok); }
+
+/* === CONCEPT ICONS (generic shapes with meaning) === */
+.concept-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  font-size: 1.5rem;
+}
+
+/* Scenario/teach-back icons */
+.icon-wine { font-size: 3rem; }
+.icon-wrench { font-size: 3rem; }
+.icon-briefcase { font-size: 3rem; }
+.icon-lightbulb { font-size: 3rem; }
+.icon-star { font-size: 3rem; }
+.icon-heart { font-size: 3rem; }
+.icon-people { font-size: 3rem; }
+
+/* Pillar icons (Session 6) */
+.pillar-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  margin: 0 auto var(--space-md);
+}
+.pillar-icon.professional { background: var(--accent-coral); }
+.pillar-icon.community { background: var(--accent-teal); }
+.pillar-icon.relationships { background: var(--accent-sage); }
+.pillar-icon.personal { background: var(--accent-peach); }

@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Code Basecamp — GTM Enablement Slide Deck</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css">
+  <link rel="stylesheet" href="shared/theme.css">
+  <link rel="stylesheet" href="shared/icons.css">
+  <link rel="stylesheet" href="shared/diagrams.css">
+  <link rel="stylesheet" href="shared/animations.css">
+  <style>
+    /* === BASECAMP DECK LOCAL STYLES === */
+
+    /* Terminal code blocks */
+    .terminal-block {
+      background: #1A1A1A;
+      border-radius: var(--radius-lg);
+      padding: var(--space-md) var(--space-lg);
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      color: #d4d4d4;
+      line-height: 1.7;
+      overflow-x: auto;
+      margin: var(--space-md) 0;
+      border: 1px solid #2a2a2a;
+    }
+    .terminal-block .terminal-header {
+      display: flex;
+      gap: 6px;
+      margin-bottom: var(--space-sm);
+      padding-bottom: var(--space-sm);
+      border-bottom: 1px solid #333;
+    }
+    .terminal-header .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .terminal-header .dot-red { background: #ff5f57; }
+    .terminal-header .dot-yellow { background: #febc2e; }
+    .terminal-header .dot-green { background: #28c840; }
+    .terminal-block .line-prompt { color: #7ec699; }
+    .terminal-block .line-output { color: #d4d4d4; }
+    .terminal-block .line-comment { color: #666; }
+    .terminal-block .line-highlight { color: #D4754E; }
+    .terminal-block .line-success { color: #28c840; }
+
+    /* Agentic loop diagram */
+    .agentic-loop {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-md);
+      margin: var(--space-xl) auto;
+      max-width: 800px;
+    }
+    .loop-node {
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--radius-lg);
+      text-align: center;
+      font-weight: var(--weight-semibold);
+      font-size: var(--text-base);
+      min-width: 120px;
+      box-shadow: var(--shadow-card);
+    }
+    .loop-node.read { background: var(--accent-teal); color: white; }
+    .loop-node.plan { background: var(--accent-coral); color: white; }
+    .loop-node.act { background: var(--accent-sage); color: white; }
+    .loop-node.verify { background: var(--text-primary); color: white; }
+    .loop-connector {
+      font-size: var(--text-xl);
+      color: var(--border-medium);
+      font-weight: var(--weight-bold);
+    }
+
+    /* Four-up grid for features */
+    .four-up {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+      margin: var(--space-lg) 0;
+    }
+    .four-up-item {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--shadow-card);
+      border: 1px solid var(--border-light);
+    }
+    .four-up-item h4 {
+      color: var(--accent-coral);
+      margin-bottom: var(--space-xs);
+    }
+    .four-up-item code {
+      font-family: var(--font-mono);
+      font-size: var(--text-sm);
+      background: var(--bg-secondary);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    .four-up-item p {
+      font-size: var(--text-sm);
+      margin: 0;
+    }
+
+    /* Client scenario styling */
+    .client-scenario {
+      max-width: 750px;
+    }
+    .client-badge {
+      display: inline-block;
+      background: var(--accent-coral);
+      color: white;
+      font-size: var(--text-xs);
+      font-weight: var(--weight-bold);
+      padding: 4px 12px;
+      border-radius: var(--radius-xl);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: var(--space-md);
+    }
+    .client-industry {
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,0.6);
+      margin-bottom: var(--space-md);
+    }
+    .client-situation {
+      font-size: var(--text-base);
+      color: rgba(255,255,255,0.85);
+      line-height: 1.7;
+    }
+
+    /* Day number for dividers */
+    .day-label {
+      font-size: var(--text-sm);
+      font-weight: var(--weight-bold);
+      color: var(--accent-coral);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-xs);
+    }
+
+    /* Hierarchy diagram */
+    .hierarchy {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      max-width: 600px;
+      margin: var(--space-lg) auto;
+    }
+    .hierarchy-level {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+    }
+    .hierarchy-level .h-label {
+      font-weight: var(--weight-bold);
+      min-width: 120px;
+    }
+    .hierarchy-level .h-desc {
+      color: var(--text-secondary);
+    }
+    .hierarchy-level.h-root { background: var(--accent-coral); color: white; }
+    .hierarchy-level.h-root .h-desc { color: rgba(255,255,255,0.85); }
+    .hierarchy-level.h-sub { background: var(--accent-peach); color: var(--text-primary); margin-left: var(--space-xl); }
+    .hierarchy-level.h-team { background: var(--bg-secondary); color: var(--text-primary); margin-left: var(--space-2xl); }
+
+    /* Flow diagram (horizontal) */
+    .flow-horizontal {
+      display: flex;
+      align-items: center;
+      gap: var(--space-sm);
+      margin: var(--space-lg) 0;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .flow-box {
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      text-align: center;
+      box-shadow: var(--shadow-card);
+      min-width: 110px;
+    }
+    .flow-box.coral { background: var(--accent-coral); color: white; }
+    .flow-box.teal { background: var(--accent-teal); color: white; }
+    .flow-box.sage { background: var(--accent-sage); color: white; }
+    .flow-box.dark { background: var(--text-primary); color: white; }
+    .flow-box.light { background: var(--bg-white); color: var(--text-primary); border: 1px solid var(--border-light); }
+    .flow-arrow-sm {
+      font-size: var(--text-lg);
+      color: var(--border-medium);
+    }
+
+    /* Security layers */
+    .security-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      max-width: 700px;
+      margin: var(--space-lg) auto;
+    }
+    .security-layer {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: var(--radius-md);
+      font-size: var(--text-sm);
+    }
+    .security-layer .s-num {
+      font-weight: var(--weight-bold);
+      font-size: var(--text-lg);
+      min-width: 28px;
+    }
+    .security-layer .s-label {
+      font-weight: var(--weight-semibold);
+      min-width: 140px;
+    }
+
+    /* Comparison feature table */
+    .feature-compare {
+      width: 100%;
+      margin: var(--space-lg) 0;
+      font-size: var(--text-sm);
+    }
+    .feature-compare th, .feature-compare td {
+      padding: 8px 12px;
+      text-align: center;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .feature-compare th:first-child, .feature-compare td:first-child {
+      text-align: left;
+    }
+    .feature-compare .check { color: var(--accent-sage); font-weight: var(--weight-bold); }
+    .feature-compare .partial { color: var(--accent-coral); }
+    .feature-compare .miss { color: var(--text-light); }
+
+    /* Scoring rubric */
+    .rubric-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+      margin: var(--space-lg) 0;
+    }
+    .rubric-item {
+      background: var(--bg-white);
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      box-shadow: var(--shadow-card);
+      border-top: 4px solid var(--accent-coral);
+      text-align: center;
+    }
+    .rubric-item .rubric-pct {
+      font-size: var(--text-3xl);
+      font-weight: var(--weight-bold);
+      color: var(--accent-coral);
+      line-height: 1;
+      margin-bottom: var(--space-xs);
+    }
+    .rubric-item h4 {
+      margin-bottom: var(--space-xs);
+    }
+    .rubric-item p {
+      font-size: var(--text-sm);
+      margin: 0;
+    }
+
+    /* Agenda day cards */
+    .agenda-days {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      margin: var(--space-lg) 0;
+    }
+    .agenda-day {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      padding: var(--space-md) var(--space-lg);
+      background: var(--bg-white);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-card);
+    }
+    .agenda-day-num {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: var(--weight-bold);
+      color: white;
+      font-size: var(--text-sm);
+    }
+    .agenda-day h4 {
+      margin-bottom: 0;
+      font-size: var(--text-base);
+    }
+    .agenda-day p {
+      margin: 0;
+      font-size: var(--text-sm);
+    }
+    .agenda-day .agenda-time {
+      margin-left: auto;
+      font-size: var(--text-xs);
+      color: var(--text-light);
+      white-space: nowrap;
+    }
+
+    /* Three-client overview cards */
+    .client-cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-md);
+      margin: var(--space-lg) 0;
+    }
+    .client-card {
+      background: #1A1A1A;
+      border-radius: var(--radius-lg);
+      padding: var(--space-lg);
+      color: white;
+    }
+    .client-card h4 {
+      color: var(--accent-coral);
+      margin-bottom: var(--space-xs);
+    }
+    .client-card .cc-industry {
+      font-size: var(--text-xs);
+      color: rgba(255,255,255,0.5);
+      margin-bottom: var(--space-sm);
+    }
+    .client-card p {
+      font-size: var(--text-sm);
+      color: rgba(255,255,255,0.8);
+      margin: 0;
+    }
+
+    /* Layer stack polished (architecture) */
+    .layer-stack-polished {
+      max-width: 950px;
+      gap: 5px;
+    }
+    .layer-stack-polished .layer {
+      min-height: 64px;
+      border-radius: var(--radius-lg);
+      padding: var(--space-md) var(--space-2xl);
+    }
+    .layer-stack-polished .layer-label {
+      font-size: var(--text-lg);
+      min-width: 180px;
+    }
+    .layer-stack-polished .layer-contents {
+      font-size: var(--text-base);
+      letter-spacing: 0.02em;
+    }
+
+    /* Dark slide text overrides */
+    section[data-background-color="#1A1A1A"] h2,
+    section[data-background-color="#1A1A1A"] h3 {
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- ============================================================
+           SECTION 0 — WELCOME
+           ============================================================ -->
+
+      <!-- SLIDE 1 — TITLE -->
+      <section class="slide-title">
+        <div class="title-accent-bar"></div>
+        <div class="session-number">BASECAMP</div>
+        <h1>Claude Code Basecamp</h1>
+        <p class="subtitle">GTM Enablement &middot; Live Session Deck</p>
+        <div class="session-meta">
+          <span class="duration">5 days</span>
+          <span class="dot-separator">&#183;</span>
+          <span>Product Engineers &middot; Solutions Architects &middot; Applied Researchers</span>
+        </div>
+        <aside class="notes">
+          <p><strong>[TIMING]</strong> Full program: 5 days. Day 1: 90 min. Days 2-4: 120 min each. Day 5: 120 min capstone.</p>
+          <p><strong>[OPEN]</strong> Welcome the cohort. Set the tone: this is hands-on, client-focused training. By the end of the week, every person in this room will be able to demo Claude Code cold, architect an enterprise deployment, and handle any objection a customer throws at them.</p>
+          <p><strong>[KEY MOMENT]</strong> "This is not a lecture series. Every day starts with a client scenario. You will learn by doing the work you will do in the field."</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 2 — AGENDA OVERVIEW -->
+      <section>
+        <h2>Five Days, Five Milestones</h2>
+        <div class="agenda-days">
+          <div class="agenda-day">
+            <div class="agenda-day-num" style="background: var(--accent-coral);">1</div>
+            <div>
+              <h4>First Contact</h4>
+              <p>Install, navigate, complete your first agentic task</p>
+            </div>
+            <span class="agenda-time">90 min</span>
+          </div>
+          <div class="agenda-day">
+            <div class="agenda-day-num" style="background: var(--accent-teal);">2</div>
+            <div>
+              <h4>Prompt Craft</h4>
+              <p>CLAUDE.md, context management, session hygiene</p>
+            </div>
+            <span class="agenda-time">120 min</span>
+          </div>
+          <div class="agenda-day">
+            <div class="agenda-day-num" style="background: var(--accent-sage);">3</div>
+            <div>
+              <h4>Extend &amp; Customize</h4>
+              <p>Hooks, MCP, Skills, composed workflows</p>
+            </div>
+            <span class="agenda-time">120 min</span>
+          </div>
+          <div class="agenda-day">
+            <div class="agenda-day-num" style="background: var(--accent-terracotta);">4</div>
+            <div>
+              <h4>Customer Scenarios</h4>
+              <p>Security, deployment, cost, competitive positioning</p>
+            </div>
+            <span class="agenda-time">120 min</span>
+          </div>
+          <div class="agenda-day">
+            <div class="agenda-day-num" style="background: var(--text-primary);">5</div>
+            <div>
+              <h4>Ship It &mdash; Capstone</h4>
+              <p>Blind brief, working demo, peer review</p>
+            </div>
+            <span class="agenda-time">120 min</span>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> Walk through the five days briefly. Each day builds on the last. "By Friday, you will present a client-tailored demo from a brief you have never seen."</p>
+          <p><strong>[KEY MOMENT]</strong> Emphasize that every day opens with a real client scenario. "We don't start with 'today we will learn feature X.' We start with a customer problem, and the features become the answer."</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 3 — WHAT THIS DECK COVERS -->
+      <section>
+        <h2>Deck vs. Self-Paced Foundations</h2>
+        <div class="side-by-side" style="margin-top: var(--space-lg);">
+          <div class="side-card side-before">
+            <h3>Self-Paced Foundations</h3>
+            <p style="font-size: var(--text-sm); margin-bottom: var(--space-md);">Completed before the live sessions</p>
+            <ul style="font-size: var(--text-sm); color: var(--text-secondary); padding-left: var(--space-lg); margin: 0;">
+              <li>Anthropic mission &amp; values</li>
+              <li>Product surfaces &amp; model family</li>
+              <li>Claude Code architecture overview</li>
+              <li>How it thinks: context, reasoning, cost</li>
+              <li>Configuration: CLAUDE.md, hooks, MCP concepts</li>
+              <li>Security &amp; enterprise basics</li>
+            </ul>
+          </div>
+          <div class="side-arrow">&#8594;</div>
+          <div class="side-card side-after">
+            <h3>This Live Deck</h3>
+            <p style="font-size: var(--text-sm); margin-bottom: var(--space-md);">Hands-on, demo-driven, client-focused</p>
+            <ul style="font-size: var(--text-sm); color: var(--text-primary); padding-left: var(--space-lg); margin: 0;">
+              <li>Live install &amp; first agentic task</li>
+              <li>CLAUDE.md authoring with real repos</li>
+              <li>Building hooks, MCP servers, Skills</li>
+              <li>Security, cost, &amp; competitive role-plays</li>
+              <li>Blind-brief capstone presentation</li>
+              <li>Facilitator talking points throughout</li>
+            </ul>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Before we begin Day 1, let me frame what this deck covers versus the self-paced foundations you completed before today."</p>
+          <p><strong>[CHECK]</strong> Quick poll: "Who completed the foundations? Any questions from that material?" Address gaps now so the live sessions stay on pace.</p>
+          <p>The foundations give the conceptual groundwork. These live sessions are about building muscle memory: installing, configuring, demoing, and handling objections in real time.</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SECTION 1 — DAY 1: FIRST CONTACT
+           ============================================================ -->
+
+      <!-- SLIDE 4 — DAY 1 DIVIDER -->
+      <section class="slide-divider" data-background-color="var(--bg-secondary)">
+        <div class="day-label">Day 1</div>
+        <h2>First Contact</h2>
+        <p class="part-description">Install, navigate, and deliver a first win</p>
+        <div class="duration-badge">90 min</div>
+        <aside class="notes">
+          <p><strong>[OPEN]</strong> Don't start with "today we'll learn to install Claude Code." Start with: "Meridian Health has an 8-person backend team. New endpoints take them 2-3 days. By the end of this session, you'll be able to show them how to do it in minutes."</p>
+          <p><strong>[TIMING]</strong> 45 min live demo + 45 min hands-on lab.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 5 — CLIENT SCENARIO: MERIDIAN HEALTH -->
+      <section data-background-color="#1A1A1A">
+        <div class="client-scenario">
+          <div class="client-badge">Client Scenario</div>
+          <h2 style="color: white;">Meridian Health</h2>
+          <div class="client-industry">Healthcare SaaS &middot; 8-person backend team &middot; Node.js API</div>
+          <p class="client-situation">Meridian's VP of Engineering just approved a Claude Code pilot. They maintain a Node.js API powering patient scheduling across 200+ clinics. Their biggest pain: adding new API endpoints takes 2&ndash;3 days because of boilerplate, tests, and compliance checks. Your job is to set up Claude Code in their environment and show them their first real productivity win &mdash; a new endpoint built in minutes, not days.</p>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> Read the scenario. Let it land. "This is who you are helping today. Every feature we cover maps back to solving Meridian's problem."</p>
+          <p><strong>[KEY MOMENT]</strong> The client scenario is not decoration. It frames every demo. When you show the install, you are installing for Meridian. When you build the first endpoint, you are delivering their first win.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 6 — AGENTIC VS AUTOCOMPLETE -->
+      <section>
+        <h2>What Is Claude Code?</h2>
+        <div class="side-by-side" style="margin-top: var(--space-lg);">
+          <div class="side-card side-before">
+            <h3>Autocomplete</h3>
+            <p style="font-size: var(--text-lg); font-weight: var(--weight-semibold); color: var(--text-primary); margin-bottom: var(--space-sm);">Suggests lines</p>
+            <p>Predicts the next line of code inside your editor. You stay in control, it fills in the blanks.</p>
+            <p style="font-size: var(--text-xs); color: var(--text-light); margin-top: var(--space-sm);">GitHub Copilot, Cursor tab-complete</p>
+          </div>
+          <div class="vs-badge">vs</div>
+          <div class="side-card side-after">
+            <h3>Agentic</h3>
+            <p style="font-size: var(--text-lg); font-weight: var(--weight-semibold); color: var(--text-primary); margin-bottom: var(--space-sm);">Completes tasks</p>
+            <p>Takes on entire tasks autonomously. Reads your codebase, plans changes, writes code, runs tests, fixes what breaks.</p>
+            <p style="font-size: var(--text-xs); color: var(--accent-terracotta); font-weight: var(--weight-semibold); margin-top: var(--space-sm);">Claude Code</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Before I install anything, let me show you why this is different from what most people think of as AI coding."</p>
+          <p><strong>[DEMO TIP]</strong> This is the slide you will return to in every customer demo. The one-liner: "The difference between autocomplete and a colleague." Autocomplete suggests the next line. Claude Code takes "refactor the auth module" and does the entire migration.</p>
+          <p>For your GTM audience: you need to be able to NARRATE this difference in real time during a live demo. Practice saying: "See, it's reading the existing patterns. Now it's planning. Now it's writing across multiple files. Now it's running the tests."</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 7 — THE AGENTIC LOOP -->
+      <section>
+        <h2>The Agentic Loop</h2>
+        <p style="color: var(--text-secondary);">What happens when you give Claude Code a task</p>
+        <div class="agentic-loop">
+          <div class="loop-node read">Read</div>
+          <div class="loop-connector">&#8594;</div>
+          <div class="loop-node plan">Plan</div>
+          <div class="loop-connector">&#8594;</div>
+          <div class="loop-node act">Act</div>
+          <div class="loop-connector">&#8594;</div>
+          <div class="loop-node verify">Verify</div>
+        </div>
+        <div style="text-align: center; margin-top: var(--space-sm);">
+          <span style="font-size: var(--text-sm); color: var(--accent-teal); font-weight: var(--weight-semibold);">&#8634; Loop until the task is complete</span>
+        </div>
+        <div class="card-grid card-grid-4" style="margin-top: var(--space-xl); font-size: var(--text-sm);">
+          <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--accent-teal);">
+            <h4 style="color: var(--accent-teal);">Read</h4>
+            <p>Scans files, imports, directory structure to understand the codebase</p>
+          </div>
+          <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--accent-coral);">
+            <h4>Plan</h4>
+            <p>Extended thinking: breaks task into steps, anticipates edge cases</p>
+          </div>
+          <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--accent-sage);">
+            <h4 style="color: var(--accent-sage);">Act</h4>
+            <p>Writes code, edits files, runs commands in your real environment</p>
+          </div>
+          <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--text-primary);">
+            <h4 style="color: var(--text-primary);">Verify</h4>
+            <p>Runs tests, checks output, self-corrects if something breaks</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Here is the loop that powers everything Claude Code does."</p>
+          <p><strong>[DEMO TIP]</strong> During your live demo, call out each step as it happens: "See it reading the route files? That's the Read step. Now it's pausing to think -- that's Plan. Now it's writing the endpoint code -- Act. And now it's running npm test -- Verify." This narration is the skill that separates good demos from great ones.</p>
+          <p>The loop repeats. If the tests fail, Claude reads the error, plans a fix, acts on it, and verifies again. This self-correction is a powerful demo moment.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 8 — FOUR SURFACES -->
+      <section>
+        <h2>Four Ways to Use Claude Code</h2>
+        <div class="card-grid card-grid-4" style="margin-top: var(--space-lg);">
+          <div class="card" style="padding: var(--space-md); text-align: center;">
+            <div style="font-size: var(--text-2xl); margin-bottom: var(--space-sm);">&#9002;</div>
+            <h4 style="font-size: var(--text-sm);">Terminal (CLI)</h4>
+            <p style="font-size: var(--text-xs);">Full power. Headless mode for CI/CD. Direct filesystem access.</p>
+            <p style="font-size: var(--text-xs); color: var(--accent-coral); font-weight: var(--weight-semibold); margin-top: var(--space-sm);">Best for: power users, automation</p>
+          </div>
+          <div class="card" style="padding: var(--space-md); text-align: center;">
+            <div style="font-size: var(--text-2xl); margin-bottom: var(--space-sm);">&#128187;</div>
+            <h4 style="font-size: var(--text-sm);">VS Code / JetBrains</h4>
+            <p style="font-size: var(--text-xs);">Inline diffs, visual file tree, lower barrier to entry.</p>
+            <p style="font-size: var(--text-xs); color: var(--accent-coral); font-weight: var(--weight-semibold); margin-top: var(--space-sm);">Best for: visual feedback, reviews</p>
+          </div>
+          <div class="card" style="padding: var(--space-md); text-align: center;">
+            <div style="font-size: var(--text-2xl); margin-bottom: var(--space-sm);">&#128241;</div>
+            <h4 style="font-size: var(--text-sm);">Desktop &amp; Mobile</h4>
+            <p style="font-size: var(--text-xs);">Native apps. Start or continue tasks from anywhere.</p>
+            <p style="font-size: var(--text-xs); color: var(--accent-coral); font-weight: var(--weight-semibold); margin-top: var(--space-sm);">Best for: async, on-the-go</p>
+          </div>
+          <div class="card" style="padding: var(--space-md); text-align: center;">
+            <div style="font-size: var(--text-2xl); margin-bottom: var(--space-sm);">&#127760;</div>
+            <h4 style="font-size: var(--text-sm);">Web (claude.ai)</h4>
+            <p style="font-size: var(--text-xs);">Zero install. Shareable. Integrated with Projects and Skills.</p>
+            <p style="font-size: var(--text-xs); color: var(--accent-coral); font-weight: var(--weight-semibold); margin-top: var(--space-sm);">Best for: first demos, quick tasks</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Claude Code isn't locked to one environment. Know which surface to reach for in each demo."</p>
+          <p><strong>[DEMO TIP]</strong> For first demos with non-technical stakeholders, start with the web. For engineering teams, start with the CLI. For teams that live in VS Code, start there. Match the surface to the audience.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 9 — LIVE DEMO TALKING POINTS -->
+      <section class="slide-exercise">
+        <div class="exercise-header">
+          <span class="exercise-badge">LIVE DEMO</span>
+          <span class="exercise-time">15 min</span>
+        </div>
+        <h2>Install &amp; First Task — Demo Script</h2>
+        <div class="exercise-steps">
+          <div class="step">
+            <span class="step-number">1</span>
+            <div class="step-content">
+              <h4>Install from scratch</h4>
+              <p><code style="font-family: var(--font-mono); font-size: var(--text-sm); background: var(--bg-secondary); padding: 2px 6px; border-radius: 4px;">npm install -g @anthropic-ai/claude-code</code> &mdash; narrate every step, call out what could go wrong</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">2</span>
+            <div class="step-content">
+              <h4>Open the sample repo, launch Claude Code</h4>
+              <p>Watch Claude read directory structure and package.json before you type anything. <strong>Call this out</strong> &mdash; it is the first "aha."</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">3</span>
+            <div class="step-content">
+              <h4>First agentic task</h4>
+              <p>"Add a GET /health endpoint with tests" &mdash; narrate the loop: Read, Plan, Act, Verify</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">4</span>
+            <div class="step-content">
+              <h4>Run tests, show it passes</h4>
+              <p>This is the moment. New endpoint + tests in under 5 minutes vs. Meridian's 2-3 day baseline.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[DEMO SCRIPT]</strong> "I'm going to install Claude Code from zero and build Meridian's first endpoint live. Watch the steps — this is exactly what you'll do in the lab, and exactly what you'll narrate for customers."</p>
+          <p><strong>[KEY MOMENTS]</strong> Three moments to highlight: (1) When Claude reads the codebase before you ask — the agentic read step. (2) When Claude runs the tests after making changes — the verify step. (3) If Claude makes a mistake and self-corrects — don't skip this, it builds trust.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 10 — KEY STATS -->
+      <section class="slide-stat">
+        <div class="big-number-container">
+          <div class="big-number">72.7%</div>
+          <div class="big-number-unit">SWE-bench Verified</div>
+          <div class="big-number-context">Industry-leading benchmark for real-world coding ability</div>
+        </div>
+        <div class="data-callouts" style="margin-top: var(--space-xl);">
+          <div class="data-callout">
+            <div class="value" style="font-size: var(--text-2xl);">200K&ndash;1M</div>
+            <div class="label">Token context window</div>
+          </div>
+          <div class="data-callout">
+            <div class="value" style="font-size: var(--text-2xl); color: var(--accent-teal);">2&times;</div>
+            <div class="label">Code output per engineer</div>
+          </div>
+          <div class="data-callout">
+            <div class="value" style="font-size: var(--text-2xl); color: var(--accent-sage);">~7 min</div>
+            <div class="label">Install to first task</div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Here are the numbers that back up what you just saw."</p>
+          <p>Let these land one by one. 72.7% SWE-bench Verified — the hardest real-world coding benchmark. 200K to 1M token context — it reads entire codebases, not just open files. 2x code output at Anthropic internally. And about 7 minutes from install to completing your first real task.</p>
+          <p>These are the stats you pull out in a customer conversation when someone asks "how good is it, really?"</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 11 — BRIDGE TO LAB -->
+      <section class="slide-exercise">
+        <div class="exercise-header">
+          <span class="exercise-badge">LAB</span>
+          <span class="exercise-time">45 min</span>
+        </div>
+        <h2>Now You Do It for Meridian</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Install Claude Code in both terminal and VS Code. Then deliver Meridian's first win.</p>
+        <div class="card-grid card-grid-2" style="margin-top: var(--space-md);">
+          <div class="card" style="padding: var(--space-md);">
+            <h4>Your Task</h4>
+            <p>Install Claude Code, clone the sample API, add a /health endpoint with tests using the agentic workflow</p>
+          </div>
+          <div class="card" style="padding: var(--space-md);">
+            <h4>Your Deliverable</h4>
+            <p>Working install (CLI + IDE) + completed agentic task + one-sentence explanation of the agentic loop for Meridian's team lead</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[BRIDGE]</strong> "You've seen me do it. Now you do it as if you're onboarding Meridian's team. Your job isn't just to install — it's to deliver their first win."</p>
+          <p><strong>[WATCH FOR]</strong> Proxy/firewall issues, confusion between terminal and IDE surfaces, trainees who finish early (give them the troubleshooting exercise).</p>
+          <p><strong>[DEBRIEF]</strong> "What would you say to Meridian's team lead? How do you explain the agentic loop in one sentence?"</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SECTION 2 — DAY 2: PROMPT CRAFT
+           ============================================================ -->
+
+      <!-- SLIDE 12 — DAY 2 DIVIDER -->
+      <section class="slide-divider" data-background-color="var(--bg-secondary)">
+        <div class="day-label">Day 2</div>
+        <h2>Prompt Craft</h2>
+        <p class="part-description">CLAUDE.md, context management, and the art of steering multi-step workflows</p>
+        <div class="duration-badge">120 min</div>
+        <aside class="notes">
+          <p><strong>[OPEN]</strong> "Lumen Logistics has 40 developers and zero documentation. New hires take three weeks to become productive. Their CTO asked us: can Claude Code fix that?" CLAUDE.md isn't a config file — it's the answer to a real customer pain point.</p>
+          <p><strong>[TIMING]</strong> 60 min live + 60 min lab.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 13 — CLIENT SCENARIO: LUMEN LOGISTICS -->
+      <section data-background-color="#1A1A1A">
+        <div class="client-scenario">
+          <div class="client-badge">Client Scenario</div>
+          <h2 style="color: white;">Lumen Logistics</h2>
+          <div class="client-industry">Supply chain &middot; 40-developer team &middot; Node.js monorepo</div>
+          <p class="client-situation">Lumen has a sprawling monorepo with zero documentation. Every new hire takes 3 weeks to become productive because there is no written record of conventions, architecture decisions, or testing patterns. The CTO wants Claude Code to accelerate onboarding and enforce consistency &mdash; but without a CLAUDE.md, Claude just guesses at their patterns and gets half of them wrong. Your job: write the CLAUDE.md that makes Claude an effective team member.</p>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "This is the exact situation you'll face in the field. A team excited about Claude Code, but the codebase has no documentation. Without a CLAUDE.md, Claude will guess — and guess wrong."</p>
+          <p>The before/after of adding a CLAUDE.md to this repo is the single most persuasive demo in the entire program.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 14 — WHAT IS CLAUDE.md -->
+      <section>
+        <h2>CLAUDE.md</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">The system prompt for your codebase</p>
+        <div style="display: flex; gap: var(--space-xl); align-items: flex-start;">
+          <div style="flex: 1;">
+            <div class="card" style="border-left: 4px solid var(--accent-coral); padding: var(--space-lg);">
+              <h4>What it is</h4>
+              <p>A markdown file at your project root that gives Claude Code persistent instructions: coding standards, architecture decisions, testing conventions, anything you would tell a new teammate on day one.</p>
+            </div>
+            <div class="card" style="border-left: 4px solid var(--accent-teal); padding: var(--space-lg); margin-top: var(--space-md);">
+              <h4 style="color: var(--accent-teal);">Why it matters</h4>
+              <p>Without it, Claude reads more files, guesses at conventions, and often gets them wrong. With it, Claude starts faster, targets the right files, and matches your team's patterns.</p>
+            </div>
+          </div>
+          <div style="flex: 1;">
+            <div class="card" style="border-left: 4px solid var(--accent-sage); padding: var(--space-lg);">
+              <h4 style="color: var(--accent-sage);">The GTM angle</h4>
+              <p>Writing the first CLAUDE.md together is a powerful onboarding moment with customers. It is the single most impactful configuration surface &mdash; every deployment should start here.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "CLAUDE.md is the most important file you will create in any customer engagement."</p>
+          <p>Think of it as a system prompt, but for an entire codebase. Every time Claude Code starts a session, it reads this file first. It shapes every decision Claude makes — what patterns to follow, what tools to use, what to check before committing.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 15 — CLAUDE.md EXAMPLE -->
+      <section>
+        <h2>CLAUDE.md in Practice</h2>
+        <div class="terminal-block">
+          <div class="terminal-header">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+            <span style="color: #888; font-size: var(--text-xs); margin-left: 8px;">CLAUDE.md</span>
+          </div>
+          <div>
+            <div class="line-comment"># Project: Lumen Logistics API</div>
+            <br>
+            <div class="line-comment">## Architecture</div>
+            <div class="line-output">- Express.js monorepo with route handlers in /src/routes/</div>
+            <div class="line-output">- Shared utilities in /src/utils/ — never duplicate</div>
+            <div class="line-output">- Tests live next to source: foo.ts → foo.test.ts</div>
+            <br>
+            <div class="line-comment">## Conventions</div>
+            <div class="line-output">- TypeScript strict mode, async/await only</div>
+            <div class="line-output">- All functions need JSDoc comments</div>
+            <div class="line-output">- Imports: group by external, internal, types</div>
+            <br>
+            <div class="line-comment">## Testing</div>
+            <div class="line-output">- Jest + supertest for API tests</div>
+            <div class="line-output">- Every route: happy path + error case minimum</div>
+            <div class="line-output">- Run `npm test` before committing</div>
+            <br>
+            <div class="line-comment">## Before committing</div>
+            <div class="line-highlight">- Run `npm run lint && npm test`</div>
+            <div class="line-highlight">- Never commit .env or node_modules</div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[DEMO]</strong> Walk through each section. "Architecture tells Claude where things live. Conventions tells Claude how to write. Testing tells Claude what to verify. Before committing tells Claude the quality gate."</p>
+          <p>Emphasize: this file should be 30-80 lines. NOT 200 lines. Over-specified CLAUDE.md files are a common anti-pattern — they constrain more than they help.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 16 — CLAUDE.md HIERARCHY -->
+      <section>
+        <h2>CLAUDE.md Hierarchy</h2>
+        <p style="color: var(--text-secondary);">Instructions cascade from general to specific</p>
+        <div class="hierarchy">
+          <div class="hierarchy-level h-root">
+            <span class="h-label">~/CLAUDE.md</span>
+            <span class="h-desc">Personal defaults &mdash; applies to all your projects</span>
+          </div>
+          <div class="hierarchy-level h-root">
+            <span class="h-label">/repo/CLAUDE.md</span>
+            <span class="h-desc">Project root &mdash; coding standards, architecture, test patterns</span>
+          </div>
+          <div class="hierarchy-level h-sub">
+            <span class="h-label">/repo/src/CLAUDE.md</span>
+            <span class="h-desc">Subdirectory &mdash; module-specific overrides</span>
+          </div>
+          <div class="hierarchy-level h-team">
+            <span class="h-label">/repo/.claude/CLAUDE.md</span>
+            <span class="h-desc">Team-specific &mdash; shared via git, enforced org-wide</span>
+          </div>
+        </div>
+        <p style="text-align: center; font-size: var(--text-sm); color: var(--text-secondary); margin-top: var(--space-md);">More specific files override more general ones. Like CSS specificity for your codebase.</p>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "CLAUDE.md isn't just one file. It's a hierarchy."</p>
+          <p>The key insight for enterprise customers: a root CLAUDE.md sets org-wide standards. Subdirectory CLAUDE.md files add module-specific rules. This maps to how real engineering orgs work — company-wide style guides with team-level exceptions.</p>
+          <p>For Solutions Architects: this hierarchy is how you design a CLAUDE.md strategy for a 200-person engineering org.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 17 — BEFORE/AFTER DEMO -->
+      <section>
+        <h2>Before/After: The CLAUDE.md Effect</h2>
+        <div class="side-by-side" style="margin-top: var(--space-lg);">
+          <div class="side-card side-before">
+            <h3>Without CLAUDE.md</h3>
+            <ul style="font-size: var(--text-sm); padding-left: var(--space-lg); color: var(--text-secondary);">
+              <li>Reads 30+ files trying to infer conventions</li>
+              <li>Guesses at test patterns (often wrong)</li>
+              <li>Mixes async/await with raw Promises</li>
+              <li>Commits without running lint</li>
+              <li>Slow startup, verbose output</li>
+            </ul>
+          </div>
+          <div class="side-arrow">&#8594;</div>
+          <div class="side-card side-after">
+            <h3>With CLAUDE.md</h3>
+            <ul style="font-size: var(--text-sm); padding-left: var(--space-lg); color: var(--text-primary);">
+              <li>Reads 5-8 targeted files immediately</li>
+              <li>Follows exact test patterns from docs</li>
+              <li>Consistent async/await everywhere</li>
+              <li>Runs lint + tests before every commit</li>
+              <li>Fast, focused, convention-correct</li>
+            </ul>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[KEY MOMENT]</strong> This before/after demo wins more customer conversations than anything else in the program. Show the messy repo without CLAUDE.md first — let them see Claude struggle. Then add the CLAUDE.md, restart, show the difference. Night and day.</p>
+          <p><strong>[DEMO TIP]</strong> Do this live. The impact is much stronger than a slide. This slide is a preview — the real demo happens in the terminal.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 18 — SESSION MANAGEMENT -->
+      <section>
+        <h2>Session Management</h2>
+        <p style="color: var(--text-secondary);">The commands that separate surface-level users from power users</p>
+        <div class="four-up">
+          <div class="four-up-item">
+            <h4>/compact</h4>
+            <p>Summarizes conversation to save context window. Essential for long sessions when Claude starts forgetting earlier context.</p>
+          </div>
+          <div class="four-up-item">
+            <h4>/clear</h4>
+            <p>Resets context entirely. Use when you have hit a dead end or want a fresh start without restarting the session.</p>
+          </div>
+          <div class="four-up-item">
+            <h4>/cost</h4>
+            <p>Shows token usage for the current session. Know your spend. Teach customers to track theirs.</p>
+          </div>
+          <div class="four-up-item">
+            <h4>Plan Mode</h4>
+            <p>Claude thinks and plans without acting. Use for demos &mdash; shows reasoning without making changes. Builds trust with skeptical audiences.</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "You know how to give Claude instructions. Now learn to manage the conversation."</p>
+          <p><strong>[DEMO]</strong> Show a real scenario: start a long task, notice Claude repeating itself (context degradation), recover with /compact. Then show /cost — customers love seeing the spend tracker.</p>
+          <p>Plan Mode is especially powerful for customer demos. "Let me show you how Claude would approach this" — without actually changing any files. Safe, impressive, trust-building.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 19 — COMMON FAILURE PATTERNS -->
+      <section>
+        <h2>Common Failure Patterns</h2>
+        <p style="color: var(--text-secondary);">What goes wrong &mdash; and how to recover</p>
+        <div class="card-grid card-grid-3" style="margin-top: var(--space-lg);">
+          <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--accent-terracotta);">
+            <h4 style="color: var(--accent-terracotta);">Kitchen Sink</h4>
+            <p>Cramming too many tasks into one session. Context fills up, quality degrades.</p>
+            <p style="font-weight: var(--weight-semibold); color: var(--accent-teal); margin-top: var(--space-sm);">Fix: /clear and start fresh</p>
+          </div>
+          <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--accent-terracotta);">
+            <h4 style="color: var(--accent-terracotta);">Over-Specified CLAUDE.md</h4>
+            <p>200+ line CLAUDE.md that constrains more than it helps. Claude follows bad rules rigidly.</p>
+            <p style="font-weight: var(--weight-semibold); color: var(--accent-teal); margin-top: var(--space-sm);">Fix: Keep it 30-80 lines</p>
+          </div>
+          <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--accent-terracotta);">
+            <h4 style="color: var(--accent-terracotta);">Correction Spirals</h4>
+            <p>Correcting Claude 5+ times instead of starting fresh. The conversation gets tangled.</p>
+            <p style="font-weight: var(--weight-semibold); color: var(--accent-teal); margin-top: var(--space-sm);">Fix: Start a new session</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "In customer engagements, you will see these patterns. Knowing how to diagnose them makes you credible."</p>
+          <p><strong>[DEMO]</strong> Intentionally trigger a failure pattern. Show the kitchen-sink: pile 5 unrelated tasks into one session, watch quality degrade. Then demonstrate recovery. "In a customer engagement, you'll see this. Here's how you diagnose it."</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 20 — EXPLORE-PLAN-CODE WORKFLOW -->
+      <section>
+        <h2>The Workflow That Works</h2>
+        <p style="color: var(--text-secondary);">Explore first, plan, then code</p>
+        <div class="process-flow" style="margin-top: var(--space-xl);">
+          <div class="flow-step">
+            <div class="step-label">Explore</div>
+            <div class="step-desc">"Read the auth module and summarize what you find"</div>
+          </div>
+          <div class="flow-arrow">&#8594;</div>
+          <div class="flow-step primary">
+            <div class="step-label">Plan</div>
+            <div class="step-desc">"Plan how to add JWT — don't change anything yet"</div>
+          </div>
+          <div class="flow-arrow">&#8594;</div>
+          <div class="flow-step secondary">
+            <div class="step-label">Code</div>
+            <div class="step-desc">"Implement the plan. Run tests after each step."</div>
+          </div>
+        </div>
+        <p class="text-center mt-lg" style="color: var(--text-secondary); font-size: var(--text-sm);">Resist the urge to jump straight to "build me X." The explore-plan-code pattern produces consistently better results.</p>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "The best prompt engineers don't start with 'build me X.' They start with 'explore.'"</p>
+          <p>This three-step pattern produces consistently better results: (1) Have Claude explore and understand the codebase first. (2) Have Claude plan the approach — review it, adjust. (3) Then execute. The extra 2 minutes of exploration saves 20 minutes of rework.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 21 — BRIDGE TO LAB -->
+      <section class="slide-exercise">
+        <div class="exercise-header">
+          <span class="exercise-badge">LAB</span>
+          <span class="exercise-time">60 min</span>
+        </div>
+        <h2>Write the CLAUDE.md That Tames Lumen's Monorepo</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Fork the messy repo, explore the codebase, write a CLAUDE.md, then prove it works.</p>
+        <div class="exercise-steps">
+          <div class="step">
+            <span class="step-number">1</span>
+            <div class="step-content">
+              <h4>Explore without a CLAUDE.md</h4>
+              <p>Watch Claude struggle with inconsistent conventions</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">2</span>
+            <div class="step-content">
+              <h4>Write your CLAUDE.md</h4>
+              <p>Capture the patterns you discover. 30-80 lines.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">3</span>
+            <div class="step-content">
+              <h4>Refactor the messiest module</h4>
+              <p>Prove your CLAUDE.md works: conventions, tests, docs</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">4</span>
+            <div class="step-content">
+              <h4>Pitch the CTO</h4>
+              <p>Show the before/after to your partner. Make the case for org-wide adoption.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[BRIDGE]</strong> "You've seen the theory. Now build the real thing. The Lumen CTO is waiting."</p>
+          <p><strong>[WATCH FOR]</strong> CLAUDE.md files over 200 lines (coach restraint). Trainees skipping the before/after comparison (the before is essential for the contrast). Trainees who finish early — give them the failure patterns exercise.</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SECTION 3 — DAY 3: EXTEND & CUSTOMIZE
+           ============================================================ -->
+
+      <!-- SLIDE 22 — DAY 3 DIVIDER -->
+      <section class="slide-divider" data-background-color="var(--bg-secondary)">
+        <div class="day-label">Day 3</div>
+        <h2>Extend &amp; Customize</h2>
+        <p class="part-description">Hooks, MCP, Skills, and composed workflows</p>
+        <div class="duration-badge">120 min</div>
+        <aside class="notes">
+          <p><strong>[OPEN]</strong> "Arcadia Financial has 60 engineers building a payment platform. Compliance requires: nothing ships without lint, type checks, and tests. Developers waste hours context-switching to Jira. Can Claude Code enforce quality gates and pull context automatically? Today you build that."</p>
+          <p><strong>[TIMING]</strong> 45 min live + 75 min lab (the longest lab — the composed workflow takes time).</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 23 — CLIENT SCENARIO: ARCADIA FINANCIAL -->
+      <section data-background-color="#1A1A1A">
+        <div class="client-scenario">
+          <div class="client-badge">Client Scenario</div>
+          <h2 style="color: white;">Arcadia Financial</h2>
+          <div class="client-industry">Fintech / Regulated &middot; 60 engineers &middot; Payment processing platform</div>
+          <p class="client-situation">Arcadia is a Series C fintech with hard compliance requirements: no code ships without passing lint, type checks, and tests. Their PM team lives in Jira, and developers constantly context-switch to look up ticket details. The Head of Engineering asks: "Can Claude Code plug into our workflow &mdash; enforce our quality gates automatically and pull context from Jira so developers stop tab-switching?"</p>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Three customer pain points in one brief: compliance enforcement, tool integration, and context-switching. Each one maps to a Claude Code feature."</p>
+          <p>Compliance = Hooks. Jira context = MCP. Team workflows = Skills. The composed workflow demos all three together.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 24 — HOOKS -->
+      <section>
+        <h2>Hooks: The Compliance Answer</h2>
+        <p style="color: var(--text-secondary);">"How do I control what Claude does?" &mdash; every CISO, ever</p>
+        <div style="display: flex; gap: var(--space-xl); margin-top: var(--space-lg);">
+          <div style="flex: 1;">
+            <div class="terminal-block">
+              <div class="terminal-header">
+                <div class="dot dot-red"></div>
+                <div class="dot dot-yellow"></div>
+                <div class="dot dot-green"></div>
+                <span style="color: #888; font-size: var(--text-xs); margin-left: 8px;">.claude/hooks.json</span>
+              </div>
+              <div>
+                <div class="line-output">{</div>
+                <div class="line-highlight">  "pre-commit": [</div>
+                <div class="line-output">    "npm run lint",</div>
+                <div class="line-output">    "npm run type-check",</div>
+                <div class="line-output">    "npm test -- --bail"</div>
+                <div class="line-output">  ],</div>
+                <div class="line-highlight">  "post-edit": [</div>
+                <div class="line-output">    "npm test -- --related --bail"</div>
+                <div class="line-output">  ]</div>
+                <div class="line-output">}</div>
+              </div>
+            </div>
+          </div>
+          <div style="flex: 0.8;">
+            <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-coral);">
+              <h4>Pre-commit</h4>
+              <p>Enforced gates. Lint, type-check, and tests must pass before any commit. Not suggestions &mdash; requirements.</p>
+            </div>
+            <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-teal); margin-top: var(--space-md);">
+              <h4 style="color: var(--accent-teal);">Post-edit</h4>
+              <p>Runs tests on related files after Claude edits. Catches regressions in real time.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "When a CISO asks 'how do you control what Claude does?' — this is the answer."</p>
+          <p><strong>[DEMO]</strong> Build this hook live. Introduce a deliberate bug, try to commit, watch the hook catch it. "These hooks are enforced gates, not suggestions. Claude cannot bypass them."</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 25 — MCP: THE USB OF AI -->
+      <section>
+        <h2>MCP: The USB of AI</h2>
+        <div class="side-by-side" style="margin-top: var(--space-lg);">
+          <div class="side-card side-before">
+            <h3>Before MCP</h3>
+            <div style="display: flex; flex-direction: column; gap: 6px; margin: var(--space-md) 0;">
+              <div style="font-size: var(--text-sm); color: var(--text-secondary);">
+                Jira <span style="font-family: var(--font-mono); font-size: var(--text-xs);">--- custom API ---</span> Claude
+              </div>
+              <div style="font-size: var(--text-sm); color: var(--text-secondary);">
+                Slack <span style="font-family: var(--font-mono); font-size: var(--text-xs);">-- different API --</span> Claude
+              </div>
+              <div style="font-size: var(--text-sm); color: var(--text-secondary);">
+                Datadog <span style="font-family: var(--font-mono); font-size: var(--text-xs);">-- yet another ---</span> Claude
+              </div>
+            </div>
+            <p style="font-size: var(--text-sm);">Every tool needed its own custom integration. Like a different charger for every device.</p>
+          </div>
+          <div class="side-arrow">&#8594;</div>
+          <div class="side-card side-after">
+            <h3>After MCP</h3>
+            <div style="display: flex; flex-direction: column; gap: 6px; margin: var(--space-md) 0;">
+              <div style="font-size: var(--text-sm); color: var(--text-primary);">
+                Jira <span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--accent-coral); font-weight: var(--weight-bold);">---- MCP ----</span> Claude
+              </div>
+              <div style="font-size: var(--text-sm); color: var(--text-primary);">
+                Slack <span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--accent-coral); font-weight: var(--weight-bold);">---- MCP ----</span> Claude
+              </div>
+              <div style="font-size: var(--text-sm); color: var(--text-primary);">
+                Datadog <span style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--accent-coral); font-weight: var(--weight-bold);">---- MCP ----</span> Claude
+              </div>
+            </div>
+            <p style="font-size: var(--text-sm); font-weight: var(--weight-semibold);">One universal standard. Any AI connects to any tool through a single protocol.</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Before USB, every device had a different charger cable. MCP is the USB of AI — one protocol to connect Claude to any tool."</p>
+          <p>MCP was created by Anthropic and released as an open standard. Strategic moat disguised as generosity — like Google creating Kubernetes. Other AI providers are now adopting it, which makes the ecosystem more valuable.</p>
+          <p>For Arcadia: MCP is how Claude will pull Jira ticket context without developers leaving their terminal.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 26 — MCP IN PRACTICE -->
+      <section>
+        <h2>MCP in Practice</h2>
+        <p style="color: var(--text-secondary);">Connections that enterprise customers ask for</p>
+        <div class="card-grid card-grid-4" style="margin-top: var(--space-lg);">
+          <div class="card" style="padding: var(--space-md); text-align: center; border-top: 3px solid var(--accent-coral);">
+            <h4 style="font-size: var(--text-sm);">Jira</h4>
+            <p style="font-size: var(--text-xs);">"Pick up JIRA-1234" &mdash; Claude reads the ticket and starts implementing</p>
+          </div>
+          <div class="card" style="padding: var(--space-md); text-align: center; border-top: 3px solid var(--accent-teal);">
+            <h4 style="font-size: var(--text-sm); color: var(--accent-teal);">Datadog</h4>
+            <p style="font-size: var(--text-xs);">Pull error logs and metrics to diagnose production issues from your terminal</p>
+          </div>
+          <div class="card" style="padding: var(--space-md); text-align: center; border-top: 3px solid var(--accent-sage);">
+            <h4 style="font-size: var(--text-sm); color: var(--accent-sage);">Slack</h4>
+            <p style="font-size: var(--text-xs);">Post deploy summaries, pull conversation context for bug reports</p>
+          </div>
+          <div class="card" style="padding: var(--space-md); text-align: center; border-top: 3px solid var(--text-primary);">
+            <h4 style="font-size: var(--text-sm); color: var(--text-primary);">Confluence</h4>
+            <p style="font-size: var(--text-xs);">Read internal docs, architecture decisions, runbooks while coding</p>
+          </div>
+        </div>
+        <p class="text-center" style="font-size: var(--text-sm); color: var(--text-secondary); margin-top: var(--space-lg);">Same server works with any host. Same host works with any server. True plug-and-play.</p>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "These are the connections enterprise customers ask for most."</p>
+          <p>In your customer conversations, ask: "What tools does your team live in?" Then map those tools to available MCP servers. If there's no server yet, that's a professional services opportunity.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 27 — SKILLS -->
+      <section>
+        <h2>Skills: Shared Team Workflows</h2>
+        <p style="color: var(--text-secondary);">SKILL.md files that encode expertise and distribute via git</p>
+        <div style="display: flex; gap: var(--space-xl); margin-top: var(--space-lg); align-items: flex-start;">
+          <div style="flex: 1;">
+            <div class="terminal-block">
+              <div class="terminal-header">
+                <div class="dot dot-red"></div>
+                <div class="dot dot-yellow"></div>
+                <div class="dot dot-green"></div>
+                <span style="color: #888; font-size: var(--text-xs); margin-left: 8px;">.claude/commands/deploy-check.md</span>
+              </div>
+              <div>
+                <div class="line-output">Run the following pre-deploy checklist:</div>
+                <div class="line-output">1. Run full test suite, report results</div>
+                <div class="line-output">2. Check for TODO/FIXME in changed files</div>
+                <div class="line-output">3. Verify env vars in .env.example</div>
+                <div class="line-output">4. Check for console.log in prod code</div>
+                <div class="line-output">5. Validate API error handling</div>
+                <div class="line-output">6. Generate changelog since last deploy</div>
+              </div>
+            </div>
+          </div>
+          <div style="flex: 0.8;">
+            <div class="card" style="padding: var(--space-lg);">
+              <h4>How Skills work</h4>
+              <p style="margin-bottom: var(--space-sm);">Text files with instructions that Claude loads on demand via slash commands.</p>
+              <p style="font-weight: var(--weight-semibold); color: var(--accent-coral);">Shared via git &mdash; a tech lead defines them once, the entire team inherits them.</p>
+            </div>
+            <div class="card" style="padding: var(--space-lg); margin-top: var(--space-md);">
+              <h4 style="color: var(--accent-sage);">Enterprise angle</h4>
+              <p>Skills encode institutional knowledge. Code review checklists, security scan patterns, onboarding guides &mdash; all versioned and auditable.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "If MCP gives Claude hands — the ability to touch tools — Skills give Claude expertise."</p>
+          <p>The enterprise selling point: Skills are shared via git, versioned, and auditable. A tech lead creates a deploy-check Skill once, and every developer on the team gets it automatically. This is how you standardize quality across an engineering org.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 28 — COMPOSED WORKFLOW -->
+      <section>
+        <h2>The Composed Workflow</h2>
+        <p style="color: var(--text-secondary);">One prompt. Full context. Automatic quality gates. Ready to ship.</p>
+        <div class="flow-horizontal" style="margin-top: var(--space-xl);">
+          <div class="flow-box coral">Jira Context<br><span style="font-size: var(--text-xs); font-weight: var(--weight-normal);">via MCP</span></div>
+          <div class="flow-arrow-sm">&#8594;</div>
+          <div class="flow-box teal">Implementation<br><span style="font-size: var(--text-xs); font-weight: var(--weight-normal);">Claude writes code</span></div>
+          <div class="flow-arrow-sm">&#8594;</div>
+          <div class="flow-box sage">Hooks<br><span style="font-size: var(--text-xs); font-weight: var(--weight-normal);">lint + typecheck + test</span></div>
+          <div class="flow-arrow-sm">&#8594;</div>
+          <div class="flow-box dark">Deploy Check<br><span style="font-size: var(--text-xs); font-weight: var(--weight-normal);">via Skill</span></div>
+        </div>
+        <div class="prompt-box" style="max-width: 700px; margin: var(--space-xl) auto 0;">
+          "Pick up JIRA-1234, implement the feature it describes, then run /deploy-check to verify everything is ready."
+        </div>
+        <aside class="notes">
+          <p><strong>[KEY MOMENT]</strong> This is the enterprise pitch in 60 seconds. One prompt triggers: external context from Jira (MCP), autonomous implementation (Claude), enforced quality gates (hooks), and a standardized deployment checklist (Skill). All without leaving the terminal.</p>
+          <p><strong>[DEMO]</strong> Run this live. When it works end to end — Jira context, code, hooks pass, deploy-check runs — that is the demo moment that closes deals.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 29 — AGENT TEAMS -->
+      <section>
+        <h2>Agent Teams &amp; Subagents</h2>
+        <p style="color: var(--text-secondary);">Parallel agents for large-scale tasks</p>
+        <div class="side-by-side" style="margin-top: var(--space-lg);">
+          <div class="side-card side-before" style="text-align: center;">
+            <h3>Single Agent</h3>
+            <p style="font-size: var(--text-sm); margin-bottom: var(--space-md);">One task at a time, sequential</p>
+            <div style="font-size: var(--text-4xl); color: var(--text-light);">&#9679;</div>
+            <p style="font-size: var(--text-xs); color: var(--text-secondary); margin-top: var(--space-sm);">Good for: focused tasks, cost-sensitive work</p>
+          </div>
+          <div class="vs-badge">vs</div>
+          <div class="side-card side-after" style="text-align: center;">
+            <h3>Agent Team</h3>
+            <p style="font-size: var(--text-sm); margin-bottom: var(--space-md);">Writer + Reviewer in parallel</p>
+            <div style="display: flex; gap: var(--space-md); justify-content: center;">
+              <div style="font-size: var(--text-2xl); color: var(--accent-coral);">&#9679;<br><span style="font-size: var(--text-xs);">Writer</span></div>
+              <div style="font-size: var(--text-2xl); color: var(--accent-teal);">&#9679;<br><span style="font-size: var(--text-xs);">Reviewer</span></div>
+            </div>
+            <p style="font-size: var(--text-xs); color: var(--accent-terracotta); font-weight: var(--weight-semibold); margin-top: var(--space-sm);">~7x token cost &mdash; dramatically faster for large tasks</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "For large-scale tasks, you can run multiple Claude agents in parallel."</p>
+          <p>The writer/reviewer pattern: one agent implements while another reviews — like pair programming with AI. Fan-out patterns let agents work on different files simultaneously. Cost is ~7x single agent, but time savings can be dramatic for big refactors.</p>
+          <p>Keep this brief. Enterprise customers with big codebases will ask about it. Know it exists, know the tradeoff.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 30 — THE 6-LAYER ARCHITECTURE STACK -->
+      <section>
+        <h2 style="text-align: center;">The Complete Architecture Stack</h2>
+        <div class="layer-stack layer-stack-polished" style="margin-top: var(--space-lg);">
+          <div class="layer layer-ui">
+            <div class="layer-label">User Interfaces</div>
+            <div class="layer-contents">CLI &middot; VS Code &middot; Desktop &middot; Mobile &middot; Web</div>
+          </div>
+          <div class="layer" style="background: var(--accent-terracotta); color: white;">
+            <div class="layer-label">Product Features</div>
+            <div class="layer-contents">Agentic Loop &middot; Extended Thinking &middot; Voice &middot; Remote Sessions</div>
+          </div>
+          <div class="layer layer-intelligence">
+            <div class="layer-label">Intelligence</div>
+            <div class="layer-contents">Opus 4.6 &middot; Sonnet 4.6 &middot; Haiku 4.5</div>
+          </div>
+          <div class="layer layer-integration">
+            <div class="layer-label">Integration</div>
+            <div class="layer-contents">MCP &middot; Skills &middot; Hooks &middot; Plugins &middot; Agent SDK</div>
+          </div>
+          <div class="layer layer-api">
+            <div class="layer-label">API</div>
+            <div class="layer-contents">Messages &middot; Tool Use &middot; Streaming &middot; Batch</div>
+          </div>
+          <div class="layer layer-platform">
+            <div class="layer-label">Platform</div>
+            <div class="layer-contents">Anthropic &middot; AWS Bedrock &middot; Vertex AI &middot; Azure</div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[KEY MOMENT]</strong> This is THE key visual. Build it from bottom to top, pausing at each layer.</p>
+          <p>"Platform: where Claude runs — Anthropic, AWS, Google, Azure. API: the interface everything talks through. Integration: MCP, Skills, Hooks — the customization layer. Intelligence: the three model tiers. Product Features: what the models can do. User Interfaces: where you interact."</p>
+          <p>"When a customer asks 'what is Claude Code?' — you can draw this stack on a whiteboard and explain every layer."</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 31 — BRIDGE TO LAB -->
+      <section class="slide-exercise">
+        <div class="exercise-header">
+          <span class="exercise-badge">LAB</span>
+          <span class="exercise-time">75 min</span>
+        </div>
+        <h2>Build Arcadia's Workflow</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Build the composed workflow Arcadia's compliance team requires.</p>
+        <div class="exercise-steps">
+          <div class="step">
+            <span class="step-number">1</span>
+            <div class="step-content">
+              <h4>Build a pre-commit hook</h4>
+              <p>Lint + type-check + tests must pass. Introduce a bug, watch the hook catch it.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">2</span>
+            <div class="step-content">
+              <h4>Set up a mock Jira MCP server</h4>
+              <p>Claude can query tickets for context without developers leaving the terminal.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">3</span>
+            <div class="step-content">
+              <h4>Create a deploy-check Skill</h4>
+              <p>Shareable via git. The team lead defines it once, everyone inherits it.</p>
+            </div>
+          </div>
+          <div class="step">
+            <span class="step-number">4</span>
+            <div class="step-content">
+              <h4>Demo the full composed loop</h4>
+              <p>One prompt: Jira context &#8594; implementation &#8594; hooks &#8594; deploy-check.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[BRIDGE]</strong> "The Head of Engineering wants a proof-of-concept by end of day. Build it."</p>
+          <p><strong>[WATCH FOR]</strong> MCP setup issues (have fallback configs ready). Trainees perfecting each piece instead of getting the full workflow running. The goal is the composed demo — not perfection on any single step.</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SECTION 4 — DAY 4: CUSTOMER SCENARIOS
+           ============================================================ -->
+
+      <!-- SLIDE 32 — DAY 4 DIVIDER -->
+      <section class="slide-divider" data-background-color="var(--bg-secondary)">
+        <div class="day-label">Day 4</div>
+        <h2>Customer Scenarios</h2>
+        <p class="part-description">Security, deployment, cost, and competitive positioning</p>
+        <div class="duration-badge">120 min</div>
+        <aside class="notes">
+          <p><strong>[OPEN]</strong> "No new features today. Today is about the conversations that make or break your first engagements. Three client scenarios, three different playbooks."</p>
+          <p><strong>[TIMING]</strong> 90 min role-play breakouts + 30 min lab for building reference materials.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 33 — THREE CLIENT BRIEFS -->
+      <section>
+        <h2>Three Clients, Three Playbooks</h2>
+        <div class="client-cards">
+          <div class="client-card">
+            <h4>Nova Insurance</h4>
+            <div class="cc-industry">Healthcare / Claims Processing</div>
+            <p>The CISO needs to sign off before Claude Code touches their claims codebase. She'll grill you on data handling, sandboxing, and compliance.</p>
+            <p style="margin-top: var(--space-sm); color: var(--accent-coral); font-weight: var(--weight-semibold); font-size: var(--text-xs);">Playbook: Security</p>
+          </div>
+          <div class="client-card">
+            <h4>Atlas Manufacturing</h4>
+            <div class="cc-industry">Industrial / Enterprise</div>
+            <p>VP of Engineering wants a deployment plan and cost estimate for 200 developers on AWS Bedrock.</p>
+            <p style="margin-top: var(--space-sm); color: var(--accent-coral); font-weight: var(--weight-semibold); font-size: var(--text-xs);">Playbook: Enterprise Deployment</p>
+          </div>
+          <div class="client-card">
+            <h4>Prism Analytics</h4>
+            <div class="cc-industry">Data / Analytics</div>
+            <p>A senior engineering manager already uses Copilot and doesn't see why they need another tool.</p>
+            <p style="margin-top: var(--space-sm); color: var(--accent-coral); font-weight: var(--weight-semibold); font-size: var(--text-xs);">Playbook: Competitive</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Three conversations. Each requires a different playbook. Pair up — one plays you, one plays the customer."</p>
+          <p>Each scenario tests a different muscle: security depth for Nova, enterprise architecture for Atlas, honest competitive positioning for Prism. Rotate partners between role-plays.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 34 — SECURITY DEEP DIVE -->
+      <section>
+        <h2>Security: Defense-in-Depth</h2>
+        <p style="color: var(--text-secondary);">The layered answer to "How do I know Claude won't..."</p>
+        <div class="security-stack">
+          <div class="security-layer" style="background: var(--accent-coral); color: white;">
+            <span class="s-num">1</span>
+            <span class="s-label">Sandbox</span>
+            <span style="font-size: var(--text-sm);">OS-level filesystem isolation. Claude cannot access files outside the project directory.</span>
+          </div>
+          <div class="security-layer" style="background: var(--accent-peach); color: var(--text-primary);">
+            <span class="s-num">2</span>
+            <span class="s-label">Permissions</span>
+            <span style="font-size: var(--text-sm);">Tool-level controls. Approve/deny file writes, bash commands, network access per action.</span>
+          </div>
+          <div class="security-layer" style="background: var(--accent-teal); color: white;">
+            <span class="s-num">3</span>
+            <span class="s-label">Hooks</span>
+            <span style="font-size: var(--text-sm);">Team-level guardrails. Pre-commit checks that Claude cannot bypass.</span>
+          </div>
+          <div class="security-layer" style="background: var(--accent-sage); color: white;">
+            <span class="s-num">4</span>
+            <span class="s-label">Managed Settings</span>
+            <span style="font-size: var(--text-sm);">Admin-level policies. Org-wide restrictions on model access, data handling, and tool usage.</span>
+          </div>
+        </div>
+        <p class="text-center" style="font-size: var(--text-sm); color: var(--text-secondary); margin-top: var(--space-md);">Layer by layer builds confidence. Start with sandboxing, end with managed settings.</p>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "When Nova's CISO asks 'how do I know Claude won't exfiltrate patient data?' — this is your answer."</p>
+          <p>Walk through layer by layer: (1) Sandbox — OS-level isolation, Claude can't see files outside the project. (2) Permissions — developers approve or deny each action. (3) Hooks — team-enforced quality gates. (4) Managed settings — admin controls for the whole org.</p>
+          <p>The layered narrative builds confidence. Never just say "it's secure." Show the layers.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 35 — ENTERPRISE DEPLOYMENT -->
+      <section>
+        <h2>Enterprise Deployment Paths</h2>
+        <div class="card-grid card-grid-3" style="margin-top: var(--space-lg);">
+          <div class="card" style="padding: var(--space-lg); border-top: 4px solid #FF9900;">
+            <h4 style="color: #FF9900;">AWS Bedrock</h4>
+            <p style="font-size: var(--text-sm); margin-bottom: var(--space-sm);">Data stays in customer's AWS account. Integrates with existing IAM, VPC, and compliance setup.</p>
+            <p style="font-size: var(--text-xs); color: var(--text-light);">Best for: AWS-native orgs, HIPAA/SOC 2 requirements</p>
+          </div>
+          <div class="card" style="padding: var(--space-lg); border-top: 4px solid #4285F4;">
+            <h4 style="color: #4285F4;">Google Vertex AI</h4>
+            <p style="font-size: var(--text-sm); margin-bottom: var(--space-sm);">Native GCP integration. Same compliance posture as other Google Cloud services.</p>
+            <p style="font-size: var(--text-xs); color: var(--text-light);">Best for: GCP-native orgs, BigQuery-heavy teams</p>
+          </div>
+          <div class="card" style="padding: var(--space-lg); border-top: 4px solid var(--accent-coral);">
+            <h4>Anthropic Direct</h4>
+            <p style="font-size: var(--text-sm); margin-bottom: var(--space-sm);">Latest models first. Fastest feature releases. Anthropic manages infrastructure.</p>
+            <p style="font-size: var(--text-xs); color: var(--text-light);">Best for: speed, latest capabilities, smaller teams</p>
+          </div>
+        </div>
+        <p class="text-center" style="font-size: var(--text-sm); color: var(--text-secondary); margin-top: var(--space-lg);">Claude is the only frontier model available on all three major clouds. Major competitive differentiator for multi-cloud enterprises.</p>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "When Atlas asks 'how do we deploy this for 200 developers?' — match the path to their infrastructure."</p>
+          <p>If they are already on AWS, Bedrock is the lowest-friction path. Data never leaves their account, uses their existing IAM and compliance setup. GCP teams go Vertex. Teams that want the latest models first go direct.</p>
+          <p>Competitive advantage: OpenAI is primarily Azure. Gemini is primarily GCP. Claude is on all three.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 36 — COST MODEL -->
+      <section>
+        <h2>Cost Model &amp; ROI Math</h2>
+        <div style="display: flex; gap: var(--space-xl); margin-top: var(--space-lg);">
+          <div style="flex: 1;">
+            <div class="data-callouts" style="flex-direction: column; gap: var(--space-md); align-items: flex-start;">
+              <div class="data-callout" style="text-align: left;">
+                <div class="value" style="font-size: var(--text-3xl);">~$6</div>
+                <div class="label">Per developer per day (average)</div>
+              </div>
+              <div class="data-callout" style="text-align: left;">
+                <div class="value" style="font-size: var(--text-3xl); color: var(--accent-teal);">$50&ndash;200</div>
+                <div class="label">Per developer per month (typical range)</div>
+              </div>
+            </div>
+          </div>
+          <div style="flex: 1;">
+            <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-sage);">
+              <h4 style="color: var(--accent-sage);">The ROI framing</h4>
+              <p style="font-size: var(--text-sm); margin-bottom: var(--space-sm);">200 devs &times; $6/day = <strong>$1,200/day</strong></p>
+              <p style="font-size: var(--text-sm); margin-bottom: var(--space-sm);">If each saves 1 hr: 200 hrs &times; $150/hr = <strong>$30,000/day</strong></p>
+              <p style="font-size: var(--text-sm); font-weight: var(--weight-bold); color: var(--accent-coral);">25&times; return on investment</p>
+            </div>
+            <div class="card" style="padding: var(--space-lg); margin-top: var(--space-md);">
+              <h4>Spend controls</h4>
+              <p style="font-size: var(--text-sm);">Model routing (Haiku for simple, Sonnet for daily, Opus for hard). Usage dashboards. Team-level budget caps.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "The number Atlas cares about: $6/dev/day average."</p>
+          <p>Walk through the ROI math on the spot: "$6/day times 200 developers is $1,200/day. If each developer saves one hour — and they save more — that's 200 hours times $150/hour fully loaded cost, which is $30,000/day in recovered engineering time. That's a 25x return."</p>
+          <p>For the "runaway costs" objection: model routing. Haiku for simple automated tasks, Sonnet for daily work, Opus only for genuinely hard problems. This tiered approach typically reduces cost by 40-60%.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 37 — COMPETITIVE POSITIONING -->
+      <section>
+        <h2>Competitive Positioning</h2>
+        <p style="color: var(--text-secondary);">Honest differentiation wins trust</p>
+        <div class="comparison-matrix" style="margin-top: var(--space-lg);">
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th class="brand-col claude">Claude Code</th>
+                <th class="brand-col copilot">Copilot</th>
+                <th style="background: #333; color: white; border-radius: var(--radius-sm) var(--radius-sm) 0 0;">Cursor</th>
+                <th style="background: #7088A0; color: white; border-radius: var(--radius-sm) var(--radius-sm) 0 0;">Devin</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="dimension">Autonomy</td>
+                <td class="winner"><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot empty"></span><span class="rating-dot empty"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot empty"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+              </tr>
+              <tr>
+                <td class="dimension">Code Quality</td>
+                <td class="winner"><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot empty"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot half"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot empty"></span></td>
+              </tr>
+              <tr>
+                <td class="dimension">IDE Integration</td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot empty"></span></td>
+                <td class="winner"><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+                <td class="winner"><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot empty"></span><span class="rating-dot empty"></span></td>
+              </tr>
+              <tr>
+                <td class="dimension">Enterprise Ready</td>
+                <td class="winner"><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot empty"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot empty"></span><span class="rating-dot empty"></span></td>
+              </tr>
+              <tr>
+                <td class="dimension">Ecosystem (MCP)</td>
+                <td class="winner"><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot half"></span><span class="rating-dot empty"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot empty"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot empty"></span><span class="rating-dot empty"></span></td>
+              </tr>
+              <tr>
+                <td class="dimension">User Adoption</td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+                <td class="winner"><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot full"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot full"></span><span class="rating-dot half"></span></td>
+                <td><span class="rating-dot full"></span><span class="rating-dot empty"></span><span class="rating-dot empty"></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Let's be honest about the competitive landscape."</p>
+          <p>Walk through: Copilot has the largest installed base and deepest IDE integration — it's the best autocomplete. Cursor is an excellent AI-first editor with great UX. Devin aims for full autonomy but is less mature and adopted. Claude Code leads in autonomous task completion, code quality, enterprise readiness, and the MCP ecosystem.</p>
+          <p><strong>[KEY RULE]</strong> Never trash a competitor. It kills trust instantly. Position honestly: "Copilot is excellent at line-level autocomplete. Claude Code operates at the project level. Many teams use both."</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 38 — HONEST DIFFERENTIATION -->
+      <section class="slide-callout" data-background-color="var(--accent-peach)">
+        <blockquote>Where we win. Where they are strong. How they coexist.</blockquote>
+        <p class="callout-context" style="max-width: 700px; margin: 0 auto;">Claude Code is the market leader in autonomous agentic coding. Copilot is the best autocomplete. Cursor is the best AI editor. Many teams use Claude Code alongside Copilot &mdash; they serve different needs. The question isn't "replace" &mdash; it's "what can your team do now that they couldn't before?"</p>
+        <aside class="notes">
+          <p><strong>[KEY MOMENT]</strong> This is the framing for the Prism Analytics role-play. When the engineering manager says "we already have Copilot," you don't say "switch." You say: "Copilot handles line-level suggestions. Claude Code handles multi-file tasks that used to take days. Your team can use both."</p>
+          <p>The killer question to ask: "What's the largest refactor your team has been putting off? What would happen if it took an afternoon instead of a sprint?"</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 39 — OBJECTION HANDLING -->
+      <section>
+        <h2>Objection Handling Frameworks</h2>
+        <div class="card-grid card-grid-2" style="margin-top: var(--space-lg);">
+          <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-coral);">
+            <h4>"It's not secure enough"</h4>
+            <p>Walk the defense-in-depth stack: sandbox &#8594; permissions &#8594; hooks &#8594; managed settings. Then show the Trust Center. Layer by layer builds confidence.</p>
+          </div>
+          <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-teal);">
+            <h4 style="color: var(--accent-teal);">"Costs will spiral"</h4>
+            <p>Model routing: Haiku for automation, Sonnet for daily, Opus for hard problems. Usage dashboards and budget caps. Compare to the cost of an additional hire, not the cost of a Copilot seat.</p>
+          </div>
+          <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-sage);">
+            <h4 style="color: var(--accent-sage);">"We already use Copilot"</h4>
+            <p>They serve different needs. Copilot: line-level autocomplete. Claude Code: project-level agentic tasks. Teams use both. Ask: "What's the biggest refactor you've been putting off?"</p>
+          </div>
+          <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--text-primary);">
+            <h4 style="color: var(--text-primary);">"Will it replace our developers?"</h4>
+            <p>Claude Code removes the parts of the job nobody likes: boilerplate, migration grunt work, chasing test failures across 50 files. What's left is the creative, high-judgment work. Teams report feeling more agency, not less.</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "These are the four objections you will hear most. Practice the response until it's natural."</p>
+          <p>The security objection: layer by layer, not "it's secure." The cost objection: compare to a hire, not a seat. The Copilot objection: coexistence, not replacement. The job threat objection: reframe to what gets automated (boring stuff) vs. what stays (interesting work).</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           SECTION 5 — DAY 5: SHIP IT
+           ============================================================ -->
+
+      <!-- SLIDE 40 — DAY 5 DIVIDER -->
+      <section class="slide-divider" data-background-color="var(--bg-secondary)">
+        <div class="day-label">Day 5</div>
+        <h2>Ship It &mdash; Capstone</h2>
+        <p class="part-description">Blind brief. Working demo. Peer review.</p>
+        <div class="duration-badge">120 min</div>
+        <aside class="notes">
+          <p><strong>[OPEN]</strong> "This is the closest thing to your first real engagement. Brief you've never seen, company you don't know. 90 minutes to understand, architect, build, and present. Make it count."</p>
+          <p>Set the stage with visible energy. This is graduation day.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 41 — CAPSTONE FORMAT -->
+      <section>
+        <h2>Capstone Format</h2>
+        <div class="process-flow" style="margin-top: var(--space-xl);">
+          <div class="flow-step">
+            <div class="step-label">Brief</div>
+            <div class="step-desc">15 min<br>Read &amp; analyze</div>
+          </div>
+          <div class="flow-arrow">&#8594;</div>
+          <div class="flow-step primary">
+            <div class="step-label">Architect</div>
+            <div class="step-desc">15 min<br>Plan features &amp; demo</div>
+          </div>
+          <div class="flow-arrow">&#8594;</div>
+          <div class="flow-step secondary">
+            <div class="step-label">Build</div>
+            <div class="step-desc">45 min<br>Working demo</div>
+          </div>
+          <div class="flow-arrow">&#8594;</div>
+          <div class="flow-step" style="background: var(--accent-sage); color: white;">
+            <div class="step-label" style="color: white;">Present</div>
+            <div class="step-desc" style="color: rgba(255,255,255,0.85);">10 min + Q&amp;A<br>Peer scoring</div>
+          </div>
+        </div>
+        <div class="card-grid card-grid-2" style="margin-top: var(--space-xl);">
+          <div class="card" style="padding: var(--space-md);">
+            <h4>Presentation Structure</h4>
+            <p style="font-size: var(--text-sm);">2 min on the problem. 6 min live demo. 2 min next steps &amp; rollout plan.</p>
+          </div>
+          <div class="card" style="padding: var(--space-md);">
+            <h4 style="color: var(--accent-teal);">Demo Advice</h4>
+            <p style="font-size: var(--text-sm);">Pick 3-4 features max. Build for reliability, not flash. Test twice before presenting.</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TIMING]</strong> 15 min read + 15 min plan + 45 min build + presentations (10 min each + 2 min Q&A + 1 min scoring). Final 10 min for debrief.</p>
+          <p><strong>[WATCH FOR]</strong> Jumping to building without planning. Demoing too many features. Building something unrelated to the brief. These are the most common mistakes.</p>
+          <p>The best presentations start with the customer's problem: "You mentioned your team spends 40% of their time on..."</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 42 — SCORING RUBRIC -->
+      <section>
+        <h2>Scoring Rubric</h2>
+        <div class="rubric-grid">
+          <div class="rubric-item">
+            <div class="rubric-pct">25%</div>
+            <h4>Problem Framing</h4>
+            <p>Did you understand the customer's world? Did your demo start with their pain, not your features?</p>
+          </div>
+          <div class="rubric-item">
+            <div class="rubric-pct">25%</div>
+            <h4>Technical Depth</h4>
+            <p>Did the demo work? Was the implementation sound? Did you use the right Claude Code features?</p>
+          </div>
+          <div class="rubric-item">
+            <div class="rubric-pct">25%</div>
+            <h4>Relevance</h4>
+            <p>Was the solution tailored to the brief? Would this customer actually buy what you showed?</p>
+          </div>
+          <div class="rubric-item">
+            <div class="rubric-pct">25%</div>
+            <h4>Confidence</h4>
+            <p>Did you handle Q&amp;A well? Did you recover when things broke? Did you sound field-ready?</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Your cohort will score you on these four dimensions. Equal weight — 25% each."</p>
+          <p>The best presentations nail problem framing. They start with the customer, not the product. Technical depth matters, but a simple demo that works perfectly beats an ambitious one that breaks.</p>
+          <p>Confidence under Q&A is the transfer test. If someone asks a curveball and the presenter handles it smoothly — that means the training worked.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 43 — CLOSING -->
+      <section class="slide-callout" data-background-color="var(--accent-peach)">
+        <blockquote>You're ready.</blockquote>
+        <p class="callout-context" style="max-width: 700px; margin: 0 auto;">Five days. Five client scenarios. Installed Claude Code, wrote CLAUDE.md files, built hooks and MCP servers, handled security and competitive objections, and delivered a cold-brief demo. You can draw the architecture stack on a whiteboard, explain every layer, and hold your own with any customer.</p>
+        <aside class="notes">
+          <p><strong>[CLOSE]</strong> Read the scores. Celebrate the top presentation. Then close with warmth.</p>
+          <p>"What was the most effective demo moment you saw today? What technique will you steal? What's the one thing you want to practice before your first real engagement?"</p>
+          <p>"You've earned this. You've built the muscle memory. The first real customer conversation is going to feel familiar — because you've already had it five times this week."</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 44 — END CARD -->
+      <section class="slide-closing" data-background-color="var(--bg-secondary)">
+        <div class="loop-badge build" style="font-size: var(--text-sm); padding: 6px 20px;">BASECAMP</div>
+        <h2 style="margin-top: var(--space-md);">Basecamp Complete</h2>
+        <p style="color: var(--text-secondary);">First Contact &middot; Prompt Craft &middot; Extend &amp; Customize &middot; Customer Scenarios &middot; Ship It</p>
+        <div style="margin-top: var(--space-xl); color: var(--text-light); font-size: var(--text-sm);">
+          <p style="margin: 0;">Claude Code Basecamp &mdash; Anthropic</p>
+        </div>
+        <aside class="notes">
+          <p>Final slide. Let it sit. Thank the cohort for their engagement and intensity this week.</p>
+          <p>"You are now equipped to demo Claude Code, architect enterprise deployments, and have honest competitive conversations. Go build."</p>
+        </aside>
+      </section>
+
+    </div>
+  </div>
+
+  <div class="session-badge">BASECAMP</div>
+  <div class="course-footer">Claude Code Basecamp &mdash; Anthropic</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/notes/notes.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: 'c/t',
+      showSlideNumber: 'all',
+      transition: 'none',
+      transitionSpeed: 'fast',
+      backgroundTransition: 'fade',
+      center: true,
+      width: 1280,
+      height: 800,
+      margin: 0.04,
+      plugins: [RevealNotes]
+    });
+  </script>
+</body>
+</html>
