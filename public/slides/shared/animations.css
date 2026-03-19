@@ -1,0 +1,158 @@
+/* ============================================================
+   ANIMATIONS.CSS — Subtle transitions and fragment animations
+   Used with reveal.js fragment system
+   ============================================================ */
+
+/* === FRAGMENT ANIMATION OVERRIDES === */
+
+/* Default fade-up (slightly more subtle than reveal default) */
+.reveal .fragment.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.reveal .fragment.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Scale in (for icons and cards) */
+.reveal .fragment.scale-in {
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.reveal .fragment.scale-in.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Slide in from left */
+.reveal .fragment.slide-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.reveal .fragment.slide-left.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Slide in from right */
+.reveal .fragment.slide-right {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.reveal .fragment.slide-right.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Highlight in (background pulse) */
+.reveal .fragment.highlight-coral {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+.reveal .fragment.highlight-coral.visible {
+  background-color: var(--accent-peach);
+  border-radius: var(--radius-sm);
+}
+
+/* === FLOW ARROW ANIMATION === */
+.flow-arrow {
+  opacity: 0.3;
+  transition: opacity 0.5s ease;
+}
+.fragment.visible + .flow-arrow,
+.flow-arrow.visible {
+  opacity: 1;
+}
+
+/* === TIMELINE NODE ANIMATION === */
+.timeline-node {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.timeline-node.fragment {
+  opacity: 0;
+  transform: scale(0.9);
+}
+.timeline-node.fragment.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* === HUB-SPOKE ENTRANCE === */
+.spoke.fragment {
+  opacity: 0;
+  transform: rotate(var(--angle)) translateX(100px) rotate(calc(-1 * var(--angle))) scale(0.7);
+}
+.spoke.fragment.visible {
+  opacity: 1;
+  transform: rotate(var(--angle)) translateX(200px) rotate(calc(-1 * var(--angle))) scale(1);
+}
+
+/* === LAYER STACK ENTRANCE === */
+.layer.fragment {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+.layer.fragment.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* === CARD ENTRANCE === */
+.card.fragment,
+.icon-grid-item.fragment {
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.card.fragment.visible,
+.icon-grid-item.fragment.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Stagger children (apply to parent container) */
+.stagger-children > .fragment:nth-child(1) { transition-delay: 0s; }
+.stagger-children > .fragment:nth-child(2) { transition-delay: 0.08s; }
+.stagger-children > .fragment:nth-child(3) { transition-delay: 0.16s; }
+.stagger-children > .fragment:nth-child(4) { transition-delay: 0.24s; }
+.stagger-children > .fragment:nth-child(5) { transition-delay: 0.32s; }
+.stagger-children > .fragment:nth-child(6) { transition-delay: 0.40s; }
+.stagger-children > .fragment:nth-child(7) { transition-delay: 0.48s; }
+.stagger-children > .fragment:nth-child(8) { transition-delay: 0.56s; }
+
+/* === AUTO-ANIMATE HELPERS === */
+[data-auto-animate] .layer-stack .layer {
+  transition: all 0.6s ease;
+}
+
+/* === SUBTLE HOVER EFFECTS (for interactive browsing) === */
+@media (hover: hover) {
+  .icon-grid-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-medium);
+    transition: all 0.2s ease;
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow-medium);
+    transition: box-shadow 0.2s ease;
+  }
+
+  .spoke:hover {
+    z-index: 10;
+    transform: rotate(var(--angle)) translateX(200px) rotate(calc(-1 * var(--angle))) scale(1.08);
+    box-shadow: var(--shadow-medium);
+  }
+}
+
+/* === PRINT STYLES (for PDF export) === */
+@media print {
+  .reveal .fragment {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
