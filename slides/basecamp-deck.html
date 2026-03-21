@@ -358,6 +358,11 @@
       letter-spacing: 0.02em;
     }
 
+    /* Remove box around duration badge on day dividers */
+    .slide-divider .duration-badge {
+      border: none;
+    }
+
     /* Dark slide text overrides */
     section[data-background-color="#1A1A1A"] h2,
     section[data-background-color="#1A1A1A"] h3 {
@@ -382,8 +387,8 @@
       z-index: 10;
     }
 
-    /* Large WIP banner on slides 1-15 */
-    .reveal .slides > section:nth-child(-n+15)::before {
+    /* Large WIP banner on slides 1-13 */
+    .reveal .slides > section:nth-child(-n+13)::before {
       content: "Slides WIP \2014  skip to slide 16 for take-home slides \2192";
       position: absolute;
       bottom: -20px;
@@ -437,19 +442,26 @@
     /* Pain-to-solution timeline bar */
     .timeline-compare {
       display: flex;
-      align-items: center;
-      gap: var(--space-lg);
+      align-items: flex-start;
+      gap: var(--space-md);
       max-width: 700px;
       margin: var(--space-lg) auto 0;
     }
+    .timeline-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .timeline-item.pain { flex: 3; }
+    .timeline-item.solution { flex: 1; }
     .timeline-bar {
-      flex: 1;
+      width: 100%;
       border-radius: var(--radius-md);
       padding: var(--space-sm) var(--space-md);
       text-align: center;
       font-weight: var(--weight-semibold);
       font-size: var(--text-sm);
-      position: relative;
+      white-space: nowrap;
     }
     .timeline-bar.pain {
       background: var(--accent-terracotta);
@@ -458,12 +470,12 @@
     .timeline-bar.solution {
       background: var(--accent-sage);
       color: white;
-      flex: 0.25;
     }
     .timeline-arrow {
       font-size: var(--text-xl);
       color: var(--text-light);
       flex-shrink: 0;
+      padding-top: var(--space-sm);
     }
     .timeline-label {
       font-size: var(--text-xs);
@@ -630,7 +642,7 @@
     .roadmap-day.active {
       opacity: 1;
       transform: scale(1.03);
-      border-left: 4px solid var(--accent-coral);
+      border-left: 4px solid currentColor;
       box-shadow: 0 4px 16px rgba(0,0,0,0.1);
     }
     .roadmap-day.completed {
@@ -646,6 +658,7 @@
     .roadmap-day h4 {
       margin-bottom: 0;
       font-size: var(--text-base);
+      color: var(--text-primary);
     }
     .roadmap-day p {
       margin: 0;
@@ -788,7 +801,7 @@
       <section>
         <h2 style="font-size: var(--text-lg); color: var(--text-light); margin-bottom: var(--space-lg);">Your Week at a Glance</h2>
         <div class="roadmap-days">
-          <div class="roadmap-day active">
+          <div class="roadmap-day active" style="color: var(--accent-coral);">
             <div class="agenda-day-num" style="background: var(--accent-coral);">1</div>
             <div><h4>First Contact</h4><p>Install, navigate, first agentic task</p></div>
           </div>
@@ -867,13 +880,13 @@
           <div class="client-industry">Healthcare SaaS &middot; 8-person backend team &middot; Node.js API</div>
           <p class="client-situation">Meridian maintains a Node.js API powering patient scheduling across 200+ clinics. Their biggest pain: new API endpoints take 2&ndash;3 days because of boilerplate, tests, and compliance checks. Your job: show them a new endpoint built in minutes, not days.</p>
           <div class="timeline-compare" style="margin-top: var(--space-lg);">
-            <div class="timeline-bar pain" style="flex: 3;">
-              <div>2&ndash;3 days</div>
+            <div class="timeline-item pain">
+              <div class="timeline-bar pain">2&ndash;3 days</div>
               <div class="timeline-label">New endpoint today</div>
             </div>
             <div class="timeline-arrow" style="color: rgba(255,255,255,0.4);">&#8594;</div>
-            <div class="timeline-bar solution" style="flex: 0.3;">
-              <div>Min</div>
+            <div class="timeline-item solution">
+              <div class="timeline-bar solution">Minutes</div>
               <div class="timeline-label">With Claude Code</div>
             </div>
           </div>
@@ -1098,7 +1111,7 @@
             <div class="agenda-day-num" style="background: var(--accent-coral);">1</div>
             <div><h4>First Contact</h4><p>Install, navigate, first agentic task</p></div>
           </div>
-          <div class="roadmap-day active">
+          <div class="roadmap-day active" style="color: var(--accent-teal);">
             <div class="agenda-day-num" style="background: var(--accent-teal);">2</div>
             <div><h4>Prompt Craft</h4><p>CLAUDE.md, context management, session hygiene</p></div>
           </div>
@@ -1173,13 +1186,13 @@
           <div class="client-industry">Supply chain &middot; 40-developer team &middot; Node.js monorepo</div>
           <p class="client-situation">Lumen has a sprawling monorepo with zero documentation. New hires take 3 weeks to become productive. The CTO wants Claude Code to accelerate onboarding and enforce consistency &mdash; but without a CLAUDE.md, Claude guesses at their patterns and gets half wrong. Your job: write the CLAUDE.md that fixes this.</p>
           <div class="timeline-compare" style="margin-top: var(--space-lg);">
-            <div class="timeline-bar pain" style="flex: 3;">
-              <div>3 weeks</div>
+            <div class="timeline-item pain">
+              <div class="timeline-bar pain">3 weeks</div>
               <div class="timeline-label">New hire onboarding today</div>
             </div>
             <div class="timeline-arrow" style="color: rgba(255,255,255,0.4);">&#8594;</div>
-            <div class="timeline-bar solution" style="flex: 0.5;">
-              <div>Days</div>
+            <div class="timeline-item solution">
+              <div class="timeline-bar solution">Days</div>
               <div class="timeline-label">With CLAUDE.md</div>
             </div>
           </div>
@@ -1193,33 +1206,23 @@
       <!-- SLIDE 18 — WHY MONOREPOS ARE HARD -->
       <section>
         <h2>The Monorepo Problem</h2>
-        <p style="color: var(--text-secondary);">Lumen isn't unusual &mdash; this is the default at scale</p>
-        <div style="display: flex; gap: var(--space-xl); margin-top: var(--space-lg); align-items: flex-start;">
-          <div style="flex: 1;">
-            <div class="card" style="padding: var(--space-lg); border-top: 3px solid var(--accent-coral); margin-bottom: var(--space-md);">
-              <h4>What is a monorepo?</h4>
-              <p style="font-size: var(--text-sm);">One repository, many projects. Shared libraries, services, and apps all live in a single codebase. Google, Meta, Stripe, and most enterprise teams over 20 developers use one.</p>
-            </div>
-            <div class="card" style="padding: var(--space-lg); border-top: 3px solid var(--accent-terracotta);">
-              <h4>Why it breaks AI coding tools</h4>
-              <ul style="font-size: var(--text-sm); padding-left: var(--space-lg); margin: 0;">
-                <li><strong>Scale:</strong> Thousands of files &mdash; Claude can't read them all</li>
-                <li><strong>Inconsistency:</strong> Different teams, different conventions in the same repo</li>
-                <li><strong>Hidden knowledge:</strong> Patterns exist but aren't documented anywhere</li>
-                <li><strong>Wrong guesses:</strong> Without guidance, Claude picks up patterns from the wrong subproject</li>
-              </ul>
-            </div>
+        <p style="color: var(--text-secondary);">One repo, many projects, zero documentation &mdash; standard at scale (Google, Meta, Stripe, most teams over 20 devs)</p>
+        <div class="card-grid card-grid-2" style="margin-top: var(--space-lg);">
+          <div class="card" style="padding: var(--space-lg); border-top: 3px solid var(--accent-terracotta);">
+            <h4 style="color: var(--accent-terracotta);">Scale</h4>
+            <p style="font-size: var(--text-sm);">Thousands of files across dozens of services. Claude can't read them all &mdash; it needs to know where to look.</p>
           </div>
-          <div style="flex: 0.8;">
-            <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-coral);">
-              <h4>Who uses monorepos?</h4>
-              <p style="font-size: var(--text-sm);">Google, Meta, Microsoft, Stripe, Airbnb, Uber, Twitter. The pattern is standard at scale &mdash; expect most enterprise prospects with 20+ devs to have one.</p>
-            </div>
-            <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-teal); margin-top: var(--space-md);">
-              <h4 style="color: var(--accent-teal);">The onboarding signal</h4>
-              <p style="font-size: var(--text-sm);">Ask prospects: &ldquo;How long until a new hire makes their first meaningful commit?&rdquo; Anything over a week signals undocumented conventions &mdash; the exact pain CLAUDE.md solves.</p>
-            </div>
-            <p style="font-size: var(--text-xs); color: var(--text-light); text-align: center; margin-top: var(--space-sm);">This is your most common Day 2 customer profile.</p>
+          <div class="card" style="padding: var(--space-lg); border-top: 3px solid var(--accent-terracotta);">
+            <h4 style="color: var(--accent-terracotta);">Inconsistency</h4>
+            <p style="font-size: var(--text-sm);">Different teams, different conventions in the same repo. Without guidance, Claude picks up patterns from the wrong subproject.</p>
+          </div>
+          <div class="card" style="padding: var(--space-lg); border-top: 3px solid var(--accent-terracotta);">
+            <h4 style="color: var(--accent-terracotta);">Hidden knowledge</h4>
+            <p style="font-size: var(--text-sm);">Architecture decisions, testing patterns, and naming conventions exist only in senior engineers' heads. Nothing written down.</p>
+          </div>
+          <div class="card" style="padding: var(--space-lg); border-top: 3px solid var(--accent-teal);">
+            <h4 style="color: var(--accent-teal);">Discovery question</h4>
+            <p style="font-size: var(--text-sm);">Ask prospects: &ldquo;How long until a new hire makes their first meaningful commit?&rdquo; Over a week = undocumented conventions = CLAUDE.md opportunity.</p>
           </div>
         </div>
         <aside class="notes">
@@ -1636,7 +1639,7 @@
             <div class="agenda-day-num" style="background: var(--accent-teal);">2</div>
             <div><h4>Prompt Craft</h4><p>CLAUDE.md, context management, session hygiene</p></div>
           </div>
-          <div class="roadmap-day active">
+          <div class="roadmap-day active" style="color: var(--accent-sage);">
             <div class="agenda-day-num" style="background: var(--accent-sage);">3</div>
             <div><h4>Extend &amp; Customize</h4><p>Hooks, MCP, Skills, composed workflows</p></div>
           </div>
@@ -1997,7 +2000,7 @@
             <div class="agenda-day-num" style="background: var(--accent-sage);">3</div>
             <div><h4>Extend &amp; Customize</h4><p>Hooks, MCP, Skills, composed workflows</p></div>
           </div>
-          <div class="roadmap-day active">
+          <div class="roadmap-day active" style="color: var(--accent-terracotta);">
             <div class="agenda-day-num" style="background: var(--accent-terracotta);">4</div>
             <div><h4>Customer Scenarios</h4><p>Security, deployment, cost, competitive positioning</p></div>
           </div>
@@ -2384,7 +2387,7 @@
             <div class="agenda-day-num" style="background: var(--accent-terracotta);">4</div>
             <div><h4>Customer Scenarios</h4><p>Security, deployment, cost, competitive positioning</p></div>
           </div>
-          <div class="roadmap-day active">
+          <div class="roadmap-day active" style="color: var(--text-primary);">
             <div class="agenda-day-num" style="background: var(--text-primary);">5</div>
             <div><h4>Ship It &mdash; Capstone</h4><p>Blind brief, working demo, peer review</p></div>
           </div>
