@@ -3839,7 +3839,7 @@ export default function App() {
               {[
                 { label: "Home", phase: "welcome", color: C.orange, active: phase === "welcome" },
                 { label: "How It Works", phase: "how-it-works", color: C.blue, active: phase === "how-it-works" },
-                { label: "Orientation", phase: "foundations", color: C.green, active: phase === "foundations", onNav: () => { setFoundationsViewContext("orientation"); navigateTo("foundations"); } },
+                { label: "Foundations", phase: "foundations", color: C.green, active: phase === "foundations", onNav: () => { setFoundationsViewContext("orientation"); navigateTo("foundations"); } },
                 { label: "Role-Based Training", phase: "path-select", color: C.orange, active: phase === "hub" || phase === "module" || phase === "path-select" },
               ].map((item, idx) => (
                 <button
