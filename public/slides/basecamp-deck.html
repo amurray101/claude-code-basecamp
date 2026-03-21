@@ -1301,8 +1301,8 @@
               <p style="font-size: var(--text-xs); margin: 0;">No special syntax. Just headings, bullets, and prose. Anyone on the team can read and edit it.</p>
             </div>
             <div class="card" style="padding: var(--space-md); border-left: 4px solid var(--accent-coral); margin-bottom: var(--space-md);">
-              <h4 style="font-size: var(--text-sm);">Human-authored</h4>
-              <p style="font-size: var(--text-xs); margin: 0;">You write it, not Claude. It captures what your senior engineers know but haven't documented. Claude reads it at session start.</p>
+              <h4 style="font-size: var(--text-sm);">Co-authored</h4>
+              <p style="font-size: var(--text-xs); margin: 0;">Claude can generate a CLAUDE.md by analyzing the codebase, and humans refine it with team-specific judgment. The best files blend Claude&rsquo;s analysis with human knowledge.</p>
             </div>
             <div class="card" style="padding: var(--space-md); border-left: 4px solid var(--accent-sage);">
               <h4 style="color: var(--accent-sage); font-size: var(--text-sm);">Checked into git</h4>
@@ -1311,9 +1311,9 @@
           </div>
         </div>
         <aside class="notes">
-          <p><strong>[TRANSITION]</strong> "This is what a real CLAUDE.md looks like. Plain markdown &mdash; no special syntax, no config format. You write it by hand, capturing the conventions your team already follows."</p>
-          <p><strong>[KEY POINTS]</strong> Three things to emphasize: (1) It's plain markdown, not YAML or JSON &mdash; anyone can edit it. (2) Humans write it, Claude reads it &mdash; it's your instructions to Claude, not the other way around. (3) It lives in the repo and goes through code review like any other file.</p>
-          <p><strong>[COMMON QUESTION]</strong> "Can Claude write its own CLAUDE.md?" Yes, you can ask Claude to draft one based on reading the codebase &mdash; but a human should review and edit it. The value is encoding human judgment, not automated guesses.</p>
+          <p><strong>[TRANSITION]</strong> "This is what a real CLAUDE.md looks like. Plain markdown &mdash; no special syntax, no config format. Claude can generate a first draft by analyzing the codebase, and then you refine it with the team knowledge only humans have."</p>
+          <p><strong>[KEY POINTS]</strong> Three things to emphasize: (1) It's plain markdown, not YAML or JSON &mdash; anyone can edit it. (2) Claude can draft it by reading the codebase, then humans add the judgment calls &mdash; naming philosophy, architectural decisions, what not to touch. (3) It lives in the repo and goes through code review like any other file.</p>
+          <p><strong>[COMMON QUESTION]</strong> "Should we write it or have Claude write it?" Both. The fastest path is asking Claude to generate a CLAUDE.md from the codebase, then reviewing and adding what it missed &mdash; the unwritten rules that only your senior engineers know.</p>
         </aside>
       </section>
 
