@@ -3334,7 +3334,7 @@ function CurriculumPlanContent() {
         <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
           {dependencyChain.map((link, i) => (
             <div key={i} style={{ display: "flex", alignItems: "baseline", gap: 12, padding: "10px 0 10px 12px", borderLeft: `2px solid ${C.blue}30` }}>
-              <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.blue, flexShrink: 0, minWidth: 100 }}>{link.from} \u2192 {link.to}</span>
+              <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.blue, flexShrink: 0, minWidth: 100 }}>{link.from} {"\u2192"} {link.to}</span>
               <span style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted, lineHeight: 1.5 }}>{link.text}</span>
             </div>
           ))}
@@ -3426,7 +3426,7 @@ function CurriculumPlanContent() {
         <div style={{ margin: "28px 0 0", padding: "18px 22px", background: C.cream, borderRadius: 10, border: `1px solid ${C.lightGray}` }}>
           <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.green, marginBottom: 8 }}>Handling varying technical depth</div>
           <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.muted, lineHeight: 1.6, margin: 0 }}>
-            Every content page has three depth levels \u2014 Simplified, Standard, and Engineer \u2014 so participants of any background can access content at their comfort level. Facilitator guides include pacing notes for mixed-depth rooms.
+            Every content page has three depth levels — Simplified, Standard, and Engineer — so participants of any background can access content at their comfort level. Facilitator guides include pacing notes for mixed-depth rooms.
           </p>
         </div>
       </div>
