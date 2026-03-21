@@ -12,6 +12,7 @@ import F6b_SecurityArchitecture from "./foundations/F6b_SecurityArchitecture";
 import F7a_DeploymentPathFinder from "./foundations/F7a_DeploymentPathFinder";
 import F7b_CostROI from "./foundations/F7b_CostROI";
 import M1_InstallFirstRun from "./modules/M1_InstallFirstRun";
+import M1b_CommandGlossary from "./modules/M1b_CommandGlossary";
 import M2a_ClaudeMdBuilder from "./modules/M2a_ClaudeMdBuilder";
 import M2b_PromptPatterns from "./modules/M2b_PromptPatterns";
 import M3_IntegrationPatterns from "./modules/M3_IntegrationPatterns";
@@ -36,6 +37,7 @@ const MATERIAL_COMPONENTS = {
   F7a: F7a_DeploymentPathFinder,
   F7b: F7b_CostROI,
   M1: M1_InstallFirstRun,
+  M1b: M1b_CommandGlossary,
   M2a: M2a_ClaudeMdBuilder,
   M2b: M2b_PromptPatterns,
   M3: M3_IntegrationPatterns,
@@ -89,6 +91,7 @@ const MATERIALS = [
   { id: "F7b", title: "Cost & ROI Pocket Math", format: "Quick Reference Card", pages: "1 front/back", category: "Foundations" },
   // Modules
   { id: "M1", title: "Install & First Run", format: "Cheat Sheet", pages: "2 pages", category: "Modules" },
+  { id: "M1b", title: "Command Glossary", format: "Cheat Sheet", pages: "2 pages", category: "Modules" },
   { id: "M2a", title: "CLAUDE.md Builder", format: "Worksheet", pages: "2 pages", category: "Modules" },
   { id: "M2b", title: "Prompt Patterns for Agentic Coding", format: "Cheat Sheet", pages: "1 front/back", category: "Modules" },
   { id: "M3", title: "Integration Patterns", format: "Architecture Reference", pages: "2 pages", category: "Modules" },
@@ -107,7 +110,7 @@ const GRAB_AND_GO_IDS = ["F3a", "F4", "F6a", "M4a", "F7b"];
 
 const DISTRIBUTION_SCHEDULE = [
   { day: "Pre-work", ids: ["F1", "F2", "F3a", "F3b", "F4"] },
-  { day: "Day 1", ids: ["M1", "F5"] },
+  { day: "Day 1", ids: ["M1", "M1b", "F5"] },
   { day: "Day 2", ids: ["M2a", "M2b"] },
   { day: "Day 3", ids: ["M3"] },
   { day: "Day 4", ids: ["F6a", "F6b", "F7a", "F7b", "M4a", "M4b", "M4c", "P1", "P2", "P3", "P4"] },
@@ -116,7 +119,7 @@ const DISTRIBUTION_SCHEDULE = [
 
 const CATEGORIES = [
   { name: "Foundations", prefix: "F", color: C.orange, count: 10 },
-  { name: "Modules", prefix: "M", color: C.blue, count: 8 },
+  { name: "Modules", prefix: "M", color: C.blue, count: 9 },
   { name: "Paths", prefix: "P", color: C.green, count: 4 },
 ];
 

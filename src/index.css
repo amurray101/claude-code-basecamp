@@ -27,6 +27,11 @@
   border-radius: 2px;
 }
 
+@keyframes slideIn {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;
