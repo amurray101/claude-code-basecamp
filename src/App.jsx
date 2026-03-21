@@ -1228,7 +1228,7 @@ const DAY_PREWORK = {
     duration: "30 min",
     description: "Complete these readings before the live session so you arrive ready to install and build.",
     foundations: [
-      { sectionId: "claude-code", label: "Claude Code at a Glance", why: "Understand what Claude Code is and how it fits into the Anthropic product stack." },
+      { sectionId: "how-to-use", label: "How to Use Claude Code", why: "Know the four surfaces (CLI, desktop, mobile, web) so you understand what you're installing and which interface to reach for." },
       { sectionId: "how-it-thinks", label: "How It Thinks", why: "Learn the agentic loop (read, plan, act, verify) so the live demo makes sense." },
     ],
     materials: [
@@ -1237,9 +1237,10 @@ const DAY_PREWORK = {
   },
   2: {
     duration: "30 min",
-    description: "Read the configuration foundations and review the CLAUDE.md worksheet before the live session.",
+    description: "Read the configuration foundations and understand model selection before the live CLAUDE.md authoring session.",
     foundations: [
       { sectionId: "configuration", label: "Configuration & Customization", why: "Understand CLAUDE.md, hooks, permissions, and settings before the live CLAUDE.md authoring session." },
+      { sectionId: "what-it-costs", label: "What It Costs", why: "Understand model selection (Haiku, Sonnet, Opus) and token pricing — you'll make model choices in your CLAUDE.md today." },
     ],
     materials: [
       { id: "M2a", label: "CLAUDE.md Builder worksheet", why: "Familiarize yourself with the worksheet structure before the live authoring exercise." },
@@ -1249,18 +1250,21 @@ const DAY_PREWORK = {
     duration: "45 min",
     description: "Study the integration patterns and hooks architecture before the live build session.",
     foundations: [
-      { sectionId: "configuration", label: "Configuration (hooks & extensions)", why: "Review hooks syntax and permission tiers — you'll build them live today." },
+      { sectionId: "configuration", label: "Review: Configuration (hooks & extensions)", why: "Review hooks syntax and permission tiers — you'll build them live today." },
+      { sectionId: "how-it-thinks", label: "Review: How It Thinks", why: "Revisit the agentic loop — understanding tool dispatch helps when you wire up hooks and MCP servers." },
     ],
     materials: [
       { id: "M3", label: "Integration Patterns architecture reference", why: "Study the architecture diagrams for hooks, MCP, and slash commands before building them." },
     ],
   },
   4: {
-    duration: "30 min",
-    description: "Review security and enterprise deployment foundations before today's competitive positioning and customer role-plays.",
+    duration: "45 min",
+    description: "Study the personas, security, and enterprise foundations before today's competitive positioning and customer role-plays.",
     foundations: [
+      { sectionId: "who-uses-it", label: "Who Uses Claude Code", why: "Know the five buyer personas and their use cases — you'll role-play customer conversations today." },
       { sectionId: "security", label: "Security & Trust", why: "Fluency in the defense-in-depth model is essential for the CISO objection-handling role-play." },
       { sectionId: "enterprise", label: "Enterprise Deployment & Costs", why: "Understand deployment options and cost models before the VP of Engineering role-play." },
+      { sectionId: "what-it-costs", label: "Review: What It Costs", why: "Revisit pricing and model selection — you'll need cost figures ready for customer conversations." },
     ],
     materials: [
       { id: "F6a", label: "Security Battlecard", why: "Your cheat sheet for the CISO role-play." },
