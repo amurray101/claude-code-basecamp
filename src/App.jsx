@@ -1008,8 +1008,8 @@ const FOUNDATIONS = [
 // Orientation: required upfront before path selection (Anthropic, Products, Claude Code overview)
 // Contextual: delivered just-in-time as prework for the module that uses them
 const ORIENTATION_SECTIONS = [
-  "welcome", "products", "claude-ai", "cowork", "model-family", "extensions",
-  "claude-code", "how-to-use", "who-uses-it", "what-it-costs", "how-it-thinks",
+  "welcome", "products", "claude-ai", "cowork", "cc-overview", "model-family", "extensions",
+  "claude-code",
 ];
 
 const ORIENTATION_FOUNDATIONS = FOUNDATIONS.map(f => {
