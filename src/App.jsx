@@ -165,8 +165,8 @@ function PlatformDiagram() {
           </defs>
           <text x="340" y="16" textAnchor="middle" fill={C.faint} fontSize="11" fontFamily="IBM Plex Mono, monospace" letterSpacing="1.5">ANTHROPIC PRODUCT SURFACES</text>
           {[
-            { x: 30, label: "Claude.ai", sub: "Chat · Projects · Skills", color: C.faint, highlight: false },
-            { x: 240, label: "Claude Code", sub: "Agentic CLI · Agent SDK", color: C.orange, highlight: true },
+            { x: 30, label: "Claude.ai", sub: "Chat · Projects · Cowork", color: C.faint, highlight: false },
+            { x: 240, label: "Claude Code", sub: "Agentic CLI", color: C.orange, highlight: true },
             { x: 450, label: "API + SDKs", sub: "Custom applications", color: C.faint, highlight: false },
           ].map((b, i) => (
             <g key={i}>
@@ -185,10 +185,9 @@ function PlatformDiagram() {
           <line x1="340" y1="186" x2="340" y2="212" stroke={C.gray} strokeWidth="1" markerEnd="url(#b)" />
 
           {[
-            { x: 30, label: "MCP", sub: "Tool discovery" },
-            { x: 195, label: "Skills", sub: "Packaged expertise" },
-            { x: 360, label: "Projects", sub: "Persistent context" },
-            { x: 525, label: "Agent SDK", sub: "Custom agents" },
+            { x: 100, label: "MCP", sub: "Tool discovery" },
+            { x: 275, label: "Skills", sub: "Packaged expertise" },
+            { x: 450, label: "Agent SDK", sub: "Custom agents" },
           ].map((b, i) => (
             <g key={i}>
               <rect x={b.x} y="216" width="130" height="44" rx="6" fill={C.cream} stroke={C.lightGray} strokeWidth="0.5" />
@@ -957,6 +956,22 @@ const FOUNDATIONS = [
     ],
   },
 ];
+
+// ─── ORIENTATION vs CONTEXTUAL FOUNDATIONS ───
+// Orientation: required upfront before path selection (Anthropic, Products, Claude Code overview)
+// Contextual: delivered just-in-time as prework for the module that uses them
+const ORIENTATION_SECTIONS = [
+  "welcome", "products", "claude-ai", "cowork", "model-family", "extensions",
+  "claude-code", "how-it-thinks",
+];
+
+const ORIENTATION_FOUNDATIONS = FOUNDATIONS.map(f => {
+  if (!f.pages) return f;
+  return { ...f, pages: f.pages.filter(p => ORIENTATION_SECTIONS.includes(p.id)) };
+});
+
+const isOrientationComplete = (sections) =>
+  ORIENTATION_SECTIONS.every(id => sections.includes(id));
 
 // ─── MODULES (the 5-day curriculum) ───
 const MODULES = [
@@ -3435,6 +3450,7 @@ export default function App() {
   const [deliverableTab, setDeliverableTab] = useState("part1"); // "part1" or "cohort1"
   const [menuOpen, setMenuOpen] = useState(false);
   const [showOutcomesModal, setShowOutcomesModal] = useState(false);
+  const [foundationsViewContext, setFoundationsViewContext] = useState("orientation"); // "orientation" | "contextual"
   const contentRef = useRef(null);
 
   // Gamification state
@@ -3450,7 +3466,8 @@ export default function App() {
 
   useEffect(() => {
     const data = loadProgress();
-    if (data.foundationsDone) setFoundationsDone(true);
+    const orientationDone = data.foundationsDone || isOrientationComplete(data.foundationSectionsViewed || []);
+    if (orientationDone) setFoundationsDone(true);
     if (data.path) setPath(data.path);
     if (data.completed?.length) setCompleted(new Set(data.completed));
     if (data.userName) setUserName(data.userName);
@@ -3465,8 +3482,8 @@ export default function App() {
     const hashPhases = ["facilitator", "materials", "deliverables", "feedback-response"];
     if (hash && hashPhases.includes(hash)) {
       setPhase(hash);
-    } else if (data.foundationsDone && data.path) setPhase("hub");
-    else if (data.foundationsDone) setPhase("path-select");
+    } else if (orientationDone && data.path) setPhase("hub");
+    else if (orientationDone) setPhase("path-select");
     else setPhase("welcome");
   }, []);
 
@@ -3482,7 +3499,7 @@ export default function App() {
   // Track foundation section views (including sub-pages)
   useEffect(() => {
     if (phase === "foundations" && !showMethodology) {
-      const foundation = FOUNDATIONS[foundationStep];
+      const foundation = activeFoundations[foundationStep];
       const sectionId = foundation?.id;
       if (sectionId && !foundationSectionsViewed.includes(sectionId)) {
         setFoundationSectionsViewed(prev => [...prev, sectionId]);
@@ -3494,7 +3511,7 @@ export default function App() {
         }
       }
     }
-  }, [phase, foundationStep, showMethodology, subPage]);
+  }, [phase, foundationStep, showMethodology, subPage, activeFoundations]);
 
   // Track module sub-progress when opening a module
   useEffect(() => {
@@ -3587,7 +3604,8 @@ export default function App() {
   if (phase === "loading") return <div style={{ minHeight: "100vh", background: C.bg }} />;
 
   const progress = Math.round((completed.size / MODULES.length) * 100);
-  const currentFoundation = FOUNDATIONS[foundationStep];
+  const activeFoundations = foundationsViewContext === "orientation" ? ORIENTATION_FOUNDATIONS : FOUNDATIONS;
+  const currentFoundation = activeFoundations[foundationStep];
 
   const navigateTo = (target, opts = {}) => {
     setMenuOpen(false);
@@ -3951,10 +3969,10 @@ export default function App() {
         <>
           <div style={st.topBar}>
             <div style={st.topBarInner}>
-              <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 2, color: C.faint, textTransform: "uppercase" }}>Foundations</div>
+              <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 2, color: C.faint, textTransform: "uppercase" }}>{foundationsViewContext === "orientation" ? "Orientation" : "Foundations"}</div>
             </div>
             <div style={st.tabRow}>
-              {FOUNDATIONS.map((f, i) => (
+              {activeFoundations.map((f, i) => (
                 <button key={f.id} onClick={() => { setShowMethodology(false); setFoundationStep(i); setSubPage(-1); }} style={{ ...st.tab, color: !showMethodology && i === foundationStep ? C.orange : C.faint, borderBottomColor: !showMethodology && i === foundationStep ? C.orange : "transparent", fontWeight: !showMethodology && i === foundationStep ? 500 : 400 }}>{f.label}</button>
               ))}
               <div style={{ flex: 1 }} />
@@ -4106,12 +4124,16 @@ export default function App() {
                   else if (subPage === 0) { setSubPage(-1); }
                   else if (foundationStep > 0) {
                     setFoundationStep(foundationStep - 1);
-                    const prev = FOUNDATIONS[foundationStep - 1];
+                    const prev = activeFoundations[foundationStep - 1];
                     if (prev.pages) { setSubPage(prev.pages.length - 1); } else { setSubPage(-1); }
                   }
                 }} style={st.navBtn}>← Previous</button>
               ) : <div />}
-              {foundationStep === FOUNDATIONS.length - 1 && (!currentFoundation.pages || subPage === currentFoundation.pages.length - 1) ? (
+              {foundationsViewContext === "contextual" ? (
+                <button onClick={() => { setPhase("module"); setFoundationsViewContext("orientation"); }} style={st.navBtn}
+                  onMouseEnter={e => e.currentTarget.style.opacity = "0.88"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+                >← Back to module</button>
+              ) : foundationStep === activeFoundations.length - 1 && (!currentFoundation.pages || subPage === currentFoundation.pages.length - 1) ? (
                 <button onClick={() => { setFoundationsDone(true); setPhase("path-select"); }} style={st.primaryBtn}
                   onMouseEnter={e => e.currentTarget.style.opacity = "0.88"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}
                 >Choose your role →</button>
