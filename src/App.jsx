@@ -3295,7 +3295,7 @@ function CurriculumPlanContent() {
           <h2 style={headingStyle}>The Five-Day Arc</h2>
         </div>
         <div style={accentLine(C.blue)} />
-        <p style={bodyStyle}>Each day is framed through a client scenario, produces a concrete artifact, and follows a pre-work \u2192 live \u2192 lab rhythm. The curriculum builds progressively from individual tool proficiency (Days 1\u20133) to customer-facing skills (Day 4) to integrated performance under pressure (Day 5).</p>
+        <p style={bodyStyle}>Each day is framed through a client scenario, produces a concrete artifact, and follows a pre-work → live → lab rhythm. The curriculum builds progressively from individual tool proficiency (Days 1–3) to customer-facing skills (Day 4) to integrated performance under pressure (Day 5).</p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
           {dayArcData.map((d, i) => (
@@ -3308,19 +3308,19 @@ function CurriculumPlanContent() {
                 <div style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 500, color: C.dark, marginBottom: 3 }}>{d.title}</div>
                 <div style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted, lineHeight: 1.55, marginBottom: 4 }}>{d.focus}</div>
                 <div style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.faint, marginBottom: 4 }}>
-                  <span style={{ color: d.color }}>{d.client}</span> \u2014 {d.clientDetail}
+                  <span style={{ color: d.color }}>{d.client}</span> — {d.clientDetail}
                 </div>
                 <div style={{ fontFamily: "var(--sans)", fontSize: 11, color: C.faint, marginBottom: 8 }}>
                   <span style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 0.5, textTransform: "uppercase", color: C.muted }}>Produces:</span> {d.artifact}
                 </div>
                 <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                   {d.integrated ? (
-                    <span style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "3px 10px", borderRadius: 12, background: d.color + "10", color: d.color }}>Integrated session \u00b7 {d.integrated}</span>
+                    <span style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "3px 10px", borderRadius: 12, background: d.color + "10", color: d.color }}>Integrated session · {d.integrated}</span>
                   ) : (
                     <>
-                      {d.prework && <span style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "3px 10px", borderRadius: 12, background: C.blue + "10", color: C.blue }}>Pre-work \u00b7 {d.prework}</span>}
-                      <span style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "3px 10px", borderRadius: 12, background: C.orange + "10", color: C.orange }}>Live \u00b7 {d.live}</span>
-                      <span style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "3px 10px", borderRadius: 12, background: C.green + "10", color: C.green }}>Lab \u00b7 {d.lab}</span>
+                      {d.prework && <span style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "3px 10px", borderRadius: 12, background: C.blue + "10", color: C.blue }}>Pre-work · {d.prework}</span>}
+                      <span style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "3px 10px", borderRadius: 12, background: C.orange + "10", color: C.orange }}>Live · {d.live}</span>
+                      <span style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "3px 10px", borderRadius: 12, background: C.green + "10", color: C.green }}>Lab · {d.lab}</span>
                     </>
                   )}
                 </div>
@@ -3348,7 +3348,7 @@ function CurriculumPlanContent() {
           <h2 style={headingStyle}>Role Differentiation & Competency Outcomes</h2>
         </div>
         <div style={accentLine(C.green)} />
-        <p style={bodyStyle}>Basecamp serves four roles through a three-layer model: common foundation \u2192 shared technical sessions (Days 1\u20133) \u2192 role-specific breakouts (Day 4) and capstone briefs (Day 5).</p>
+        <p style={bodyStyle}>Basecamp serves four roles through a three-layer model: common foundation → shared technical sessions (Days 1–3) → role-specific breakouts (Day 4) and capstone briefs (Day 5).</p>
 
         {/* Role matrix table */}
         <div style={{ margin: "20px 0 32px", borderRadius: 12, border: `1px solid ${C.lightGray}`, overflow: "hidden", background: C.bg }}>
@@ -3405,7 +3405,7 @@ function CurriculumPlanContent() {
 
         {/* Competency outcomes */}
         <h3 style={subheadStyle}>Competency Outcomes by Role</h3>
-        <p style={bodyStyle}>What each role should be able to do by the end of the program. Each outcome is tied to a specific day\u2019s module.</p>
+        <p style={bodyStyle}>What each role should be able to do by the end of the program. Each outcome is tied to a specific day’s module.</p>
 
         {competencyData.map((group, gi) => (
           <div key={gi} style={{ marginBottom: 20, borderLeft: `3px solid ${group.color}`, borderRadius: 8, background: group.color + "04", padding: "16px 20px" }}>
@@ -3452,7 +3452,7 @@ function CurriculumPlanContent() {
               <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: s.color, flexShrink: 0, minWidth: 62 }}>{s.stage}</span>
               <div>
                 <span style={{ fontFamily: "var(--sans)", fontSize: 12.5, fontWeight: 500, color: C.dark }}>{s.level}</span>
-                <span style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted }}> \u2014 {s.desc}</span>
+                <span style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted }}> — {s.desc}</span>
               </div>
             </div>
           ))}
@@ -3461,12 +3461,12 @@ function CurriculumPlanContent() {
         <h3 style={subheadStyle}>Key Trade-offs</h3>
 
         <div style={{ background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}`, padding: "20px 24px", marginBottom: 16 }}>
-          <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>Shared Days 1\u20133 vs. earlier role divergence</h4>
-          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}>I chose shared sessions for the first three days despite the audience having different technical depths. The alternative \u2014 splitting into technical and non-technical tracks on Day 1 \u2014 would mean Pre-Sales PEs never build the hands-on depth needed to handle technical customer conversations. The three-tier content mode selector and facilitator pacing notes mitigate the mixed-depth challenge without sacrificing depth for anyone.</p>
+          <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>Shared Days 1–3 vs. earlier role divergence</h4>
+          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}>I chose shared sessions for the first three days despite the audience having different technical depths. The alternative — splitting into technical and non-technical tracks on Day 1 — would mean Pre-Sales PEs never build the hands-on depth needed to handle technical customer conversations. The three-tier content mode selector and facilitator pacing notes mitigate the mixed-depth challenge without sacrificing depth for anyone.</p>
         </div>
         <div style={{ background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}`, padding: "20px 24px", marginBottom: 16 }}>
           <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>Client scenarios as framing vs. abstract exercises</h4>
-          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}>Every module is framed through a realistic client scenario (Meridian Health, Lumen Logistics, Arcadia Financial, etc.) rather than abstract exercises. This costs development time \u2014 each scenario needs a believable company, industry context, and problem statement. The payoff: learners practice the actual cognitive work of a customer engagement rather than just learning features in isolation.</p>
+          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}>Every module is framed through a realistic client scenario (Meridian Health, Lumen Logistics, Arcadia Financial, etc.) rather than abstract exercises. This costs development time — each scenario needs a believable company, industry context, and problem statement. The payoff: learners practice the actual cognitive work of a customer engagement rather than just learning features in isolation.</p>
         </div>
         <div style={{ background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}`, padding: "20px 24px", marginBottom: 16 }}>
           <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>Single-file React app vs. a more scalable architecture</h4>
@@ -3474,10 +3474,10 @@ function CurriculumPlanContent() {
         </div>
         <div style={{ background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}`, padding: "20px 24px", marginBottom: 16 }}>
           <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>Depth on Day 2 (CLAUDE.md) vs. distributing across days</h4>
-          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}>Day 2 is the deepest module (17 steps with facilitator narration scripts). I chose to invest heavily here because the CLAUDE.md before/after demo is the single most persuasive moment in the entire program. It\u2019s the demo every PE will run in their first customer conversation. Getting this day right has outsized impact on field readiness.</p>
+          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}>Day 2 is the deepest module (17 steps with facilitator narration scripts). I chose to invest heavily here because the CLAUDE.md before/after demo is the single most persuasive moment in the entire program. It’s the demo every PE will run in their first customer conversation. Getting this day right has outsized impact on field readiness.</p>
         </div>
 
-        <h3 style={subheadStyle}>What I\u2019d Do Differently with More Time</h3>
+        <h3 style={subheadStyle}>What I’d Do Differently with More Time</h3>
         {[
           { label: "Video walkthroughs", text: "Pre-recorded facilitator demos for each module, so learners can watch the \u201cideal\u201d run before attempting it themselves." },
           { label: "Quantitative confidence measurement", text: "Add a 1\u20135 confidence self-rating before and after each module. Currently the knowledge checkpoints are qualitative." },
@@ -3487,7 +3487,7 @@ function CurriculumPlanContent() {
           { label: "Async delivery", text: "The current design assumes a facilitated, synchronous cohort. For global teams, I\u2019d build an async-first version with video content, auto-graded exercises, and optional live office hours." },
         ].map((item, i) => (
           <div key={i} style={{ display: "flex", gap: 10, marginBottom: 10, paddingLeft: 4 }}>
-            <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.blue, flexShrink: 0, paddingTop: 3 }}>\u2022</span>
+            <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.blue, flexShrink: 0, paddingTop: 3 }}>•</span>
             <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}><strong>{item.label}:</strong> {item.text}</p>
           </div>
         ))}
