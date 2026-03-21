@@ -3539,8 +3539,20 @@ export default function App() {
 
             {/* Nav items */}
             <div style={{ flex: 1, padding: "16px 0", overflowY: "auto" }}>
+              <button
+                onClick={() => navigateTo("welcome")}
+                style={{
+                  display: "flex", alignItems: "center", gap: 10, width: "100%",
+                  padding: "12px 24px", background: phase === "welcome" ? C.dark + "08" : "transparent",
+                  border: "none", borderLeft: phase === "welcome" ? `3px solid ${C.dark}` : "3px solid transparent",
+                  cursor: "pointer", textAlign: "left", marginBottom: 8,
+                }}
+              >
+                <span style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: phase === "welcome" ? 600 : 400, color: phase === "welcome" ? C.dark : C.muted }}>Home</span>
+              </button>
+              <div style={{ borderBottom: `1px solid ${C.lightGray}`, marginBottom: 8 }} />
               {[
-                { label: "Foundations", phase: "foundations", color: C.orange, active: phase === "foundations" || phase === "welcome" },
+                { label: "Foundations", phase: "foundations", color: C.orange, active: phase === "foundations" },
                 { label: "Role-Based Training", phase: "path-select", color: C.blue, active: phase === "hub" || phase === "module" || phase === "path-select" },
                 { label: "Resource Library", phase: "materials", color: C.green, active: phase === "materials" },
                 { label: "Facilitator Guide", phase: "facilitator", color: C.gray, active: phase === "facilitator" },
@@ -4192,7 +4204,7 @@ export default function App() {
             )}
 
             <div style={{ display: "flex", gap: 12, ...st.fadeUp, animationDelay: "0.4s" }}>
-              {!isComplete && (
+              {!isComplete && (activePhaseTab === "lab" || activePhaseTab === "integrated") && (
                 <button onClick={() => {
                   setCompleted(prev => new Set([...prev, mod.id]));
                   setModuleSubProgress(prev => ({ ...prev, [mod.id]: "complete" }));
@@ -4239,6 +4251,49 @@ export default function App() {
                 There's a knowledge checkpoint above — want to take a minute?
               </p>
             )}
+
+            {/* Talk to Claude */}
+            {(() => {
+              const roleLabel = PATHS.find(p => p.id === path)?.short || "";
+              const competency = mod.competencies?.[path] || "";
+              const skillsList = mod.skills?.join(", ") || "";
+              const prompt = encodeURIComponent(
+                `I'm a ${roleLabel} going through Claude Code Basecamp training. I just completed ${mod.day}: "${mod.title}" — ${mod.subtitle}\n\n` +
+                `The client scenario for this module: ${mod.clientScenario?.company} (${mod.clientScenario?.industry}) — ${mod.clientScenario?.situation}\n\n` +
+                `Skills covered: ${skillsList}\n` +
+                (competency ? `My role-specific goal: ${competency}\n\n` : "\n") +
+                `Help me deepen my understanding of this material. I might ask you to:\n` +
+                `- Explain concepts I'm unsure about\n` +
+                `- Quiz me on what I learned\n` +
+                `- Help me practice explaining these topics to customers\n` +
+                `- Walk through scenarios I might encounter in the field\n\n` +
+                `Start by asking me what I'd like to focus on.`
+              );
+              return (
+                <div style={{ marginTop: 28, padding: "20px 24px", background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}`, ...st.fadeUp, animationDelay: "0.5s" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.blue, marginBottom: 4 }}>Deepen your understanding</div>
+                      <div style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.muted, lineHeight: 1.5 }}>Open a conversation with Claude pre-loaded with context from this lesson. Ask questions, practice customer scenarios, or test your knowledge.</div>
+                    </div>
+                    <a
+                      href={`https://claude.ai/new?q=${prompt}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        padding: "10px 20px", borderRadius: 8, cursor: "pointer",
+                        background: C.blue, border: "none", color: "#fff",
+                        fontFamily: "var(--sans)", fontSize: 13, fontWeight: 500,
+                        textDecoration: "none", whiteSpace: "nowrap", flexShrink: 0,
+                        transition: "opacity 0.2s",
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.opacity = "0.88"}
+                      onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+                    >Talk to Claude →</a>
+                  </div>
+                </div>
+              );
+            })()}
           </div>
           </>
         );
