@@ -4907,6 +4907,15 @@ export default function App() {
             })}
           </div>
 
+          {/* WIP banner for non-primary tracks */}
+          {path !== "pe-pre" && (
+            <div style={{ margin: "0 0 28px", padding: "14px 18px", background: "#fff3e0", border: `1.5px solid ${C.orange}`, borderRadius: 8, ...st.fadeUp, animationDelay: "0.12s" }}>
+              <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.dark, lineHeight: 1.6, margin: 0 }}>
+                <span style={{ fontWeight: 700, color: C.orange }}>Work in progress.</span> This track is an outline — module details, practice scenarios, and deliverables are still being built out. The <span style={{ fontWeight: 600 }}>PE Pre-Sales</span> track is fully developed; start there for the complete experience.
+              </p>
+            </div>
+          )}
+
           {/* Credentials */}
           <div style={{ marginBottom: 36, ...st.fadeUp, animationDelay: "0.15s" }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 14 }}>
@@ -4952,6 +4961,7 @@ export default function App() {
                         {done && <span style={{ fontSize: 10, fontFamily: "var(--sans)", fontWeight: 500, color: mod.color, background: mod.color + "12", padding: "2px 8px", borderRadius: 10 }}>Complete</span>}
                         {!done && subProg === "checkpoint-done" && <span style={{ fontSize: 10, fontFamily: "var(--sans)", fontWeight: 500, color: mod.color, background: mod.color + "10", padding: "2px 8px", borderRadius: 10 }}>Checkpoint done</span>}
                         {!done && subProg === "started" && <span style={{ fontSize: 10, fontFamily: "var(--sans)", fontWeight: 400, color: C.faint, background: C.lightGray + "60", padding: "2px 8px", borderRadius: 10 }}>In progress</span>}
+                        {mod.id === 2 && path === "pe-pre" && <span style={{ fontSize: 10, fontFamily: "var(--sans)", fontWeight: 500, color: C.blue, background: C.blue + "12", padding: "2px 8px", borderRadius: 10 }}>Deep Dive</span>}
                       </div>
                       <div style={{ fontFamily: "var(--sans)", fontSize: 11.5, color: C.muted, marginTop: 3, lineHeight: 1.4, maxWidth: 400 }}>{mod.subtitle.split(". ")[0]}.</div>
                       {mod.customerFraming && <div style={{ fontFamily: "var(--sans)", fontSize: 11, color: mod.color, marginTop: 4, lineHeight: 1.4, maxWidth: 400, fontStyle: "italic" }}>{mod.customerFraming}</div>}
