@@ -34,7 +34,11 @@ function loadProgress() {
     const data = { ...PROGRESS_DEFAULTS, ...JSON.parse(raw) };
     // Migration: if foundationsDone but no sections tracked, backfill all
     if (data.foundationsDone && data.foundationSectionsViewed.length === 0) {
-      data.foundationSectionsViewed = ["welcome", "products", "claude-ai", "cowork", "model-family", "extensions", "claude-code", "how-it-thinks", "configuration", "security", "enterprise"];
+      data.foundationSectionsViewed = ["welcome", "products", "claude-ai", "cowork", "cc-overview", "model-family", "extensions", "claude-code", "how-it-thinks", "configuration", "security", "enterprise"];
+    }
+    // Migration: backfill cc-overview for users who already have progress tracked
+    if (data.foundationSectionsViewed.length > 0 && !data.foundationSectionsViewed.includes("cc-overview")) {
+      data.foundationSectionsViewed.push("cc-overview");
     }
     return data;
   } catch {
@@ -465,6 +469,7 @@ const FOUNDATIONS = [
         { label: "Product surfaces", desc: "Claude.ai, the API, and Claude Code — and how they connect" },
         { label: "Claude.ai", desc: "The conversational surface — where most users start and what your customers already know" },
         { label: "Cowork", desc: "Claude.ai's agentic execution mode — AI that acts, not just answers" },
+        { label: "Claude Code", desc: "The agentic coding partner — AI that reads, plans, edits, and verifies at the project level" },
         { label: "Model family", desc: "Opus, Sonnet, and Haiku — when to use each" },
         { label: "Extension layers", desc: "MCP, Skills, and Projects — the customization toolkit" },
       ]},
@@ -514,7 +519,7 @@ const FOUNDATIONS = [
       {
         id: "model-family", label: "Models", title: "The model family",
         content: [
-          { type: "section-intro", step: "3", label: "Model Family", context: "Products > Models" },
+          { type: "section-intro", step: "4", label: "Model Family", context: "Products > Models" },
           { type: "models", items: [
             { name: "Claude Opus", color: C.orange, desc: "Maximum intelligence. Complex reasoning, nuanced analysis, research synthesis. For high-stakes decisions where depth matters more than speed.", tag: "Deepest reasoning", simpleDesc: "The most powerful model — the senior expert for the hardest problems. Takes more time and costs more, but catches things others miss.",
               greatFor: [
@@ -563,7 +568,7 @@ const FOUNDATIONS = [
       {
         id: "extensions", label: "Extensions", title: "Extension layers",
         content: [
-          { type: "section-intro", step: "4", label: "Extensions", context: "Products > Extensions" },
+          { type: "section-intro", step: "5", label: "Extensions", context: "Products > Extensions" },
           { type: "text", value: "Three capabilities extend what Claude can do across all surfaces. They compose — a customer might use MCP to pull Salesforce data, a Skill to format it, inside a Project loaded with brand guidelines.", simple: "Three add-ons expand Claude's abilities, and they combine. For example: MCP connects to Salesforce, a Skill formats the data, inside a Project that knows brand rules." },
           { type: "models", items: [
             { name: "MCP", color: C.green, desc: "Model Context Protocol connects Claude to external services — Slack, GitHub, Jira, databases, internal APIs. A standardized way to discover and use tools dynamically.", tag: "External tools + data", simpleDesc: "A universal adapter that lets Claude plug into other software — Slack, GitHub, Jira, databases — using a standard protocol instead of custom integrations." },
@@ -574,56 +579,55 @@ const FOUNDATIONS = [
           { type: "reflect", prompt: "Think of a customer you've worked with (or imagine one). Which Anthropic surface would they start with? Which would they grow into? What would that journey look like?" },
         ],
       },
-    ],
-  },
-  {
-    id: "claude-code", label: "Claude Code", title: "What is Claude Code?",
-    content: [
-      { type: "text", value: "You've seen where Claude Code fits in the Anthropic stack. Now let's go deeper on how it actually works — the agentic loop, the interaction model, and what makes it different from every other coding tool.", simple: "You already know what Claude Code is. Now let's understand how it works under the hood — how it reads code, plans changes, and verifies its own work.", engineer: "Claude Code is a CLI-native agentic coding tool. It uses the same Messages API as other Claude integrations but wraps it in a persistent tool-use loop with filesystem access, shell execution, and git operations. This section covers the architecture, tool dispatch, and context management internals." },
-      { type: "outcomes", items: [
-        "Explain in 60 seconds how agentic coding differs from autocomplete tools like Copilot",
-        "Walk through the agentic loop — read, plan, act, verify — using a concrete example",
-      ]},
-      { type: "heading", value: "A different interaction model", simple: "How Claude Code works differently from other coding tools", engineer: "Architecture: agentic loop and tool dispatch" },
-      { type: "text", value: <>Most AI coding tools operate at the line level — suggesting the next autocomplete. Claude Code operates at the project level. It reads your codebase, plans multi-step changes, edits files, runs tests, and fixes what breaks — all in one agentic loop. When you say <a href="https://claude.ai/new?q=refactor%20the%20auth%20module%20to%20use%20JWT" target="_blank" rel="noopener noreferrer" style={{ color: C.orange, textDecoration: "underline", textUnderlineOffset: "3px", cursor: "pointer" }}>"refactor the auth module to use JWT,"</a> it doesn't suggest a snippet. It executes the entire migration.</> },
-      { type: "terminal", title: "Claude Code in action", lines: [
-        "$ claude",
-        "",
-        "→ What would you like to work on?",
-        "",
-        "$ Refactor the auth module to use JWT instead of sessions",
-        "",
-        "→ I'll analyze the current auth implementation and plan the migration.",
-        "→ Let me start by reading the relevant files...",
-        "",
-        "  Reading src/auth/session.ts",
-        "  Reading src/middleware/auth.ts",
-        "  Reading src/routes/login.ts",
-        "  Reading package.json",
-        "",
-        "→ I see the current session-based auth. Here's my plan:",
-        "  1. Install jsonwebtoken and @types/jsonwebtoken",
-        "  2. Create src/auth/jwt.ts with token generation/verification",
-        "  3. Update middleware to validate JWT from Authorization header",
-        "  4. Update login route to return JWT instead of setting session",
-        "  5. Remove express-session dependency",
-        "  6. Run existing tests and fix any failures",
-        "",
-        "  Shall I proceed?",
-      ]},
-      { type: "heading", value: "The architecture", simple: "How Claude Code is built -- the steps it follows to get work done" },
-      { type: "diagram" },
-      { type: "stats", heading: "Fast Stats", items: [
-        { stat: "72.7%", label: "SWE-bench Verified score — the industry benchmark for real-world coding ability", source: "Anthropic Sonnet 4 model card, May 2025" },
-        { stat: "200K", label: "Token context window — Claude reads entire codebases, not just open files", source: "API docs", sourceUrl: "https://docs.anthropic.com" },
-        { stat: "~$6/day", label: "Average cost per developer — 90% of users spend less than $12/day", source: "Costs docs", sourceUrl: "https://docs.anthropic.com/en/docs/claude-code/costs" },
-        { stat: "3", label: "Cloud deployment options — AWS Bedrock, Google Vertex AI, Microsoft Foundry", source: "Deployment docs", sourceUrl: "https://docs.anthropic.com/en/docs/claude-code/bedrock-vertex" },
-        { stat: "24", label: "Hook events available for custom automation — from pre-commit to post-edit to CI/CD", source: "Hooks docs", sourceUrl: "https://docs.anthropic.com/en/docs/claude-code/hooks" },
-        { stat: "4", label: "Permission modes — default, plan, auto-accept, and headless for CI/CD pipelines", source: "Security docs", sourceUrl: "https://docs.anthropic.com/en/docs/claude-code/security" },
-      ]},
-      { type: "reflect", prompt: "Think about the difference between a developer using GitHub Copilot (line-level autocomplete) versus Claude Code (agentic, multi-step). How would you explain this difference to a VP of Engineering in 60 seconds?" },
-    ],
-    pages: [
+      {
+        id: "claude-code", label: "Claude Code", title: "What is Claude Code?",
+        content: [
+          { type: "section-intro", step: "5", label: "Claude Code", context: "Products > Claude Code" },
+          { type: "text", value: "You've seen where Claude Code fits in the Anthropic stack. Now let's go deeper on how it actually works — the agentic loop, the interaction model, and what makes it different from every other coding tool.", simple: "You already know what Claude Code is. Now let's understand how it works under the hood — how it reads code, plans changes, and verifies its own work.", engineer: "Claude Code is a CLI-native agentic coding tool. It uses the same Messages API as other Claude integrations but wraps it in a persistent tool-use loop with filesystem access, shell execution, and git operations. This section covers the architecture, tool dispatch, and context management internals." },
+          { type: "outcomes", items: [
+            "Explain in 60 seconds how agentic coding differs from autocomplete tools like Copilot",
+            "Walk through the agentic loop — read, plan, act, verify — using a concrete example",
+          ]},
+          { type: "heading", value: "A different interaction model", simple: "How Claude Code works differently from other coding tools", engineer: "Architecture: agentic loop and tool dispatch" },
+          { type: "text", value: <>Most AI coding tools operate at the line level — suggesting the next autocomplete. Claude Code operates at the project level. It reads your codebase, plans multi-step changes, edits files, runs tests, and fixes what breaks — all in one agentic loop. When you say <a href="https://claude.ai/new?q=refactor%20the%20auth%20module%20to%20use%20JWT" target="_blank" rel="noopener noreferrer" style={{ color: C.orange, textDecoration: "underline", textUnderlineOffset: "3px", cursor: "pointer" }}>"refactor the auth module to use JWT,"</a> it doesn't suggest a snippet. It executes the entire migration.</> },
+          { type: "terminal", title: "Claude Code in action", lines: [
+            "$ claude",
+            "",
+            "→ What would you like to work on?",
+            "",
+            "$ Refactor the auth module to use JWT instead of sessions",
+            "",
+            "→ I'll analyze the current auth implementation and plan the migration.",
+            "→ Let me start by reading the relevant files...",
+            "",
+            "  Reading src/auth/session.ts",
+            "  Reading src/middleware/auth.ts",
+            "  Reading src/routes/login.ts",
+            "  Reading package.json",
+            "",
+            "→ I see the current session-based auth. Here's my plan:",
+            "  1. Install jsonwebtoken and @types/jsonwebtoken",
+            "  2. Create src/auth/jwt.ts with token generation/verification",
+            "  3. Update middleware to validate JWT from Authorization header",
+            "  4. Update login route to return JWT instead of setting session",
+            "  5. Remove express-session dependency",
+            "  6. Run existing tests and fix any failures",
+            "",
+            "  Shall I proceed?",
+          ]},
+          { type: "heading", value: "The architecture", simple: "How Claude Code is built -- the steps it follows to get work done" },
+          { type: "diagram" },
+          { type: "stats", heading: "Fast Stats", items: [
+            { stat: "72.7%", label: "SWE-bench Verified score — the industry benchmark for real-world coding ability", source: "Anthropic Sonnet 4 model card, May 2025" },
+            { stat: "200K", label: "Token context window — Claude reads entire codebases, not just open files", source: "API docs", sourceUrl: "https://docs.anthropic.com" },
+            { stat: "~$6/day", label: "Average cost per developer — 90% of users spend less than $12/day", source: "Costs docs", sourceUrl: "https://docs.anthropic.com/en/docs/claude-code/costs" },
+            { stat: "3", label: "Cloud deployment options — AWS Bedrock, Google Vertex AI, Microsoft Foundry", source: "Deployment docs", sourceUrl: "https://docs.anthropic.com/en/docs/claude-code/bedrock-vertex" },
+            { stat: "24", label: "Hook events available for custom automation — from pre-commit to post-edit to CI/CD", source: "Hooks docs", sourceUrl: "https://docs.anthropic.com/en/docs/claude-code/hooks" },
+            { stat: "4", label: "Permission modes — default, plan, auto-accept, and headless for CI/CD pipelines", source: "Security docs", sourceUrl: "https://docs.anthropic.com/en/docs/claude-code/security" },
+          ]},
+          { type: "reflect", prompt: "Think about the difference between a developer using GitHub Copilot (line-level autocomplete) versus Claude Code (agentic, multi-step). How would you explain this difference to a VP of Engineering in 60 seconds?" },
+        ],
+      },
   {
     id: "how-to-use", label: "How to Use", title: "Four ways to use Claude Code",
     content: [
@@ -2469,34 +2473,48 @@ function ContentBlock({ block, idx, contentMode }) {
             <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: m.color, background: m.color + "12", padding: "2px 8px", borderRadius: 10 }}>{m.tag}</span>
           </div>
           <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.6, margin: 0 }}>{contentMode === "simplified" && m.simpleDesc ? m.simpleDesc : contentMode === "engineer" && m.engineerDesc ? m.engineerDesc : m.desc}</p>
-          {(m.greatFor || m.notSuitedFor) && (
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 14 }}>
-              {m.greatFor && (
-                <div style={{ padding: "12px 14px", background: C.green + "06", borderRadius: 8, border: `1px solid ${C.green}20` }}>
-                  <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.green, marginBottom: 8 }}>Great for</div>
-                  {m.greatFor.map((item, j) => (
-                    <div key={j} style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 5 }}>
-                      <span style={{ color: C.green, fontSize: 9, flexShrink: 0, lineHeight: 1 }}>{"\u2713"}</span>
-                      <span style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.dark, lineHeight: 1.45 }}>{item}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-              {m.notSuitedFor && (
-                <div style={{ padding: "12px 14px", background: C.faint + "06", borderRadius: 8, border: `1px solid ${C.lightGray}` }}>
-                  <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.gray, marginBottom: 8 }}>Not well suited for</div>
-                  {m.notSuitedFor.map((item, j) => (
-                    <div key={j} style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 5 }}>
-                      <span style={{ color: C.gray, fontSize: 9, flexShrink: 0, lineHeight: 1 }}>{"\u2717"}</span>
-                      <span style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.muted, lineHeight: 1.45 }}>{item}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
         </div>
       ))}
+      {/* Comparison table for greatFor / notSuitedFor */}
+      {block.items.some(m => m.greatFor || m.notSuitedFor) && (
+        <div style={{ marginTop: 8, borderRadius: 10, overflow: "hidden", border: `1px solid ${C.lightGray}` }}>
+          <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "var(--sans)", fontSize: 12 }}>
+            <thead>
+              <tr style={{ background: C.dark }}>
+                <th style={{ padding: "10px 14px", fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.faint, textAlign: "left", fontWeight: 400 }}>Model</th>
+                <th style={{ padding: "10px 14px", fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.green, textAlign: "left", fontWeight: 400 }}>Great for</th>
+                <th style={{ padding: "10px 14px", fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.gray, textAlign: "left", fontWeight: 400 }}>Not well suited for</th>
+              </tr>
+            </thead>
+            <tbody>
+              {block.items.filter(m => m.greatFor || m.notSuitedFor).map((m, i) => (
+                <tr key={i} style={{ borderTop: `1px solid ${C.lightGray}`, background: i % 2 === 0 ? C.bg : C.cream }}>
+                  <td style={{ padding: "14px", verticalAlign: "top", width: "15%", borderRight: `1px solid ${C.lightGray}` }}>
+                    <span style={{ fontFamily: "var(--serif)", fontSize: 14, color: m.color, display: "block" }}>{m.name}</span>
+                    <span style={{ fontFamily: "var(--mono)", fontSize: 9, color: m.color + "99" }}>{m.tag}</span>
+                  </td>
+                  <td style={{ padding: "14px", verticalAlign: "top", borderRight: `1px solid ${C.lightGray}` }}>
+                    {m.greatFor?.map((item, j) => (
+                      <div key={j} style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
+                        <span style={{ color: C.green, fontSize: 9, flexShrink: 0 }}>{"\u2713"}</span>
+                        <span style={{ color: C.dark, lineHeight: 1.45 }}>{item}</span>
+                      </div>
+                    ))}
+                  </td>
+                  <td style={{ padding: "14px", verticalAlign: "top" }}>
+                    {m.notSuitedFor?.map((item, j) => (
+                      <div key={j} style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
+                        <span style={{ color: C.gray, fontSize: 9, flexShrink: 0 }}>{"\u2717"}</span>
+                        <span style={{ color: C.muted, lineHeight: 1.45 }}>{item}</span>
+                      </div>
+                    ))}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 
