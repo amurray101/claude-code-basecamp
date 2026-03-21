@@ -401,6 +401,138 @@
       z-index: 10;
       white-space: nowrap;
     }
+    /* Diagram placeholder for future visuals */
+    .diagram-placeholder {
+      border: 2px dashed var(--border-medium);
+      border-radius: var(--radius-lg);
+      padding: var(--space-xl) var(--space-lg);
+      text-align: center;
+      margin: var(--space-lg) auto;
+      max-width: 800px;
+      background: repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 10px,
+        rgba(176, 174, 165, 0.04) 10px,
+        rgba(176, 174, 165, 0.04) 20px
+      );
+    }
+    .diagram-placeholder .placeholder-label {
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-bold);
+      color: var(--accent-terracotta);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--space-sm);
+    }
+    .diagram-placeholder .placeholder-desc {
+      font-size: var(--text-sm);
+      color: var(--text-light);
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Pain-to-solution timeline bar */
+    .timeline-compare {
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+      max-width: 700px;
+      margin: var(--space-lg) auto 0;
+    }
+    .timeline-bar {
+      flex: 1;
+      border-radius: var(--radius-md);
+      padding: var(--space-sm) var(--space-md);
+      text-align: center;
+      font-weight: var(--weight-semibold);
+      font-size: var(--text-sm);
+      position: relative;
+    }
+    .timeline-bar.pain {
+      background: var(--accent-terracotta);
+      color: white;
+    }
+    .timeline-bar.solution {
+      background: var(--accent-sage);
+      color: white;
+      flex: 0.25;
+    }
+    .timeline-arrow {
+      font-size: var(--text-xl);
+      color: var(--text-light);
+      flex-shrink: 0;
+    }
+    .timeline-label {
+      font-size: var(--text-xs);
+      color: rgba(255,255,255,0.6);
+      margin-top: var(--space-xs);
+    }
+
+    /* Metric comparison bars (before/after) */
+    .metric-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      margin-bottom: var(--space-sm);
+    }
+    .metric-label {
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      min-width: 130px;
+      text-align: right;
+    }
+    .metric-track {
+      flex: 1;
+      height: 28px;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      position: relative;
+    }
+    .metric-fill {
+      height: 100%;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      padding-left: var(--space-sm);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-semibold);
+      color: white;
+      white-space: nowrap;
+    }
+    .metric-fill.bad { background: var(--accent-terracotta); }
+    .metric-fill.good { background: var(--accent-sage); }
+
+    /* Simple horizontal bar chart for cost/value */
+    .bar-chart-simple {
+      max-width: 500px;
+    }
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-md);
+      margin-bottom: var(--space-md);
+    }
+    .bar-row-label {
+      font-size: var(--text-sm);
+      font-weight: var(--weight-semibold);
+      min-width: 80px;
+      text-align: right;
+    }
+    .bar-visual {
+      height: 36px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      padding: 0 var(--space-md);
+      font-size: var(--text-sm);
+      font-weight: var(--weight-bold);
+      color: white;
+    }
+
     /* Roadmap "you are here" slides */
     .roadmap-days {
       display: flex;
@@ -615,6 +747,17 @@
           <h2 style="color: white;">Meridian Health</h2>
           <div class="client-industry">Healthcare SaaS &middot; 8-person backend team &middot; Node.js API</div>
           <p class="client-situation">Meridian maintains a Node.js API powering patient scheduling across 200+ clinics. Their biggest pain: new API endpoints take 2&ndash;3 days because of boilerplate, tests, and compliance checks. Your job: show them a new endpoint built in minutes, not days.</p>
+          <div class="timeline-compare" style="margin-top: var(--space-lg);">
+            <div class="timeline-bar pain" style="flex: 3;">
+              <div>2&ndash;3 days</div>
+              <div class="timeline-label">New endpoint today</div>
+            </div>
+            <div class="timeline-arrow" style="color: rgba(255,255,255,0.4);">&#8594;</div>
+            <div class="timeline-bar solution" style="flex: 0.3;">
+              <div>Min</div>
+              <div class="timeline-label">With Claude Code</div>
+            </div>
+          </div>
         </div>
         <aside class="notes">
           <p><strong>[TRANSITION]</strong> Read the scenario. Let it land. "This is who you are helping today. Every feature we cover maps back to solving Meridian's problem."</p>
@@ -720,7 +863,11 @@
             <p>When tests pass &mdash; or fail &mdash; what does Claude do next? This is the verify-and-loop moment.</p>
           </div>
         </div>
-        <p style="text-align: center; font-size: var(--text-sm); color: var(--accent-coral); font-weight: var(--weight-semibold); margin-top: var(--space-lg);">You will narrate this yourself in the lab. Watch closely.</p>
+        <div class="diagram-placeholder" style="margin-top: var(--space-md); padding: var(--space-md);">
+          <div class="placeholder-label">Screenshot Placeholder</div>
+          <div class="placeholder-desc">Annotated screenshot of a Claude Code terminal session building the /health endpoint. Label the four agentic loop phases directly on the terminal output: (1) Read &mdash; scanning routes and test files, (2) Plan &mdash; extended thinking visible, (3) Act &mdash; writing code across files, (4) Verify &mdash; running tests and self-correcting.</div>
+        </div>
+        <p style="text-align: center; font-size: var(--text-sm); color: var(--accent-coral); font-weight: var(--weight-semibold); margin-top: var(--space-sm);">You will narrate this yourself in the lab. Watch closely.</p>
         <aside class="notes">
           <p><strong>[DEMO]</strong> This is the facilitator's cue. Install from scratch: <code>curl -fsSL https://cli.anthropic.com/install.sh | sh</code>. Open the sample repo. Launch Claude Code. Give it the prompt: "Add a GET /health endpoint with tests." Narrate the loop as it runs.</p>
           <p><strong>[KEY MOMENTS]</strong> Three moments to highlight: (1) When Claude reads the codebase before you ask &mdash; the agentic read step. (2) When Claude runs the tests after making changes &mdash; the verify step. (3) If Claude makes a mistake and self-corrects &mdash; don't skip this, it builds trust.</p>
@@ -819,6 +966,17 @@
           <h2 style="color: white;">Lumen Logistics</h2>
           <div class="client-industry">Supply chain &middot; 40-developer team &middot; Node.js monorepo</div>
           <p class="client-situation">Lumen has a sprawling monorepo with zero documentation. New hires take 3 weeks to become productive. The CTO wants Claude Code to accelerate onboarding and enforce consistency &mdash; but without a CLAUDE.md, Claude guesses at their patterns and gets half wrong. Your job: write the CLAUDE.md that fixes this.</p>
+          <div class="timeline-compare" style="margin-top: var(--space-lg);">
+            <div class="timeline-bar pain" style="flex: 3;">
+              <div>3 weeks</div>
+              <div class="timeline-label">New hire onboarding today</div>
+            </div>
+            <div class="timeline-arrow" style="color: rgba(255,255,255,0.4);">&#8594;</div>
+            <div class="timeline-bar solution" style="flex: 0.5;">
+              <div>Days</div>
+              <div class="timeline-label">With CLAUDE.md</div>
+            </div>
+          </div>
         </div>
         <aside class="notes">
           <p><strong>[TRANSITION]</strong> "This is the exact situation you'll face in the field. A team excited about Claude Code, but the codebase has no documentation. Without a CLAUDE.md, Claude will guess &mdash; and guess wrong."</p>
@@ -829,16 +987,28 @@
       <!-- SLIDE 15 — THE BEFORE -->
       <section>
         <h2>The Before</h2>
-        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">What you're about to see: Claude without a CLAUDE.md</p>
-        <div class="card" style="padding: var(--space-xl); border-left: 6px solid var(--accent-terracotta); max-width: 700px; margin: 0 auto;">
-          <p style="font-size: var(--text-base); line-height: 1.8;">The facilitator is about to open Lumen's messy repo and ask Claude to refactor a module. <strong>There is no CLAUDE.md.</strong></p>
-          <p style="font-size: var(--text-base); line-height: 1.8; margin-top: var(--space-md);">Watch what happens when Claude has to guess:</p>
-          <ul style="font-size: var(--text-sm); padding-left: var(--space-lg); color: var(--text-secondary); margin-top: var(--space-sm);">
-            <li>How many files does it read before it starts?</li>
-            <li>Does it follow the project's actual conventions?</li>
-            <li>Does it run the right test command?</li>
-            <li>How long does it take to produce a result?</li>
-          </ul>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-md);">Claude without a CLAUDE.md &mdash; watch it guess</p>
+        <div style="max-width: 700px; margin: 0 auto;">
+          <div class="metric-row">
+            <div class="metric-label">Files scanned</div>
+            <div class="metric-track"><div class="metric-fill bad" style="width: 90%;">30+ files</div></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-label">Conventions</div>
+            <div class="metric-track"><div class="metric-fill bad" style="width: 45%;">Guessed wrong</div></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-label">Test runner</div>
+            <div class="metric-track"><div class="metric-fill bad" style="width: 60%;">Wrong command</div></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-label">Time to result</div>
+            <div class="metric-track"><div class="metric-fill bad" style="width: 85%;">Slow &mdash; lots of backtracking</div></div>
+          </div>
+        </div>
+        <div class="diagram-placeholder" style="margin-top: var(--space-md); padding: var(--space-md);">
+          <div class="placeholder-label">Screenshot Placeholder</div>
+          <div class="placeholder-desc">Annotated terminal screenshot showing Claude reading 30+ files, using wrong import style, and missing the project's test runner. Highlight the wasted exploration with red annotations.</div>
         </div>
         <aside class="notes">
           <p><strong>[DEMO]</strong> Open the messy repo. No CLAUDE.md. Ask Claude: "Refactor the user module to use async/await consistently." Let it run. Don't interrupt. Let the audience see Claude read 30+ files, guess at patterns, maybe miss the test runner, maybe use the wrong import style. The struggle is the point.</p>
@@ -849,17 +1019,30 @@
       <!-- SLIDE 16 — THE AFTER -->
       <section>
         <h2>The After</h2>
-        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Same task, same repo &mdash; but now with a CLAUDE.md</p>
-        <div class="card" style="padding: var(--space-xl); border-left: 6px solid var(--accent-sage); max-width: 700px; margin: 0 auto;">
-          <p style="font-size: var(--text-base); line-height: 1.8;">Now the facilitator adds a CLAUDE.md and runs the <strong>exact same task</strong>.</p>
-          <p style="font-size: var(--text-base); line-height: 1.8; margin-top: var(--space-md);">Watch the difference in:</p>
-          <ul style="font-size: var(--text-sm); padding-left: var(--space-lg); color: var(--text-primary); margin-top: var(--space-sm);">
-            <li><strong>Speed</strong> &mdash; fewer files read, faster to the right answer</li>
-            <li><strong>Accuracy</strong> &mdash; follows the exact conventions specified</li>
-            <li><strong>Convention matching</strong> &mdash; import ordering, test patterns, async style</li>
-          </ul>
-          <p style="font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--accent-coral); margin-top: var(--space-lg);">This before/after is the single most persuasive demo you can give a customer.</p>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-md);">Same task, same repo &mdash; now with a CLAUDE.md</p>
+        <div style="max-width: 700px; margin: 0 auto;">
+          <div class="metric-row">
+            <div class="metric-label">Files scanned</div>
+            <div class="metric-track"><div class="metric-fill good" style="width: 20%;">5 files</div></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-label">Conventions</div>
+            <div class="metric-track"><div class="metric-fill good" style="width: 95%;">Exact match</div></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-label">Test runner</div>
+            <div class="metric-track"><div class="metric-fill good" style="width: 95%;">Correct command</div></div>
+          </div>
+          <div class="metric-row">
+            <div class="metric-label">Time to result</div>
+            <div class="metric-track"><div class="metric-fill good" style="width: 25%;">Fast &mdash; straight to the answer</div></div>
+          </div>
         </div>
+        <div class="diagram-placeholder" style="margin-top: var(--space-md); padding: var(--space-md);">
+          <div class="placeholder-label">Screenshot Placeholder</div>
+          <div class="placeholder-desc">Annotated terminal screenshot showing Claude reading only the relevant files, using correct async/await conventions, and running the right test command. Highlight the efficiency with green annotations. Place side-by-side with slide 15 screenshot for maximum contrast.</div>
+        </div>
+        <p style="text-align: center; font-size: var(--text-sm); font-weight: var(--weight-semibold); color: var(--accent-coral); margin-top: var(--space-sm);">Same repo. 50 lines of markdown. Completely different result.</p>
         <aside class="notes">
           <p><strong>[DEMO]</strong> Add the CLAUDE.md (30-80 lines: architecture, conventions, testing, pre-commit). Clear the session. Run the exact same prompt. The difference should be dramatic: fewer files read, conventions matched, right test runner, faster completion.</p>
           <p><strong>[KEY MOMENT]</strong> After the demo, pause. "That's the demo that wins customer conversations. Same task, same repo. The only difference is 50 lines of markdown. You will build this for Lumen in the lab."</p>
@@ -913,13 +1096,17 @@
         <div class="four-up">
           <div class="four-up-item" style="border-top: 3px solid var(--accent-terracotta);">
             <h4 style="color: var(--accent-terracotta);">Kitchen Sink</h4>
-            <p><strong>Pattern:</strong> Too many unrelated tasks in one session. Context fills, quality drops.</p>
-            <p style="color: var(--accent-teal); font-weight: var(--weight-semibold); margin-top: var(--space-sm);">Recovery: /clear and start fresh. One task, one session.</p>
+            <div class="metric-track" style="margin: var(--space-sm) 0; height: 20px;">
+              <div class="metric-fill bad" style="width: 95%; font-size: 10px;">Context window full</div>
+            </div>
+            <p style="font-size: var(--text-sm);"><strong>Pattern:</strong> Too many unrelated tasks. Context fills, quality drops.</p>
+            <p style="color: var(--accent-teal); font-weight: var(--weight-semibold); margin-top: var(--space-sm); font-size: var(--text-sm);">Recovery: /clear &mdash; one task, one session.</p>
           </div>
           <div class="four-up-item" style="border-top: 3px solid var(--accent-terracotta);">
             <h4 style="color: var(--accent-terracotta);">Correction Spiral</h4>
-            <p><strong>Pattern:</strong> Correcting Claude 5+ times. The conversation gets tangled. Each correction makes it worse.</p>
-            <p style="color: var(--accent-teal); font-weight: var(--weight-semibold); margin-top: var(--space-sm);">Recovery: Stop correcting. Start a new session with a clearer prompt.</p>
+            <div style="font-size: 20px; text-align: center; margin: var(--space-sm) 0; color: var(--accent-terracotta); letter-spacing: 2px;">&#x21bb; &#x21bb; &#x21bb; &#x21bb; &#x21bb;</div>
+            <p style="font-size: var(--text-sm);"><strong>Pattern:</strong> Correcting 5+ times. Each correction tangles the conversation more.</p>
+            <p style="color: var(--accent-teal); font-weight: var(--weight-semibold); margin-top: var(--space-sm); font-size: var(--text-sm);">Recovery: Stop. New session, clearer prompt.</p>
           </div>
         </div>
         <aside class="notes">
@@ -935,13 +1122,23 @@
         <div class="four-up">
           <div class="four-up-item" style="border-top: 3px solid var(--accent-terracotta);">
             <h4 style="color: var(--accent-terracotta);">Over-Specified CLAUDE.md</h4>
-            <p><strong>Pattern:</strong> 200+ lines of rules. Claude follows bad rules rigidly instead of using judgment.</p>
-            <p style="color: var(--accent-teal); font-weight: var(--weight-semibold); margin-top: var(--space-sm);">Recovery: Cut to 30&ndash;80 lines. Conventions, not micromanagement.</p>
+            <div style="display: flex; align-items: center; gap: var(--space-sm); margin: var(--space-sm) 0;">
+              <div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent-terracotta); line-height: 1.2;">rule 1<br>rule 2<br>rule 3<br>...<br>rule 200+</div>
+              <div style="font-size: var(--text-sm); color: var(--accent-terracotta);">&#8594;</div>
+              <div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent-sage); line-height: 1.2;">conventions<br>patterns<br>testing<br><span style="color: var(--text-light);">30&ndash;80 lines</span></div>
+            </div>
+            <p style="font-size: var(--text-sm);"><strong>Pattern:</strong> 200+ rigid rules. Claude follows bad rules instead of using judgment.</p>
+            <p style="color: var(--accent-teal); font-weight: var(--weight-semibold); margin-top: var(--space-sm); font-size: var(--text-sm);">Recovery: Cut to 30&ndash;80 lines.</p>
           </div>
           <div class="four-up-item" style="border-top: 3px solid var(--accent-terracotta);">
             <h4 style="color: var(--accent-terracotta);">Context Exhaustion</h4>
-            <p><strong>Pattern:</strong> Vague prompts like "improve this codebase." Claude reads everything, accomplishes nothing.</p>
-            <p style="color: var(--accent-teal); font-weight: var(--weight-semibold); margin-top: var(--space-sm);">Recovery: Be specific. "Refactor the auth module" beats "improve the code."</p>
+            <div style="display: flex; align-items: center; gap: var(--space-sm); margin: var(--space-sm) 0;">
+              <div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent-terracotta);">"improve this codebase"</div>
+              <div style="font-size: var(--text-sm); color: var(--accent-terracotta);">&#8594;</div>
+              <div style="font-family: var(--font-mono); font-size: 10px; color: var(--accent-sage);">"refactor the auth module"</div>
+            </div>
+            <p style="font-size: var(--text-sm);"><strong>Pattern:</strong> Vague prompts. Claude reads everything, accomplishes nothing.</p>
+            <p style="color: var(--accent-teal); font-weight: var(--weight-semibold); margin-top: var(--space-sm); font-size: var(--text-sm);">Recovery: Be specific.</p>
           </div>
         </div>
         <aside class="notes">
@@ -1046,6 +1243,26 @@
           <h2 style="color: white;">Arcadia Financial</h2>
           <div class="client-industry">Fintech / Regulated &middot; 60 engineers &middot; Payment processing platform</div>
           <p class="client-situation">No code ships at Arcadia without passing lint, type checks, and tests. Developers constantly context-switch to Jira for ticket details. The Head of Engineering asks: &ldquo;Can Claude Code enforce our quality gates automatically and pull context from Jira so developers stop tab-switching?&rdquo;</p>
+          <div style="display: flex; gap: var(--space-md); margin-top: var(--space-lg);">
+            <div style="flex: 1; text-align: center; padding: var(--space-sm); border-radius: var(--radius-md); background: rgba(255,255,255,0.08);">
+              <div style="font-size: var(--text-xs); color: rgba(255,255,255,0.5);">Pain</div>
+              <div style="font-size: var(--text-sm); color: white; font-weight: var(--weight-semibold);">Compliance gates</div>
+              <div style="color: var(--accent-coral); font-weight: var(--weight-bold); margin: var(--space-xs) 0;">&darr;</div>
+              <div style="font-size: var(--text-sm); color: var(--accent-teal); font-weight: var(--weight-semibold);">Hooks</div>
+            </div>
+            <div style="flex: 1; text-align: center; padding: var(--space-sm); border-radius: var(--radius-md); background: rgba(255,255,255,0.08);">
+              <div style="font-size: var(--text-xs); color: rgba(255,255,255,0.5);">Pain</div>
+              <div style="font-size: var(--text-sm); color: white; font-weight: var(--weight-semibold);">Jira tab-switching</div>
+              <div style="color: var(--accent-coral); font-weight: var(--weight-bold); margin: var(--space-xs) 0;">&darr;</div>
+              <div style="font-size: var(--text-sm); color: var(--accent-teal); font-weight: var(--weight-semibold);">MCP</div>
+            </div>
+            <div style="flex: 1; text-align: center; padding: var(--space-sm); border-radius: var(--radius-md); background: rgba(255,255,255,0.08);">
+              <div style="font-size: var(--text-xs); color: rgba(255,255,255,0.5);">Pain</div>
+              <div style="font-size: var(--text-sm); color: white; font-weight: var(--weight-semibold);">Inconsistent process</div>
+              <div style="color: var(--accent-coral); font-weight: var(--weight-bold); margin: var(--space-xs) 0;">&darr;</div>
+              <div style="font-size: var(--text-sm); color: var(--accent-teal); font-weight: var(--weight-semibold);">Skills</div>
+            </div>
+          </div>
         </div>
         <aside class="notes">
           <p><strong>[TRANSITION]</strong> "Three customer pain points in one brief: compliance enforcement, tool integration, and context-switching. Each one maps to a Claude Code feature."</p>
@@ -1372,7 +1589,11 @@
             <p style="font-size: var(--text-xs); color: var(--text-light);">Best for: speed, latest capabilities, smaller teams</p>
           </div>
         </div>
-        <p class="text-center" style="font-size: var(--text-sm); color: var(--text-secondary); margin-top: var(--space-lg);">Claude is the only frontier model available on all three major clouds. Major competitive differentiator for multi-cloud enterprises.</p>
+        <div class="diagram-placeholder" style="margin-top: var(--space-lg);">
+          <div class="placeholder-label">Diagram Placeholder</div>
+          <div class="placeholder-desc">Cloud architecture diagram showing Claude Code at center with three deployment paths radiating out: AWS Bedrock (customer VPC boundary, IAM integration), Google Vertex AI (GCP project boundary), and Anthropic Direct. Show data residency boundaries for each path. Include logos for AWS, GCP, and Anthropic.</div>
+        </div>
+        <p class="text-center" style="font-size: var(--text-sm); color: var(--text-secondary); margin-top: var(--space-sm);">The only frontier model on all three major clouds.</p>
         <aside class="notes">
           <p><strong>[TRANSITION]</strong> "When Atlas asks 'how do we deploy this for 200 developers?' &mdash; match the path to their infrastructure."</p>
           <p>If they are already on AWS, Bedrock is the lowest-friction path. Data never leaves their account, uses their existing IAM and compliance setup. GCP teams go Vertex. Teams that want the latest models first go direct.</p>
@@ -1383,27 +1604,24 @@
       <!-- SLIDE 35 — COST MODEL -->
       <section>
         <h2>Cost Model &amp; ROI Math</h2>
-        <div style="display: flex; gap: var(--space-xl); margin-top: var(--space-lg);">
+        <div style="display: flex; gap: var(--space-xl); margin-top: var(--space-lg); align-items: flex-start;">
           <div style="flex: 1;">
-            <div class="data-callouts" style="flex-direction: column; gap: var(--space-md); align-items: flex-start;">
-              <div class="data-callout" style="text-align: left;">
-                <div class="value" style="font-size: var(--text-3xl);">~$6</div>
-                <div class="label">Per developer per day (average)</div>
+            <p style="font-size: var(--text-sm); color: var(--text-secondary); margin-bottom: var(--space-md);">200 developers &middot; daily cost vs. recovered value</p>
+            <div class="bar-chart-simple">
+              <div class="bar-row">
+                <div class="bar-row-label">Cost</div>
+                <div class="bar-visual" style="background: var(--accent-coral); width: 60px;">$1,200</div>
               </div>
-              <div class="data-callout" style="text-align: left;">
-                <div class="value" style="font-size: var(--text-3xl); color: var(--accent-teal);">$50&ndash;200</div>
-                <div class="label">Per developer per month (typical range)</div>
+              <div class="bar-row">
+                <div class="bar-row-label">Value</div>
+                <div class="bar-visual" style="background: var(--accent-sage); width: 400px;">$30,000</div>
               </div>
             </div>
+            <p style="font-size: var(--text-lg); font-weight: var(--weight-bold); color: var(--accent-coral); margin-top: var(--space-md);">25&times; return on investment</p>
+            <p style="font-size: var(--text-xs); color: var(--text-light); margin-top: var(--space-xs);">200 devs &times; $6/day = $1,200 &middot; 200 hrs saved &times; $150/hr = $30,000</p>
           </div>
-          <div style="flex: 1;">
-            <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-sage);">
-              <h4 style="color: var(--accent-sage);">The ROI framing</h4>
-              <p style="font-size: var(--text-sm); margin-bottom: var(--space-sm);">200 devs &times; $6/day = <strong>$1,200/day</strong></p>
-              <p style="font-size: var(--text-sm); margin-bottom: var(--space-sm);">If each saves 1 hr: 200 hrs &times; $150/hr = <strong>$30,000/day</strong></p>
-              <p style="font-size: var(--text-sm); font-weight: var(--weight-bold); color: var(--accent-coral);">25&times; return on investment</p>
-            </div>
-            <div class="card" style="padding: var(--space-lg); margin-top: var(--space-md);">
+          <div style="flex: 0.7;">
+            <div class="card" style="padding: var(--space-lg);">
               <h4>Spend controls</h4>
               <p style="font-size: var(--text-sm);">Model routing (Haiku for simple, Sonnet for daily, Opus for hard). Usage dashboards. Team-level budget caps.</p>
             </div>
@@ -1476,6 +1694,10 @@
               </tr>
             </tbody>
           </table>
+        </div>
+        <div class="diagram-placeholder" style="margin-top: var(--space-md); padding: var(--space-sm) var(--space-lg);">
+          <div class="placeholder-label">Diagram Placeholder</div>
+          <div class="placeholder-desc">Radar/spider chart with 6 axes (Autonomy, Code Quality, IDE Integration, Enterprise Ready, Ecosystem, User Adoption) overlaying Claude Code, Copilot, Cursor, and Devin as colored polygons. More visually scannable than the dot-rating table above &mdash; could replace it entirely.</div>
         </div>
         <aside class="notes">
           <p><strong>[TRANSITION]</strong> "Let's be honest about the competitive landscape."</p>
