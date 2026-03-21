@@ -580,15 +580,9 @@ const FOUNDATIONS = [
     id: "claude-code", label: "Claude Code", title: "What is Claude Code?",
     content: [
       { type: "text", value: "You've seen where Claude Code fits in the Anthropic stack. Now let's go deeper on how it actually works — the agentic loop, the interaction model, and what makes it different from every other coding tool.", simple: "You already know what Claude Code is. Now let's understand how it works under the hood — how it reads code, plans changes, and verifies its own work.", engineer: "Claude Code is a CLI-native agentic coding tool. It uses the same Messages API as other Claude integrations but wraps it in a persistent tool-use loop with filesystem access, shell execution, and git operations. This section covers the architecture, tool dispatch, and context management internals." },
-      { type: "overview", heading: "What we'll cover", items: [
-        { label: "Interaction model", desc: "How agentic coding differs from autocomplete tools" },
-        { label: "Architecture", desc: "The agentic loop — how Claude reads, plans, acts, and verifies" },
-      ]},
       { type: "outcomes", items: [
         "Explain in 60 seconds how agentic coding differs from autocomplete tools like Copilot",
         "Walk through the agentic loop — read, plan, act, verify — using a concrete example",
-        "Identify which Claude Code surface (CLI, VS Code, desktop, web) fits a given user's workflow",
-        "Position Claude Code's value to different buyer personas: engineering leaders, data scientists, DevOps teams",
       ]},
       { type: "heading", value: "A different interaction model", simple: "How Claude Code works differently from other coding tools", engineer: "Architecture: agentic loop and tool dispatch" },
       { type: "text", value: <>Most AI coding tools operate at the line level — suggesting the next autocomplete. Claude Code operates at the project level. It reads your codebase, plans multi-step changes, edits files, runs tests, and fixes what breaks — all in one agentic loop. When you say <a href="https://claude.ai/new?q=refactor%20the%20auth%20module%20to%20use%20JWT" target="_blank" rel="noopener noreferrer" style={{ color: C.orange, textDecoration: "underline", textUnderlineOffset: "3px", cursor: "pointer" }}>"refactor the auth module to use JWT,"</a> it doesn't suggest a snippet. It executes the entire migration.</> },
@@ -3838,7 +3832,7 @@ export default function App() {
             <div style={{ flex: 1, padding: "16px 0", overflowY: "auto" }}>
               {[
                 { label: "Home", phase: "welcome", color: C.orange, active: phase === "welcome" },
-                { label: "How It Works", phase: "how-it-works", color: C.blue, active: phase === "how-it-works" },
+                { label: "Course Structure", phase: "how-it-works", color: C.blue, active: phase === "how-it-works" },
                 { label: "Foundations", phase: "foundations", color: C.green, active: phase === "foundations", onNav: () => { setFoundationsViewContext("orientation"); navigateTo("foundations"); } },
                 { label: "Role-Based Training", phase: "path-select", color: C.orange, active: phase === "hub" || phase === "module" || phase === "path-select" },
               ].map((item, idx) => (
