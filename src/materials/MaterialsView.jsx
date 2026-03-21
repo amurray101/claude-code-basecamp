@@ -279,8 +279,12 @@ export default function MaterialsView({ onBack, initialMaterialId }) {
   }, []);
 
   const closeMaterial = useCallback(() => {
-    setActiveMaterial(null);
-  }, []);
+    if (initialMaterialId) {
+      onBack();
+    } else {
+      setActiveMaterial(null);
+    }
+  }, [initialMaterialId, onBack]);
 
   // If viewing a single material full-screen
   if (activeMaterial) {
@@ -302,7 +306,7 @@ export default function MaterialsView({ onBack, initialMaterialId }) {
                 onMouseLeave={e => { e.currentTarget.style.borderColor = C.lightGray; e.currentTarget.style.color = C.muted; }}
                 className="no-print"
               >
-                &larr; Back to Materials
+                &larr; {initialMaterialId ? "Back" : "Back to Materials"}
               </button>
               <MaterialComponent />
             </div>

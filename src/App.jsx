@@ -637,8 +637,6 @@ const FOUNDATIONS = [
       { type: "overview", heading: "What we'll cover", items: [
         { label: "Extended thinking", desc: "How Claude reasons step-by-step on complex problems before acting" },
         { label: "Context window", desc: "Why Claude can read entire codebases — not just the open file" },
-        { label: "Model selection", desc: "Haiku, Sonnet, and Opus — when to use which, and why it matters" },
-        { label: "Cost model", desc: "Token economics, pricing tiers, and how to talk about cost with buyers" },
       ]},
       { type: "outcomes", items: [
         "Explain extended thinking and why it produces better code than instant generation",
@@ -3532,6 +3530,7 @@ export default function App() {
   const [facilitatorModule, setFacilitatorModule] = useState(null);
   const [subPage, setSubPage] = useState(-1); // -1 = main content, 0+ = pages index
   const [initialMaterialId, setInitialMaterialId] = useState(null); // for deep-linking into materials
+  const [materialsReturnTo, setMaterialsReturnTo] = useState(null); // { phase, moduleId } for back navigation
   const [deliverableTab, setDeliverableTab] = useState("part1"); // "part1" or "cohort1"
   const [menuOpen, setMenuOpen] = useState(false);
   const [showOutcomesModal, setShowOutcomesModal] = useState(false);
@@ -3683,6 +3682,7 @@ export default function App() {
   // Bridge for inline material references in steps
   if (typeof window !== "undefined") {
     window.__openMaterial = (materialId) => {
+      setMaterialsReturnTo({ phase, moduleId: activeModule });
       setInitialMaterialId(materialId);
       setPhase("materials");
     };
@@ -4473,7 +4473,7 @@ export default function App() {
                       key={mat.id}
                       material={{ ...mat, format: MATERIAL_META[mat.id]?.format }}
                       color={mod.color}
-                      onOpen={() => { setInitialMaterialId(mat.id); setPhase("materials"); }}
+                      onOpen={() => { setMaterialsReturnTo({ phase: "module", moduleId: mod.id }); setInitialMaterialId(mat.id); setPhase("materials"); }}
                     />
                   ))}
                 </div>
@@ -4522,7 +4522,7 @@ export default function App() {
                       }
                     }
                   }}
-                  onOpenMaterial={(matId) => { setInitialMaterialId(matId); setPhase("materials"); }}
+                  onOpenMaterial={(matId) => { setMaterialsReturnTo({ phase: "module", moduleId: mod.id }); setInitialMaterialId(matId); setPhase("materials"); }}
                   preworkCompleted={preworkCompleted}
                   onMarkPreworkDone={() => {
                     if (!preworkCompleted.includes(mod.id)) {
@@ -4855,7 +4855,7 @@ export default function App() {
                   { id: "M4a", label: "Competitive Battlecard", why: "Claude Code vs. Copilot vs. Cursor positioning" },
                   { id: "F7b", label: "Cost & ROI Pocket Math", why: "Close the cost conversation in 60 seconds" },
                 ].map(mat => (
-                  <button key={mat.id} onClick={() => { setInitialMaterialId(mat.id); setPhase("materials"); }}
+                  <button key={mat.id} onClick={() => { setMaterialsReturnTo({ phase: "hub" }); setInitialMaterialId(mat.id); setPhase("materials"); }}
                     style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", textAlign: "left", padding: "10px 14px", background: C.bg, border: `1px solid ${C.lightGray}`, borderRadius: 6, cursor: "pointer", transition: "all 0.15s" }}
                     onMouseEnter={e => { e.currentTarget.style.borderColor = C.orange + "60"; }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor = C.lightGray; }}
@@ -4935,7 +4935,16 @@ export default function App() {
 
       {/* ═══ MATERIALS ═══ */}
       {phase === "materials" && (
-        <MaterialsView onBack={() => { setPhase("hub"); setInitialMaterialId(null); }} initialMaterialId={initialMaterialId} />
+        <MaterialsView onBack={() => {
+          if (materialsReturnTo) {
+            setPhase(materialsReturnTo.phase);
+            if (materialsReturnTo.moduleId) setActiveModule(materialsReturnTo.moduleId);
+          } else {
+            setPhase("hub");
+          }
+          setInitialMaterialId(null);
+          setMaterialsReturnTo(null);
+        }} initialMaterialId={initialMaterialId} />
       )}
     </div>
   );
