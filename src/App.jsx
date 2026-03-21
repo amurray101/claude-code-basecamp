@@ -3895,7 +3895,7 @@ export default function App() {
               <div style={{ borderBottom: `1px solid ${C.lightGray}`, margin: "8px 0" }} />
               {[
                 { label: "Resource Library", phase: "materials", color: C.green, active: phase === "materials" },
-                { label: "Facilitator Guide", phase: "facilitator", color: C.gray, active: phase === "facilitator" },
+                // { label: "Facilitator Guide", phase: "facilitator", color: C.gray, active: phase === "facilitator" },
               ].map(item => (
                 <button
                   key={item.phase}
@@ -3947,7 +3947,7 @@ export default function App() {
                 ))}
               </div>
 
-              {/* Methodology */}
+              {/* Methodology — hidden
               <button
                 onClick={() => { setMenuOpen(false); setShowMethodology(true); setPhase("foundations"); window.scrollTo({ top: 0, behavior: "instant" }); }}
                 style={{
@@ -3960,6 +3960,7 @@ export default function App() {
                 <span style={{ width: 6, height: 6, borderRadius: "50%", background: C.gray, flexShrink: 0 }} />
                 <span style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: showMethodology && phase === "foundations" ? 600 : 400, color: showMethodology && phase === "foundations" ? C.dark : C.muted }}>Methodology</span>
               </button>
+              */}
             </div>
           </nav>
         </div>
@@ -4967,7 +4968,7 @@ export default function App() {
                         {!done && subProg === "checkpoint-done" && <span style={{ fontSize: 10, fontFamily: "var(--sans)", fontWeight: 500, color: mod.color, background: mod.color + "10", padding: "2px 8px", borderRadius: 10 }}>Checkpoint done</span>}
                         {!done && subProg === "started" && <span style={{ fontSize: 10, fontFamily: "var(--sans)", fontWeight: 400, color: C.faint, background: C.lightGray + "60", padding: "2px 8px", borderRadius: 10 }}>In progress</span>}
                       </div>
-                      <div style={{ fontFamily: "var(--sans)", fontSize: 11.5, color: C.muted, marginTop: 3, lineHeight: 1.4, maxWidth: 400 }}>{mod.subtitle.split(".")[0]}.</div>
+                      <div style={{ fontFamily: "var(--sans)", fontSize: 11.5, color: C.muted, marginTop: 3, lineHeight: 1.4, maxWidth: 400 }}>{mod.subtitle.split(". ")[0]}.</div>
                       {mod.customerFraming && <div style={{ fontFamily: "var(--sans)", fontSize: 11, color: mod.color, marginTop: 4, lineHeight: 1.4, maxWidth: 400, fontStyle: "italic" }}>{mod.customerFraming}</div>}
                     </div>
                   </div>
