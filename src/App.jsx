@@ -34,7 +34,7 @@ function loadProgress() {
     const data = { ...PROGRESS_DEFAULTS, ...JSON.parse(raw) };
     // Migration: if foundationsDone but no sections tracked, backfill all
     if (data.foundationsDone && data.foundationSectionsViewed.length === 0) {
-      data.foundationSectionsViewed = ["welcome", "products", "cowork", "model-family", "extensions", "claude-code", "how-it-thinks", "configuration", "security", "enterprise"];
+      data.foundationSectionsViewed = ["welcome", "products", "claude-ai", "cowork", "model-family", "extensions", "claude-code", "how-it-thinks", "configuration", "security", "enterprise"];
     }
     return data;
   } catch {
@@ -364,6 +364,37 @@ function DeploymentPathsDiagram() {
 }
 
 
+// ─── COST COMPARISON DIAGRAM ───
+function CostComparisonDiagram() {
+  const items = [
+    { label: "Copilot seat", cost: "$19/mo", w: 32, color: C.faint },
+    { label: "Claude Code avg", cost: "$100\u2013200/mo", w: 140, color: C.orange },
+    { label: "Engineering hire", cost: "$15\u201325K/mo", w: 580, color: C.green },
+  ];
+  return (
+    <div style={{ margin: "20px 0", border: `1px solid ${C.lightGray}`, borderRadius: 12, overflow: "hidden", background: C.cream }}>
+      <div style={{ padding: "12px 16px", borderBottom: `1px solid ${C.lightGray}` }}>
+        <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 2, color: C.faint, textTransform: "uppercase" }}>The right comparison</div>
+      </div>
+      <div style={{ padding: 16 }}>
+        <svg width="100%" viewBox="0 0 680 160" style={{ display: "block" }}>
+          {items.map((item, i) => {
+            const y = i * 48 + 10;
+            return (
+              <g key={i}>
+                <text x="0" y={y + 6} fill={C.dark} fontSize="11" fontWeight="500" fontFamily="IBM Plex Sans, sans-serif" dominantBaseline="central">{item.label}</text>
+                <text x="0" y={y + 22} fill={C.faint} fontSize="10" fontFamily="IBM Plex Mono, monospace" dominantBaseline="central">{item.cost}</text>
+                <rect x="160" y={y} width={item.w} height="28" rx="4" fill={item.color + "20"} stroke={item.color + "40"} strokeWidth="0.5" />
+              </g>
+            );
+          })}
+          <text x="340" y="155" textAnchor="middle" fill={C.faint} fontSize="9" fontFamily="IBM Plex Sans, sans-serif">Compare to the cost of an engineer, not the cost of a Copilot seat</text>
+        </svg>
+      </div>
+    </div>
+  );
+}
+
 // ─── FOUNDATIONS JOURNEY MAP ───
 function FoundationsJourneyMap({ foundations, foundationStep, subPage }) {
   // Build flat list of nodes: each top-level foundation + its sub-pages
@@ -435,12 +466,14 @@ const FOUNDATIONS = [
       { type: "text", value: "Anthropic's products are a composable stack. Understanding where Claude Code fits influences how you talk about it with customers.", simple: "Anthropic makes several products that snap together like building blocks. Claude Code is one of them — knowing how the pieces fit helps you explain it to customers." },
       { type: "overview", heading: "What we'll cover", items: [
         { label: "Product surfaces", desc: "Claude.ai, the API, and Claude Code — and how they connect" },
+        { label: "Claude.ai", desc: "The conversational surface — where most users start and what your customers already know" },
         { label: "Cowork", desc: "Claude.ai's agentic execution mode — AI that acts, not just answers" },
         { label: "Model family", desc: "Opus, Sonnet, and Haiku — when to use each" },
         { label: "Extension layers", desc: "MCP, Skills, and Projects — the customization toolkit" },
       ]},
       { type: "outcomes", items: [
         "Map the full Anthropic product stack and explain how each surface connects to the API",
+        "Articulate what claude.ai already offers so you can clearly explain what Claude Code adds beyond it",
         "Differentiate Cowork from chat and from Claude Code — and know when to recommend each to a customer",
         "Recommend the right Claude model (Opus, Sonnet, Haiku) for a given customer use case",
         "Identify which extension layers (MCP, Skills, Projects) solve a customer's specific workflow needs",
@@ -450,9 +483,25 @@ const FOUNDATIONS = [
     ],
     pages: [
       {
+        id: "claude-ai", label: "Claude.ai", title: "Claude.ai: the conversational surface",
+        content: [
+          { type: "section-intro", step: "1", label: "Claude.ai", context: "Products > Claude.ai" },
+          { type: "text", value: "Claude.ai is the front door to Claude — the web and mobile app that most people picture when they hear 'Claude.' It's a conversational interface for thinking, writing, analysis, and creation. Your customers almost certainly already use it, which means the conversation isn't 'have you heard of Claude?' — it's 'here's what else Claude can do.'", simple: "Claude.ai is the app most people already know — the website and mobile app where you chat with Claude. Your customers probably use it already, so the real conversation is about what else Claude can do beyond chat." },
+          { type: "models", items: [
+            { name: "Chat", color: C.green, desc: "Conversational thinking partner for brainstorming, drafting, analysis, and Q&A. Supports file uploads, image understanding, and web search. The interaction most users know.", tag: "Conversational AI", simpleDesc: "The core chat experience — ask questions, upload files, analyze images, search the web. This is what most people think of when they think of Claude." },
+            { name: "Projects", color: C.orange, desc: "Persistent workspaces with custom instructions and reference documents. Teams standardize Claude's behavior without writing code — brand guidelines, analysis templates, onboarding playbooks.", tag: "Persistent context", simpleDesc: "Saved workspaces where you set instructions and upload reference docs. Like setting up a desk for Claude with everything it needs for a specific job." },
+            { name: "Artifacts", color: C.blue, desc: "Rich interactive output — documents, code previews, visualizations, websites, diagrams — created and iterated on directly in the conversation. Not just text replies, but finished deliverables.", tag: "Rich output", simpleDesc: "Claude creates real things inside the conversation — documents, code, charts, even small websites — that you can see, use, and refine on the spot." },
+          ]},
+          { type: "text", value: "For individual knowledge workers and non-technical teams, claude.ai is often the right answer on its own. A marketing team using Projects with brand guidelines, a finance analyst iterating on models through Artifacts, a support lead drafting playbooks in chat — these are real, high-value deployments that don't require a single line of code.", simple: "For many teams, claude.ai is all they need. Marketing uses Projects for brand voice, analysts build models with Artifacts, support leads draft playbooks in chat — all without writing any code." },
+          { type: "divider" },
+          { type: "heading", value: "Where claude.ai ends and Claude Code begins", simple: "When you need Claude Code instead" },
+          { type: "text", value: "Claude.ai is designed for human-in-the-loop interaction — a person asks, Claude responds, the person iterates. It works inside the browser and operates on content the user provides. Claude Code breaks three of those boundaries: it reads your entire codebase instead of waiting for you to paste snippets, it executes commands and edits files autonomously instead of producing text you copy elsewhere, and it lives in the terminal and IDE where engineers already work. In enterprise deployments, both coexist — claude.ai for the broader organization, Claude Code for engineering.", simple: "Claude.ai is a conversation — you ask, Claude answers, you refine. Claude Code is different: it reads your whole codebase, runs commands and edits files on its own, and lives in the developer's terminal. Most companies use both — claude.ai for everyone, Claude Code for engineers." },
+        ],
+      },
+      {
         id: "cowork", label: "Cowork", title: "Cowork: agentic execution",
         content: [
-          { type: "section-intro", step: "1", label: "Cowork", context: "Products > Cowork" },
+          { type: "section-intro", step: "2", label: "Cowork", context: "Products > Cowork" },
           { type: "text", value: "Chat is for thinking together. Cowork is for delegating. Claude plans, executes multi-step workflows, connects to external tools, and delivers finished work — the same agentic loop that powers Claude Code, but for non-coding knowledge work.", simple: "Chat is a conversation. Cowork is delegation — you hand off a task and Claude works on it independently: planning, taking steps, connecting to tools, and delivering finished work." },
           { type: "models", items: [
             { name: "Connectors", color: C.green, desc: "Connects to Gmail, Calendar, Drive, Slack, Notion, and more. No API keys or developer setup required.", tag: "External integrations", simpleDesc: "Claude plugs into everyday work tools — Gmail, Calendar, Drive, Slack, Notion — as part of completing tasks. No coding setup required." },
@@ -468,7 +517,7 @@ const FOUNDATIONS = [
       {
         id: "model-family", label: "Models", title: "The model family",
         content: [
-          { type: "section-intro", step: "2", label: "Model Family", context: "Products > Models" },
+          { type: "section-intro", step: "3", label: "Model Family", context: "Products > Models" },
           { type: "models", items: [
             { name: "Claude Opus", color: C.orange, desc: "Maximum intelligence. Complex reasoning, nuanced analysis, research synthesis. For high-stakes decisions where depth matters more than speed.", tag: "Deepest reasoning", simpleDesc: "The most powerful model — the senior expert for the hardest problems. Takes more time and costs more, but catches things others miss." },
             { name: "Claude Sonnet", color: C.blue, desc: "The workhorse powering Claude Code. Fast, intelligent, and versatile. Ideal for agentic coding, daily workflows, and most deployments.", tag: "Best all-around", simpleDesc: "The everyday model that balances speed, smarts, and cost. Powers Claude Code by default. Right starting point for most customers." },
@@ -479,7 +528,7 @@ const FOUNDATIONS = [
       {
         id: "extensions", label: "Extensions", title: "Extension layers",
         content: [
-          { type: "section-intro", step: "3", label: "Extensions", context: "Products > Extensions" },
+          { type: "section-intro", step: "4", label: "Extensions", context: "Products > Extensions" },
           { type: "text", value: "Three capabilities extend what Claude can do across all surfaces. They compose — a customer might use MCP to pull Salesforce data, a Skill to format it, inside a Project loaded with brand guidelines.", simple: "Three add-ons expand Claude's abilities, and they combine. For example: MCP connects to Salesforce, a Skill formats the data, inside a Project that knows brand rules." },
           { type: "models", items: [
             { name: "MCP", color: C.green, desc: "Model Context Protocol connects Claude to external services — Slack, GitHub, Jira, databases, internal APIs. A standardized way to discover and use tools dynamically.", tag: "External tools + data", simpleDesc: "A universal adapter that lets Claude plug into other software — Slack, GitHub, Jira, databases — using a standard protocol instead of custom integrations." },
@@ -495,7 +544,7 @@ const FOUNDATIONS = [
   {
     id: "claude-code", label: "Claude Code", title: "What is Claude Code?",
     content: [
-      { type: "text", value: "You've seen where Claude Code fits in the Anthropic stack. Now let's go deeper on how it actually works — the agentic loop, the interaction model, and what makes it different from every other coding tool.", simple: "You already know what Claude Code is. Now let's understand how it works under the hood — how it reads code, plans changes, and verifies its own work." },
+      { type: "text", value: "You've seen where Claude Code fits in the Anthropic stack. Now let's go deeper on how it actually works — the agentic loop, the interaction model, and what makes it different from every other coding tool.", simple: "You already know what Claude Code is. Now let's understand how it works under the hood — how it reads code, plans changes, and verifies its own work.", engineer: "Claude Code is a CLI-native agentic coding tool. It uses the same Messages API as other Claude integrations but wraps it in a persistent tool-use loop with filesystem access, shell execution, and git operations. This section covers the architecture, tool dispatch, and context management internals." },
       { type: "overview", heading: "What we'll cover", items: [
         { label: "Interaction model", desc: "How agentic coding differs from autocomplete tools" },
         { label: "Architecture", desc: "The agentic loop — how Claude reads, plans, acts, and verifies" },
@@ -509,7 +558,7 @@ const FOUNDATIONS = [
         "Identify which Claude Code surface (CLI, VS Code, desktop, web) fits a given user's workflow",
         "Position Claude Code's value to different buyer personas: engineering leaders, data scientists, DevOps teams",
       ]},
-      { type: "heading", value: "A different interaction model", simple: "How Claude Code works differently from other coding tools" },
+      { type: "heading", value: "A different interaction model", simple: "How Claude Code works differently from other coding tools", engineer: "Architecture: agentic loop and tool dispatch" },
       { type: "text", value: <>Most AI coding tools operate at the line level — suggesting the next autocomplete. Claude Code operates at the project level. It reads your codebase, plans multi-step changes, edits files, runs tests, and fixes what breaks — all in one agentic loop. When you say <a href="https://claude.ai/new?q=refactor%20the%20auth%20module%20to%20use%20JWT" target="_blank" rel="noopener noreferrer" style={{ color: C.orange, textDecoration: "underline", textUnderlineOffset: "3px", cursor: "pointer" }}>"refactor the auth module to use JWT,"</a> it doesn't suggest a snippet. It executes the entire migration.</> },
       { type: "terminal", title: "Claude Code in action", lines: [
         "$ claude",
@@ -651,7 +700,7 @@ const FOUNDATIONS = [
         "",
         "→ Proceeding with implementation...",
       ]},
-      { type: "heading", value: "Context window and codebase understanding", simple: "How much code Claude can read at once, and why that matters" },
+      { type: "heading", value: "How Claude reads your entire codebase", simple: "How much code Claude can see at once" },
       { type: "text", value: "Most AI coding tools see one file at a time. Claude Code's 200K-token context window lets it read and reason across your entire codebase simultaneously — understanding how modules connect and where changes will ripple.", simple: "Most AI tools see one file at a time. Claude Code can hold 500+ files in context at once, seeing how different parts of your code connect." },
       { type: "text", value: "When a customer asks \"Can Claude understand my whole repo?\" the answer is usually yes. For larger codebases, it automatically prioritizes the most relevant files.", simple: "When customers ask if Claude can understand their whole codebase, the answer is usually yes. For very large repos, it automatically picks the most important files first." },
       { type: "values", items: [
@@ -663,19 +712,20 @@ const FOUNDATIONS = [
       { type: "heading", value: "Model selection — Haiku, Sonnet, and Opus", simple: "Choosing the right AI model -- small, medium, or large -- for each task" },
       { type: "text", value: "Claude Code defaults to Sonnet 4, but users can switch models mid-conversation. This matters because different tasks have different needs — and understanding the tradeoffs is essential for advising customers on their deployment.", simple: "Claude Code comes with a default AI model (Sonnet 4), but you can swap to a different one anytime during a conversation. Think of models like car engines -- some are built for speed and fuel economy, others for raw power. Picking the right one for the job helps balance performance and cost." },
       { type: "models", items: [
-        { name: "Haiku", tag: "speed", color: C.blue, desc: "The fastest model. Best for simple, high-volume tasks: renaming variables, formatting files, generating boilerplate, running quick checks. 10–20× cheaper than Opus. Ideal for CI/CD automation where latency and cost matter more than reasoning depth.", simpleDesc: "The lightweight, fast option. Great for quick, repetitive tasks like renaming a variable across files or generating standard code templates. It is 10 to 20 times cheaper than the top model, making it ideal for automated pipelines (CI/CD -- systems that automatically build and test code) where speed and low cost matter most." },
-        { name: "Sonnet", tag: "default", color: C.orange, desc: "The balanced model and Claude Code's default. Excellent at multi-file refactors, test generation, debugging, and architecture analysis. The best tradeoff of intelligence, speed, and cost for daily coding work.", simpleDesc: "The all-rounder and the one most people use day to day. It handles tasks that span multiple files, writes tests, fixes bugs, and analyzes how code fits together. It strikes the best balance between being smart, being fast, and keeping costs reasonable." },
-        { name: "Opus", tag: "depth", color: C.green, desc: "The most intelligent model. Best for novel architecture decisions, complex debugging across systems, and tasks requiring deep reasoning about tradeoffs. Slower and more expensive, but produces solutions that Sonnet might miss.", simpleDesc: "The most powerful brain in the lineup. Use it for genuinely hard problems -- designing a new system from scratch, debugging a tricky issue that crosses multiple services, or making architecture decisions with lots of tradeoffs. It takes longer and costs more, but it can solve things the other models cannot." },
+        { name: "Haiku", tag: "speed", color: C.blue, desc: "The fastest model. Best for simple, high-volume tasks: renaming variables, formatting files, generating boilerplate, running quick checks. 10–20× cheaper than Opus. Ideal for CI/CD automation where latency and cost matter more than reasoning depth.", simpleDesc: "The lightweight, fast option for quick, repetitive tasks. 10-20x cheaper than Opus — ideal for CI/CD automation." },
+        { name: "Sonnet", tag: "default", color: C.orange, desc: "The balanced model and Claude Code's default. Excellent at multi-file refactors, test generation, debugging, and architecture analysis. The best tradeoff of intelligence, speed, and cost for daily coding work.", simpleDesc: "The all-rounder most people use daily. Best balance of intelligence, speed, and cost." },
+        { name: "Opus", tag: "depth", color: C.green, desc: "The most intelligent model. Best for novel architecture decisions, complex debugging across systems, and tasks requiring deep reasoning about tradeoffs. Slower and more expensive, but produces solutions that Sonnet might miss.", simpleDesc: "The most powerful model for genuinely hard problems. Takes longer and costs more, but solves things others can't." },
       ]},
-      { type: "text", value: "In sales conversations, model selection is often the answer to \"How do we control costs?\" Teams can default to Sonnet for daily work, drop to Haiku for automated CI tasks, and escalate to Opus only when they hit a genuinely hard problem. This tiered approach typically reduces cost by 40–60% versus running everything on the strongest model.", simple: "When a customer asks about controlling costs, model selection is the key answer. Teams can use Sonnet for everyday work, switch to the cheaper Haiku for automated tasks (like running checks in a build pipeline), and only bring in the expensive Opus when they hit a truly difficult problem. This mix-and-match approach typically cuts costs by 40 to 60 percent compared to always using the most powerful model." },
-      { type: "heading", value: "Cost model and token economics", simple: "How pricing works -- and why it is different from traditional software" },
-      { type: "text", value: "Claude Code is priced by token usage, not by seat. This is a fundamental shift from most developer tools and it changes the sales conversation. There's no per-user license to negotiate — customers pay for what they use, which means the conversation shifts from 'How many seats?' to 'How much value per dollar?'", simple: "Instead of charging a flat fee per person (like most software subscriptions), Claude Code charges based on how much you actually use it. Think of it like a utility bill -- you pay for the electricity you consume, not a fixed rate regardless of usage. This means small teams pay less, and heavy users pay more, but only in proportion to the value they are getting." },
+      { type: "text", value: "In sales conversations, model selection is often the answer to \"How do we control costs?\" Teams can default to Sonnet for daily work, drop to Haiku for automated CI tasks, and escalate to Opus only when they hit a genuinely hard problem. This tiered approach typically reduces cost by 40–60% versus running everything on the strongest model.", simple: "Model selection answers the cost question. Use Sonnet daily, Haiku for CI, Opus for hard problems — typically 40-60% cheaper than running everything on the strongest model." },
+      { type: "heading", value: "What it costs", simple: "How pricing works" },
+      { type: "text", value: "Claude Code is priced by token usage, not by seat. This is a fundamental shift from most developer tools and it changes the sales conversation. There's no per-user license to negotiate — customers pay for what they use, which means the conversation shifts from 'How many seats?' to 'How much value per dollar?'", simple: "Claude Code charges by usage, not per seat. Customers pay for what they use — the conversation shifts from 'How many seats?' to 'How much value per dollar?'" },
       { type: "values", items: [
-        { title: "Input tokens", desc: "What Claude reads — your codebase files, CLAUDE.md, conversation history. Cached input tokens (repeated reads of the same files) cost 90% less.", simpleDesc: "Tokens are small chunks of text -- roughly one token per word. Input tokens cover everything Claude reads: your code files, your instructions, and the conversation so far. If Claude re-reads the same file, those tokens are 'cached' (stored for reuse), which cuts costs by 90%." },
+        { title: "Input tokens", desc: "What Claude reads — your codebase files, CLAUDE.md, conversation history. Cached input tokens (repeated reads of the same files) cost 90% less.", simpleDesc: "Everything Claude reads — code files, instructions, conversation history. Cached reads cost 90% less." },
         { title: "Output tokens", desc: "What Claude writes — code, explanations, plans, terminal commands. This is the larger cost driver for most coding tasks.", simpleDesc: "Output tokens are the text Claude produces -- the code it writes, its explanations, and any commands it runs. Writing new content costs more than reading existing content, so the amount Claude generates is usually the biggest factor in the bill." },
-        { title: "Thinking tokens", desc: "When extended thinking is active, Claude's reasoning steps are billed as output tokens. More complex problems = more thinking = higher cost, but also higher quality.", simpleDesc: "When Claude pauses to reason before acting (its 'thinking step'), that internal reasoning counts as output and is billed accordingly. Harder problems require more thinking, so they cost more -- but they also produce better results, much like spending extra time planning a project upfront saves rework later." },
+        { title: "Thinking tokens", desc: "When extended thinking is active, Claude's reasoning steps are billed as output tokens. More complex problems = more thinking = higher cost, but also higher quality.", simpleDesc: "Claude's internal reasoning before acting. Harder problems need more thinking, costing more but producing better results." },
       ]},
-      { type: "text", value: "A typical engineering team running Claude Code for daily development work sees costs between $50–200 per developer per month. Heavy users running large refactors or using Opus might see $300+. This is almost always cheaper than an additional engineering hire, which is the right comparison to draw in sales conversations — not the cost of a Copilot seat.", simple: "Most developers end up spending roughly $50 to $200 a month using Claude Code. Power users who tackle big tasks or use the strongest model might hit $300+. For perspective, hiring another engineer costs thousands per month in salary alone. That is the fair comparison -- not the price of other code-assistant subscriptions." },
+      { type: "text", value: "A typical engineering team running Claude Code for daily development work sees costs between $50–200 per developer per month. Heavy users running large refactors or using Opus might see $300+. This is almost always cheaper than an additional engineering hire, which is the right comparison to draw in sales conversations — not the cost of a Copilot seat.", simple: "Most developers spend $50-200/month. Compare to an engineering hire ($15-25K/month), not a Copilot seat ($19/month)." },
+      { type: "cost-comparison-diagram" },
       { type: "reflect", prompt: "A prospect says: 'We're worried about runaway costs if developers use this all day.' How would you structure a response using model selection, prompt caching, and the per-token pricing model? What's the right comparison point?" },
     ],
   },
@@ -722,6 +772,7 @@ const FOUNDATIONS = [
       { type: "text", value: "CLAUDE.md files are hierarchical — a root file sets project-wide rules, while subdirectory files can add or override rules for specific packages. In a monorepo, the frontend team's CLAUDE.md might specify React patterns while the backend team's specifies API conventions, all inheriting from a shared root.", simple: "CLAUDE.md files are layered: a top-level one sets project-wide rules, and files in subfolders can add or override rules for specific parts. In a monorepo, each team can have its own rules while inheriting shared basics from the top-level file." },
       { type: "config-hierarchy-diagram" },
       { type: "placeholder", title: "Advanced CLAUDE.md patterns for enterprise teams", why: "When a team scales beyond a handful of developers, a single CLAUDE.md file isn't enough. Here's how enterprise teams structure their configuration. The .claude/rules/ directory lets you split rules into modular files — one per topic (e.g., testing-conventions.md, api-patterns.md, security-requirements.md). Each rule file can include YAML frontmatter with a 'paths' field that scopes it to specific directories using glob patterns, so your React component rules only activate when Claude is working in src/components/. The @import syntax (@path/to/shared-rules.md) lets you pull instructions from other files — even across repos via symlinks — so an org-wide style guide lives in one place and every repo inherits it. For monorepos, claudeMdExcludes lets you skip packages that shouldn't load CLAUDE.md files (e.g., third-party vendored code or legacy modules you don't want Claude touching). As a practical example: Meridian Health's monorepo has a root CLAUDE.md with org-wide standards (TypeScript strict, no any types, HIPAA logging requirements), a packages/api/CLAUDE.md with backend conventions (Express patterns, Prisma ORM usage), a packages/web/CLAUDE.md with frontend conventions (React hooks, Tailwind classes), and .claude/rules/hipaa-compliance.md with path-scoped rules that only activate for files handling patient data. The total across all files stays under 200 lines per scope. We'll go into this in more detail in the role-specific tracks coming up.", topics: [".claude/rules/", "@import syntax", "Path-specific rules", "claudeMdExcludes", "Monorepo strategies", "Size management"] },
+      { type: "divider" },
       { type: "heading", value: "Slash commands and custom commands", simple: "Shortcuts that trigger common workflows with a single command" },
       { type: "text", value: "Slash commands are shortcuts that trigger predefined workflows — Claude Code ships with built-in ones like /review, /test, and /commit. The real power is custom commands, where teams create their own.", simple: "Slash commands are one-word shortcuts that kick off tasks, with built-ins like /review, /test, and /commit. The real value is that teams can create custom commands for workflows they repeat often." },
       { type: "terminal", title: "Custom slash commands", lines: [
@@ -736,6 +787,7 @@ const FOUNDATIONS = [
         "6. Generate a summary of changes since last deploy",
       ]},
       { type: "text", value: "Custom commands are stored as markdown files in .claude/commands/ and shared via git, so a tech lead can define workflows once and the entire team inherits them. This is a powerful selling point: standardized quality checks that don't require anyone to remember a process.", simple: "Custom commands are saved as text files in .claude/commands/ and shared via git, so a team leader writes them once and every developer gets them automatically. This standardizes quality checks without relying on people to remember checklists." },
+      { type: "divider" },
       { type: "heading", value: "Memory and project settings", simple: "How Claude remembers your preferences between sessions" },
       { type: "text", value: "Claude Code remembers context across sessions through two mechanisms: project-level memory in CLAUDE.md (version-controlled, shared) and user-level memory in ~/.claude/settings.json (personal preferences, global defaults). When Claude learns you prefer functional components or Vitest over Jest, it remembers.", simple: "Claude Code stores project-level memory in CLAUDE.md (shared via git) and personal memory in a settings file on your computer. If you tell Claude you prefer a certain coding style, it remembers next time." },
       { type: "values", items: [
@@ -743,6 +795,7 @@ const FOUNDATIONS = [
         { title: "User memory (~/.claude/)", desc: "Personal preferences that follow you across projects. Output format preferences, default model choice, frequently used tools.", simpleDesc: "Your personal preferences stored on your computer, following you from project to project — like preferred output format or favorite model." },
         { title: "Session context", desc: "Within a single session, Claude remembers everything discussed. Useful for iterative work — 'Now do the same thing for the user module.'", simpleDesc: "Within a single conversation, Claude remembers everything discussed — you can say 'now do the same for the other module' and it knows what you mean. This resets when you start a new session." },
       ]},
+      { type: "divider" },
       { type: "heading", value: "Hooks — control and guardrails", simple: "Automatic checks that run before or after Claude takes an action" },
       { type: "text", value: "Hooks let you run custom scripts before or after Claude Code takes actions — for example, enforcing linting before commits or running tests after file edits. Hooks are deterministic guardrails, not suggestions: if a hook fails, the action is blocked, making them the answer to 'How do I control what Claude does?'", simple: "Hooks are automatic checkpoints that run before or after Claude acts — like running style checks ('linting') before a commit or tests after an edit. If a hook fails, the action is blocked entirely, making them the answer when a security-focused customer asks how they keep Claude in check." },
       { type: "terminal", title: "Hook configuration (.claude/hooks.json)", lines: [
@@ -760,6 +813,7 @@ const FOUNDATIONS = [
         "  ]",
         "}",
       ]},
+      { type: "divider" },
       { type: "heading", value: "Permission modes — how much Claude asks", simple: "How you control how much supervision Claude gets in real time" },
       { type: "text", value: "Permission modes control how much autonomy Claude has during a session — how often it pauses to ask before acting. You set the mode when you start working and can switch between them anytime.", simple: "Permission modes are a dial that controls how independent Claude is while you work. You choose the setting and can change it anytime." },
       { type: "values", items: [
@@ -768,6 +822,7 @@ const FOUNDATIONS = [
         { title: "Auto-accept mode", desc: "Claude executes without asking, within configured boundaries. Good for experienced users who trust their CLAUDE.md and hook setup. Also called 'Accept Edits' — Claude writes code and runs commands freely, but hooks and permission rules still apply.", simpleDesc: "Claude works without pausing for approval — writing code, running commands, and making changes freely. Hooks and permission rules still apply, like giving a trusted colleague the go-ahead within clear guardrails." },
         { title: "Headless mode", desc: "No human in the loop — Claude runs autonomously in CI/CD pipelines. Permissions are entirely configured via settings files and managed policies. This is the enterprise deployment pattern for GitHub Actions, automated code review, and scheduled tasks.", simpleDesc: "No human in the loop — Claude runs inside automated CI/CD pipelines with all permissions set in advance through config files. This is how large companies run Claude Code at scale in GitHub Actions and automated workflows." },
       ]},
+      { type: "divider" },
       { type: "heading", value: "Permission rules — what Claude is allowed to do", simple: "The underlying rules that control what actions Claude can take, regardless of mode" },
       { type: "text", value: "Separate from modes, permission rules determine which actions are structurally allowed regardless of which mode is active. These rules persist across sessions, can be enforced by administrators, and override everything — even auto-accept mode.", simple: "Underneath modes, a separate layer of rules controls what Claude is actually allowed to do — think of modes as 'how often Claude checks in' and rules as 'what Claude is allowed to do at all.' Even in auto-accept mode, a deny rule will block the action." },
       { type: "values", items: [
@@ -775,6 +830,7 @@ const FOUNDATIONS = [
         { title: "Deny rules", desc: "Actions Claude is never allowed to take, regardless of mode. Example: deny running rm -rf or curl to prevent destructive commands and data exfiltration. Deny rules override everything — they can't be bypassed by any mode.", simpleDesc: "Things Claude can never do, no matter what — like blocking destructive commands ('rm -rf') or network calls ('curl'). Deny rules are absolute and cannot be overridden by any mode, setting, or prompt." },
         { title: "Managed policies", desc: "Organization-wide rules set by administrators that take highest precedence and can't be overridden by individual users. A security team can enforce deny rules, restrict MCP servers, and require specific configurations across every developer's install.", simpleDesc: "Rules set by an IT or security team that apply to every developer in the company — individual users cannot change them. Like a company-wide IT policy, but for AI." },
       ]},
+      { type: "divider" },
       { type: "heading", value: "MCP in Claude Code", simple: "Connecting Claude to your company's other tools and systems" },
       { type: "text", value: "Claude Code connects to MCP (Model Context Protocol) servers, giving it access to your customer's internal tools — Jira, Datadog, Confluence, Figma. It's the bridge between 'AI coding assistant' and 'AI that understands our whole engineering workflow.'", simple: "MCP (Model Context Protocol) lets Claude talk to other software tools — pulling ticket details from Jira, reading error logs from Datadog, or viewing design files in Figma. It turns Claude from a coding helper into something that understands your entire engineering workflow." },
       { type: "text", value: "MCP also expands Claude Code beyond developers — product managers, data analysts, and technical writers can pull context from internal systems through 1000+ pre-built connectors. Custom MCP servers can be built in an afternoon.", simple: "MCP expands Claude Code beyond developers — product managers, data analysts, and technical writers can pull context from internal systems too. There are over 1,000 ready-made connectors, and building a custom one takes an afternoon." },
@@ -800,7 +856,7 @@ const FOUNDATIONS = [
         "Describe how managed settings give administrators centralized control over every developer's Claude Code install",
       ]},
       { type: "security-layers-diagram" },
-      { type: "heading", value: "Sandboxing — filesystem and network isolation", simple: "Sandboxing -- keeping Claude in a restricted space. 'Sandboxing' means putting software inside a walled-off area where it can only access certain files and network connections. Think of it like a playground fence: Claude can play inside, but it cannot wander into the rest of your system." },
+      { type: "heading", value: "Sandboxing — what Claude can and can't touch", simple: "Sandboxing — keeping Claude in a restricted space" },
       { type: "text", value: "Claude Code runs bash commands in a sandbox that restricts filesystem access to the working directory and requires explicit approval for network requests. This is an OS-level isolation boundary that holds even if a prompt injection attempts to break out.", simple: "Claude Code runs commands inside a restricted zone — it can only modify files in the current project folder and cannot make internet requests unless approved. This restriction is enforced at the operating system level, so it holds firm even if someone tries to trick Claude into escaping." },
       { type: "values", items: [
         { title: "Filesystem isolation", desc: "Claude can read broadly but can only write within the project directory. Configurable allowWrite/denyWrite/denyRead paths let admins lock down sensitive areas.", simpleDesc: "Claude can read files broadly for context but can only create or edit files inside the current project folder. Admins can fine-tune access further with allowWrite/denyWrite/denyRead paths." },
@@ -1657,13 +1713,15 @@ const MATERIAL_META = {
 };
 
 // ─── STEP-BY-STEP EXERCISE COMPONENT ───
-function ExerciseSteps({ steps, color, simplified, facilitatorMode }) {
+function ExerciseSteps({ steps, color, contentMode, facilitatorMode }) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-      {steps.map((step, i) => (
-        <div key={i} style={{ display: "flex", gap: 16, padding: "20px 0", borderBottom: i < steps.length - 1 ? `1px solid ${C.lightGray}` : "none" }}>
-          <div style={{ flexShrink: 0, width: 28, height: 28, borderRadius: "50%", background: step.type === "checkpoint" ? color + "15" : C.cream, border: `1px solid ${step.type === "checkpoint" ? color + "40" : C.lightGray}`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--mono)", fontSize: 11, fontWeight: 600, color: step.type === "checkpoint" ? color : C.muted }}>
-            {step.type === "checkpoint" ? "\u2713" : i + 1}
+    <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+      {steps.map((step, i) => {
+        const isCheckpoint = step.type === "checkpoint";
+        return (
+        <div key={i} style={{ display: "flex", gap: 16, padding: isCheckpoint ? "32px 16px" : "28px 0", borderBottom: i < steps.length - 1 ? `2px solid ${C.lightGray}` : "none", ...(isCheckpoint ? { background: color + "04", borderRadius: 10, borderLeft: `3px solid ${color}`, margin: "8px 0" } : {}) }}>
+          <div style={{ flexShrink: 0, width: isCheckpoint ? 32 : 28, height: isCheckpoint ? 32 : 28, borderRadius: "50%", background: isCheckpoint ? color + "18" : C.cream, border: `${isCheckpoint ? 2 : 1}px solid ${isCheckpoint ? color + "50" : C.lightGray}`, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "var(--mono)", fontSize: isCheckpoint ? 13 : 11, fontWeight: 600, color: isCheckpoint ? color : C.muted }}>
+            {isCheckpoint ? "\u2713" : i + 1}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 6 }}>
@@ -1736,7 +1794,8 @@ function ExerciseSteps({ steps, color, simplified, facilitatorMode }) {
             )}
           </div>
         </div>
-      ))}
+        );
+      })}
     </div>
   );
 }
@@ -1936,7 +1995,7 @@ function PreworkView({ dayId, prework, mod, foundationSectionsViewed, onOpenFoun
   );
 }
 
-function LiveSessionView({ mod, phaseConfig, guide, simplified, facilitatorMode, onContinue }) {
+function LiveSessionView({ mod, phaseConfig, guide, contentMode, facilitatorMode, onContinue }) {
   const { live } = phaseConfig;
 
   return (
@@ -1982,7 +2041,7 @@ function LiveSessionView({ mod, phaseConfig, guide, simplified, facilitatorMode,
           <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 2, color: mod.color, textTransform: "uppercase", marginBottom: 4 }}>Steps covered in this session</div>
           <p style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.faint, margin: "0 0 12px", lineHeight: 1.5 }}>Your facilitator will walk through these. Follow along and ask questions.</p>
           <div style={{ border: `1px solid ${C.lightGray}`, borderRadius: 12, padding: "4px 20px", background: C.bg }}>
-            <ExerciseSteps steps={live.stepIndices.map(idx => mod.steps[idx])} color={mod.color} simplified={simplified} facilitatorMode={facilitatorMode} />
+            <ExerciseSteps steps={live.stepIndices.map(idx => mod.steps[idx])} color={mod.color} contentMode={contentMode} facilitatorMode={facilitatorMode} />
           </div>
         </div>
       )}
@@ -2001,7 +2060,7 @@ function LiveSessionView({ mod, phaseConfig, guide, simplified, facilitatorMode,
   );
 }
 
-function LabView({ mod, phaseConfig, simplified, checkpointsCompleted, onCheckpointComplete, gaps, facilitatorMode }) {
+function LabView({ mod, phaseConfig, contentMode, checkpointsCompleted, onCheckpointComplete, gaps, facilitatorMode }) {
   const { lab } = phaseConfig;
   const labSteps = lab.stepIndices.map(idx => mod.steps[idx]);
 
@@ -2013,7 +2072,7 @@ function LabView({ mod, phaseConfig, simplified, checkpointsCompleted, onCheckpo
         <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 2, color: mod.color, textTransform: "uppercase", marginBottom: 4 }}>Step-by-step walkthrough</div>
         <p style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.faint, margin: "0 0 12px", lineHeight: 1.5 }}>Work through these independently. Commands with a copy button can be pasted directly into your terminal.</p>
         <div style={{ border: `1px solid ${C.lightGray}`, borderRadius: 12, padding: "4px 20px", background: C.bg }}>
-          <ExerciseSteps steps={labSteps} color={mod.color} simplified={simplified} facilitatorMode={facilitatorMode} />
+          <ExerciseSteps steps={labSteps} color={mod.color} contentMode={contentMode} facilitatorMode={facilitatorMode} />
         </div>
       </div>
 
@@ -2049,7 +2108,7 @@ function LabView({ mod, phaseConfig, simplified, checkpointsCompleted, onCheckpo
   );
 }
 
-function IntegratedSessionView({ mod, phaseConfig, simplified, checkpointsCompleted, onCheckpointComplete, gaps, facilitatorMode }) {
+function IntegratedSessionView({ mod, phaseConfig, contentMode, checkpointsCompleted, onCheckpointComplete, gaps, facilitatorMode }) {
   return (
     <div>
       <div style={{ padding: "16px 20px", background: mod.color + "06", borderRadius: 10, border: `1px solid ${mod.color}20`, marginBottom: 24 }}>
@@ -2060,7 +2119,7 @@ function IntegratedSessionView({ mod, phaseConfig, simplified, checkpointsComple
       <div style={{ marginBottom: 24 }}>
         <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 2, color: mod.color, textTransform: "uppercase", marginBottom: 4 }}>Step-by-step walkthrough</div>
         <div style={{ border: `1px solid ${C.lightGray}`, borderRadius: 12, padding: "4px 20px", background: C.bg }}>
-          <ExerciseSteps steps={phaseConfig.stepIndices.map(idx => mod.steps[idx])} color={mod.color} simplified={simplified} facilitatorMode={facilitatorMode} />
+          <ExerciseSteps steps={phaseConfig.stepIndices.map(idx => mod.steps[idx])} color={mod.color} contentMode={contentMode} facilitatorMode={facilitatorMode} />
         </div>
       </div>
 
@@ -2154,10 +2213,43 @@ function PersonaGrid({ items, delay }) {
   );
 }
 
+// ─── CONTENT MODE SELECT ───
+function ContentModeSelect({ contentMode, onChange, moduleId, onRetake }) {
+  const modeColor = contentMode === "simplified" ? C.blue
+    : contentMode === "engineer" ? C.orange : C.faint;
+  const modeBg = contentMode === "standard" ? "transparent" : modeColor + "12";
+  const modeBorder = contentMode === "standard" ? C.lightGray : modeColor + "40";
+  return (
+    <select
+      value={contentMode}
+      onChange={e => {
+        if (e.target.value === "__retake") {
+          onRetake && onRetake();
+          return;
+        }
+        onChange(e.target.value);
+      }}
+      style={{
+        background: modeBg, border: `1px solid ${modeBorder}`,
+        borderRadius: 6, padding: "5px 12px", cursor: "pointer",
+        fontFamily: "var(--sans)", fontSize: 11, color: modeColor,
+        transition: "all 0.2s", outline: "none",
+        flexShrink: 0,
+      }}
+    >
+      <option value="simplified">Simplified</option>
+      <option value="standard">Standard</option>
+      <option value="engineer">Engineer</option>
+      {moduleId && <option value="__retake">Retake diagnostic...</option>}
+    </select>
+  );
+}
+
+
 // ─── CONTENT RENDERER ───
-function ContentBlock({ block, idx, simplified }) {
+function ContentBlock({ block, idx, contentMode }) {
   const delay = `${0.08 + idx * 0.04}s`;
-  const v = (simplified && block.simple) ? block.simple : block.value;
+  const v = contentMode === "simplified" && block.simple ? block.simple : contentMode === "engineer" && block.engineer ? block.engineer : block.value;
   if (block.type === "text") return <p style={{ ...st.bodyText, ...st.fadeUp, animationDelay: delay }}>{v}</p>;
   if (block.type === "heading") return <h3 style={{ ...st.sectionHeading, ...st.fadeUp, animationDelay: delay }}>{v}</h3>;
   if (block.type === "personas") return <PersonaGrid items={block.items} delay={delay} />;
@@ -2167,6 +2259,7 @@ function ContentBlock({ block, idx, simplified }) {
   if (block.type === "security-layers-diagram") return <div style={{ ...st.fadeUp, animationDelay: delay }}><SecurityLayersDiagram /></div>;
   if (block.type === "model-selection-diagram") return <div style={{ ...st.fadeUp, animationDelay: delay }}><ModelSelectionDiagram /></div>;
   if (block.type === "deployment-paths-diagram") return <div style={{ ...st.fadeUp, animationDelay: delay }}><DeploymentPathsDiagram /></div>;
+  if (block.type === "cost-comparison-diagram") return <div style={{ ...st.fadeUp, animationDelay: delay }}><CostComparisonDiagram /></div>;
 
   if (block.type === "overview") return (
     <div style={{ background: C.cream, border: `1px solid ${C.lightGray}`, borderRadius: 10, padding: "20px 24px", margin: "16px 0 24px", ...st.fadeUp, animationDelay: delay }}>
@@ -2214,7 +2307,7 @@ function ContentBlock({ block, idx, simplified }) {
       {block.items.map((v, i) => (
         <div key={i} style={{ padding: "14px 18px", background: C.cream, borderRadius: 8, border: `1px solid ${C.lightGray}` }}>
           <div style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 500, color: C.dark, marginBottom: 3 }}>{v.title}</div>
-          <div style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.muted, lineHeight: 1.5 }}>{(simplified && v.simpleDesc) ? v.simpleDesc : v.desc}</div>
+          <div style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.muted, lineHeight: 1.5 }}>{contentMode === "simplified" && v.simpleDesc ? v.simpleDesc : contentMode === "engineer" && v.engineerDesc ? v.engineerDesc : v.desc}</div>
         </div>
       ))}
     </div>
@@ -2228,7 +2321,7 @@ function ContentBlock({ block, idx, simplified }) {
             <span style={{ fontFamily: "var(--serif)", fontSize: 18, color: m.color }}>{m.name}</span>
             <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: m.color, background: m.color + "12", padding: "2px 8px", borderRadius: 10 }}>{m.tag}</span>
           </div>
-          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.6, margin: 0 }}>{(simplified && m.simpleDesc) ? m.simpleDesc : m.desc}</p>
+          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.6, margin: 0 }}>{contentMode === "simplified" && m.simpleDesc ? m.simpleDesc : contentMode === "engineer" && m.engineerDesc ? m.engineerDesc : m.desc}</p>
         </div>
       ))}
     </div>
@@ -2479,7 +2572,7 @@ function DiagnosticQuiz({ moduleId, color, onComplete, existingResult }) {
     if (ansIdx === null || quiz.questions[qIdx].axis !== "ai") return sum;
     return sum + quiz.questions[qIdx].options[ansIdx].points;
   }, 0);
-  const recommendation = score <= 3 ? "simplified" : "standard";
+  const recommendation = score <= 3 ? "simplified" : score <= 5 ? "standard" : "engineer";
 
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(20,20,19,0.5)", backdropFilter: "blur(4px)", padding: 20 }}>
@@ -2576,41 +2669,45 @@ function DiagnosticQuiz({ moduleId, color, onComplete, existingResult }) {
             </div>
 
             {/* Recommendation */}
-            <div style={{
-              padding: "16px 20px", borderRadius: 10, marginBottom: 20,
-              background: recommendation === "simplified" ? C.blue + "08" : C.green + "08",
-              border: `1px solid ${recommendation === "simplified" ? C.blue + "20" : C.green + "20"}`,
-            }}>
-              <p style={{ fontFamily: "var(--sans)", fontSize: 14, color: C.dark, lineHeight: 1.6, margin: 0 }}>
-                {recommendation === "simplified"
-                  ? "We recommend simplified mode for this day. It focuses on core concepts with expanded explanations and less facilitator-specific detail."
-                  : "We recommend standard mode for this day. It includes facilitator scripts, key discussion points, and deeper technical context."}
-              </p>
-            </div>
-
-            {/* Action buttons */}
-            <button
-              onClick={() => onComplete(recommendation, answers, score)}
-              style={{
-                fontFamily: "var(--sans)", fontSize: 14, fontWeight: 500, color: "#fff",
-                background: color, border: "none", borderRadius: 8, padding: "12px 20px",
-                cursor: "pointer", width: "100%", marginBottom: 10,
-              }}
-            >
-              Use {recommendation} mode
-            </button>
-            <button
-              onClick={() => onComplete(recommendation === "simplified" ? "standard" : "simplified", answers, score)}
-              style={{
-                fontFamily: "var(--sans)", fontSize: 13, color: C.muted,
-                background: "none", border: `1px solid ${C.lightGray}`, borderRadius: 8,
-                padding: "10px 20px", cursor: "pointer", width: "100%",
-              }}
-            >
-              Use {recommendation === "simplified" ? "standard" : "simplified"} mode instead
-            </button>
+            {(() => {
+              const modeColors = { simplified: C.blue, standard: C.green, engineer: C.orange };
+              const modeLabels = { simplified: "Simplified", standard: "Standard", engineer: "Engineer" };
+              const modeDescs = {
+                simplified: "Focuses on core concepts with plain-language explanations and no assumed jargon.",
+                standard: "Includes facilitator scripts, key discussion points, and balanced technical context.",
+                engineer: "Implementation-focused — API details, code examples, and architecture. Assumes comfort with CLI, git, and APIs.",
+              };
+              const recColor = modeColors[recommendation];
+              const modes = ["simplified", "standard", "engineer"];
+              const otherModes = modes.filter(m => m !== recommendation);
+              return (
+                <>
+                  <div style={{ padding: "16px 20px", borderRadius: 10, marginBottom: 20, background: recColor + "08", border: `1px solid ${recColor}20` }}>
+                    <div style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 500, color: recColor, marginBottom: 4 }}>Recommended: {modeLabels[recommendation]}</div>
+                    <p style={{ fontFamily: "var(--sans)", fontSize: 14, color: C.dark, lineHeight: 1.6, margin: 0 }}>{modeDescs[recommendation]}</p>
+                  </div>
+                  <button
+                    onClick={() => onComplete(recommendation, answers, score)}
+                    style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 500, color: "#fff", background: color, border: "none", borderRadius: 8, padding: "12px 20px", cursor: "pointer", width: "100%", marginBottom: 10 }}
+                  >
+                    Use {modeLabels[recommendation]} mode
+                  </button>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    {otherModes.map(mode => (
+                      <button
+                        key={mode}
+                        onClick={() => onComplete(mode, answers, score)}
+                        style={{ fontFamily: "var(--sans)", fontSize: 12, color: modeColors[mode], background: "none", border: `1px solid ${modeColors[mode]}30`, borderRadius: 8, padding: "10px 16px", cursor: "pointer", flex: 1 }}
+                      >
+                        Use {modeLabels[mode]}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              );
+            })()}
             <p style={{ fontFamily: "var(--sans)", fontSize: 11, color: C.faint, marginTop: 12, textAlign: "center", lineHeight: 1.5 }}>
-              You can change this anytime using the Simplify toggle in the module header.
+              You can change this anytime using the content mode selector in the header.
             </p>
           </>
         )}
@@ -2878,7 +2975,7 @@ function CurriculumPlanContent() {
         <p style={bulletStyle}><span style={dot}>•</span> <strong>The full Anthropic product suite:</strong> Claude.ai, Cowork, Claude Code, and the API — how each surface works, who it serves, and when to recommend one over another. Trainees learn the complete platform so they can position Claude Code within the broader ecosystem rather than pitching it in isolation.</p>
         <p style={bulletStyle}><span style={dot}>•</span> <strong>Claude Code deep-dive:</strong> The agentic loop (read → plan → act → verify), the interaction model, how it differs from autocomplete tools, context window mechanics, and the model family (Opus, Sonnet, Haiku). This is where trainees build the mental model they'll use for every demo and customer conversation.</p>
         <p style={bulletStyle}><span style={dot}>•</span> <strong>Configuration, security, and enterprise deployment:</strong> CLAUDE.md, hooks, permissions, the defense-in-depth security model, managed settings, cloud deployment options (Bedrock, Vertex, Foundry), and cost/ROI math. These are the topics that come up in every enterprise sales conversation.</p>
-        <p style={pStyle}>The foundation also includes a "Simplify" toggle on every page — plain-language alternatives for participants who are newer to technical concepts. After completing foundations, each participant selects one of four role-specific paths (PE Pre-Sales, PE Post-Sales, Solutions Architect, Applied Research), which shapes how every subsequent module frames its competency outcomes.</p>
+        <p style={pStyle}>The foundation also includes a content mode selector on every page with three depth levels (Simplified, Standard, Engineer) — allowing participants of any background to access content at their comfort level. After completing foundations, each participant selects one of four role-specific paths (PE Pre-Sales, PE Post-Sales, Solutions Architect, Applied Research), which shapes how every subsequent module frames its competency outcomes.</p>
 
         <h3 style={h2Style}>Phase 2: Progressive Hands-On Modules (Days 1–5)</h3>
         <p style={pStyle}>With the shared foundation in place, the five-day curriculum builds progressively from individual tool proficiency (Days 1–3) to customer-facing skills (Day 4) to integrated performance under pressure (Day 5). Every session produces a concrete artifact the learner uses in the field.</p>
@@ -3011,7 +3108,7 @@ function CurriculumPlanContent() {
 
         <h3 style={h2Style}>Handling Varying Technical Depth</h3>
         <p style={pStyle}>The cohort will include people of varying technical background. To address this, the training has:</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Simplify toggle:</strong> Every content page has a "Simplify" button that swaps technical language for plain-English explanations. This lets less technical participants keep up without slowing down the room.</p>
+        <p style={bulletStyle}><span style={dot}>•</span> <strong>Simplify toggle:</strong> Every content page has a content mode selector with three levels: Simplified (plain-language explanations), Standard (full facilitator content), and Engineer (implementation-focused technical depth). This lets participants of any background access content at their comfort level.</p>
         <p style={bulletStyle}><span style={dot}>•</span> <strong>Contextual exercises:</strong> Steps are tagged by context (terminal, VS Code, Claude, browser). Participants who are comfortable in the terminal can move faster; those who need more guidance can follow the explicit commands.</p>
         <p style={bulletStyle}><span style={dot}>•</span> <strong>Facilitator guide pacing notes:</strong> The facilitator guide for each module includes pacing advice for mixed-depth rooms — which steps to narrate slowly, which to skip for advanced groups, and when to pair technical with non-technical participants.</p>
       </div>
@@ -3143,7 +3240,7 @@ function CurriculumPlanContent() {
 
         <div style={{ background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}`, padding: "20px 24px", marginBottom: 16 }}>
           <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>Shared Days 1–3 vs. earlier role divergence</h4>
-          <p style={{ ...pStyle, margin: 0 }}>I chose shared sessions for the first three days despite the audience having different technical depths. The alternative — splitting into technical and non-technical tracks on Day 1 — would mean Pre-Sales PEs never build the hands-on depth needed to handle technical customer conversations. The "Simplify" toggle and facilitator pacing notes mitigate the mixed-depth challenge without sacrificing depth for anyone.</p>
+          <p style={{ ...pStyle, margin: 0 }}>I chose shared sessions for the first three days despite the audience having different technical depths. The alternative — splitting into technical and non-technical tracks on Day 1 — would mean Pre-Sales PEs never build the hands-on depth needed to handle technical customer conversations. The three-tier content mode selector (Simplified / Standard / Engineer) and facilitator pacing notes mitigate the mixed-depth challenge without sacrificing depth for anyone.</p>
         </div>
         <div style={{ background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}`, padding: "20px 24px", marginBottom: 16 }}>
           <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>Client scenarios as framing vs. abstract exercises</h4>
@@ -3330,7 +3427,7 @@ export default function App() {
   const [completed, setCompleted] = useState(new Set());
   const [foundationsDone, setFoundationsDone] = useState(false);
   const [showMethodology, setShowMethodology] = useState(false);
-  const [simplified, setSimplified] = useState(false);
+  const [contentMode, setContentMode] = useState("standard");
   const [facilitatorMode, setFacilitatorMode] = useState(false);
   const [diagnosticResults, setDiagnosticResults] = useState({});
   const [showDiagnosticQuiz, setShowDiagnosticQuiz] = useState(null);
@@ -3414,14 +3511,14 @@ export default function App() {
       if (!diagnosticResults[activeModule]) {
         setShowDiagnosticQuiz(activeModule);
       } else {
-        setSimplified(diagnosticResults[activeModule].chosenMode === "simplified");
+        setContentMode(diagnosticResults[activeModule].chosenMode || "standard");
       }
     }
   }, [phase, activeModule]);
 
   const handleDiagnosticComplete = useCallback((chosenMode, answers, score) => {
     const moduleId = showDiagnosticQuiz;
-    const recommendation = score <= 3 ? "simplified" : "standard";
+    const recommendation = score <= 3 ? "simplified" : score <= 5 ? "standard" : "engineer";
     setDiagnosticResults(prev => ({
       ...prev,
       [moduleId]: {
@@ -3433,7 +3530,7 @@ export default function App() {
         completedAt: new Date().toISOString(),
       },
     }));
-    setSimplified(chosenMode === "simplified");
+    setContentMode(chosenMode);
     setShowDiagnosticQuiz(null);
   }, [showDiagnosticQuiz]);
 
@@ -3550,6 +3647,17 @@ export default function App() {
               >
                 <span style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: phase === "welcome" ? 600 : 400, color: phase === "welcome" ? C.dark : C.muted }}>Home</span>
               </button>
+              <button
+                onClick={() => navigateTo("how-it-works")}
+                style={{
+                  display: "flex", alignItems: "center", gap: 10, width: "100%",
+                  padding: "12px 24px", background: phase === "how-it-works" ? C.dark + "08" : "transparent",
+                  border: "none", borderLeft: phase === "how-it-works" ? `3px solid ${C.dark}` : "3px solid transparent",
+                  cursor: "pointer", textAlign: "left",
+                }}
+              >
+                <span style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: phase === "how-it-works" ? 600 : 400, color: phase === "how-it-works" ? C.dark : C.muted }}>How It Works</span>
+              </button>
               <div style={{ borderBottom: `1px solid ${C.lightGray}`, marginBottom: 8 }} />
               {[
                 { label: "Foundations", phase: "foundations", color: C.orange, active: phase === "foundations" },
@@ -3606,6 +3714,20 @@ export default function App() {
                   </button>
                 ))}
               </div>
+
+              {/* Methodology */}
+              <button
+                onClick={() => { setMenuOpen(false); setShowMethodology(true); setPhase("foundations"); window.scrollTo({ top: 0, behavior: "instant" }); }}
+                style={{
+                  display: "flex", alignItems: "center", gap: 10, width: "100%",
+                  padding: "12px 24px", background: showMethodology && phase === "foundations" ? C.gray + "10" : "transparent",
+                  border: "none", borderLeft: showMethodology && phase === "foundations" ? `3px solid ${C.gray}` : "3px solid transparent",
+                  cursor: "pointer", textAlign: "left", marginTop: 4,
+                }}
+              >
+                <span style={{ width: 6, height: 6, borderRadius: "50%", background: C.gray, flexShrink: 0 }} />
+                <span style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: showMethodology && phase === "foundations" ? 600 : 400, color: showMethodology && phase === "foundations" ? C.dark : C.muted }}>Methodology</span>
+              </button>
             </div>
           </nav>
         </div>
@@ -3657,15 +3779,171 @@ export default function App() {
               <span key={i} style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "5px 12px", borderRadius: 16, border: `1px solid ${C.lightGray}`, color: C.muted }}>{role}</span>
             ))}
           </div>
-          <div style={{ ...st.quoteBlock, margin: "0 0 44px", ...st.fadeUp, animationDelay: "0.35s" }}>
+          {/* 5-day arc */}
+          <div style={{ margin: "0 0 36px", ...st.fadeUp, animationDelay: "0.33s" }}>
+            <svg width="100%" viewBox="0 0 500 50" style={{ display: "block", maxWidth: 480 }}>
+              {[{ label: "Install", x: 30 }, { label: "Prompt", x: 145 }, { label: "Extend", x: 260 }, { label: "Position", x: 375 }, { label: "Ship", x: 480 }].map((d, i) => (
+                <g key={i}>
+                  <circle cx={d.x} cy="14" r="5" fill={C.orange + "30"} stroke={C.orange} strokeWidth="1" />
+                  <text x={d.x} y="38" textAnchor="middle" fill={C.muted} fontSize="10" fontFamily="IBM Plex Sans, sans-serif">{d.label}</text>
+                  <text x={d.x} y="17" textAnchor="middle" dominantBaseline="central" fill={C.orange} fontSize="7" fontFamily="IBM Plex Mono, monospace">{i + 1}</text>
+                  {i < 4 && <line x1={d.x + 8} y1="14" x2={[145, 260, 375, 480][i] - 8} y2="14" stroke={C.lightGray} strokeWidth="1" />}
+                </g>
+              ))}
+            </svg>
+          </div>
+
+          <div style={{ ...st.quoteBlock, margin: "0 0 44px", ...st.fadeUp, animationDelay: "0.38s" }}>
             <p style={st.quoteText}>"The most powerful thing about Claude Code isn't what it can do alone — it's how it transforms the way engineering teams think about what's possible."</p>
           </div>
           <div style={{ ...st.fadeUp, animationDelay: "0.5s" }}>
+            <button onClick={() => setPhase("how-it-works")} style={st.primaryBtn}
+              onMouseEnter={e => e.currentTarget.style.opacity = "0.88"}
+              onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+            >How this course works →</button>
+            <p style={{ fontFamily: "var(--mono)", fontSize: 11, color: C.faint, marginTop: 12 }}>~45 min foundations · then 5 days of hands-on modules</p>
+          </div>
+        </div>
+      )}
+
+      {/* ═══ HOW IT WORKS ═══ */}
+      {phase === "how-it-works" && (
+        <div style={st.container}>
+          <div style={{ ...st.fadeUp, animationDelay: "0s" }}>
+            <button onClick={() => setPhase("welcome")} style={st.navBtn}>← Back</button>
+          </div>
+          <div style={{ ...st.fadeUp, animationDelay: "0.05s", marginTop: 20 }}>
+            <div style={st.eyebrow}>Program structure</div>
+            <div style={{ height: 2, width: 48, background: C.orange, margin: "16px 0 28px", borderRadius: 1 }} />
+            <h1 style={{ ...st.heroTitle, fontSize: 36 }}>How this<br /><span style={{ color: C.orange }}>course works.</span></h1>
+            <p style={st.heroBody}>A week-long program in three layers: shared foundations, a role you choose, and five days of building real things.</p>
+          </div>
+
+          {/* ── THREE-LAYER OVERVIEW ── */}
+          <div style={{ marginTop: 40, display: "flex", flexDirection: "column", gap: 0, ...st.fadeUp, animationDelay: "0.15s" }}>
+            {[
+              { num: "1", label: "Foundations", color: C.orange, desc: "Everyone starts with the same base. Self-paced readings on Anthropic, the product stack, Claude Code's architecture, security, and configuration. This shared context means every conversation starts from the same page.", time: "~45 min self-paced" },
+              { num: "2", label: "Choose your role", color: C.blue, desc: "Select the lens that matches your job: PE Pre-Sales, PE Post-Sales, Solutions Architect, or Applied Research. Same technical content, different practice scenarios and deliverables.", time: "4 roles available" },
+              { num: "3", label: "Five-day learning path", color: C.green, desc: "One module per day, each building on the last. Every day has three parts: self-directed pre-work, a facilitator-led live session, and a hands-on lab. You finish the week with a capstone presentation under time pressure.", time: "5 days" },
+            ].map((layer, i) => (
+              <div key={i} style={{
+                display: "flex", gap: 16, padding: "20px 0",
+                borderBottom: i < 2 ? `1px solid ${C.lightGray}` : "none",
+              }}>
+                <div style={{
+                  width: 36, height: 36, borderRadius: "50%", flexShrink: 0,
+                  background: layer.color + "12", border: `1.5px solid ${layer.color}40`,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontFamily: "var(--mono)", fontSize: 13, fontWeight: 600, color: layer.color,
+                }}>
+                  {layer.num}
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
+                    <span style={{ fontFamily: "var(--sans)", fontSize: 15, fontWeight: 500, color: C.dark }}>{layer.label}</span>
+                    <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: layer.color }}>{layer.time}</span>
+                  </div>
+                  <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.6, margin: 0 }}>{layer.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* ── DAILY RHYTHM ── */}
+          <div style={{ ...st.fadeUp, animationDelay: "0.25s" }}>
+            <h2 style={st.sectionHeading}>The daily rhythm</h2>
+            <p style={{ ...st.bodyText, marginBottom: 20 }}>Each day follows the same three-part structure. You read before, practice together, then build on your own.</p>
+
+            <div style={{ display: "flex", gap: 10, marginBottom: 28 }}>
+              {[
+                { label: "Pre-work", icon: "01", color: C.blue, desc: "Self-paced readings from the foundations + reference materials. Done before the live session so you arrive ready to build." },
+                { label: "Live session", icon: "02", color: C.orange, desc: "Facilitator-led demo and walkthrough. Watch the technique, ask questions, see how it's done on a real codebase." },
+                { label: "Lab", icon: "03", color: C.green, desc: "Hands-on practice. You do the work yourself on the same sample repos — building artifacts you'll use in the field." },
+              ].map((part, i) => (
+                <div key={i} style={{
+                  flex: 1, padding: "16px 14px", borderRadius: 10,
+                  background: part.color + "06", border: `1px solid ${part.color}20`,
+                }}>
+                  <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, color: part.color, textTransform: "uppercase", marginBottom: 8 }}>{part.label}</div>
+                  <p style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.muted, lineHeight: 1.55, margin: 0 }}>{part.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── WEEK AT A GLANCE ── */}
+          <div style={{ ...st.fadeUp, animationDelay: "0.35s" }}>
+            <h2 style={st.sectionHeading}>Your week at a glance</h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+              {[
+                { day: "Day 1", title: "First contact", focus: "Install Claude Code, complete your first agentic task", prework: "30 min", live: "45 min", lab: "45 min", color: C.orange },
+                { day: "Day 2", title: "Prompt craft", focus: "CLAUDE.md, context management, prompt patterns", prework: "30 min", live: "60 min", lab: "60 min", color: C.blue },
+                { day: "Day 3", title: "Extend & customize", focus: "Hooks, MCP servers, slash commands, Agent SDK", prework: "45 min", live: "45 min", lab: "75 min", color: C.green },
+                { day: "Day 4", title: "Customer scenarios", focus: "Security reviews, deployments, competitive positioning", prework: null, live: "90 min", lab: "30 min", color: C.orange },
+                { day: "Day 5", title: "Ship it", focus: "Blind brief, working demo, capstone presentation", prework: null, live: null, lab: null, integrated: "120 min", color: C.green },
+              ].map((d, i) => (
+                <div key={i} style={{
+                  display: "flex", alignItems: "flex-start", gap: 16, padding: "16px 0",
+                  borderBottom: i < 4 ? `1px solid ${C.lightGray}` : "none",
+                }}>
+                  <div style={{ minWidth: 48, textAlign: "center" }}>
+                    <span style={{ fontFamily: "var(--serif)", fontSize: 22, color: d.color, lineHeight: 1 }}>{d.day.split(" ")[1]}</span>
+                    <div style={{ fontFamily: "var(--mono)", fontSize: 9, color: C.faint, letterSpacing: 1, marginTop: 2 }}>{d.day.split(" ")[0].toUpperCase()}</div>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 500, color: C.dark, marginBottom: 2 }}>{d.title}</div>
+                    <div style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted, lineHeight: 1.5, marginBottom: 8 }}>{d.focus}</div>
+                    <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                      {d.integrated ? (
+                        <span style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "3px 10px", borderRadius: 12, background: d.color + "10", color: d.color }}>Integrated session · {d.integrated}</span>
+                      ) : (
+                        <>
+                          {d.prework && <span style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "3px 10px", borderRadius: 12, background: C.blue + "10", color: C.blue }}>Pre-work · {d.prework}</span>}
+                          {d.live && <span style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "3px 10px", borderRadius: 12, background: C.orange + "10", color: C.orange }}>Live · {d.live}</span>}
+                          {d.lab && <span style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "3px 10px", borderRadius: 12, background: C.green + "10", color: C.green }}>Lab · {d.lab}</span>}
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── ROLE LENS NOTE ── */}
+          <div style={{ margin: "36px 0 0", padding: "18px 22px", background: C.cream, borderRadius: 10, border: `1px solid ${C.lightGray}`, ...st.fadeUp, animationDelay: "0.45s" }}>
+            <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.blue, marginBottom: 8 }}>How roles work</div>
+            <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.muted, lineHeight: 1.6, margin: 0 }}>
+              Everyone goes through the same five modules. Your role determines the practice scenarios you work through, the deliverables you produce, and the competencies you're assessed on. A pre-sales PE practices live demos and objection handling; a solutions architect designs adoption roadmaps and cost models. Same knowledge, different application.
+            </p>
+          </div>
+
+          {/* ── WHAT YOU'LL PRODUCE ── */}
+          <div style={{ ...st.fadeUp, animationDelay: "0.5s" }}>
+            <h2 style={st.sectionHeading}>What you'll walk away with</h2>
+            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              {[
+                "A working Claude Code installation you've used to build real things",
+                "A CLAUDE.md template library and prompt pattern cheat sheet",
+                "Custom hooks, MCP integrations, and slash commands you built yourself",
+                "A competitive battlecard and security FAQ for customer conversations",
+                "A capstone presentation — a working demo built from a blind customer brief",
+              ].map((item, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "baseline", gap: 10, padding: "8px 0" }}>
+                  <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.orange, flexShrink: 0 }}>{String(i + 1).padStart(2, "0")}</span>
+                  <span style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.5 }}>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── CTA ── */}
+          <div style={{ marginTop: 44, ...st.fadeUp, animationDelay: "0.6s" }}>
             <button onClick={() => setPhase("foundations")} style={st.primaryBtn}
               onMouseEnter={e => e.currentTarget.style.opacity = "0.88"}
               onMouseLeave={e => e.currentTarget.style.opacity = "1"}
-            >Begin foundations →</button>
-            <p style={{ fontFamily: "var(--mono)", fontSize: 11, color: C.faint, marginTop: 12 }}>~45 min foundations · then 5 days of hands-on modules</p>
+            >Start foundations →</button>
+            <p style={{ fontFamily: "var(--mono)", fontSize: 11, color: C.faint, marginTop: 12 }}>Begin with the shared knowledge base everyone needs</p>
           </div>
         </div>
       )}
@@ -3682,7 +3960,6 @@ export default function App() {
                 <button key={f.id} onClick={() => { setShowMethodology(false); setFoundationStep(i); setSubPage(-1); }} style={{ ...st.tab, color: !showMethodology && i === foundationStep ? C.orange : C.faint, borderBottomColor: !showMethodology && i === foundationStep ? C.orange : "transparent", fontWeight: !showMethodology && i === foundationStep ? 500 : 400 }}>{f.label}</button>
               ))}
               <div style={{ flex: 1 }} />
-              <button onClick={() => setShowMethodology(prev => !prev)} style={{ ...st.tab, color: showMethodology ? C.muted : C.gray, borderBottomColor: showMethodology ? C.gray : "transparent", fontWeight: 400, fontSize: 11, opacity: 0.7 }}>Methodology</button>
             </div>
             {currentFoundation.pages && !showMethodology && (
               <div style={{ display: "flex", gap: 0, borderTop: `1px solid ${C.lightGray}`, padding: "0 20px", background: C.cream }}>
@@ -3820,10 +4097,10 @@ export default function App() {
           <div style={{ ...st.container, paddingTop: currentFoundation.pages ? 196 : 164 }} key={currentFoundation.id + (subPage >= 0 ? '-' + subPage : '')}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", ...st.fadeUp }}>
               <h2 style={{ ...st.foundationTitle, margin: 0 }}>{subPage >= 0 && currentFoundation.pages ? currentFoundation.pages[subPage].title : currentFoundation.title}</h2>
-              <button onClick={() => setSimplified(s => !s)} style={{ background: simplified ? C.blue + "12" : "transparent", border: `1px solid ${simplified ? C.blue + "40" : C.lightGray}`, borderRadius: 6, padding: "5px 12px", cursor: "pointer", fontFamily: "var(--sans)", fontSize: 11, color: simplified ? C.blue : C.faint, transition: "all 0.2s", whiteSpace: "nowrap", flexShrink: 0 }}>{simplified ? "Simplified" : "Simplify"}</button>
+              <ContentModeSelect contentMode={contentMode} onChange={setContentMode} />
             </div>
             <div style={{ height: 24 }} />
-            {(subPage >= 0 && currentFoundation.pages ? currentFoundation.pages[subPage].content : currentFoundation.content).map((block, idx) => <ContentBlock key={idx} block={block} idx={idx} simplified={simplified} />)}
+            {(subPage >= 0 && currentFoundation.pages ? currentFoundation.pages[subPage].content : currentFoundation.content).map((block, idx) => <ContentBlock key={idx} block={block} idx={idx} contentMode={contentMode} />)}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 36, paddingTop: 20, borderTop: `1px solid ${C.lightGray}` }}>
               {(foundationStep > 0 || subPage >= 0) ? (
                 <button onClick={() => {
@@ -4041,14 +4318,8 @@ export default function App() {
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
                 <h1 style={{ fontFamily: "var(--serif)", fontSize: 36, fontWeight: 400, color: C.dark, margin: "0 0 8px" }}>{mod.title}</h1>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  {diagnosticResults[mod.id] && (
-                    <button
-                      onClick={() => setShowDiagnosticQuiz(mod.id)}
-                      style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "var(--mono)", fontSize: 10, color: C.faint, textDecoration: "underline", textDecorationColor: C.lightGray, textUnderlineOffset: 3, padding: "5px 0" }}
-                    >Retake diagnostic</button>
-                  )}
                   <button onClick={() => setFacilitatorMode(f => !f)} style={{ background: facilitatorMode ? C.orange + "12" : "transparent", border: `1px solid ${facilitatorMode ? C.orange + "40" : C.lightGray}`, borderRadius: 6, padding: "5px 12px", cursor: "pointer", fontFamily: "var(--sans)", fontSize: 11, color: facilitatorMode ? C.orange : C.faint, transition: "all 0.2s", whiteSpace: "nowrap" }}>Facilitator mode</button>
-                  <button onClick={() => setSimplified(s => !s)} style={{ background: simplified ? C.blue + "12" : "transparent", border: `1px solid ${simplified ? C.blue + "40" : C.lightGray}`, borderRadius: 6, padding: "5px 12px", cursor: "pointer", fontFamily: "var(--sans)", fontSize: 11, color: simplified ? C.blue : C.faint, transition: "all 0.2s", whiteSpace: "nowrap" }}>{simplified ? "Simplified" : "Simplify"}</button>
+                  <ContentModeSelect contentMode={contentMode} onChange={setContentMode} moduleId={mod.id} onRetake={() => setShowDiagnosticQuiz(mod.id)} />
                 </div>
               </div>
               <p style={{ ...st.bodyText, maxWidth: 540, fontSize: 16, marginBottom: 28 }}>{mod.subtitle}</p>
@@ -4161,7 +4432,7 @@ export default function App() {
 
             {activePhaseTab === "live" && phaseConfig?.mode === "standard" && (
               <div style={{ ...st.fadeUp, animationDelay: "0.22s" }}>
-                <LiveSessionView mod={mod} phaseConfig={phaseConfig} guide={guide} simplified={simplified} facilitatorMode={facilitatorMode} onContinue={() => { setActivePhaseTab("lab"); window.scrollTo({ top: 0, behavior: "instant" }); }} />
+                <LiveSessionView mod={mod} phaseConfig={phaseConfig} guide={guide} contentMode={contentMode} facilitatorMode={facilitatorMode} onContinue={() => { setActivePhaseTab("lab"); window.scrollTo({ top: 0, behavior: "instant" }); }} />
               </div>
             )}
 
@@ -4170,7 +4441,7 @@ export default function App() {
                 <LabView
                   mod={mod}
                   phaseConfig={phaseConfig}
-                  simplified={simplified}
+                  contentMode={contentMode}
                   facilitatorMode={facilitatorMode}
                   checkpointsCompleted={checkpointsCompleted}
                   onCheckpointComplete={() => {
@@ -4189,7 +4460,7 @@ export default function App() {
                 <IntegratedSessionView
                   mod={mod}
                   phaseConfig={phaseConfig}
-                  simplified={simplified}
+                  contentMode={contentMode}
                   facilitatorMode={facilitatorMode}
                   checkpointsCompleted={checkpointsCompleted}
                   onCheckpointComplete={() => {
