@@ -1044,6 +1044,7 @@ const MODULES = [
     id: 1, number: "01", day: "Day 1",
     title: "First contact",
     subtitle: "Install Claude Code in the terminal and VS Code, navigate both interfaces, and complete your first agentic task. Everyone starts here.",
+    customerFraming: "Run a live install for a prospect and deliver their first \"wow\" moment in under 10 minutes.",
     clientScenario: { company: "Meridian Health", industry: "Healthcare SaaS", situation: "Meridian Health's 8-person backend team needs 2–3 days to add new API endpoints due to boilerplate and testing overhead. Your job: install Claude Code and deliver their first real productivity win — a new endpoint built in minutes, not days." },
     materials: [
       { id: "M1", label: "Install & First Run cheat sheet", when: "Print before starting — follow alongside steps 1-4" },
@@ -1082,6 +1083,7 @@ steps: [
     id: 2, number: "02", day: "Day 2",
     title: "Prompt craft for agentic coding",
     subtitle: "CLAUDE.md, context and session management, and the art of steering multi-step workflows. The module that separates surface-level users from power users.",
+    customerFraming: "Show a customer how to make Claude Code an expert on their codebase — not just a generic tool.",
     clientScenario: { company: "Lumen Logistics", industry: "Supply chain / logistics", situation: "Lumen Logistics has 40 developers, a sprawling Node.js monorepo, and zero documentation. New hires take 3 weeks to become productive because conventions are unwritten. Your job: write the CLAUDE.md that makes Claude an effective team member, then prove it by refactoring a messy module to match." },
     materials: [
       { id: "M2a", label: "CLAUDE.md Builder worksheet", when: "Use during step 4 to structure your CLAUDE.md" },
@@ -1128,6 +1130,7 @@ steps: [
     id: 3, number: "03", day: "Day 3",
     title: "Extend and customize",
     subtitle: "Hooks, MCP servers, Skills, Plugins, subagents, and the Agent SDK. Turn Claude Code into your customer's engineering platform.",
+    customerFraming: "Design the hooks, integrations, and guardrails that make a customer's security and compliance team say yes.",
     clientScenario: { company: "Arcadia Financial", industry: "Fintech / regulated", situation: "Arcadia Financial has 60 engineers and hard compliance requirements: nothing ships without lint, type checks, and tests. Their PM team lives in Jira and developers constantly context-switch. Can Claude Code enforce quality gates and pull Jira context automatically?" },
     materials: [
       { id: "M3", label: "Integration Patterns architecture reference", when: "Architecture diagrams for hooks, MCP, and slash commands" },
@@ -1168,6 +1171,7 @@ steps: [
     id: 4, number: "04", day: "Day 4",
     title: "Customer scenarios",
     subtitle: "Role-specific breakouts. Handle security reviews, architect enterprise deployments, navigate cost conversations, and present to real skeptics.",
+    customerFraming: "Handle the three conversations that close deals: the CISO, the VP of Engineering, and the Copilot skeptic.",
     clientScenario: { company: "Three different clients", industry: "Cross-industry", situation: "Three client conversations back-to-back. Nova Insurance's CISO grills you on security. Atlas Manufacturing's VP wants a deployment plan for 200 developers on AWS. Prism Analytics' engineering manager already uses Copilot and doesn't see why they need another tool." },
     materials: [
       { id: "M4a", label: "Claude Code vs. Competition battlecard", when: "Have open during the Copilot skeptic role-play (step 3)" },
@@ -1206,6 +1210,7 @@ steps: [
     id: 5, number: "05", day: "Day 5",
     title: "Ship it",
     subtitle: "Blind customer brief. Working demo. Peer review. Make it count.",
+    customerFraming: "Prove you can go from a blind customer brief to a working demo and a compelling pitch — under pressure.",
     clientScenario: { company: "Unknown — blind brief", industry: "Varies", situation: "A customer brief you've never seen — a real company with a real problem. You have 2 hours to understand their world, architect a solution, build a working demo, and present to your cohort as if they were the customer's leadership team." },
     materials: [
       { id: "M5", label: "Capstone Presentation Guide", when: "Structure your 10-minute presentation with this framework" },
@@ -3083,7 +3088,7 @@ const FEEDBACK_RESPONSE = [
     items: [
       {
         problem: "Too much content per day",
-        analysis: "31% said pacing was too fast and confidence scores were flat across all three days (4.29, 4.28, 4.28) — people weren't getting more confident as the week went on. Multiple respondents said some version of 'too much content packed into the day.' We were putting more into each session than people could absorb. Those who fared better likely had stronger technical backgrounds coming in, but we need to design for everyone.",
+        analysis: "31% said pacing was too fast — roughly 5 out of 17 respondents. With samples this small, no single number is statistically conclusive; what matters is that the same signal appeared in three independent places: the pacing survey (31% too fast), the written comments ('too much content packed into the day'), and the confidence data (flat at 4.29, 4.28, 4.28 across all three days). When three different data sources converge, that's a real problem, not a sampling artifact. We were putting more into each session than people could absorb. Those who fared better likely had stronger technical backgrounds coming in, but we need to design for everyone.",
         implementation: {
           label: "Expanded from 3 days to 5, moved lectures to pre-work",
           detail: "The program runs 5 days now instead of 3 — about 40% less content per day. Conceptual material is moved to self-paced pre-work, leaving live time to focus on hands-on exercises.",
@@ -3099,7 +3104,7 @@ const FEEDBACK_RESPONSE = [
       },
       {
         problem: "No sense of progress, no role differentiation",
-        analysis: "Confidence flat. 'Apply independently' went up then back down (4.2, 4.5, 4.3) — it should just go up. Day 3 'realistic work simulation' dropped to 3.9 from 4.3-4.4 on Days 1-2, meaning the most technical day felt the least connected to actual work. People asked for 'more splits between SA, Engineer, Research' and 'guidance as to what is more relevant for each group.' A single curriculum for all roles means some content doesn't map to some people's jobs.",
+        analysis: "Confidence flat. 'Apply independently' went up then back down (4.2, 4.5, 4.3) — it should just go up. Day 3 'realistic work simulation' dropped to 3.9 from 4.3-4.4 on Days 1-2, meaning the most technical day felt the least connected to actual work. People asked for 'more splits between SA, Engineer, Research' and 'guidance as to what is more relevant for each group.' A single curriculum for all roles means some content doesn't map to some people's jobs. Critically, Cohort 1's survey data wasn't segmented by role — making this the biggest analytical blind spot. The flat confidence curve may mask divergent role trajectories: PEs improving while SAs plateau, averaging to flat. And the 31% who said 'too fast' likely clusters in less technical roles, while AR may have found it too slow. Without role-segmented data, we're guessing. Fixing this instrumentation gap is as important as fixing the curriculum itself.",
         implementation: {
           label: "Four role tracks with different outcomes per module",
           detail: "PE Pre-Sales, PE Post-Sales, Solutions Architect, Applied Research. Each module shows a role-specific outcome — a PE sees 'Demo the install to a prospect,' an SA sees 'Explain the value prop to a technical audience.' Day 4 splits into role-specific breakouts. Skill badges give people a way to see their progress.",
@@ -3113,8 +3118,16 @@ const FEEDBACK_RESPONSE = [
           detail: "CLI install, IDE setup, and repo clone all happen before Day 1. Facilitator checklists include fallback plans for proxy, PATH, and WSL issues. Goal is zero install debugging during live time.",
         },
       },
+      {
+        problem: "The flat confidence curve has multiple explanations",
+        analysis: "A flat line at 4.29 across three days is clearly a problem — but it's worth asking why it's flat before assuming the answer. There are at least four competing hypotheses. (1) Overload: too much content suppresses learning, so confidence can't rise. (2) Ceiling effect: 4.3 out of 5 is already high, and the scale may not have enough room to capture real growth. (3) Dunning-Kruger reset: Day 1 confidence is artificially high because people don't yet know what they don't know; Days 2-3 reveal complexity, creating a dip that offsets real learning — flat could actually mean progress. (4) Mixed population: some roles' confidence is rising while others' is falling, and they average to flat. Each hypothesis leads to a different intervention. We're designing for #1 (reduce content load) and #4 (segment by role). If the curve stays flat in Cohort 2 with reduced load and role segmentation, hypotheses #2 and #3 become more likely — and that would mean redesigning the survey instrument, not the curriculum.",
+        implementation: {
+          label: "Designed to test the overload and mixed-population hypotheses first",
+          detail: "Cohort 2 reduces content per day by ~40% (testing hypothesis #1) and segments all survey data by role (testing hypothesis #4). If confidence still doesn't climb, we revisit the measurement scale and consider whether flat-at-high is actually a healthy signal of calibrated self-assessment.",
+        },
+      },
     ],
-    signalVsNoise: "Some of this feedback points to real structural problems. Some of it is individual preference. Here's how we separated the two. The clearest problems — the ones we're most confident need fixing — showed up in multiple places at once. Pacing and overload appeared in the survey numbers (31% said too fast), in the written comments ('too much content'), and in the confidence data (flat across all three days). When three different data sources say the same thing, that's a real problem. The Evals session scored low (3.9) and got specific, actionable feedback about what went wrong — that's a real problem. People asked for role-specific content in their own words — that's a real gap. Setup friction showed up in multiple reports and has a clear fix — that's worth addressing. Other feedback was real but narrower. Day 3's realism score dipped to 3.9, but it was one day and one metric — worth watching, not worth redesigning around. One person asked for a fully async track. That's a valid preference and points to a real learning style gap, but 67% said pacing was fine in the live format. We addressed it with a light-touch accommodation (self-paced pre-work, Claude Chat for on-demand help) rather than building a parallel program.",
+    signalVsNoise: "Some of this feedback points to real structural problems. Some of it is individual preference. Here's how we separated the two. The clearest problems — the ones we're most confident need fixing — showed up in multiple places at once. Pacing and overload appeared in the survey numbers (31% said too fast), in the written comments ('too much content'), and in the confidence data (flat across all three days). When three different data sources say the same thing, that's a real problem. The Evals session scored low (3.9) and got specific, actionable feedback about what went wrong — that's a real problem. People asked for role-specific content in their own words — that's a real gap. Setup friction showed up in multiple reports and has a clear fix — that's worth addressing. Other feedback was real but narrower. Day 3's realism score dipped to 3.9, but it was one day and one metric — worth watching, not worth redesigning around. One person asked for a fully async track. That's a valid preference and points to a real learning style gap, but 67% said pacing was fine in the live format. We addressed it with a light-touch accommodation (self-paced pre-work, Claude Chat for on-demand help) rather than building a parallel program. What the silence tells us is just as important. Nobody said the content was wrong or outdated — the material was accurate, just too dense. That's a delivery problem, not a content problem, and it's much easier to fix. Nobody said 'I already knew this' — the audience was appropriately targeted and the baseline was right. And nobody asked for more content on any specific topic; every piece of feedback pointed in the same direction: less, slower, more hands-on. The direction is unanimous even if the magnitude is debated. One more gap worth noting: 54 survey responses across 3 days from a cohort of roughly 18 people suggests near-100% daily response rate — which means this feedback is representative of the full group, not a self-selected subset. That's unusually strong signal for a pilot.",
   },
   {
     id: "measurement",
@@ -3152,111 +3165,196 @@ const FEEDBACK_RESPONSE = [
     ],
     summary: "Cohort 2 works if NPS hits 50+, confidence climbs each day, no session scores below 4.2, and — most importantly — people are using Claude Code with customers within 30 days of finishing the program.",
   },
+  {
+    id: "risks",
+    number: "03",
+    question: "What are the risks of these changes?",
+    items: [
+      {
+        problem: "Expanding from 3 days to 5 days",
+        analysis: "More calendar time means more scheduling friction. Participants may struggle to block five days, and attendance could drop on Days 4-5 as competing priorities pull people away. A 5-day program also raises the bar for perceived ROI — if Day 4 doesn't feel essential, people will question the investment.",
+        implementation: {
+          label: "Each day is 2-2.75 hours, not a full day",
+          detail: "The 5-day structure uses shorter daily sessions rather than five full days. This reduces calendar pressure while maintaining the spaced-repetition benefit of learning across multiple days. We monitor day-over-day attendance as a leading indicator — if it drops below 90% on Days 4-5, the program is too long or Day 4's content isn't pulling its weight.",
+        },
+      },
+      {
+        problem: "Moving content to pre-work",
+        analysis: "The entire live curriculum depends on participants having completed the pre-work. If completion rates fall below target, facilitators are forced to re-teach foundational content during live time — exactly the problem the redesign was meant to solve. Pre-work non-completion is the single biggest structural risk in the new design.",
+        implementation: {
+          label: "Target 100%, design for 85%",
+          detail: "Pre-work completion is tracked and visible to facilitators before Day 1. The facilitator guide includes fallback plans for every foundation topic — 5-minute recap scripts that cover the essentials without consuming the full live session. The app itself includes a progress tracker that makes incomplete sections visible. If completion drops below 90%, the pre-work is too long, too hard to access, or not positioned as valuable — and we shorten or restructure it, not add more live lecture.",
+        },
+      },
+      {
+        problem: "Four role tracks may fragment small cohorts",
+        analysis: "With cohorts of 15-20 people split across four tracks, some breakout groups could have only 2-3 participants. Small breakouts risk feeling sparse and losing the energy of peer learning. The logistics of four simultaneous tracks also require either four facilitators or carefully staggered scheduling.",
+        implementation: {
+          label: "Minimum viable group size of 3; merge adjacent roles below that",
+          detail: "If any track has fewer than 3 participants, merge with an adjacent role: PE Pre-Sales with Solutions Architect (both customer-conversation oriented), PE Post-Sales with Applied Research (both deeply hands-on). The merged sessions use the more technical track's content with discussion prompts that surface the other role's perspective. This keeps groups viable without losing differentiation.",
+        },
+      },
+      {
+        problem: "Build-first may overcorrect from the Evals session failure",
+        analysis: "The Cohort 1 feedback about 'abstract component taxonomy' may be about bad lectures, not all lectures. Some learners need framing before building — jumping straight into a lab without context can create confusion that feels productive but isn't. The risk is replacing one problem (too much lecture) with another (undirected hands-on time).",
+        implementation: {
+          label: "5-minute context-set before every lab, not zero lecture",
+          detail: "Build-first doesn't mean zero framing. Every lab starts with a 5-minute client scenario that provides context and motivation: 'Your customer Meridian Health has this problem. You have 20 minutes to solve it.' This is fundamentally different from a 30-minute taxonomy walkthrough. The scenario IS the framing — it tells you what you're building and why, without front-loading abstract concepts.",
+        },
+      },
+    ],
+    summary: "Every structural change creates new failure modes. The goal isn't to eliminate risk — it's to make the risks visible and build fallbacks so we learn fast from Cohort 2 regardless of which bets land.",
+  },
 ]
 // ─── CURRICULUM PLAN CONTENT (Part 1 Questions) ───
 function CurriculumPlanContent() {
-  const sectionStyle = { marginBottom: 56 };
-  const h1Style = { fontFamily: "var(--serif)", fontSize: 28, fontWeight: 400, color: C.dark, margin: "0 0 8px", lineHeight: 1.25 };
-  const h2Style = { fontFamily: "var(--serif)", fontSize: 20, fontWeight: 400, color: C.dark, margin: "32px 0 12px", lineHeight: 1.3 };
-  const h3Style = { fontFamily: "var(--sans)", fontSize: 14, fontWeight: 600, color: C.muted, margin: "24px 0 8px" };
-  const pStyle = { fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: "0 0 14px" };
-  const bulletStyle = { fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: "0 0 8px", paddingLeft: 20, position: "relative" };
-  const dot = { position: "absolute", left: 0, color: C.orange };
+  const sectionGap = { marginBottom: 56 };
   const accentLine = (color) => ({ height: 2, width: 48, background: color, margin: "12px 0 24px", borderRadius: 1 });
+  const headingStyle = { fontFamily: "var(--serif)", fontSize: 28, fontWeight: 400, color: C.dark, margin: "0 0 8px", lineHeight: 1.25 };
+  const bodyStyle = { fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: "0 0 14px" };
+  const subheadStyle = { fontFamily: "var(--serif)", fontSize: 20, fontWeight: 400, color: C.dark, margin: "32px 0 12px", lineHeight: 1.3 };
 
-  const tableHeader = { fontFamily: "var(--sans)", fontSize: 12, fontWeight: 600, color: "#fff", padding: "10px 14px", textAlign: "left" };
-  const tableCell = { fontFamily: "var(--sans)", fontSize: 12, color: C.muted, padding: "10px 14px", borderBottom: `1px solid ${C.lightGray}`, lineHeight: 1.5, verticalAlign: "top" };
-
-  const dayData = [
-    { day: "Day 1", mod: "First Contact", focus: "Install, navigate, complete a first agentic task in terminal and IDE", artifact: "Working install + first agentic task recording + client talking points" },
-    { day: "Day 2", mod: "Prompt Craft", focus: "CLAUDE.md authoring, session management, Plan Mode, prompt patterns", artifact: "CLAUDE.md template library + prompt pattern cheat sheet + before/after comparison" },
-    { day: "Day 3", mod: "Extend & Customize", focus: "Hooks, MCP servers, slash commands, Agent SDK, composed workflows", artifact: "Custom hook + MCP server + slash command + integration architecture" },
-    { day: "Day 4", mod: "Customer Scenarios", focus: "Security objections, deployment architecture, cost/ROI, competitive positioning", artifact: "Security FAQ + deployment template + competitive battlecard + demo scripts" },
-    { day: "Day 5", mod: "Ship It (Capstone)", focus: "Blind brief \u2192 working demo \u2192 peer-reviewed presentation", artifact: "Client-tailored capstone presentation + working demo + peer feedback" },
+  const dayArcData = [
+    { day: "1", title: "First Contact", client: "Meridian Health", clientDetail: "8-person backend team, 2\u20133 days per API endpoint", focus: "Install Claude Code, complete first agentic task, compare terminal vs. IDE", artifact: "Working install + first agentic task + client talking points", prework: "30 min", live: "45 min", lab: "45 min", color: C.orange },
+    { day: "2", title: "Prompt Craft", client: "Lumen Logistics", clientDetail: "40 developers, sprawling Node.js monorepo, zero documentation", focus: "CLAUDE.md authoring, session management, prompt patterns, Plan Mode", artifact: "CLAUDE.md template + prompt cheat sheet + before/after comparison", prework: "30 min", live: "60 min", lab: "60 min", color: C.blue },
+    { day: "3", title: "Extend & Customize", client: "Arcadia Financial", clientDetail: "60 engineers, compliance-gated payment platform", focus: "Hooks, MCP servers, slash commands, composed workflows", artifact: "Custom hook + MCP server + slash command + integration architecture", prework: "45 min", live: "45 min", lab: "75 min", color: C.green },
+    { day: "4", title: "Customer Scenarios", client: "Nova / Atlas / Prism", clientDetail: "CISO security review, VP deployment, Copilot skeptic", focus: "Security objections, deployment architecture, competitive positioning, cost/ROI", artifact: "Security FAQ + deployment template + competitive battlecard + demo scripts", prework: "45 min", live: "90 min", lab: "30 min", color: C.orange },
+    { day: "5", title: "Ship It (Capstone)", client: "Blind brief", clientDetail: "Unknown company, unknown problem", focus: "Analyze brief \u2192 architect solution \u2192 build working demo \u2192 present to cohort", artifact: "Capstone presentation + working demo + peer feedback", integrated: "120 min", color: C.green },
   ];
 
-  const modalityData = [
-    { mod: "Day 1: First Contact", live: "45 min", lab: "45 min", self: "30 min pre-work", total: "~2 hrs" },
-    { mod: "Day 2: Prompt Craft", live: "60 min", lab: "60 min", self: "30 min pre-work", total: "~2.5 hrs" },
-    { mod: "Day 3: Extend", live: "45 min", lab: "75 min", self: "45 min pre-work", total: "~2.75 hrs" },
-    { mod: "Day 4: Scenarios", live: "90 min", lab: "30 min", self: "None", total: "~2 hrs" },
-    { mod: "Day 5: Capstone", live: "120 min", lab: "Integrated", self: "None", total: "~2 hrs" },
+  const dependencyChain = [
+    { from: "Foundations", to: "Day 1", text: "Product knowledge means Day 1 goes straight to building" },
+    { from: "Day 1", to: "Day 2", text: "Agentic loop understanding enables prompt steering" },
+    { from: "Day 2", to: "Day 3", text: "CLAUDE.md conventions are prerequisites for hooks and MCP" },
+    { from: "Day 3", to: "Day 4", text: "Technical depth gives credibility for customer conversations" },
+    { from: "Day 4", to: "Day 5", text: "Conversation practice enables the capstone presentation" },
+  ];
+
+  const competencyData = [
+    { role: "PE Pre-Sales", color: C.orange, outcomes: [
+      { day: "Day 1", text: "Demo install and first agentic task to a prospect \u2014 narrate the agentic loop and explain why it matters vs. autocomplete." },
+      { day: "Day 2", text: "Write a CLAUDE.md for a prospect\u2019s repo during a live evaluation, showing how context transforms output quality." },
+      { day: "Day 3", text: "Architect integration patterns for a customer evaluation \u2014 hooks for guardrails, MCP for their tools, slash commands for team workflows." },
+      { day: "Day 4", text: "Run a full technical evaluation \u2014 reference architecture, handle security and cost objections, position against Copilot/Cursor/Devin." },
+      { day: "Day 5", text: "Deliver a compelling demo from a cold customer brief in under 2 hours \u2014 architecture, live demo, and clear next-steps ask." },
+    ]},
+    { role: "PE Post-Sales", color: C.blue, outcomes: [
+      { day: "Day 1", text: "Set up Claude Code in a customer\u2019s environment, troubleshoot installation issues, guide a developer through their first agentic task." },
+      { day: "Day 2", text: "Pair-program with a customer team to author CLAUDE.md files tailored to their codebase, conventions, and CI/CD pipeline." },
+      { day: "Day 3", text: "Build and deploy custom MCP servers, hooks, and slash commands in a customer\u2019s environment \u2014 debugging integration issues live." },
+      { day: "Day 4", text: "Navigate a live customer debugging session \u2014 diagnose a failing integration, fix it with the customer watching, turn the save into a relationship win." },
+      { day: "Day 5", text: "Scope, build, and deliver a working implementation from a customer brief \u2014 pair-program, leave behind documentation, hand off a running system." },
+    ]},
+    { role: "Solutions Architect", color: C.green, outcomes: [
+      { day: "Day 1", text: "Articulate the agentic coding value proposition to a technical audience and map it to common customer pain points." },
+      { day: "Day 2", text: "Design a CLAUDE.md strategy for a multi-team org \u2014 root-level standards, team-level overrides, integration with existing style guides." },
+      { day: "Day 3", text: "Design a phased adoption plan from individual pilot to team-wide deployment with integration patterns for the customer\u2019s toolchain." },
+      { day: "Day 4", text: "Assess a customer org, identify highest-leverage insertion points, position honestly against competitors, present a strategic adoption roadmap." },
+      { day: "Day 5", text: "Present a complete adoption strategy from a blind brief \u2014 architecture, phased rollout, cost projections, risk assessment, clear ask." },
+    ]},
+    { role: "Applied Research", color: C.muted, outcomes: [
+      { day: "Day 1", text: "Analyze the agentic loop \u2014 tool calls, planning steps, error recovery \u2014 and identify areas where model capabilities could be extended." },
+      { day: "Day 2", text: "Evaluate how CLAUDE.md content affects reasoning quality, identify prompt patterns that improve accuracy, build evaluation harnesses." },
+      { day: "Day 3", text: "Build custom Agent SDK tooling \u2014 automated code review pipelines, evaluation harnesses, workflows connecting Claude Code to training infrastructure." },
+      { day: "Day 4", text: "Advise on capabilities and limitations for ML workflows \u2014 propose custom tooling, scope what\u2019s possible vs. what requires model-level changes." },
+      { day: "Day 5", text: "Design and present a research workflow \u2014 custom Agent SDK tooling, evaluation metrics, integration with training pipelines \u2014 with a working prototype." },
+    ]},
   ];
 
   return (
     <>
-      {/* ─── 1. CURRICULUM ARC ─── */}
-      <div style={sectionStyle}>
+      {/* \u2500\u2500\u2500 1. DESIGN PRINCIPLES \u2500\u2500\u2500 */}
+      <div style={{ ...sectionGap, ...st.fadeUp, animationDelay: "0.05s" }}>
         <div style={{ display: "flex", alignItems: "baseline", gap: 14, marginBottom: 8 }}>
           <span style={{ fontFamily: "var(--serif)", fontSize: 42, color: C.orange, lineHeight: 1, opacity: 0.25 }}>01</span>
-          <h2 style={h1Style}>Curriculum Arc</h2>
+          <h2 style={headingStyle}>Design Principles</h2>
         </div>
         <div style={accentLine(C.orange)} />
-        <p style={pStyle}>Basecamp is structured in three phases: a common skills foundation, five days of progressive hands-on modules, and role-specific specialization. Before anyone touches Claude Code, every participant goes through the same foundational onboarding — ensuring a shared baseline of company context, product knowledge, and technical understanding regardless of role or background.</p>
+        <p style={bodyStyle}>Four principles shape the curriculum architecture. For the learner-facing overview of daily structure and time commitments, see <strong>How It Works</strong> on the main hub.</p>
 
-        <h3 style={h2Style}>Phase 1: Common Skills Foundation (Self-Paced Pre-Work)</h3>
-        <p style={pStyle}>Before the live sessions begin, all participants complete a self-paced foundation covering seven sections (~20 minutes total). This shared baseline ensures everyone arrives on Day 1 with the same context:</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Anthropic's mission and values:</strong> Who we are, why the company was founded, what it means to be a Public Benefit Corporation, and the working principles that shape how we build and sell. This matters because every customer conversation reflects our values — trainees need to internalize the "safety as science" ethos, not just know the product features.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>The full Anthropic product suite:</strong> Claude.ai, Cowork, Claude Code, and the API — how each surface works, who it serves, and when to recommend one over another. Trainees learn the complete platform so they can position Claude Code within the broader ecosystem rather than pitching it in isolation.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Claude Code deep-dive:</strong> The agentic loop (read → plan → act → verify), the interaction model, how it differs from autocomplete tools, context window mechanics, and the model family (Opus, Sonnet, Haiku). This is where trainees build the mental model they'll use for every demo and customer conversation.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Configuration, security, and enterprise deployment:</strong> CLAUDE.md, hooks, permissions, the defense-in-depth security model, managed settings, cloud deployment options (Bedrock, Vertex, Foundry), and cost/ROI math. These are the topics that come up in every enterprise sales conversation.</p>
-        <p style={pStyle}>The foundation also includes a content mode selector on every page with three depth levels (Simplified, Standard, Engineer) — allowing participants of any background to access content at their comfort level. After completing foundations, each participant selects one of four role-specific paths (PE Pre-Sales, PE Post-Sales, Solutions Architect, Applied Research), which shapes how every subsequent module frames its competency outcomes.</p>
-
-        <h3 style={h2Style}>Phase 2: Progressive Hands-On Modules (Days 1–5)</h3>
-        <p style={pStyle}>With the shared foundation in place, the five-day curriculum builds progressively from individual tool proficiency (Days 1–3) to customer-facing skills (Day 4) to integrated performance under pressure (Day 5). Every session produces a concrete artifact the learner uses in the field.</p>
-        <div style={{ borderRadius: 10, overflow: "hidden", border: `1px solid ${C.lightGray}`, margin: "16px 0 24px" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <thead>
-              <tr style={{ background: C.orange }}>
-                <th style={tableHeader}>Day</th>
-                <th style={tableHeader}>Module</th>
-                <th style={tableHeader}>Core Focus</th>
-                <th style={tableHeader}>Artifact Produced</th>
-              </tr>
-            </thead>
-            <tbody>
-              {dayData.map((d, i) => (
-                <tr key={i} style={{ background: i % 2 === 0 ? C.bg : C.cream }}>
-                  <td style={{ ...tableCell, fontWeight: 600, color: C.dark, whiteSpace: "nowrap" }}>{d.day}</td>
-                  <td style={{ ...tableCell, color: C.dark }}>{d.mod}</td>
-                  <td style={tableCell}>{d.focus}</td>
-                  <td style={tableCell}>{d.artifact}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginTop: 20 }}>
+          {[
+            { label: "Scenario-first learning", color: C.orange, desc: "Every day opens with a client problem, not a feature walkthrough. Learners practice the cognitive work of a real customer engagement from minute one." },
+            { label: "Client scenario threading", color: C.blue, desc: "Five fictional companies across five days \u2014 Meridian Health, Lumen Logistics, Arcadia Financial, three Day 4 role-plays, and a blind capstone brief." },
+            { label: "Scaffolded dependency chain", color: C.green, desc: "Each day\u2019s skills are prerequisites for the next. You can\u2019t steer Claude with CLAUDE.md (Day 2) without understanding the agentic loop (Day 1)." },
+            { label: "One curriculum, four lenses", color: C.muted, desc: "All roles share the same technical foundation. Differentiation happens through competency framing, Day 4 breakouts, and role-matched capstone briefs." },
+          ].map((p, i) => (
+            <div key={i} style={{ padding: "16px 18px", borderRadius: 10, background: p.color + "06", border: `1px solid ${p.color}20` }}>
+              <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, color: p.color, textTransform: "uppercase", marginBottom: 8 }}>{p.label}</div>
+              <p style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted, lineHeight: 1.6, margin: 0 }}>{p.desc}</p>
+            </div>
+          ))}
         </div>
-
-        <h3 style={h2Style}>How Each Phase Builds on the Last</h3>
-        <p style={pStyle}>The curriculum uses a scaffolded dependency chain. The common foundation feeds into the daily modules, and each day's skills are prerequisites for the next:</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Foundations → Day 1:</strong> Understanding the product suite and agentic loop from pre-work means Day 1 can go straight to building — no time spent on "what is Claude Code" lectures.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Day 1 → Day 2:</strong> You must have Claude Code installed and understand the agentic loop before you can learn to steer it with CLAUDE.md and prompt patterns.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Day 2 → Day 3:</strong> CLAUDE.md conventions and prompt craft are prerequisites for hooks (which enforce conventions) and MCP (which extends Claude's capabilities). Without Day 2's mental model, hooks and MCP are just configuration files.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Day 3 → Day 4:</strong> Technical depth in the product (Days 1–3) gives you the credibility to handle security objections, architecture questions, and competitive positioning. You can't answer a CISO's questions about sandboxing if you've never configured a hook.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Day 4 → Day 5:</strong> The capstone integrates everything. You receive a blind brief and must install, configure, build, and present — drawing on every prior day. Day 4's customer conversation practice gives you the presentation and objection-handling skills the capstone requires.</p>
-
-        <h3 style={h2Style}>Competency Milestones</h3>
-        <p style={pStyle}>The program tracks progress through two systems:</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Credentials (10 total):</strong> Earned by completing module exercises. Examples include CLI Navigation, Prompt Architecture, MCP Integration, Competitive Positioning, and Live Demo Delivery. These are visible on the hub page as collectible badges.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Knowledge Checkpoints:</strong> Two reflection questions per module that test recall and application. Self-scored with expandable hints.</p>
-        <p style={pStyle}>The credential system provides a sense of progression and makes competency gaps visible. A learner who has all Day 1–3 badges but is missing Competitive Positioning knows exactly what to review before a customer conversation.</p>
       </div>
 
-      {/* ─── 2. AUDIENCE DIFFERENTIATION ─── */}
-      <div style={sectionStyle}>
+      {/* \u2500\u2500\u2500 2. THE FIVE-DAY ARC \u2500\u2500\u2500 */}
+      <div style={{ ...sectionGap, ...st.fadeUp, animationDelay: "0.15s" }}>
         <div style={{ display: "flex", alignItems: "baseline", gap: 14, marginBottom: 8 }}>
           <span style={{ fontFamily: "var(--serif)", fontSize: 42, color: C.blue, lineHeight: 1, opacity: 0.25 }}>02</span>
-          <h2 style={h1Style}>Audience Differentiation</h2>
+          <h2 style={headingStyle}>The Five-Day Arc</h2>
         </div>
         <div style={accentLine(C.blue)} />
-        <p style={pStyle}>Basecamp serves four roles with significantly different customer touchpoints, technical depths, and success metrics. The curriculum handles this through a three-layer model: common foundation → shared technical sessions → role-specific breakouts.</p>
+        <p style={bodyStyle}>Each day is framed through a client scenario, produces a concrete artifact, and follows a pre-work \u2192 live \u2192 lab rhythm. The curriculum builds progressively from individual tool proficiency (Days 1\u20133) to customer-facing skills (Day 4) to integrated performance under pressure (Day 5).</p>
 
-        {/* ── Audience differentiation visual ── */}
-        <div style={{ margin: "28px 0 36px", borderRadius: 12, border: `1px solid ${C.lightGray}`, overflow: "hidden", background: C.bg }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+          {dayArcData.map((d, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 16, padding: "20px 0", borderBottom: i < 4 ? `1px solid ${C.lightGray}` : "none" }}>
+              <div style={{ minWidth: 48, textAlign: "center", flexShrink: 0 }}>
+                <span style={{ fontFamily: "var(--serif)", fontSize: 22, color: d.color, lineHeight: 1 }}>{d.day}</span>
+                <div style={{ fontFamily: "var(--mono)", fontSize: 9, color: C.faint, letterSpacing: 1, marginTop: 2 }}>DAY</div>
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 500, color: C.dark, marginBottom: 3 }}>{d.title}</div>
+                <div style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted, lineHeight: 1.55, marginBottom: 4 }}>{d.focus}</div>
+                <div style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.faint, marginBottom: 4 }}>
+                  <span style={{ color: d.color }}>{d.client}</span> \u2014 {d.clientDetail}
+                </div>
+                <div style={{ fontFamily: "var(--sans)", fontSize: 11, color: C.faint, marginBottom: 8 }}>
+                  <span style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 0.5, textTransform: "uppercase", color: C.muted }}>Produces:</span> {d.artifact}
+                </div>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  {d.integrated ? (
+                    <span style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "3px 10px", borderRadius: 12, background: d.color + "10", color: d.color }}>Integrated session \u00b7 {d.integrated}</span>
+                  ) : (
+                    <>
+                      {d.prework && <span style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "3px 10px", borderRadius: 12, background: C.blue + "10", color: C.blue }}>Pre-work \u00b7 {d.prework}</span>}
+                      <span style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "3px 10px", borderRadius: 12, background: C.orange + "10", color: C.orange }}>Live \u00b7 {d.live}</span>
+                      <span style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "3px 10px", borderRadius: 12, background: C.green + "10", color: C.green }}>Lab \u00b7 {d.lab}</span>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Dependency chain */}
+        <h3 style={subheadStyle}>How each day builds on the last</h3>
+        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+          {dependencyChain.map((link, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "baseline", gap: 12, padding: "10px 0 10px 12px", borderLeft: `2px solid ${C.blue}30` }}>
+              <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.blue, flexShrink: 0, minWidth: 100 }}>{link.from} \u2192 {link.to}</span>
+              <span style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted, lineHeight: 1.5 }}>{link.text}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* \u2500\u2500\u2500 3. ROLE DIFFERENTIATION & COMPETENCY OUTCOMES \u2500\u2500\u2500 */}
+      <div style={{ ...sectionGap, ...st.fadeUp, animationDelay: "0.25s" }}>
+        <div style={{ display: "flex", alignItems: "baseline", gap: 14, marginBottom: 8 }}>
+          <span style={{ fontFamily: "var(--serif)", fontSize: 42, color: C.green, lineHeight: 1, opacity: 0.25 }}>03</span>
+          <h2 style={headingStyle}>Role Differentiation & Competency Outcomes</h2>
+        </div>
+        <div style={accentLine(C.green)} />
+        <p style={bodyStyle}>Basecamp serves four roles through a three-layer model: common foundation \u2192 shared technical sessions (Days 1\u20133) \u2192 role-specific breakouts (Day 4) and capstone briefs (Day 5).</p>
+
+        {/* Role matrix table */}
+        <div style={{ margin: "20px 0 32px", borderRadius: 12, border: `1px solid ${C.lightGray}`, overflow: "hidden", background: C.bg }}>
           <table style={{ width: "100%", borderCollapse: "collapse" }}>
             <thead>
               <tr style={{ background: C.blue }}>
-                {["Role", "Pre-Work", "Days 1–3", "Day 4 Breakout", "Day 5 Capstone"].map((h, i) => (
+                {["Role", "Pre-Work", "Days 1\u20133", "Day 4 Breakout", "Day 5 Capstone"].map((h, i) => (
                   <th key={h} style={{ padding: "10px 14px", fontFamily: "var(--sans)", fontSize: 11, fontWeight: 600, color: "#fff", textAlign: i === 0 ? "left" : "center", borderLeft: i > 0 ? "1px solid rgba(255,255,255,0.15)" : "none" }}>{h}</th>
                 ))}
               </tr>
@@ -3282,11 +3380,11 @@ function CurriculumPlanContent() {
                     <>
                       <td rowSpan={4} style={{ padding: "16px 14px", fontFamily: "var(--sans)", fontSize: 11, color: C.muted, lineHeight: 1.55, textAlign: "center", verticalAlign: "middle", borderTop: `1px solid ${C.lightGray}`, borderLeft: `1px solid ${C.lightGray}`, background: C.blue + "05" }}>
                         <div style={{ fontWeight: 600, color: C.dark, fontSize: 12, marginBottom: 6 }}>Common Foundation</div>
-                        Mission &amp; values · Product suite · Claude Code architecture · Security &amp; enterprise
+                        Mission &amp; values &middot; Product suite &middot; Claude Code architecture &middot; Security &amp; enterprise
                       </td>
                       <td rowSpan={4} style={{ padding: "16px 14px", fontFamily: "var(--sans)", fontSize: 11, color: C.muted, lineHeight: 1.55, textAlign: "center", verticalAlign: "middle", borderTop: `1px solid ${C.lightGray}`, borderLeft: `1px solid ${C.lightGray}`, background: C.blue + "05" }}>
                         <div style={{ fontWeight: 600, color: C.dark, fontSize: 12, marginBottom: 6 }}>Shared Technical Labs</div>
-                        Install · CLAUDE.md · Prompt patterns · Hooks · MCP · Composed workflows
+                        Install &middot; CLAUDE.md &middot; Prompt patterns &middot; Hooks &middot; MCP &middot; Composed workflows
                       </td>
                     </>
                   )}
@@ -3304,197 +3402,98 @@ function CurriculumPlanContent() {
           </table>
         </div>
 
-        <h3 style={h2Style}>Common Foundation (Pre-Work)</h3>
-        <p style={pStyle}>All participants start with the same self-paced foundation covering Anthropic's mission and values, the full product suite, and a deep-dive on Claude Code's architecture and capabilities. This shared baseline means every role — regardless of technical depth — arrives on Day 1 understanding the company, the product ecosystem, and how Claude Code fits within it. After completing foundations, each participant selects their role-specific path, which shapes how every subsequent module frames its outcomes.</p>
+        {/* Competency outcomes */}
+        <h3 style={subheadStyle}>Competency Outcomes by Role</h3>
+        <p style={bodyStyle}>What each role should be able to do by the end of the program. Each outcome is tied to a specific day\u2019s module.</p>
 
-        <h3 style={h2Style}>Shared Technical Sessions (Days 1–3)</h3>
-        <p style={pStyle}>Days 1–3 are shared across all roles. Every participant builds the same hands-on technical foundation on Claude Code — install, CLAUDE.md, prompt craft, hooks, MCP, and composed workflows. The role-specific competency descriptions (see below) ensure each learner engages with the same material through their own professional lens.</p>
-
-        <h3 style={h2Style}>Role-Specific Differentiation</h3>
-        <p style={pStyle}>Differentiation happens in three ways:</p>
-
-        <h3 style={h3Style}>1. Role-specific competency outcomes (all modules)</h3>
-        <p style={pStyle}>Every module defines a different competency target for each role. For example, Day 2 (Prompt Craft):</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>PE Pre-Sales:</strong> Write a CLAUDE.md for a prospect's repo during a live evaluation, showing how context transforms output quality.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>PE Post-Sales:</strong> Pair-program with a customer engineering team to author CLAUDE.md files tailored to their codebase and CI/CD pipeline.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Solutions Architect:</strong> Design a CLAUDE.md strategy for a multi-team engineering org — root-level standards, team-level overrides, integration patterns.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Applied Research:</strong> Evaluate how CLAUDE.md content affects model reasoning quality and build evaluation harnesses to measure impact.</p>
-        <p style={pStyle}>The same exercise (writing a CLAUDE.md) produces different competency outcomes depending on what the learner focuses on.</p>
-
-        <h3 style={h3Style}>2. Role-specific breakouts (Day 4)</h3>
-        <p style={pStyle}>Day 4 is the primary role-divergence day. The three customer scenarios (security CISO, VP of Engineering, Copilot skeptic) are weighted differently by role:</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>PE Pre-Sales:</strong> Focus on the competitive positioning scenario. Practice the honest differentiation pitch.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>PE Post-Sales:</strong> Focus on the deployment architecture scenario. Practice scoping and estimating real implementations.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Solutions Architects:</strong> All three scenarios equally weighted. Practice the full customer conversation spectrum.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Applied Research:</strong> Focus on the technical depth of what Claude Code can and can't do. Practice honest capability assessment.</p>
-
-        <h3 style={h3Style}>3. Capstone brief selection (Day 5)</h3>
-        <p style={pStyle}>Capstone briefs are matched to role. For example, a Pre-Sales PE receives a brief that requires a compelling demo and clear next-steps ask.</p>
-
-        <h3 style={h2Style}>Handling Varying Technical Depth</h3>
-        <p style={pStyle}>The cohort will include people of varying technical background. To address this, the training has:</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Simplify toggle:</strong> Every content page has a content mode selector with three levels: Simplified (plain-language explanations), Standard (full facilitator content), and Engineer (implementation-focused technical depth). This lets participants of any background access content at their comfort level.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Contextual exercises:</strong> Steps are tagged by context (terminal, VS Code, Claude, browser). Participants who are comfortable in the terminal can move faster; those who need more guidance can follow the explicit commands.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Facilitator guide pacing notes:</strong> The facilitator guide for each module includes pacing advice for mixed-depth rooms — which steps to narrate slowly, which to skip for advanced groups, and when to pair technical with non-technical participants.</p>
-      </div>
-
-      {/* ─── 3. LEARNING MODALITIES ─── */}
-      <div style={sectionStyle}>
-        <div style={{ display: "flex", alignItems: "baseline", gap: 14, marginBottom: 8 }}>
-          <span style={{ fontFamily: "var(--serif)", fontSize: 42, color: C.green, lineHeight: 1, opacity: 0.25 }}>03</span>
-          <h2 style={h1Style}>Learning Modalities</h2>
-        </div>
-        <div style={accentLine(C.green)} />
-        <p style={pStyle}>Each module uses a deliberate mix of live instruction, hands-on labs, and self-paced materials. The ratio shifts across the week as learners build independence.</p>
-
-        <h3 style={h2Style}>Modality Breakdown by Day</h3>
-        <div style={{ borderRadius: 10, overflow: "hidden", border: `1px solid ${C.lightGray}`, margin: "16px 0 24px" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
-            <thead>
-              <tr style={{ background: C.blue }}>
-                {["Module", "Live", "Lab", "Self-Paced", "Total"].map(h => (
-                  <th key={h} style={tableHeader}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {modalityData.map((d, i) => (
-                <tr key={i} style={{ background: i % 2 === 0 ? C.bg : C.cream }}>
-                  <td style={{ ...tableCell, fontWeight: 600, color: C.dark }}>{d.mod}</td>
-                  <td style={tableCell}>{d.live}</td>
-                  <td style={tableCell}>{d.lab}</td>
-                  <td style={tableCell}>{d.self}</td>
-                  <td style={{ ...tableCell, fontWeight: 500 }}>{d.total}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <h3 style={h2Style}>Live Instruction</h3>
-        <p style={pStyle}>Live sessions are facilitator-led and focus on demonstration, narration, and discussion — never lecture. Live sessions follow the "I do, we do, you do" progression: facilitator demos first, then the group works together on a guided exercise, then individuals tackle the lab independently.</p>
-
-        <h3 style={h2Style}>Hands-On Labs</h3>
-        <p style={pStyle}>Labs are structured as step-by-step walkthroughs embedded directly in the web application. Each step includes:</p>
-        <p style={bulletStyle}><span style={dot}>•</span> A description of what to do and why</p>
-        <p style={bulletStyle}><span style={dot}>•</span> Copy-pasteable commands</p>
-        <p style={bulletStyle}><span style={dot}>•</span> Expected output so learners can self-verify</p>
-        <p style={bulletStyle}><span style={dot}>•</span> Tips for common pitfalls</p>
-        <p style={bulletStyle}><span style={dot}>•</span> Material references that link to printable cheat sheets</p>
-        <p style={pStyle}>Labs are framed through client scenarios. Day 1's lab isn't "install Claude Code" — it's "you're onboarding Meridian Health's backend team and delivering their first win." This situates every exercise in the context of a real customer engagement.</p>
-
-        <h3 style={h2Style}>Leave-Behind Reference Materials</h3>
-        <p style={pStyle}>The program includes 22 printable materials across three categories:</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Grab and Go (5 cards):</strong> The essential references for any sales meeting. Includes Claude Code at a Glance, How Claude Code Thinks, Security Objection Handler, Claude Code vs. Competition, and Cost & ROI Pocket Math.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Module Worksheets (10 items):</strong> Companion materials for each module. CLAUDE.md Builder worksheet, Prompt Patterns cheat sheet, Integration Patterns architecture reference, Demo Planning worksheet, etc.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Deep Reference (7 items):</strong> Deployment Path Finder, Enterprise Deployment talk track, Configuration & Customization reference, and others.</p>
-        <p style={pStyle}>All materials are accessible from a centralized "Browse all materials" page and are printable as double-sided reference cards.</p>
-      </div>
-
-      {/* ─── 4. COMPETENCY OUTCOMES ─── */}
-      <div style={sectionStyle}>
-        <div style={{ display: "flex", alignItems: "baseline", gap: 14, marginBottom: 8 }}>
-          <span style={{ fontFamily: "var(--serif)", fontSize: 42, color: C.orange, lineHeight: 1, opacity: 0.25 }}>04</span>
-          <h2 style={h1Style}>Competency Outcomes</h2>
-        </div>
-        <div style={accentLine(C.orange)} />
-        <p style={pStyle}>These are what each role should be able to do by the end of the program. Each outcome is tied to a specific day's module.</p>
-
-        {[
-          { role: "PE Pre-Sales", color: C.orange, outcomes: [
-            { day: "Day 1", text: "Demo Claude Code's install and first-run experience to a prospect — narrate the agentic loop as it happens and explain why it matters vs. autocomplete." },
-            { day: "Day 2", text: "Write a CLAUDE.md for a prospect's repo during a live evaluation, showing how context transforms output quality." },
-            { day: "Day 3", text: "Architect a Claude Code integration pattern for a customer evaluation — hooks for guardrails, MCP for their internal tools, slash commands for team workflows." },
-            { day: "Day 4", text: "Run a full technical evaluation against a real customer use case — build a reference architecture, handle objections on security and cost, position against Copilot/Cursor/Devin, and close with a next-steps demo plan." },
-            { day: "Day 5", text: "Deliver a compelling, tailored Claude Code demo from a cold customer brief in under 2 hours — including architecture proposal, live demo, and a clear next-steps ask." },
-          ]},
-          { role: "PE Post-Sales", color: C.blue, outcomes: [
-            { day: "Day 1", text: "Set up Claude Code in a customer's dev environment, troubleshoot common installation issues, and guide a developer through their first agentic task." },
-            { day: "Day 2", text: "Pair-program with a customer engineering team to author CLAUDE.md files tailored to their codebase, conventions, and CI/CD pipeline." },
-            { day: "Day 3", text: "Build and deploy custom MCP servers, hooks, and slash commands in a customer's environment — debugging integration issues live." },
-            { day: "Day 4", text: "Navigate a live customer debugging session using Claude Code — diagnose a failing integration, fix it with the customer watching, and turn the save into a relationship-building moment." },
-            { day: "Day 5", text: "Scope, build, and deliver a working Claude Code implementation from a customer brief — pair-program through the hard parts, leave behind documentation, and hand off a running system." },
-          ]},
-          { role: "Solutions Architects", color: C.green, outcomes: [
-            { day: "Day 1", text: "Articulate the agentic coding value proposition to a technical audience and map it to common customer pain points." },
-            { day: "Day 2", text: "Design a CLAUDE.md strategy for a multi-team engineering org — root-level standards, team-level overrides, and integration patterns with existing style guides." },
-            { day: "Day 3", text: "Design a phased Claude Code adoption plan — from individual pilot to team-wide deployment — with integration patterns for the customer's existing toolchain." },
-            { day: "Day 4", text: "Assess a customer's engineering org, identify the highest-leverage Claude Code insertion points, position honestly against competitors, and present a strategic adoption roadmap." },
-            { day: "Day 5", text: "Present a complete Claude Code adoption strategy from a blind customer brief — architecture diagrams, phased rollout, integration patterns, ROI estimates, and honest risk assessment." },
-          ]},
-          { role: "Applied Research", color: C.muted, outcomes: [
-            { day: "Day 1", text: "Analyze Claude Code's agentic loop behavior — tool calls, planning steps, error recovery — and identify areas where model capabilities could be extended." },
-            { day: "Day 2", text: "Evaluate how CLAUDE.md content affects model reasoning quality, identify prompt patterns that improve code generation accuracy, and build evaluation harnesses." },
-            { day: "Day 3", text: "Build custom tooling with the Agent SDK — automated code review pipelines, evaluation harnesses, and workflows that connect Claude Code to model training infrastructure." },
-            { day: "Day 4", text: "Advise on Claude Code's capabilities and limitations for ML/training workflows — propose custom tooling workarounds and scope what's possible vs. what requires model-level changes." },
-            { day: "Day 5", text: "Design and present a Claude Code-powered research workflow — custom Agent SDK tooling, evaluation metrics, integration with training pipelines — with a working prototype." },
-          ]},
-        ].map((group, gi) => (
-          <div key={gi} style={{ margin: "28px 0" }}>
-            <h3 style={{ ...h2Style, marginTop: gi === 0 ? 20 : 32 }}>
-              <span style={{ display: "inline-block", width: 10, height: 10, borderRadius: "50%", background: group.color, marginRight: 10, verticalAlign: "middle" }} />
+        {competencyData.map((group, gi) => (
+          <div key={gi} style={{ marginBottom: 20, borderLeft: `3px solid ${group.color}`, borderRadius: 8, background: group.color + "04", padding: "16px 20px" }}>
+            <div style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, marginBottom: 12 }}>
+              <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: group.color, marginRight: 8, verticalAlign: "middle" }} />
               {group.role}
-            </h3>
+            </div>
             {group.outcomes.map((o, oi) => (
-              <div key={oi} style={{ display: "flex", gap: 12, marginBottom: 10, paddingLeft: 4 }}>
-                <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: group.color, flexShrink: 0, minWidth: 42, paddingTop: 2 }}>{o.day}</span>
-                <p style={{ ...pStyle, margin: 0 }}>{o.text}</p>
+              <div key={oi} style={{ display: "flex", gap: 10, marginBottom: 8, paddingLeft: 4 }}>
+                <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: group.color, flexShrink: 0, minWidth: 38, paddingTop: 2 }}>{o.day}</span>
+                <span style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.muted, lineHeight: 1.55 }}>{o.text}</span>
               </div>
             ))}
           </div>
         ))}
+
+        {/* Content mode callout */}
+        <div style={{ margin: "28px 0 0", padding: "18px 22px", background: C.cream, borderRadius: 10, border: `1px solid ${C.lightGray}` }}>
+          <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.green, marginBottom: 8 }}>Handling varying technical depth</div>
+          <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.muted, lineHeight: 1.6, margin: 0 }}>
+            Every content page has three depth levels \u2014 Simplified, Standard, and Engineer \u2014 so participants of any background can access content at their comfort level. Facilitator guides include pacing notes for mixed-depth rooms.
+          </p>
+        </div>
       </div>
 
-      {/* ─── 5. RATIONALE ─── */}
-      <div style={sectionStyle}>
+      {/* \u2500\u2500\u2500 4. RATIONALE & TRADE-OFFS \u2500\u2500\u2500 */}
+      <div style={{ ...sectionGap, ...st.fadeUp, animationDelay: "0.35s" }}>
         <div style={{ display: "flex", alignItems: "baseline", gap: 14, marginBottom: 8 }}>
-          <span style={{ fontFamily: "var(--serif)", fontSize: 42, color: C.blue, lineHeight: 1, opacity: 0.25 }}>05</span>
-          <h2 style={h1Style}>Rationale</h2>
+          <span style={{ fontFamily: "var(--serif)", fontSize: 42, color: C.blue, lineHeight: 1, opacity: 0.25 }}>04</span>
+          <h2 style={headingStyle}>Rationale & Trade-offs</h2>
         </div>
         <div style={accentLine(C.blue)} />
 
-        <h3 style={h2Style}>Why This Sequence</h3>
-        <p style={pStyle}>The five-day arc follows the Dreyfus model of skill acquisition: novice → advanced beginner → competent → proficient → expert.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Days 1–2 (Novice → Advanced Beginner):</strong> Learners follow rules. Install Claude Code, learn the commands, write a CLAUDE.md by template. Success is defined by following the steps correctly.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Day 3 (Competent):</strong> Learners make decisions. Which hooks to configure, which MCP servers to connect, how to compose them. Success requires judgment, not just execution.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Day 4 (Proficient):</strong> Learners handle ambiguity. Customer objections don't follow scripts. The security conversation requires reading the room; the competitive conversation requires honest differentiation.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Day 5 (Expert):</strong> Learners integrate everything under pressure. A blind brief, a time constraint, a live audience. This is as close as we can get to the real job without being in the field.</p>
-        <p style={pStyle}>This progression also follows experiential learning theory (Kolb): concrete experience (do the task) → reflective observation (knowledge checkpoints) → abstract conceptualization (understand the pattern) → active experimentation (apply to a new scenario). Each module completes this cycle.</p>
+        <h3 style={subheadStyle}>Why This Sequence</h3>
+        <p style={bodyStyle}>The five-day arc follows the Dreyfus model of skill acquisition:</p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 0, marginBottom: 24 }}>
+          {[
+            { stage: "Days 1\u20132", level: "Novice \u2192 Advanced Beginner", desc: "Follow rules. Install Claude Code, learn the commands, write a CLAUDE.md by template.", color: C.blue },
+            { stage: "Day 3", level: "Competent", desc: "Make decisions. Which hooks to configure, which MCP servers to connect, how to compose them.", color: C.green },
+            { stage: "Day 4", level: "Proficient", desc: "Handle ambiguity. Customer objections don\u2019t follow scripts. Read the room, differentiate honestly.", color: C.orange },
+            { stage: "Day 5", level: "Expert", desc: "Integrate everything under pressure. Blind brief, time constraint, live audience.", color: C.orange },
+          ].map((s, i) => (
+            <div key={i} style={{ display: "flex", alignItems: "baseline", gap: 12, padding: "10px 0 10px 12px", borderLeft: `2px solid ${s.color}30` }}>
+              <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: s.color, flexShrink: 0, minWidth: 62 }}>{s.stage}</span>
+              <div>
+                <span style={{ fontFamily: "var(--sans)", fontSize: 12.5, fontWeight: 500, color: C.dark }}>{s.level}</span>
+                <span style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted }}> \u2014 {s.desc}</span>
+              </div>
+            </div>
+          ))}
+        </div>
 
-        <h3 style={h2Style}>Key Trade-offs</h3>
+        <h3 style={subheadStyle}>Key Trade-offs</h3>
 
         <div style={{ background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}`, padding: "20px 24px", marginBottom: 16 }}>
-          <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>Shared Days 1–3 vs. earlier role divergence</h4>
-          <p style={{ ...pStyle, margin: 0 }}>I chose shared sessions for the first three days despite the audience having different technical depths. The alternative — splitting into technical and non-technical tracks on Day 1 — would mean Pre-Sales PEs never build the hands-on depth needed to handle technical customer conversations. The three-tier content mode selector (Simplified / Standard / Engineer) and facilitator pacing notes mitigate the mixed-depth challenge without sacrificing depth for anyone.</p>
+          <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>Shared Days 1\u20133 vs. earlier role divergence</h4>
+          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}>I chose shared sessions for the first three days despite the audience having different technical depths. The alternative \u2014 splitting into technical and non-technical tracks on Day 1 \u2014 would mean Pre-Sales PEs never build the hands-on depth needed to handle technical customer conversations. The three-tier content mode selector and facilitator pacing notes mitigate the mixed-depth challenge without sacrificing depth for anyone.</p>
         </div>
         <div style={{ background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}`, padding: "20px 24px", marginBottom: 16 }}>
           <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>Client scenarios as framing vs. abstract exercises</h4>
-          <p style={{ ...pStyle, margin: 0 }}>Every module is framed through a realistic client scenario (Meridian Health, Lumen Logistics, Arcadia Financial, etc.) rather than abstract exercises. This costs development time — each scenario needs a believable company, industry context, and problem statement. The payoff: learners practice the actual cognitive work of a customer engagement rather than just learning features in isolation.</p>
+          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}>Every module is framed through a realistic client scenario (Meridian Health, Lumen Logistics, Arcadia Financial, etc.) rather than abstract exercises. This costs development time \u2014 each scenario needs a believable company, industry context, and problem statement. The payoff: learners practice the actual cognitive work of a customer engagement rather than just learning features in isolation.</p>
         </div>
         <div style={{ background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}`, padding: "20px 24px", marginBottom: 16 }}>
           <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>Single-file React app vs. a more scalable architecture</h4>
-          <p style={{ ...pStyle, margin: 0 }}>The application is built as a single App.jsx file. This was a deliberate choice for a portfolio piece that needs to be instantly understandable and deployable. For a production curriculum platform, I would split into components, add a proper router, and likely use a content management system for the curriculum data.</p>
+          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}>The application is built as a single App.jsx file. This was a deliberate choice for a portfolio piece that needs to be instantly understandable and deployable. For a production curriculum platform, I would split into components, add a proper router, and likely use a content management system for the curriculum data.</p>
         </div>
         <div style={{ background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}`, padding: "20px 24px", marginBottom: 16 }}>
           <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>Depth on Day 2 (CLAUDE.md) vs. distributing across days</h4>
-          <p style={{ ...pStyle, margin: 0 }}>Day 2 is the deepest module (17 steps with facilitator narration scripts). I chose to invest heavily here because the CLAUDE.md before/after demo is the single most persuasive moment in the entire program. It's the demo every PE will run in their first customer conversation. Getting this day right has outsized impact on field readiness.</p>
+          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}>Day 2 is the deepest module (17 steps with facilitator narration scripts). I chose to invest heavily here because the CLAUDE.md before/after demo is the single most persuasive moment in the entire program. It\u2019s the demo every PE will run in their first customer conversation. Getting this day right has outsized impact on field readiness.</p>
         </div>
 
-        <h3 style={h2Style}>What I'd Do Differently with More Time</h3>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Video walkthroughs:</strong> Pre-recorded facilitator demos for each module, so learners can watch the "ideal" run before attempting it themselves.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Quantitative confidence measurement:</strong> Add a 1–5 confidence self-rating before and after each module. Currently the knowledge checkpoints are qualitative.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Real MCP server for Day 3:</strong> The current lab uses a mock Jira server. With more time, I'd provision a real sandbox Jira instance.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Alumni community and feedback loop:</strong> A Slack channel or Notion database where Basecamp graduates share field reports — what worked, what didn't, which customer scenarios came up that we didn't cover.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Adaptive difficulty:</strong> Use the credential system to unlock advanced paths. Learners who complete all Day 1–3 badges with strong checkpoint scores could get an accelerated Day 4 with harder customer scenarios.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Localization and async delivery:</strong> The current design assumes a facilitated, synchronous cohort. For global teams, I'd build an async-first version with video content, auto-graded exercises, and optional live office hours.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Visual polish:</strong> The app needs a pass on formatting, spacing, and visual consistency. Some sections are dense, some cards don't align well at different screen sizes, and the typography could be tighter throughout.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Copy editing:</strong> A full copy edit across every section — tighten the language, cut redundancy, make sure the tone is consistent from foundations through the facilitator guides.</p>
-        <p style={bulletStyle}><span style={dot}>•</span> <strong>Navigation:</strong> Moving between sections, finding the facilitator guide, and getting back to where you were can be clunky. The app would benefit from persistent navigation, breadcrumbs, or a sidebar that shows where you are in the program.</p>
+        <h3 style={subheadStyle}>What I\u2019d Do Differently with More Time</h3>
+        {[
+          { label: "Video walkthroughs", text: "Pre-recorded facilitator demos for each module, so learners can watch the \u201cideal\u201d run before attempting it themselves." },
+          { label: "Quantitative confidence measurement", text: "Add a 1\u20135 confidence self-rating before and after each module. Currently the knowledge checkpoints are qualitative." },
+          { label: "Real MCP server for Day 3", text: "The current lab uses a mock Jira server. With more time, I\u2019d provision a real sandbox Jira instance." },
+          { label: "Alumni community and feedback loop", text: "A Slack channel or Notion database where Basecamp graduates share field reports \u2014 what worked, what didn\u2019t, which customer scenarios came up that we didn\u2019t cover." },
+          { label: "Adaptive difficulty", text: "Use the credential system to unlock advanced paths. Learners who complete all Day 1\u20133 badges with strong checkpoint scores could get an accelerated Day 4 with harder customer scenarios." },
+          { label: "Async delivery", text: "The current design assumes a facilitated, synchronous cohort. For global teams, I\u2019d build an async-first version with video content, auto-graded exercises, and optional live office hours." },
+        ].map((item, i) => (
+          <div key={i} style={{ display: "flex", gap: 10, marginBottom: 10, paddingLeft: 4 }}>
+            <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.blue, flexShrink: 0, paddingTop: 3 }}>\u2022</span>
+            <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}><strong>{item.label}:</strong> {item.text}</p>
+          </div>
+        ))}
       </div>
     </>
   );
 }
-
 // ─── COHORT 1 FEEDBACK CONTENT (extracted from FeedbackResponsePage) ───
 function CohortFeedbackContent() {
   return (
@@ -3564,12 +3563,12 @@ function CohortFeedbackContent() {
       <div style={{ borderTop: `1px solid ${C.lightGray}`, paddingTop: 24, marginTop: 20, ...st.fadeUp, animationDelay: "0.5s" }}>
         <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.faint, marginBottom: 10 }}>Summary of feedback coverage</div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-          {["Pacing / content overload", "Flat confidence (no ramp)", "Evals low engagement", "Day 3 realism drop", "Role-specific differentiation", "Setup friction", "Async/solo learner gap", "Build-first vs. abstract-first", "Interactive presentations", "Hands-on > lecture"].map((tag, i) => (
+          {["Pacing / content overload", "Flat confidence (no ramp)", "Evals low engagement", "Day 3 realism drop", "Role-specific differentiation", "Setup friction", "Async/solo learner gap", "Build-first vs. abstract-first", "Interactive presentations", "Hands-on > lecture", "Statistical context (n=17)", "Role segmentation gap", "Competing hypotheses", "Silence analysis", "Change risk tradeoffs"].map((tag, i) => (
             <span key={i} style={{ fontFamily: "var(--mono)", fontSize: 9, padding: "4px 10px", borderRadius: 14, border: `1px solid ${C.green}30`, color: C.green, background: C.green + "08" }}>{tag}</span>
           ))}
         </div>
         <p style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.faint, marginTop: 16, lineHeight: 1.5 }}>
-          Each tag above is addressed in at least one diagnosis, change, and measurement section. References point to specific lines, modules, and design decisions in the Claude Code Basecamp codebase.
+          Each tag above is addressed in at least one diagnosis, change, measurement, or risk section. References point to specific lines, modules, and design decisions in the Claude Code Basecamp codebase.
         </p>
       </div>
     </>
@@ -4102,11 +4101,11 @@ export default function App() {
             <h2 style={st.sectionHeading}>Your week at a glance</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
               {[
-                { day: "Day 1", title: "First contact", focus: "Install Claude Code, complete your first agentic task", prework: "30 min", live: "45 min", lab: "45 min", color: C.orange },
-                { day: "Day 2", title: "Prompt craft", focus: "CLAUDE.md, context management, prompt patterns", prework: "30 min", live: "60 min", lab: "60 min", color: C.blue },
-                { day: "Day 3", title: "Extend & customize", focus: "Hooks, MCP servers, slash commands, Agent SDK", prework: "45 min", live: "45 min", lab: "75 min", color: C.green },
-                { day: "Day 4", title: "Customer scenarios", focus: "Security reviews, deployments, competitive positioning", prework: null, live: "90 min", lab: "30 min", color: C.orange },
-                { day: "Day 5", title: "Ship it", focus: "Blind brief, working demo, capstone presentation", prework: null, live: null, lab: null, integrated: "120 min", color: C.green },
+                { day: "Day 1", title: "First contact", focus: "Install Claude Code, complete your first agentic task", customerFraming: "Run a live install for a prospect and deliver their first \"wow\" moment in under 10 minutes.", prework: "30 min", live: "45 min", lab: "45 min", color: C.orange },
+                { day: "Day 2", title: "Prompt craft", focus: "CLAUDE.md, context management, prompt patterns", customerFraming: "Show a customer how to make Claude Code an expert on their codebase — not just a generic tool.", prework: "30 min", live: "60 min", lab: "60 min", color: C.blue },
+                { day: "Day 3", title: "Extend & customize", focus: "Hooks, MCP servers, slash commands, Agent SDK", customerFraming: "Design the hooks, integrations, and guardrails that make a customer's security and compliance team say yes.", prework: "45 min", live: "45 min", lab: "75 min", color: C.green },
+                { day: "Day 4", title: "Customer scenarios", focus: "Security reviews, deployments, competitive positioning", customerFraming: "Handle the three conversations that close deals: the CISO, the VP of Engineering, and the Copilot skeptic.", prework: "45 min", live: "90 min", lab: "30 min", color: C.orange },
+                { day: "Day 5", title: "Ship it", focus: "Blind brief, working demo, capstone presentation", customerFraming: "Prove you can go from a blind customer brief to a working demo and a compelling pitch — under pressure.", prework: null, live: null, lab: null, integrated: "120 min", color: C.green },
               ].map((d, i) => (
                 <div key={i} style={{
                   display: "flex", alignItems: "flex-start", gap: 16, padding: "16px 0",
@@ -4118,7 +4117,8 @@ export default function App() {
                   </div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 500, color: C.dark, marginBottom: 2 }}>{d.title}</div>
-                    <div style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted, lineHeight: 1.5, marginBottom: 8 }}>{d.focus}</div>
+                    <div style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted, lineHeight: 1.5, marginBottom: 4 }}>{d.focus}</div>
+                    <div style={{ fontFamily: "var(--sans)", fontSize: 11.5, color: d.color, lineHeight: 1.4, marginBottom: 8, fontStyle: "italic" }}>{d.customerFraming}</div>
                     <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                       {d.integrated ? (
                         <span style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "3px 10px", borderRadius: 12, background: d.color + "10", color: d.color }}>Integrated session · {d.integrated}</span>
@@ -4549,7 +4549,8 @@ export default function App() {
                 <h1 style={{ fontFamily: "var(--serif)", fontSize: 36, fontWeight: 400, color: C.dark, margin: "0 0 8px" }}>{mod.title}</h1>
                 <ContentModeSelect contentMode={contentMode} onChange={setContentMode} moduleId={mod.id} onRetake={() => setShowDiagnosticQuiz(mod.id)} />
               </div>
-              <p style={{ ...st.bodyText, maxWidth: 540, fontSize: 16, marginBottom: 28 }}>{mod.subtitle}</p>
+              <p style={{ ...st.bodyText, maxWidth: 540, fontSize: 16, marginBottom: mod.customerFraming ? 10 : 28 }}>{mod.subtitle}</p>
+              {mod.customerFraming && <p style={{ fontFamily: "var(--sans)", fontSize: 14, color: mod.color, fontStyle: "italic", margin: "0 0 28px", maxWidth: 540, lineHeight: 1.5 }}>{mod.customerFraming}</p>}
             </div>
 
             {/* Day snapshot */}
@@ -4929,6 +4930,7 @@ export default function App() {
                         {!done && subProg === "started" && <span style={{ fontSize: 10, fontFamily: "var(--sans)", fontWeight: 400, color: C.faint, background: C.lightGray + "60", padding: "2px 8px", borderRadius: 10 }}>In progress</span>}
                       </div>
                       <div style={{ fontFamily: "var(--sans)", fontSize: 11.5, color: C.muted, marginTop: 3, lineHeight: 1.4, maxWidth: 400 }}>{mod.subtitle.split(".")[0]}.</div>
+                      {mod.customerFraming && <div style={{ fontFamily: "var(--sans)", fontSize: 11, color: mod.color, marginTop: 4, lineHeight: 1.4, maxWidth: 400, fontStyle: "italic" }}>{mod.customerFraming}</div>}
                     </div>
                   </div>
                   <span data-arrow="" style={{ color: C.orange, fontSize: 18, opacity: 0.3, transition: "all 0.25s ease" }}>→</span>
