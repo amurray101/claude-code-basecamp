@@ -665,6 +665,27 @@
       font-size: var(--text-sm);
       color: var(--text-secondary);
     }
+    /* WIP overlay on all slides EXCEPT slide 1 and Day 2 (slides 14–32) */
+    .slides > section:nth-child(n+2):nth-child(-n+13)::after,
+    .slides > section:nth-child(n+33)::after {
+      content: "Slides WIP — go to Slide 14 for Take Home Slides";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80%;
+      padding: 2em 1.5em;
+      background: rgba(255, 255, 255, 0.95);
+      border: 4px solid var(--accent-coral, #D4754E);
+      border-radius: 16px;
+      font-size: 1.6em;
+      font-weight: 700;
+      color: var(--text-primary, #1a1a1a);
+      text-align: center;
+      z-index: 100;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
