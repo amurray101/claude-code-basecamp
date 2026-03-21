@@ -1026,8 +1026,8 @@ const FOUNDATIONS = [
 // Orientation: required upfront before path selection (Anthropic, Products, Claude Code overview)
 // Contextual: delivered just-in-time as prework for the module that uses them
 const ORIENTATION_SECTIONS = [
-  "welcome", "products", "claude-ai", "cowork", "cc-overview", "model-family", "extensions",
-  "claude-code",
+  "welcome", "claude-ai", "cowork", "claude-code", "model-family", "extensions",
+  "how-to-use", "who-uses-it", "what-it-costs", "how-it-thinks",
 ];
 
 const ORIENTATION_FOUNDATIONS = FOUNDATIONS.map(f => {
@@ -3088,14 +3088,14 @@ const FEEDBACK_RESPONSE = [
     items: [
       {
         problem: "Too much content per day",
-        analysis: "31% said pacing was too fast — roughly 5 out of 17 respondents. With samples this small, no single number is statistically conclusive; what matters is that the same signal appeared in three independent places: the pacing survey (31% too fast), the written comments ('too much content packed into the day'), and the confidence data (flat at 4.29, 4.28, 4.28 across all three days). When three different data sources converge, that's a real problem, not a sampling artifact. We were putting more into each session than people could absorb. Those who fared better likely had stronger technical backgrounds coming in, but we need to design for everyone.",
+        analysis: "31% said pacing was too fast — roughly 5 out of 17 respondents. This is a relatively small sample, so no single statistic is conclusive. But, when taken together, a clear trend emerges. The same signal appeared in three independent places: the pacing survey (31% too fast), the written comments ('too much content packed into the day'), and the confidence data (flat at 4.29, 4.28, 4.28 across all three days). It is likely that the first iteration of Basecamp jammed too much content into each day without enough time to digest. Those who fared better likely had stronger technical backgrounds coming in, but the course needs to scale across backgrounds and roles.",
         implementation: {
           label: "Expanded from 3 days to 5, moved lectures to pre-work",
           detail: "The program runs 5 days now instead of 3 — about 40% less content per day. Conceptual material is moved to self-paced pre-work, leaving live time to focus on hands-on exercises.",
         },
       },
       {
-        problem: "Lectures before building doesn't work",
+        problem: "Pair lectures with hands-on activities to reinforce concepts",
         analysis: "The Evals session scored 3.9 engagement — half a point below average. The feedback was specific: 'too much time on abstract component taxonomy without enough concrete examples.' Same person said 'the build-along afterward was far more effective.' Sessions where people got hands-on and built themselves scored higher than listening-only lectures.",
         implementation: {
           label: "Every session starts with building now",
@@ -3498,24 +3498,6 @@ function CurriculumPlanContent() {
 function CohortFeedbackContent() {
   return (
     <>
-      {/* Cohort 1 summary stats */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(140px, 1fr))", gap: 10, margin: "0 0 40px", ...st.fadeUp, animationDelay: "0.1s" }}>
-        {[
-          { stat: "35", label: "NPS", sub: "n=17" },
-          { stat: "4.1", label: "Met expectations", sub: "1–5 avg" },
-          { stat: "31%", label: "Said \u201cToo fast\u201d", sub: "pacing" },
-          { stat: "3.9", label: "Evals engagement", sub: "lowest session" },
-          { stat: "flat", label: "Confidence trend", sub: "4.29→4.28→4.28" },
-          { stat: "3.9", label: "Day 3 realism", sub: "work simulation" },
-        ].map((s, i) => (
-          <div key={i} style={{ background: C.cream, border: `1px solid ${C.lightGray}`, borderRadius: 10, padding: "16px 14px", textAlign: "center" }}>
-            <div style={{ fontFamily: "var(--serif)", fontSize: 22, color: s.stat === "flat" || parseFloat(s.stat) < 4.0 || s.stat === "31%" ? C.orange : C.green, lineHeight: 1.2 }}>{s.stat}</div>
-            <div style={{ fontFamily: "var(--sans)", fontSize: 11, color: C.muted, marginTop: 4 }}>{s.label}</div>
-            <div style={{ fontFamily: "var(--mono)", fontSize: 9, color: C.faint, marginTop: 2 }}>{s.sub}</div>
-          </div>
-        ))}
-      </div>
-
       {/* Q&A Sections */}
       {FEEDBACK_RESPONSE.map((section, si) => (
         <div key={section.id} style={{ marginBottom: 56, ...st.fadeUp, animationDelay: `${0.15 + si * 0.08}s` }}>
@@ -3713,6 +3695,25 @@ export default function App() {
   }, [foundationsDone, path, completed, phase, userName, foundationSectionsViewed, moduleSubProgress, checkpointsCompleted, certificateEarnedDate, preworkCompleted, diagnosticResults]);
 
   const activeFoundations = foundationsViewContext === "orientation" ? ORIENTATION_FOUNDATIONS : FOUNDATIONS;
+
+  const sidebarNav = useMemo(() => {
+    if (foundationsViewContext !== "orientation") return [];
+    const items = [];
+    const welcomeIdx = activeFoundations.findIndex(f => f.id === "welcome");
+    if (welcomeIdx >= 0) items.push({ id: "welcome", label: "Welcome", group: "Anthropic", foundationStep: welcomeIdx, subPage: -1 });
+    const prodIdx = activeFoundations.findIndex(f => f.id === "products");
+    if (prodIdx >= 0) {
+      const platformIds = ["claude-ai", "cowork", "claude-code", "model-family", "extensions"];
+      const deepIds = ["how-to-use", "who-uses-it", "what-it-costs", "how-it-thinks"];
+      activeFoundations[prodIdx].pages?.forEach((p, pi) => {
+        if (platformIds.includes(p.id)) items.push({ id: p.id, label: p.label, group: "Platform", foundationStep: prodIdx, subPage: pi });
+      });
+      activeFoundations[prodIdx].pages?.forEach((p, pi) => {
+        if (deepIds.includes(p.id)) items.push({ id: p.id, label: p.label, group: "Claude Code", foundationStep: prodIdx, subPage: pi });
+      });
+    }
+    return items;
+  }, [activeFoundations, foundationsViewContext]);
 
   // Track foundation section views (including sub-pages)
   useEffect(() => {
@@ -4182,27 +4183,13 @@ export default function App() {
       {/* ═══ FOUNDATIONS ═══ */}
       {phase === "foundations" && (
         <>
-          <div style={st.topBar}>
-            <div style={st.topBarInner}>
+          <div style={{ position: "fixed", top: 0, left: 0, right: 0, background: C.bg, zIndex: 10, borderBottom: `1px solid ${C.lightGray}`, paddingTop: 3 }}>
+            <div style={{ maxWidth: 920, margin: "0 auto", padding: "10px 28px" }}>
               <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 2, color: C.faint, textTransform: "uppercase" }}>Foundations</div>
             </div>
-            <div style={st.tabRow}>
-              {activeFoundations.map((f, i) => (
-                <button key={f.id} onClick={() => { setShowMethodology(false); setFoundationStep(i); setSubPage(-1); }} style={{ ...st.tab, color: !showMethodology && i === foundationStep ? C.orange : C.faint, borderBottomColor: !showMethodology && i === foundationStep ? C.orange : "transparent", fontWeight: !showMethodology && i === foundationStep ? 500 : 400 }}>{f.label}</button>
-              ))}
-              <div style={{ flex: 1 }} />
-            </div>
-            {currentFoundation.pages && !showMethodology && (
-              <div style={{ display: "flex", gap: 0, borderTop: `1px solid ${C.lightGray}`, padding: "0 20px", background: C.cream }}>
-                <button onClick={() => setSubPage(-1)} style={{ ...st.tab, fontSize: 11, padding: "8px 14px", color: subPage === -1 ? C.orange : C.faint, borderBottomColor: subPage === -1 ? C.orange : "transparent", fontWeight: subPage === -1 ? 500 : 400 }}>Overview</button>
-                {currentFoundation.pages.map((p, pi) => (
-                  <button key={p.id} onClick={() => setSubPage(pi)} style={{ ...st.tab, fontSize: 11, padding: "8px 14px", color: subPage === pi ? C.orange : C.faint, borderBottomColor: subPage === pi ? C.orange : "transparent", fontWeight: subPage === pi ? 500 : 400 }}>{p.label}</button>
-                ))}
-              </div>
-            )}
           </div>
           {showMethodology ? (
-            <div style={{ ...st.container, paddingTop: 116 }} key="methodology">
+            <div style={{ ...st.container, paddingTop: 64 }} key="methodology">
               <h2 style={{ ...st.foundationTitle, ...st.fadeUp }}>The science behind this program</h2>
               <p style={{ ...st.bodyText, ...st.fadeUp, animationDelay: "0.04s" }}>Basecamp isn't structured the way it is because it felt right. Every design choice — from the sequencing of modules to the format of individual exercises — is grounded in learning science research. This page documents the pedagogical frameworks we drew on and the evidence behind them.</p>
 
@@ -4324,8 +4311,80 @@ export default function App() {
                 <button onClick={() => setShowMethodology(false)} style={st.navBtn}>← Back to foundations</button>
               </div>
             </div>
+          ) : foundationsViewContext === "orientation" && sidebarNav.length > 0 ? (
+          <div style={{ maxWidth: 920, margin: "0 auto", paddingTop: 56, display: "flex", gap: 0, minHeight: "100vh" }}>
+            {/* ── SIDEBAR ── */}
+            <nav style={{ width: 220, flexShrink: 0, padding: "24px 0 24px 28px", position: "sticky", top: 56, alignSelf: "flex-start", maxHeight: "calc(100vh - 56px)", overflowY: "auto" }}>
+              {(() => {
+                let lastGroup = "";
+                return sidebarNav.map((item, i) => {
+                  const isActive = item.foundationStep === foundationStep && item.subPage === subPage;
+                  const showGroup = item.group !== lastGroup;
+                  lastGroup = item.group;
+                  return (
+                    <div key={item.id}>
+                      {showGroup && (
+                        <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.faint, padding: i === 0 ? "0 12px 8px" : "16px 12px 8px" }}>{item.group}</div>
+                      )}
+                      <button
+                        onClick={() => { setFoundationStep(item.foundationStep); setSubPage(item.subPage); setShowMethodology(false); window.scrollTo({ top: 0, behavior: "instant" }); }}
+                        style={{
+                          display: "block", width: "100%", textAlign: "left", cursor: "pointer",
+                          padding: "7px 12px", background: isActive ? C.orange + "08" : "transparent",
+                          border: "none", borderLeft: isActive ? `3px solid ${C.orange}` : "3px solid transparent",
+                          fontFamily: "var(--sans)", fontSize: 12.5, fontWeight: isActive ? 600 : 400,
+                          color: isActive ? C.orange : C.muted, transition: "all 0.15s",
+                        }}
+                        onMouseEnter={e => { if (!isActive) e.currentTarget.style.color = C.dark; }}
+                        onMouseLeave={e => { if (!isActive) e.currentTarget.style.color = C.muted; }}
+                      >{item.label}</button>
+                    </div>
+                  );
+                });
+              })()}
+            </nav>
+            {/* ── CONTENT ── */}
+            <div style={{ flex: 1, maxWidth: 640, padding: "24px 28px 60px" }} key={currentFoundation.id + (subPage >= 0 ? '-' + subPage : '')}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", ...st.fadeUp }}>
+                <h2 style={{ ...st.foundationTitle, margin: 0 }}>{subPage >= 0 && currentFoundation.pages ? currentFoundation.pages[subPage].title : currentFoundation.title}</h2>
+                <ContentModeSelect contentMode={contentMode} onChange={setContentMode} />
+              </div>
+              <div style={{ height: 24 }} />
+              {(subPage >= 0 && currentFoundation.pages ? currentFoundation.pages[subPage].content : currentFoundation.content).map((block, idx) => <ContentBlock key={idx} block={block} idx={idx} contentMode={contentMode} />)}
+              {(() => {
+                const currentNavIdx = sidebarNav.findIndex(item => item.foundationStep === foundationStep && item.subPage === subPage);
+                const isFirst = currentNavIdx <= 0;
+                const isLast = currentNavIdx === sidebarNav.length - 1;
+                return (
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 36, paddingTop: 20, borderTop: `1px solid ${C.lightGray}` }}>
+                    {!isFirst ? (
+                      <button onClick={() => {
+                        const prev = sidebarNav[currentNavIdx - 1];
+                        setFoundationStep(prev.foundationStep); setSubPage(prev.subPage);
+                        window.scrollTo({ top: 0, behavior: "instant" });
+                      }} style={st.navBtn}>← Previous</button>
+                    ) : <div />}
+                    {isLast ? (
+                      <button onClick={() => { setFoundationsDone(true); setPhase("path-select"); }} style={st.primaryBtn}
+                        onMouseEnter={e => e.currentTarget.style.opacity = "0.88"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+                      >Choose your role →</button>
+                    ) : (
+                      <button onClick={() => {
+                        const next = sidebarNav[currentNavIdx + 1];
+                        setFoundationStep(next.foundationStep); setSubPage(next.subPage);
+                        window.scrollTo({ top: 0, behavior: "instant" });
+                      }} style={st.primaryBtn}
+                        onMouseEnter={e => e.currentTarget.style.opacity = "0.88"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+                      >Continue →</button>
+                    )}
+                  </div>
+                );
+              })()}
+            </div>
+          </div>
           ) : (
-          <div style={{ ...st.container, paddingTop: currentFoundation.pages ? 196 : 164 }} key={currentFoundation.id + (subPage >= 0 ? '-' + subPage : '')}>
+          /* Contextual mode — full width, no sidebar */
+          <div style={{ ...st.container, paddingTop: 64 }} key={currentFoundation.id + (subPage >= 0 ? '-' + subPage : '')}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", ...st.fadeUp }}>
               <h2 style={{ ...st.foundationTitle, margin: 0 }}>{subPage >= 0 && currentFoundation.pages ? currentFoundation.pages[subPage].title : currentFoundation.title}</h2>
               <ContentModeSelect contentMode={contentMode} onChange={setContentMode} />
@@ -4333,37 +4392,10 @@ export default function App() {
             <div style={{ height: 24 }} />
             {(subPage >= 0 && currentFoundation.pages ? currentFoundation.pages[subPage].content : currentFoundation.content).map((block, idx) => <ContentBlock key={idx} block={block} idx={idx} contentMode={contentMode} />)}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 36, paddingTop: 20, borderTop: `1px solid ${C.lightGray}` }}>
-              {(foundationStep > 0 || subPage >= 0) ? (
-                <button onClick={() => {
-                  if (subPage > 0) { setSubPage(subPage - 1); }
-                  else if (subPage === 0) { setSubPage(-1); }
-                  else if (foundationStep > 0) {
-                    setFoundationStep(foundationStep - 1);
-                    const prev = activeFoundations[foundationStep - 1];
-                    if (prev.pages) { setSubPage(prev.pages.length - 1); } else { setSubPage(-1); }
-                  }
-                }} style={st.navBtn}>← Previous</button>
-              ) : <div />}
-              {foundationsViewContext === "contextual" ? (
-                <button onClick={() => { setPhase("module"); setFoundationsViewContext("orientation"); }} style={st.navBtn}
-                  onMouseEnter={e => e.currentTarget.style.opacity = "0.88"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}
-                >← Back to module</button>
-              ) : foundationStep === activeFoundations.length - 1 && (!currentFoundation.pages || subPage === currentFoundation.pages.length - 1) ? (
-                <button onClick={() => { setFoundationsDone(true); setPhase("path-select"); }} style={st.primaryBtn}
-                  onMouseEnter={e => e.currentTarget.style.opacity = "0.88"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}
-                >Choose your role →</button>
-              ) : (
-                <button onClick={() => {
-                  if (currentFoundation.pages && subPage < currentFoundation.pages.length - 1) {
-                    setSubPage(subPage + 1);
-                  } else {
-                    setFoundationStep(foundationStep + 1);
-                    setSubPage(-1);
-                  }
-                }} style={st.primaryBtn}
-                  onMouseEnter={e => e.currentTarget.style.opacity = "0.88"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}
-                >Continue →</button>
-              )}
+              <div />
+              <button onClick={() => { setPhase("module"); setFoundationsViewContext("orientation"); }} style={st.navBtn}
+                onMouseEnter={e => e.currentTarget.style.opacity = "0.88"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+              >← Back to module</button>
             </div>
           </div>
           )}
