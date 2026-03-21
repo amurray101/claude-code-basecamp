@@ -48,37 +48,37 @@ const surfaces = [
     num: 1,
     name: 'CLAUDE.md',
     desc: 'Persistent project context. The system prompt for your codebase.',
-    why: 'Start every customer deployment here.',
+    why: 'Start every customer deployment here. Day 2: you\u2019ll write one from scratch.',
   },
   {
     num: 2,
     name: 'Hooks',
     desc: 'Custom scripts before/after actions. Pre-commit linting, post-edit testing.',
-    why: "The answer to 'how do I control what Claude does?'",
+    why: 'The answer to \u201chow do I control what Claude does?\u201d Day 3: you\u2019ll build pre-commit hooks.',
   },
   {
     num: 3,
     name: 'Permissions',
     desc: 'Tiered control: Interactive (asks first), Auto-accept (within boundaries), Headless (CI/CD).',
-    why: 'Critical for enterprise security conversations.',
+    why: 'Critical for enterprise security conversations. Day 4: key for the CISO role-play.',
   },
   {
     num: 4,
     name: 'MCP',
     desc: 'Model Context Protocol connects Claude to external services. 1000+ connectors.',
-    why: 'Often the unlock for enterprise deals.',
+    why: 'Often the unlock for enterprise deals. Day 3: you\u2019ll set up a mock Jira server.',
   },
   {
     num: 5,
     name: 'Slash Commands',
     desc: 'Quick actions and custom workflows. Shared via git.',
-    why: 'Tech leads love standardized team workflows.',
+    why: 'Tech leads love standardized team workflows. Day 3: you\u2019ll create a deploy-check command.',
   },
   {
     num: 6,
     name: 'Memory',
     desc: 'Preferences across sessions. Project-level (CLAUDE.md, shared) + User-level (~/.claude/, personal).',
-    why: 'Claude remembers your conventions.',
+    why: 'Claude remembers your conventions. Day 2: session management covers this.',
   },
 ];
 
@@ -207,6 +207,9 @@ export default function F5_Configuration() {
 ## Team notes
 - [Anything you'd tell a new teammate on day one]`}
         </pre>
+        <div style={{ fontFamily: 'var(--sans)', fontSize: 10, color: C.faint, marginTop: -14, marginBottom: 18, lineHeight: 1.5 }}>
+          Use the M2a (CLAUDE.md Builder) worksheet to guide your content during the Day 2 exercise.
+        </div>
 
         {/* Hook Config Example */}
         <div style={codeLabel}>Hook Config Example</div>

@@ -88,11 +88,11 @@ const dimensions = [
   },
   {
     dim: 'CI/CD integration',
-    claude: 'GitHub Actions native',
-    copilot: 'GitHub native',
+    claude: 'GitHub Actions',
+    copilot: 'GitHub native (deeper)',
     cursor: 'No',
     devin: 'API-based',
-    advantage: true,
+    advantage: false,
   },
   {
     dim: 'Pricing',
@@ -100,7 +100,7 @@ const dimensions = [
     copilot: '$19-39/seat/month',
     cursor: '$20-40/seat/month',
     devin: '$500/month',
-    advantage: true,
+    advantage: false,
   },
 ];
 
@@ -152,7 +152,7 @@ export default function M4a_CompetitiveBattlecard() {
     <MaterialLayout
       id="M4a"
       title="Claude Code vs. Competition"
-      subtitle="Know the landscape, win the conversation"
+      subtitle="Know the landscape, win the conversation. Compare your role-play battlecard against this reference."
       color={C.orange}
       category="Day 4"
       format="Battlecard"

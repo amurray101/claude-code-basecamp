@@ -104,7 +104,10 @@ export default function M4c_DemoPlanning() {
 
         {/* Demo Moments Checklist */}
         <div style={sectionBox}>
-          <h2 style={subHeading}>Demo Moments Checklist</h2>
+          <h2 style={subHeading}>Demo Moments</h2>
+          <div style={{ fontFamily: 'var(--sans)', fontSize: 10, color: C.orange, fontWeight: 600, marginBottom: 8 }}>
+            Choose your top 3&ndash;4 (not all of them). More features = less impact.
+          </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             {[
               'Multi-file refactor \u2014 show the agentic loop in action',
@@ -134,6 +137,16 @@ export default function M4c_DemoPlanning() {
           </div>
         </div>
 
+        {/* Demo Story Arc */}
+        <div style={{ ...sectionBox, borderLeft: `3px solid ${C.orange}` }}>
+          <h2 style={subHeading}>Demo Story Arc</h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {doubleFieldRow('Opening hook (their problem):')}
+            {doubleFieldRow('Demo flow (3\u20134 moments in order):')}
+            {fieldRow('Closing ask (specific next step):')}
+          </div>
+        </div>
+
         {/* Close Plan */}
         <div style={sectionBox}>
           <h2 style={subHeading}>Close Plan</h2>
@@ -148,6 +161,9 @@ export default function M4c_DemoPlanning() {
         {/* Post-Demo Follow-Up */}
         <div style={sectionBox}>
           <h2 style={subHeading}>Post-Demo Follow-Up</h2>
+          <div style={{ fontFamily: 'var(--sans)', fontSize: 10, color: C.faint, marginBottom: 8, fontStyle: 'italic' }}>
+            Real-world follow-up steps. Use after actual customer demos, not during the lab exercise.
+          </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             {[
               'Send summary email within 24 hours',

@@ -519,7 +519,7 @@ const FOUNDATIONS = [
       {
         id: "claude-code", label: "Claude Code", title: "What is Claude Code?",
         content: [
-          { type: "section-intro", step: "5", label: "Claude Code", context: "Products > Claude Code" },
+          { type: "section-intro", step: "3", label: "Claude Code", context: "Products > Claude Code" },
           { type: "text", value: "You've seen where Claude Code fits in the Anthropic stack. Now let's go deeper on how it actually works — the agentic loop, the interaction model, and what makes it different from every other coding tool.", simple: "You already know what Claude Code is. Now let's understand how it works under the hood — how it reads code, plans changes, and verifies its own work.", engineer: "Claude Code is a CLI-native agentic coding tool. It uses the same Messages API as other Claude integrations but wraps it in a persistent tool-use loop with filesystem access, shell execution, and git operations. This section covers the architecture, tool dispatch, and context management internals." },
           { type: "outcomes", items: [
             "Explain in 60 seconds how agentic coding differs from autocomplete tools like Copilot",
@@ -1048,7 +1048,7 @@ const MODULES = [
     clientScenario: { company: "Meridian Health", industry: "Healthcare SaaS", situation: "Meridian Health's 8-person backend team needs 2–3 days to add new API endpoints due to boilerplate and testing overhead. Your job: install Claude Code and deliver their first real productivity win — a new endpoint built in minutes, not days." },
     materials: [
       { id: "M1", label: "Install & First Run cheat sheet", when: "Print before starting — follow alongside steps 1-4" },
-      { id: "F3a", label: "Claude Code at a Glance", when: "Reference card to keep at your desk" },
+      { id: "M1b", label: "Command Glossary", when: "Desk reference — every command, shortcut, and flag in one place" },
     ],
     skills: ["Terminal install", "VS Code / JetBrains setup", "Basic prompting", "Navigation", "First agentic task"],
     modality: { live: "45 min", lab: "45 min", selfPaced: "30 min pre-work" },
@@ -1088,7 +1088,6 @@ steps: [
     materials: [
       { id: "M2a", label: "CLAUDE.md Builder worksheet", when: "Use during step 4 to structure your CLAUDE.md" },
       { id: "M2b", label: "Prompt Patterns cheat sheet", when: "Reference while practicing prompt craft in steps 6-8" },
-      { id: "F5", label: "Configuration & Customization cheat sheet", when: "Companion reference for slash commands, memory, and settings" },
     ],
     skills: ["CLAUDE.md authoring", "Context management", "Session hygiene", "Multi-step workflows", "Prompt patterns"],
     modality: { live: "60 min", lab: "60 min", selfPaced: "30 min pre-work" },
@@ -1134,7 +1133,6 @@ steps: [
     clientScenario: { company: "Arcadia Financial", industry: "Fintech / regulated", situation: "Arcadia Financial has 60 engineers and hard compliance requirements: nothing ships without lint, type checks, and tests. Their PM team lives in Jira and developers constantly context-switch. Can Claude Code enforce quality gates and pull Jira context automatically?" },
     materials: [
       { id: "M3", label: "Integration Patterns architecture reference", when: "Architecture diagrams for hooks, MCP, and slash commands" },
-      { id: "F5", label: "Configuration & Customization cheat sheet", when: "Quick reference for hooks syntax and permission tiers" },
     ],
     skills: ["Hooks", "MCP integration", "Skills & Plugins", "Subagents & Agent Teams", "Agent SDK"],
     modality: { live: "45 min", lab: "75 min", selfPaced: "45 min pre-work" },
@@ -1179,7 +1177,6 @@ steps: [
       { id: "M4c", label: "Demo Planning worksheet", when: "Fill out after role-plays to plan your first real demo" },
       { id: "F6a", label: "Security Objection Handler", when: "Your cheat sheet for the CISO role-play (step 1)" },
       { id: "F7b", label: "Cost & ROI Pocket Math", when: "Quick math reference for cost conversations" },
-      { id: "F7a", label: "Deployment Path Finder", when: "Decision tree for Bedrock vs. Vertex vs. Foundry" },
     ],
     skills: ["Security objection handling", "Enterprise deployment architecture", "Cost & ROI conversations", "Competitive positioning", "Live demo skills"],
     modality: { live: "90 min (breakouts)", lab: "30 min", selfPaced: "none" },
@@ -3547,18 +3544,6 @@ function CohortFeedbackContent() {
         </div>
       ))}
 
-      {/* Footer */}
-      <div style={{ borderTop: `1px solid ${C.lightGray}`, paddingTop: 24, marginTop: 20, ...st.fadeUp, animationDelay: "0.5s" }}>
-        <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.faint, marginBottom: 10 }}>Summary of feedback coverage</div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-          {["Pacing / content overload", "Flat confidence (no ramp)", "Evals low engagement", "Day 3 realism drop", "Role-specific differentiation", "Setup friction", "Async/solo learner gap", "Build-first vs. abstract-first", "Interactive presentations", "Hands-on > lecture", "Statistical context (n=17)", "Role segmentation gap", "Competing hypotheses", "Silence analysis", "Change risk tradeoffs"].map((tag, i) => (
-            <span key={i} style={{ fontFamily: "var(--mono)", fontSize: 9, padding: "4px 10px", borderRadius: 14, border: `1px solid ${C.green}30`, color: C.green, background: C.green + "08" }}>{tag}</span>
-          ))}
-        </div>
-        <p style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.faint, marginTop: 16, lineHeight: 1.5 }}>
-          Each tag above is addressed in at least one diagnosis, change, measurement, or risk section. References point to specific lines, modules, and design decisions in the Claude Code Basecamp codebase.
-        </p>
-      </div>
     </>
   );
 }

@@ -51,10 +51,11 @@ const optimizations = [
 
 const napkinRows = [
   { label: 'Team size:', template: '___ developers' },
-  { label: 'Estimated monthly cost:', template: '___ \u00d7 $150 = $___' },
-  { label: 'Time saved:', template: '___ min/dev/day \u00d7 ___ devs \u00d7 22 days = ___ hrs/mo' },
-  { label: 'Value recovered:', template: '___ hrs \u00d7 $___ /hr = $___ /mo' },
-  { label: 'ROI:', template: '$___ / $___ = ___\u00d7' },
+  { label: 'Daily cost:', template: '___ devs \u00d7 $6/day = $___/day' },
+  { label: 'Time saved:', template: '___ hr/dev/day \u00d7 ___ devs = ___ hrs/day' },
+  { label: 'Daily value:', template: '___ hrs \u00d7 $150/hr = $___/day' },
+  { label: 'ROI:', template: '$___/day value \u00f7 $___/day cost = ___\u00d7' },
+  { label: 'Monthly:', template: '$___/day \u00d7 22 days = $___/month' },
 ];
 
 export default function F7b_CostROI() {
@@ -269,16 +270,19 @@ export default function F7b_CostROI() {
               200 developers, Sonnet usage
             </div>
             <div style={{ marginBottom: 4 }}>
-              <span style={{ ...monoLabel, textTransform: 'none', letterSpacing: 0 }}>Monthly Claude Code cost:</span>{' '}
-              200 &times; $150 = <strong style={{ color: C.dark }}>$30,000</strong>
+              <span style={{ ...monoLabel, textTransform: 'none', letterSpacing: 0 }}>Daily Claude Code cost:</span>{' '}
+              200 devs &times; $6/day = <strong style={{ color: C.dark }}>$1,200/day</strong>
             </div>
             <div style={{ marginBottom: 4 }}>
               <span style={{ ...monoLabel, textTransform: 'none', letterSpacing: 0 }}>Time saved:</span>{' '}
-              30 min/dev/day &times; 200 devs &times; 22 days = <strong style={{ color: C.dark }}>2,200 hours/month</strong>
+              1 hr/dev/day &times; 200 devs = <strong style={{ color: C.dark }}>200 hours/day</strong>
             </div>
             <div style={{ marginBottom: 4 }}>
               <span style={{ ...monoLabel, textTransform: 'none', letterSpacing: 0 }}>Value at $150/hr fully-loaded:</span>{' '}
-              2,200 &times; $160 = <strong style={{ color: C.dark }}>$352,000/month</strong>
+              200 hrs &times; $150 = <strong style={{ color: C.dark }}>$30,000/day</strong>
+            </div>
+            <div style={{ marginBottom: 4, fontSize: 11, color: C.muted }}>
+              Monthly: $1,200/day &times; 22 days = $26,400/mo cost &nbsp;|&nbsp; $30,000/day &times; 22 = $660,000/mo value
             </div>
             <div
               style={{
@@ -294,7 +298,7 @@ export default function F7b_CostROI() {
                 textAlign: 'center',
               }}
             >
-              ROI: $352,000 / $30,000 = 11.7&times; return
+              ROI: $30,000 / $1,200 = 25&times; return
             </div>
           </div>
         </div>

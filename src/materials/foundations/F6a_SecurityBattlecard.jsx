@@ -62,14 +62,17 @@ export default function F6a_SecurityBattlecard() {
       {/* ════════════ FRONT ════════════ */}
       <div className="card-front">
         <h2 style={sectionHeading}>Defense-in-Depth Model</h2>
+        <div style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.muted, marginBottom: 10, fontStyle: 'italic' }}>
+          Present from the outside in: start with Sandboxing, then add each layer. Each layer builds confidence.
+        </div>
 
-        {/* Nested concentric layers */}
+        {/* Nested concentric layers — ordered for presentation flow */}
         <div
           style={{
-            border: `2px solid ${C.faint}`,
+            border: `2px solid ${C.dark}`,
             borderRadius: 10,
             padding: 16,
-            background: C.faint + '08',
+            background: C.dark + '08',
           }}
         >
           {/* Layer 1 label */}
@@ -80,24 +83,28 @@ export default function F6a_SecurityBattlecard() {
               fontWeight: 600,
               letterSpacing: '0.04em',
               textTransform: 'uppercase',
-              color: C.muted,
+              color: C.dark,
               marginBottom: 6,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
             }}
           >
-            Layer 1 &mdash; Compliance
+            Layer 1 &mdash; Sandboxing (OS)
+            <span style={{ fontFamily: 'var(--sans)', fontSize: 9, fontWeight: 400, textTransform: 'none', letterSpacing: 0, color: C.orange }}>&larr; Start here</span>
           </div>
           <ul style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.dark, lineHeight: 1.6, margin: '0 0 12px 16px', padding: 0 }}>
-            <li>SOC 2 Type 2, ISO 27001 certifications</li>
-            <li>Anthropic Trust Center for documentation</li>
-            <li>Data processing agreements for enterprise</li>
+            <li>OS-level filesystem + network isolation</li>
+            <li>Write access limited to project directory</li>
+            <li>Dangerous commands blocked by default</li>
           </ul>
 
           <div
             style={{
-              border: `2px solid ${C.blue}`,
+              border: `2px solid ${C.orange}`,
               borderRadius: 8,
               padding: 14,
-              background: C.blue + '0c',
+              background: C.orange + '0c',
             }}
           >
             <div
@@ -107,16 +114,16 @@ export default function F6a_SecurityBattlecard() {
                 fontWeight: 600,
                 letterSpacing: '0.04em',
                 textTransform: 'uppercase',
-                color: C.blue,
+                color: C.orange,
                 marginBottom: 6,
               }}
             >
-              Layer 2 &mdash; Managed Settings
+              Layer 2 &mdash; Permissions
             </div>
             <ul style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.dark, lineHeight: 1.6, margin: '0 0 12px 16px', padding: 0 }}>
-              <li>Centralized admin control over all users</li>
-              <li>Enforced policies that can&apos;t be overridden</li>
-              <li>Restrict MCP servers to approved list</li>
+              <li>Three tiers: Interactive / Auto-accept / Headless</li>
+              <li>Evaluated independently of model output</li>
+              <li>Blocks unauthorized actions even under prompt injection</li>
             </ul>
 
             <div
@@ -148,10 +155,10 @@ export default function F6a_SecurityBattlecard() {
 
               <div
                 style={{
-                  border: `2px solid ${C.orange}`,
+                  border: `2px solid ${C.blue}`,
                   borderRadius: 8,
                   padding: 14,
-                  background: C.orange + '14',
+                  background: C.blue + '14',
                 }}
               >
                 <div
@@ -161,24 +168,24 @@ export default function F6a_SecurityBattlecard() {
                     fontWeight: 600,
                     letterSpacing: '0.04em',
                     textTransform: 'uppercase',
-                    color: C.orange,
+                    color: C.blue,
                     marginBottom: 6,
                   }}
                 >
-                  Layer 4 &mdash; Permissions
+                  Layer 4 &mdash; Managed Settings
                 </div>
                 <ul style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.dark, lineHeight: 1.6, margin: '0 0 12px 16px', padding: 0 }}>
-                  <li>Three tiers: Interactive / Auto-accept / Headless</li>
-                  <li>Evaluated independently of model output</li>
-                  <li>Blocks unauthorized actions even under prompt injection</li>
+                  <li>Centralized admin control over all users</li>
+                  <li>Enforced policies that can&apos;t be overridden</li>
+                  <li>Restrict MCP servers to approved list</li>
                 </ul>
 
                 <div
                   style={{
-                    border: `2px solid ${C.dark}`,
+                    border: `2px solid ${C.faint}`,
                     borderRadius: 6,
                     padding: 14,
-                    background: C.dark + '0a',
+                    background: C.faint + '0a',
                   }}
                 >
                   <div
@@ -188,16 +195,16 @@ export default function F6a_SecurityBattlecard() {
                       fontWeight: 600,
                       letterSpacing: '0.04em',
                       textTransform: 'uppercase',
-                      color: C.dark,
+                      color: C.muted,
                       marginBottom: 6,
                     }}
                   >
-                    Layer 5 &mdash; Sandboxing
+                    Layer 5 &mdash; Compliance
                   </div>
                   <ul style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.dark, lineHeight: 1.6, margin: '0 0 0 16px', padding: 0 }}>
-                    <li>OS-level filesystem + network isolation</li>
-                    <li>Write access limited to project directory</li>
-                    <li>Dangerous commands blocked by default</li>
+                    <li>SOC 2 Type 2, ISO 27001 certifications</li>
+                    <li>Anthropic Trust Center for documentation</li>
+                    <li>Data processing agreements for enterprise</li>
                   </ul>
                 </div>
               </div>

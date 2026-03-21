@@ -151,11 +151,11 @@ claude`}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 {[
                   'Install Claude Code CLI',
-                  <>Run <span style={inlineCode}>claude</span> in a project directory</>,
-                  <>Watch Claude read your codebase (the &ldquo;aha&rdquo; moment)</>,
-                  'Complete your first agentic task',
-                  'Install IDE extension',
-                  'Compare CLI vs IDE experience',
+                  <>Run <span style={inlineCode}>claude</span> in the sample Express API repo</>,
+                  <>Watch Claude read the codebase (the &ldquo;aha&rdquo; moment)</>,
+                  'Add a GET /health endpoint with tests (first agentic task)',
+                  'Narrate the agentic loop: Read \u2192 Plan \u2192 Edit \u2192 Test \u2192 Iterate',
+                  'Install IDE extension and compare CLI vs IDE experience',
                 ].map((item, i) => (
                   <div key={i} style={checkboxLine}>
                     <div style={checkbox} />
@@ -228,15 +228,39 @@ claude`}
 
       {/* ════════════ PAGE 2 ════════════ */}
       <div className="page-break-before" style={{ marginTop: 32 }}>
-        {/* Demo Script */}
-        <h2 style={sectionHeading}>Demo Script</h2>
+        {/* The Agentic Loop — What to Watch For */}
+        <div
+          style={{
+            background: C.orange + '0a',
+            border: `1px solid ${C.orange}25`,
+            borderRadius: 6,
+            padding: '12px 16px',
+            marginBottom: 20,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 16,
+          }}
+        >
+          {['Read', 'Plan', 'Edit', 'Test', 'Iterate'].map((phase, i) => (
+            <span key={phase} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700, color: C.orange }}>{phase}</span>
+              {i < 4 && <span style={{ color: C.gray }}>&rarr;</span>}
+            </span>
+          ))}
+        </div>
+        <div style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.muted, marginBottom: 16, lineHeight: 1.6, textAlign: 'center', fontStyle: 'italic' }}>
+          Every task Claude performs follows this cycle. Today&rsquo;s goal: observe it, recognize it, and learn to explain it to a customer.
+        </div>
+
+        <h2 style={sectionHeading}>The Agentic Loop &mdash; What to Watch For</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 24 }}>
           {[
             {
               step: 1,
               text: (
                 <>
-                  Open terminal in a project directory. Say: <em>&ldquo;I&rsquo;m going to show you what agentic coding looks like.&rdquo;</em>
+                  Open terminal in the sample Express API repo. Claude will read the codebase before you type anything.
                 </>
               ),
             },
@@ -244,7 +268,7 @@ claude`}
               step: 2,
               text: (
                 <>
-                  Run <span style={inlineCode}>claude</span>. Point out: <em>&ldquo;It&rsquo;s reading the codebase &mdash; understanding the architecture before touching anything.&rdquo;</em>
+                  Run <span style={inlineCode}>claude</span>. Watch it scan the directory structure, package.json, and existing code. This is the <strong>Read</strong> phase.
                 </>
               ),
             },
@@ -252,7 +276,7 @@ claude`}
               step: 3,
               text: (
                 <>
-                  Give a multi-file task: <em>&ldquo;Add a health check endpoint with tests.&rdquo;</em> Narrate: <em>&ldquo;Watch it plan, then execute.&rdquo;</em>
+                  Prompt: <em>&ldquo;Add a GET /health endpoint with tests.&rdquo;</em> Watch Claude <strong>Plan</strong> the changes before touching any files.
                 </>
               ),
             },
@@ -260,7 +284,7 @@ claude`}
               step: 4,
               text: (
                 <>
-                  As it works, highlight: <em>&ldquo;It&rsquo;s reading files, planning changes, writing code, running tests &mdash; all autonomously.&rdquo;</em>
+                  As it works: notice it reading existing routes, <strong>editing</strong> files to add the endpoint, then <strong>testing</strong> to verify &mdash; all autonomously.
                 </>
               ),
             },
@@ -268,7 +292,7 @@ claude`}
               step: 5,
               text: (
                 <>
-                  When complete: <em>&ldquo;That was one prompt. It understood the codebase, made the change, and verified it works.&rdquo;</em>
+                  One prompt produced a working endpoint with passing tests. This is the agentic difference &mdash; project-level, not line-level.
                 </>
               ),
             },

@@ -69,7 +69,7 @@ export default function M2b_PromptPatterns() {
               marginBottom: 10,
             }}
           >
-            Formula: Outcome + Constraints + Success Criteria
+            WHAT (outcome) + HOW (constraints &amp; conventions) + VERIFY (success criteria)
           </div>
           <div
             style={{
@@ -119,6 +119,14 @@ export default function M2b_PromptPatterns() {
               {
                 bad: '"Fix the bug"',
                 fix: 'Too vague. Describe symptoms, context, expected behavior.',
+              },
+              {
+                bad: 'Refactor A, then add feature B, then fix bug C, then update README \u2014 all in one session',
+                fix: 'Kitchen-sink session. Context overload. One job per session, or /compact between tasks.',
+              },
+              {
+                bad: '"No, use TypeScript. Actually wait, make it async. Also change the naming..."',
+                fix: 'Correction spiral. Rapid corrections degrade output. Start fresh with a clear, complete prompt.',
               },
             ].map((a, i) => (
               <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -239,53 +247,49 @@ export default function M2b_PromptPatterns() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
           {/* Left column */}
           <div>
-            {/* Context Management Commands */}
-            <h2 style={sectionHeading}>Context Management Commands</h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 20 }}>
+            {/* The WHAT + HOW Pattern in Practice */}
+            <h2 style={sectionHeading}>The WHAT + HOW Pattern</h2>
+            <div style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.muted, lineHeight: 1.6, marginBottom: 12 }}>
+              Before/after comparisons from the Day 2 exercise. Same task, better prompt.
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
               {[
                 {
-                  cmd: '/compact',
-                  desc: 'Compress context. Use between major tasks.',
+                  before: 'Refactor the helpers module',
+                  after: 'Refactor src/utils/helpers.js to use async/await, add JSDoc comments, and co-locate tests. Follow the patterns in CLAUDE.md.',
+                  why: 'WHAT (refactor helpers) + HOW (async/await, JSDoc, co-located tests, follow CLAUDE.md)',
                 },
                 {
-                  cmd: '/clear',
-                  desc: 'Reset session. Use when switching projects.',
+                  before: 'Add a shipments endpoint',
+                  after: 'Add a POST /api/shipments endpoint that creates a shipment record. Follow the same route patterns, validation, and error handling as the existing routes in src/routes/.',
+                  why: 'WHAT (add endpoint) + HOW (match existing patterns) + VERIFY (implicit: tests pass)',
                 },
-                {
-                  cmd: 'Plan Mode',
-                  desc: 'Think without acting. Use for complex planning.',
-                },
-                {
-                  cmd: '/review',
-                  desc: 'Code review mode.',
-                },
-                {
-                  cmd: '/commit',
-                  desc: 'Stage and commit with Claude.',
-                },
-                {
-                  cmd: '/test',
-                  desc: 'Run test suite.',
-                },
-              ].map((c) => (
+              ].map((ex, i) => (
                 <div
-                  key={c.cmd}
+                  key={i}
                   style={{
-                    display: 'flex',
-                    gap: 10,
-                    alignItems: 'flex-start',
                     background: C.cream,
                     border: `1px solid ${C.lightGray}`,
                     borderRadius: 6,
-                    padding: '10px 14px',
+                    padding: '12px 14px',
                   }}
                 >
-                  <span style={{ ...inlineCode, flexShrink: 0 }}>{c.cmd}</span>
-                  <span style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.muted, lineHeight: 1.5 }}>
-                    {c.desc}
-                  </span>
+                  <div style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.orange, marginBottom: 4 }}>
+                    <strong>Before:</strong> &ldquo;{ex.before}&rdquo;
+                  </div>
+                  <div style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.green, marginBottom: 6 }}>
+                    <strong>After:</strong> &ldquo;{ex.after}&rdquo;
+                  </div>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: 10, color: C.muted }}>
+                    {ex.why}
+                  </div>
                 </div>
               ))}
+            </div>
+
+            {/* Command cross-reference */}
+            <div style={{ fontFamily: 'var(--sans)', fontSize: 10, color: C.faint, marginBottom: 16, lineHeight: 1.6 }}>
+              Command reference: see M1b (Command Glossary). Key commands for today: <span style={inlineCode}>/compact</span> (between tasks), <span style={inlineCode}>/clear</span> (new topic), <span style={inlineCode}>/cost</span> (check spend).
             </div>
 
             {/* Key Insight */}
@@ -329,8 +333,8 @@ export default function M2b_PromptPatterns() {
 
           {/* Right column */}
           <div>
-            {/* Session Hygiene Checklist */}
-            <h2 style={sectionHeading}>Session Hygiene Checklist</h2>
+            {/* Session Workflow Checklist */}
+            <h2 style={sectionHeading}>Session Workflow Checklist</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {[
                 'Start each session with a clear objective',

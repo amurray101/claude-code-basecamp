@@ -13,20 +13,12 @@ const C = {
   faint: '#b0aea5',
 };
 
-const sectionHeading = {
-  fontFamily: 'var(--serif)',
-  fontSize: 20,
-  fontWeight: 400,
-  color: C.dark,
-  margin: '0 0 14px 0',
-};
-
 const subHeading = {
   fontFamily: 'var(--serif)',
   fontSize: 15,
   fontWeight: 400,
   color: C.dark,
-  margin: '0 0 10px 0',
+  margin: '0 0 8px 0',
 };
 
 const inlineCode = {
@@ -40,9 +32,9 @@ const inlineCode = {
 
 const cmdRow = {
   display: 'flex',
-  gap: 10,
+  gap: 8,
   alignItems: 'flex-start',
-  padding: '10px 14px',
+  padding: '7px 14px',
   borderBottom: `1px solid ${C.lightGray}`,
 };
 
@@ -51,7 +43,7 @@ const cmdName = {
   fontSize: 12,
   fontWeight: 600,
   color: C.dark,
-  minWidth: 120,
+  minWidth: 110,
   flexShrink: 0,
 };
 
@@ -59,7 +51,7 @@ const cmdDesc = {
   fontFamily: 'var(--sans)',
   fontSize: 11,
   color: C.muted,
-  lineHeight: 1.55,
+  lineHeight: 1.5,
 };
 
 const sectionBox = (accentColor) => ({
@@ -68,7 +60,7 @@ const sectionBox = (accentColor) => ({
   borderTop: `3px solid ${accentColor}`,
   borderRadius: 6,
   overflow: 'hidden',
-  marginBottom: 18,
+  marginBottom: 14,
 });
 
 const sectionLabel = (accentColor) => ({
@@ -77,21 +69,8 @@ const sectionLabel = (accentColor) => ({
   letterSpacing: 1.2,
   textTransform: 'uppercase',
   color: accentColor,
-  padding: '12px 14px 0',
+  padding: '10px 14px 0',
 });
-
-const tipBox = {
-  background: C.bg,
-  border: `1px solid ${C.lightGray}`,
-  borderLeft: `3px solid ${C.green}`,
-  borderRadius: 4,
-  padding: '10px 14px',
-  fontFamily: 'var(--sans)',
-  fontSize: 11,
-  color: C.muted,
-  lineHeight: 1.55,
-  marginBottom: 18,
-};
 
 export default function M1b_CommandGlossary() {
   return (
@@ -100,10 +79,43 @@ export default function M1b_CommandGlossary() {
       title="Command Glossary"
       subtitle="Every command, shortcut, and flag in one place"
       color={C.orange}
-      category="Desk Reference"
+      category="Day 1"
       format="Cheat Sheet"
     >
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+      {/* ── Daily Drivers (top banner, full width) ── */}
+      <div
+        style={{
+          background: C.dark,
+          borderRadius: 8,
+          padding: '14px 18px',
+          marginBottom: 18,
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr 1fr 1fr',
+          gap: 10,
+        }}
+      >
+        {[
+          { cmd: 'claude', what: 'Launch session' },
+          { cmd: '/compact', what: 'Compress context' },
+          { cmd: '/clear', what: 'Reset session' },
+          { cmd: '/cost', what: 'Check spend' },
+          { cmd: 'Shift+Tab', what: 'Plan Mode on/off' },
+          { cmd: 'Escape', what: 'Interrupt Claude' },
+          { cmd: '@ + file', what: 'Add file to context' },
+          { cmd: 'Up arrow', what: 'Recall last message' },
+        ].map((d) => (
+          <div key={d.cmd} style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <span style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, color: C.orange }}>
+              {d.cmd}
+            </span>
+            <span style={{ fontFamily: 'var(--sans)', fontSize: 10, color: '#b0aea5', lineHeight: 1.3 }}>
+              {d.what}
+            </span>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18 }}>
         {/* ═══ LEFT COLUMN ═══ */}
         <div>
           {/* ── Slash Commands ── */}
@@ -111,10 +123,10 @@ export default function M1b_CommandGlossary() {
             <div style={sectionLabel(C.orange)}>Slash Commands</div>
             <h2 style={{ ...subHeading, padding: '6px 14px 0' }}>Session Management</h2>
             {[
-              { cmd: '/compact', desc: 'Compress conversation context. Summarizes history to free space while preserving key details. Use every 15–20 min in long sessions or after completing a major step.' },
-              { cmd: '/clear', desc: 'Reset session completely. Clears all conversation context. Use when switching to an unrelated task.' },
-              { cmd: '/cost', desc: 'Show token usage for the current session — tokens in, tokens out, and total spend. Essential for cost conversations with customers.' },
-              { cmd: '/stats', desc: 'Display usage patterns and session statistics.' },
+              { cmd: '/compact', desc: 'Compress context. Summarizes history to free space. Use every 15\u201320 min or after a major step.' },
+              { cmd: '/clear', desc: 'Reset session completely. Use when switching to an unrelated task.' },
+              { cmd: '/cost', desc: 'Show token usage \u2014 tokens in, out, and total spend.' },
+              { cmd: '/model', desc: 'Switch model (Sonnet, Opus, Haiku) mid-conversation.' },
             ].map(c => (
               <div key={c.cmd} style={cmdRow}>
                 <span style={cmdName}>{c.cmd}</span>
@@ -122,69 +134,52 @@ export default function M1b_CommandGlossary() {
               </div>
             ))}
 
-            <h2 style={{ ...subHeading, padding: '14px 14px 0' }}>Workflow</h2>
+            <h2 style={{ ...subHeading, padding: '10px 14px 0' }}>Workflow</h2>
             {[
-              { cmd: '/review', desc: 'Code review mode. Claude reviews staged or recent changes and provides feedback before committing.' },
-              { cmd: '/commit', desc: 'Stage files and commit with a Claude-generated message. Analyzes the diff to write a meaningful commit summary.' },
-              { cmd: '/test', desc: 'Run the project\'s test suite and report results.' },
-              { cmd: '/init', desc: 'Generate a CLAUDE.md file for the current project by analyzing the codebase structure, conventions, and dependencies.' },
-            ].map(c => (
-              <div key={c.cmd} style={cmdRow}>
-                <span style={cmdName}>{c.cmd}</span>
-                <span style={cmdDesc}>{c.desc}</span>
-              </div>
-            ))}
-
-            <h2 style={{ ...subHeading, padding: '14px 14px 0' }}>Navigation</h2>
-            {[
+              { cmd: '/review', desc: 'Code review mode. Reviews staged or recent changes before committing.' },
+              { cmd: '/commit', desc: 'Stage and commit with a Claude-generated message.' },
+              { cmd: '/test', desc: 'Run the project\u2019s test suite and report results.' },
+              { cmd: '/init', desc: 'Generate a CLAUDE.md by analyzing the codebase.' },
               { cmd: '/help', desc: 'Show available commands and usage guidance.' },
-              { cmd: '/config', desc: 'View or modify Claude Code configuration settings.' },
-              { cmd: '/model', desc: 'Switch the active model (Sonnet, Opus, Haiku) mid-conversation.' },
-              { cmd: '/login', desc: 'Re-authenticate or switch accounts.' },
-              { cmd: '/logout', desc: 'Sign out of the current session.' },
             ].map(c => (
               <div key={c.cmd} style={cmdRow}>
                 <span style={cmdName}>{c.cmd}</span>
                 <span style={cmdDesc}>{c.desc}</span>
               </div>
             ))}
-          </div>
-
-          {/* ── Custom Slash Commands ── */}
-          <div style={sectionBox(C.blue)}>
-            <div style={sectionLabel(C.blue)}>Custom Slash Commands</div>
-            <div style={{ padding: '10px 14px' }}>
-              <p style={cmdDesc}>
-                Create reusable prompts as markdown files in <span style={inlineCode}>.claude/commands/</span> — shared with the team via git.
-              </p>
-              <div style={{ background: C.bg, border: `1px solid ${C.lightGray}`, borderRadius: 4, padding: '10px 12px', marginTop: 8, fontFamily: 'var(--mono)', fontSize: 10.5, color: C.dark, lineHeight: 1.7 }}>
-                <div style={{ color: C.faint }}>{'# .claude/commands/deploy-check.md'}</div>
-                <div>Run pre-deployment checklist:</div>
-                <div>1. Run all tests</div>
-                <div>2. Check for lint errors</div>
-                <div>3. Verify env variables</div>
-                <div>4. Summarize changes since last deploy</div>
-              </div>
-              <p style={{ ...cmdDesc, marginTop: 8 }}>
-                Invoke with <span style={inlineCode}>/deploy-check</span>. Arguments are passed via <span style={inlineCode}>$ARGUMENTS</span> placeholder.
-              </p>
-            </div>
           </div>
 
           {/* ── Keyboard Shortcuts ── */}
           <div style={sectionBox(C.green)}>
             <div style={sectionLabel(C.green)}>Keyboard Shortcuts</div>
             {[
-              { cmd: 'Shift + Tab', desc: 'Toggle Plan Mode on/off. Claude plans without executing — useful for reviewing strategy before committing.' },
-              { cmd: 'Escape', desc: 'Interrupt Claude mid-response. Use when you see it heading in the wrong direction.' },
-              { cmd: 'Up arrow', desc: 'Recall previous message for editing and re-sending.' },
-              { cmd: '@ + filename', desc: 'Mention a file to add it to context. Helps Claude focus on specific files.' },
+              { cmd: 'Shift + Tab', desc: 'Toggle Plan Mode. Claude plans without executing \u2014 great for demos and complex tasks.' },
+              { cmd: 'Escape', desc: 'Interrupt Claude mid-response.' },
+              { cmd: 'Up arrow', desc: 'Recall previous message for editing.' },
+              { cmd: '@ + filename', desc: 'Mention a file to add it to context.' },
             ].map(c => (
               <div key={c.cmd} style={cmdRow}>
-                <span style={{ ...cmdName, minWidth: 110 }}>{c.cmd}</span>
+                <span style={{ ...cmdName, minWidth: 100 }}>{c.cmd}</span>
                 <span style={cmdDesc}>{c.desc}</span>
               </div>
             ))}
+          </div>
+
+          {/* ── Custom Commands ── */}
+          <div style={sectionBox(C.blue)}>
+            <div style={sectionLabel(C.blue)}>Custom Slash Commands</div>
+            <div style={{ padding: '8px 14px' }}>
+              <p style={cmdDesc}>
+                Create markdown files in <span style={inlineCode}>.claude/commands/</span> &mdash; shared with the team via git. Invoke with <span style={inlineCode}>/command-name</span>.
+              </p>
+              <div style={{ background: C.bg, border: `1px solid ${C.lightGray}`, borderRadius: 4, padding: '8px 10px', marginTop: 6, fontFamily: 'var(--mono)', fontSize: 10, color: C.dark, lineHeight: 1.6 }}>
+                <div style={{ color: C.faint }}>{'# .claude/commands/deploy-check.md'}</div>
+                <div>Run pre-deployment checklist:</div>
+                <div>1. Run all tests</div>
+                <div>2. Check for lint errors</div>
+                <div>3. Verify env variables</div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -193,40 +188,28 @@ export default function M1b_CommandGlossary() {
           {/* ── CLI Commands ── */}
           <div style={sectionBox(C.dark)}>
             <div style={sectionLabel(C.dark)}>CLI Commands</div>
-            <h2 style={{ ...subHeading, padding: '6px 14px 0' }}>Getting Started</h2>
+            <h2 style={{ ...subHeading, padding: '6px 14px 0' }}>Interactive</h2>
             {[
-              { cmd: 'claude', desc: 'Launch an interactive session in the current directory. Reads codebase, CLAUDE.md, and project structure automatically.' },
-              { cmd: 'claude auth', desc: 'Authenticate with your Anthropic account. Required before first use.' },
-              { cmd: 'claude --version', desc: 'Display the installed Claude Code version.' },
-              { cmd: 'claude --help', desc: 'Show all available CLI flags and subcommands.' },
+              { cmd: 'claude', desc: 'Launch interactive session. Reads codebase and CLAUDE.md automatically.' },
+              { cmd: 'claude -c', desc: 'Continue the most recent conversation.' },
+              { cmd: 'claude auth', desc: 'Authenticate with your Anthropic account.' },
             ].map(c => (
               <div key={c.cmd} style={cmdRow}>
-                <span style={{ ...cmdName, minWidth: 130 }}>{c.cmd}</span>
+                <span style={{ ...cmdName, minWidth: 120 }}>{c.cmd}</span>
                 <span style={cmdDesc}>{c.desc}</span>
               </div>
             ))}
 
-            <h2 style={{ ...subHeading, padding: '14px 14px 0' }}>Non-Interactive / Scripting</h2>
+            <h2 style={{ ...subHeading, padding: '10px 14px 0' }}>Scripting &amp; CI/CD</h2>
             {[
-              { cmd: 'claude -p "..."', desc: 'Run a single prompt and exit. Output goes to stdout — great for piping into other tools.' },
-              { cmd: 'claude -c', desc: 'Continue the most recent conversation instead of starting a new one.' },
-              { cmd: 'claude -r "..."', desc: 'Resume with a specific session ID.' },
-              { cmd: 'echo "..." | claude', desc: 'Pipe input to Claude as a prompt. Combine with -p for fully scripted workflows.' },
+              { cmd: 'claude -p "..."', desc: 'Run a single prompt and exit. Output goes to stdout.' },
+              { cmd: 'echo "..." | claude', desc: 'Pipe input as a prompt. Combine with -p for scripted workflows.' },
+              { cmd: '--output-format json', desc: 'Return structured JSON. Useful for CI/CD integration.' },
+              { cmd: '--max-turns N', desc: 'Limit agentic turns. Safety valve for automated runs.' },
+              { cmd: '--verbose', desc: 'Show tool calls and internal reasoning.' },
             ].map(c => (
               <div key={c.cmd} style={cmdRow}>
-                <span style={{ ...cmdName, minWidth: 130 }}>{c.cmd}</span>
-                <span style={cmdDesc}>{c.desc}</span>
-              </div>
-            ))}
-
-            <h2 style={{ ...subHeading, padding: '14px 14px 0' }}>Output & Format</h2>
-            {[
-              { cmd: '--output-format json', desc: 'Return structured JSON output. Useful for CI/CD integration and scripting.' },
-              { cmd: '--verbose', desc: 'Show detailed logging including tool calls and internal reasoning.' },
-              { cmd: '--max-turns N', desc: 'Limit the number of agentic turns. Safety valve for automated runs.' },
-            ].map(c => (
-              <div key={c.cmd} style={cmdRow}>
-                <span style={{ ...cmdName, minWidth: 130 }}>{c.cmd}</span>
+                <span style={{ ...cmdName, minWidth: 120, fontSize: 11 }}>{c.cmd}</span>
                 <span style={cmdDesc}>{c.desc}</span>
               </div>
             ))}
@@ -236,13 +219,13 @@ export default function M1b_CommandGlossary() {
           <div style={sectionBox(C.blue)}>
             <div style={sectionLabel(C.blue)}>Permission Modes</div>
             {[
-              { cmd: 'Default', desc: 'Claude asks before writing files, running commands, or making network requests. Best for learning or sensitive work.', color: C.blue },
-              { cmd: 'Plan Mode', desc: 'Claude reads and proposes but takes no actions. Toggle with Shift+Tab. Great for demos where reasoning should be visible.', color: C.green },
-              { cmd: 'Auto-accept', desc: 'Claude executes within configured boundaries without asking. Hooks and permission rules still apply.', color: C.orange },
-              { cmd: 'Headless', desc: 'No human in the loop. For CI/CD pipelines. All permissions via settings files and managed policies.', color: C.dark },
+              { cmd: 'Default', desc: 'Asks before writes, commands, and network requests.', color: C.blue },
+              { cmd: 'Plan Mode', desc: 'Reads and proposes but takes no actions. Toggle: Shift+Tab.', color: C.green },
+              { cmd: 'Auto-accept', desc: 'Executes within configured boundaries. Hooks still apply.', color: C.orange },
+              { cmd: 'Headless', desc: 'No human in the loop. For CI/CD pipelines.', color: C.dark },
             ].map(c => (
               <div key={c.cmd} style={cmdRow}>
-                <div style={{ minWidth: 90, flexShrink: 0 }}>
+                <div style={{ minWidth: 85, flexShrink: 0 }}>
                   <span style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 600, padding: '2px 8px', borderRadius: 4, background: c.color + '14', color: c.color }}>{c.cmd}</span>
                 </div>
                 <span style={cmdDesc}>{c.desc}</span>
@@ -254,13 +237,13 @@ export default function M1b_CommandGlossary() {
           <div style={sectionBox(C.gray)}>
             <div style={sectionLabel(C.muted)}>Configuration Files</div>
             {[
-              { cmd: 'CLAUDE.md', desc: 'Project context — architecture, conventions, testing, deployment. Read automatically every session. The single most impactful configuration.' },
-              { cmd: '.claude/settings.json', desc: 'Project settings — MCP servers, permission rules, model preferences. Shared via git.' },
+              { cmd: 'CLAUDE.md', desc: 'Project context \u2014 architecture, conventions, testing. Read every session. The most impactful configuration.' },
+              { cmd: '.claude/settings.json', desc: 'Project settings \u2014 MCP servers, permissions, model preferences.' },
               { cmd: '.claude/commands/', desc: 'Custom slash commands as markdown files. Shared via git.' },
-              { cmd: '~/.claude/', desc: 'User-level config — personal memory, preferences. Follows you across projects.' },
+              { cmd: '~/.claude/', desc: 'User-level config \u2014 personal memory, preferences. Follows you across projects.' },
             ].map(c => (
               <div key={c.cmd} style={cmdRow}>
-                <span style={{ ...cmdName, minWidth: 145 }}>{c.cmd}</span>
+                <span style={{ ...cmdName, minWidth: 140, fontSize: 10 }}>{c.cmd}</span>
                 <span style={cmdDesc}>{c.desc}</span>
               </div>
             ))}
@@ -270,21 +253,35 @@ export default function M1b_CommandGlossary() {
           <div style={sectionBox(C.green)}>
             <div style={sectionLabel(C.green)}>Environment Variables</div>
             {[
-              { cmd: 'ANTHROPIC_API_KEY', desc: 'API key for authentication. Required for CI/CD and headless mode.' },
-              { cmd: 'CLAUDE_CODE_USE_BEDROCK', desc: 'Route requests through AWS Bedrock instead of direct API.' },
-              { cmd: 'CLAUDE_CODE_USE_VERTEX', desc: 'Route requests through Google Vertex AI.' },
-              { cmd: 'CLAUDE_CODE_ENABLE_TELEMETRY', desc: 'Opt-in OpenTelemetry. Exports token usage, cost, and tool decisions as OTel metrics.' },
+              { cmd: 'ANTHROPIC_API_KEY', desc: 'API key auth. Required for CI/CD and headless mode.' },
+              { cmd: 'CLAUDE_CODE_USE_BEDROCK', desc: 'Route through AWS Bedrock.' },
+              { cmd: 'CLAUDE_CODE_USE_VERTEX', desc: 'Route through Google Vertex AI.' },
             ].map(c => (
               <div key={c.cmd} style={cmdRow}>
-                <span style={{ ...cmdName, fontSize: 10, minWidth: 145 }}>{c.cmd}</span>
+                <span style={{ ...cmdName, fontSize: 10, minWidth: 140 }}>{c.cmd}</span>
                 <span style={cmdDesc}>{c.desc}</span>
               </div>
             ))}
           </div>
 
           {/* ── Tip ── */}
-          <div style={tipBox}>
-            <strong style={{ color: C.green }}>Session hygiene rule of thumb:</strong> <span style={inlineCode}>/compact</span> between steps, <span style={inlineCode}>/clear</span> between tasks, <span style={inlineCode}>/cost</span> before wrapping up. A clean context window is the difference between a good session and a frustrating one.
+          <div
+            style={{
+              background: C.bg,
+              border: `1px solid ${C.lightGray}`,
+              borderLeft: `3px solid ${C.green}`,
+              borderRadius: 4,
+              padding: '10px 14px',
+              fontFamily: 'var(--sans)',
+              fontSize: 11,
+              color: C.muted,
+              lineHeight: 1.55,
+            }}
+          >
+            <strong style={{ color: C.green }}>Session hygiene:</strong>{' '}
+            <span style={inlineCode}>/compact</span> between steps,{' '}
+            <span style={inlineCode}>/clear</span> between tasks,{' '}
+            <span style={inlineCode}>/cost</span> before wrapping up.
           </div>
         </div>
       </div>

@@ -66,88 +66,104 @@ export default function F6b_SecurityArchitecture() {
       format="Architecture Reference"
     >
       {/* ── Concentric Rings Diagram ── */}
+      <div style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.muted, marginBottom: 10, fontStyle: 'italic' }}>
+        Present from the outside in: start with Sandboxing, then add each layer.
+      </div>
       <div
         style={{
-          border: `2px solid ${C.faint}`,
+          border: `2px solid ${C.dark}`,
           borderRadius: 12,
           padding: 18,
-          background: C.faint + '06',
+          background: C.dark + '06',
           marginBottom: 24,
         }}
       >
-        {/* Ring 1: Compliance & Governance */}
-        <div style={{ ...ringLabel, color: C.muted }}>Compliance &amp; Governance</div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
-          <span
-            style={{
-              fontFamily: 'var(--mono)',
-              fontSize: 10,
-              color: C.green,
-              background: C.green + '15',
-              border: `1px solid ${C.green}30`,
-              borderRadius: 4,
-              padding: '3px 8px',
-            }}
-          >
-            SOC 2 Type 2
-          </span>
-          <span
-            style={{
-              fontFamily: 'var(--mono)',
-              fontSize: 10,
-              color: C.blue,
-              background: C.blue + '15',
-              border: `1px solid ${C.blue}30`,
-              borderRadius: 4,
-              padding: '3px 8px',
-            }}
-          >
-            ISO 27001
-          </span>
-          <span
-            style={{
-              fontFamily: 'var(--mono)',
-              fontSize: 10,
-              color: C.muted,
-              background: C.cream,
-              border: `1px solid ${C.lightGray}`,
-              borderRadius: 4,
-              padding: '3px 8px',
-            }}
-          >
-            Trust Center
-          </span>
-          <span
-            style={{
-              fontFamily: 'var(--mono)',
-              fontSize: 10,
-              color: C.muted,
-              background: C.cream,
-              border: `1px solid ${C.lightGray}`,
-              borderRadius: 4,
-              padding: '3px 8px',
-            }}
-          >
-            Data Processing Agreements
-          </span>
+        {/* Ring 1: Sandboxing (OS) */}
+        <div style={{ ...ringLabel, color: C.dark, display: 'flex', alignItems: 'center', gap: 8 }}>
+          Sandboxing (OS)
+          <span style={{ fontFamily: 'var(--sans)', fontSize: 9, fontWeight: 400, textTransform: 'none', letterSpacing: 0, color: C.orange }}>&larr; Start here</span>
         </div>
-
-        {/* Ring 2: Managed Settings */}
         <div
           style={{
-            border: `2px solid ${C.blue}`,
+            display: 'flex',
+            gap: 10,
+            flexWrap: 'wrap',
+            marginBottom: 12,
+          }}
+        >
+          {['Filesystem isolation', 'Network restriction', 'Command blocklist'].map(
+            (item) => (
+              <span
+                key={item}
+                style={{
+                  fontFamily: 'var(--mono)',
+                  fontSize: 10,
+                  color: C.dark,
+                  background: C.bg,
+                  border: `1px solid ${C.lightGray}`,
+                  borderRadius: 4,
+                  padding: '3px 8px',
+                }}
+              >
+                {item}
+              </span>
+            )
+          )}
+        </div>
+
+        {/* Ring 2: Permissions */}
+        <div
+          style={{
+            border: `2px solid ${C.orange}`,
             borderRadius: 10,
             padding: 16,
-            background: C.blue + '08',
+            background: C.orange + '08',
             marginBottom: 0,
           }}
         >
-          <div style={{ ...ringLabel, color: C.blue }}>Managed Settings (Admin)</div>
-          <div style={ringDetail}>
-            Centralized admin control, enforced policies, can&apos;t be overridden by users
-          </div>
-          <div style={monoSnippet}>
-            {`{"disableBypassPermissionsMode": true, "allowManagedMcpServersOnly": true}`}
+          <div style={{ ...ringLabel, color: C.orange }}>Permissions (User)</div>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', marginBottom: 12 }}>
+            <span
+              style={{
+                fontFamily: 'var(--mono)',
+                fontSize: 10,
+                color: C.dark,
+                background: C.bg,
+                border: `1px solid ${C.lightGray}`,
+                borderRadius: 4,
+                padding: '3px 8px',
+              }}
+            >
+              Interactive
+            </span>
+            <span style={{ fontFamily: 'var(--sans)', fontSize: 12, color: C.gray }}>&rarr;</span>
+            <span
+              style={{
+                fontFamily: 'var(--mono)',
+                fontSize: 10,
+                color: C.dark,
+                background: C.bg,
+                border: `1px solid ${C.lightGray}`,
+                borderRadius: 4,
+                padding: '3px 8px',
+              }}
+            >
+              Auto-accept
+            </span>
+            <span style={{ fontFamily: 'var(--sans)', fontSize: 12, color: C.gray }}>&rarr;</span>
+            <span
+              style={{
+                fontFamily: 'var(--mono)',
+                fontSize: 10,
+                color: C.dark,
+                background: C.bg,
+                border: `1px solid ${C.lightGray}`,
+                borderRadius: 4,
+                padding: '3px 8px',
+              }}
+            >
+              Headless
+            </span>
           </div>
 
           {/* Ring 3: Hooks */}
@@ -157,7 +173,6 @@ export default function F6b_SecurityArchitecture() {
               borderRadius: 8,
               padding: 14,
               background: C.green + '0a',
-              marginTop: 12,
             }}
           >
             <div style={{ ...ringLabel, color: C.green }}>Hooks (Team)</div>
@@ -168,99 +183,76 @@ export default function F6b_SecurityArchitecture() {
               {`"pre-commit": ["npm run lint"], "pre-push": ["npm run test:e2e"]`}
             </div>
 
-            {/* Ring 4: Permissions */}
+            {/* Ring 4: Managed Settings */}
             <div
               style={{
-                border: `2px solid ${C.orange}`,
+                border: `2px solid ${C.blue}`,
                 borderRadius: 8,
                 padding: 14,
-                background: C.orange + '0c',
+                background: C.blue + '0c',
                 marginTop: 12,
               }}
             >
-              <div style={{ ...ringLabel, color: C.orange }}>Permissions (User)</div>
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-                <span
-                  style={{
-                    fontFamily: 'var(--mono)',
-                    fontSize: 10,
-                    color: C.dark,
-                    background: C.bg,
-                    border: `1px solid ${C.lightGray}`,
-                    borderRadius: 4,
-                    padding: '3px 8px',
-                  }}
-                >
-                  Interactive
-                </span>
-                <span style={{ fontFamily: 'var(--sans)', fontSize: 12, color: C.gray }}>&rarr;</span>
-                <span
-                  style={{
-                    fontFamily: 'var(--mono)',
-                    fontSize: 10,
-                    color: C.dark,
-                    background: C.bg,
-                    border: `1px solid ${C.lightGray}`,
-                    borderRadius: 4,
-                    padding: '3px 8px',
-                  }}
-                >
-                  Auto-accept
-                </span>
-                <span style={{ fontFamily: 'var(--sans)', fontSize: 12, color: C.gray }}>&rarr;</span>
-                <span
-                  style={{
-                    fontFamily: 'var(--mono)',
-                    fontSize: 10,
-                    color: C.dark,
-                    background: C.bg,
-                    border: `1px solid ${C.lightGray}`,
-                    borderRadius: 4,
-                    padding: '3px 8px',
-                  }}
-                >
-                  Headless
-                </span>
+              <div style={{ ...ringLabel, color: C.blue }}>Managed Settings (Admin)</div>
+              <div style={ringDetail}>
+                Centralized admin control, enforced policies, can&apos;t be overridden by users
+              </div>
+              <div style={monoSnippet}>
+                {`{"disableBypassPermissionsMode": true, "allowManagedMcpServersOnly": true}`}
               </div>
 
-              {/* Ring 5 (center): Sandboxing */}
+              {/* Ring 5 (center): Compliance & Governance */}
               <div
                 style={{
-                  border: `2px solid ${C.dark}`,
+                  border: `2px solid ${C.faint}`,
                   borderRadius: 6,
                   padding: 14,
-                  background: C.dark + '08',
+                  background: C.faint + '08',
                   marginTop: 12,
                   textAlign: 'center',
                 }}
               >
-                <div style={{ ...ringLabel, color: C.dark }}>Sandboxing (OS)</div>
-                <div
-                  style={{
-                    display: 'flex',
-                    gap: 10,
-                    justifyContent: 'center',
-                    flexWrap: 'wrap',
-                  }}
-                >
-                  {['Filesystem isolation', 'Network restriction', 'Command blocklist'].map(
-                    (item) => (
-                      <span
-                        key={item}
-                        style={{
-                          fontFamily: 'var(--mono)',
-                          fontSize: 10,
-                          color: C.dark,
-                          background: C.bg,
-                          border: `1px solid ${C.lightGray}`,
-                          borderRadius: 4,
-                          padding: '3px 8px',
-                        }}
-                      >
-                        {item}
-                      </span>
-                    )
-                  )}
+                <div style={{ ...ringLabel, color: C.muted }}>Compliance &amp; Governance</div>
+                <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <span
+                    style={{
+                      fontFamily: 'var(--mono)',
+                      fontSize: 10,
+                      color: C.green,
+                      background: C.green + '15',
+                      border: `1px solid ${C.green}30`,
+                      borderRadius: 4,
+                      padding: '3px 8px',
+                    }}
+                  >
+                    SOC 2 Type 2
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: 'var(--mono)',
+                      fontSize: 10,
+                      color: C.blue,
+                      background: C.blue + '15',
+                      border: `1px solid ${C.blue}30`,
+                      borderRadius: 4,
+                      padding: '3px 8px',
+                    }}
+                  >
+                    ISO 27001
+                  </span>
+                  <span
+                    style={{
+                      fontFamily: 'var(--mono)',
+                      fontSize: 10,
+                      color: C.muted,
+                      background: C.cream,
+                      border: `1px solid ${C.lightGray}`,
+                      borderRadius: 4,
+                      padding: '3px 8px',
+                    }}
+                  >
+                    Trust Center
+                  </span>
                 </div>
               </div>
             </div>

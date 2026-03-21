@@ -134,8 +134,8 @@ export default function M3_IntegrationPatterns() {
             { label: 'Hooks', desc: 'Pre/post command automation', top: '50%', left: '8%', transform: 'translateY(-50%)' },
             { label: 'MCP', desc: 'External service protocol', top: '12%', left: '68%', transform: 'none' },
             { label: 'Skills', desc: 'Reusable prompt templates', top: '50%', left: '78%', transform: 'translateY(-50%)' },
-            { label: 'Subagents', desc: 'Specialized Claude instances', top: '78%', left: '68%', transform: 'none' },
-            { label: 'Agent SDK', desc: 'Custom agent orchestration', top: '85%', left: '38%', transform: 'none' },
+            { label: 'Subagents', desc: 'Specialized Claude instances', top: '78%', left: '68%', transform: 'none', advanced: true },
+            { label: 'Agent SDK', desc: 'Custom agent orchestration', top: '85%', left: '38%', transform: 'none', advanced: true },
           ].map((node) => (
             <div
               key={node.label}
@@ -145,12 +145,13 @@ export default function M3_IntegrationPatterns() {
                 left: node.left,
                 transform: node.transform,
                 background: '#fff',
-                border: `2px solid ${C.green}`,
+                border: `2px ${node.advanced ? 'dashed' : 'solid'} ${node.advanced ? C.gray : C.green}`,
                 borderRadius: 6,
                 padding: '10px 14px',
                 textAlign: 'center',
                 zIndex: 1,
                 minWidth: 120,
+                opacity: node.advanced ? 0.6 : 1,
               }}
             >
               <div
@@ -226,8 +227,11 @@ export default function M3_IntegrationPatterns() {
               </li>
             ))}
           </ol>
-          <p style={{ ...bodyText, color: C.muted }}>
+          <p style={{ ...bodyText, color: C.muted, marginBottom: 8 }}>
             <strong>Setup:</strong> Add to <span style={inlineCode}>.claude/mcp.json</span>, authenticate, restart Claude Code
+          </p>
+          <p style={{ fontFamily: 'var(--sans)', fontSize: 10, color: C.faint, lineHeight: 1.5, margin: 0 }}>
+            In today&apos;s lab, you&apos;ll build a mock Jira server. Production MCP servers use the same setup pattern &mdash; the mock lets you practice without needing real credentials.
           </p>
         </div>
       </div>
@@ -249,8 +253,11 @@ Run the following checks:
 5. Changes summary since last deploy`}
         </pre>
 
-        {/* Subagent Configuration */}
-        <div style={sectionBox}>
+        {/* Subagent Configuration — ADVANCED */}
+        <div style={{ ...sectionBox, border: `1.5px dashed ${C.gray}`, opacity: 0.85 }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 9, fontWeight: 700, color: C.gray, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
+            Advanced &mdash; Not covered in the live session
+          </div>
           <h2 style={subHeading}>Subagent Configuration</h2>
           <p style={{ ...bodyText, marginBottom: 6 }}>
             <strong>What:</strong> Specialized Claude instances for specific tasks
@@ -263,8 +270,11 @@ Run the following checks:
           </p>
         </div>
 
-        {/* Agent SDK Overview */}
-        <div style={sectionBox}>
+        {/* Agent SDK Overview — ADVANCED */}
+        <div style={{ ...sectionBox, border: `1.5px dashed ${C.gray}`, opacity: 0.85 }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 9, fontWeight: 700, color: C.gray, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 8 }}>
+            Advanced &mdash; Not covered in the live session
+          </div>
           <h2 style={subHeading}>Agent SDK Overview</h2>
           <ul style={{ margin: 0, paddingLeft: 18 }}>
             <li style={listItem}>Build custom agents with the Claude API</li>
@@ -319,8 +329,11 @@ Run the following checks:
           >
             Enterprise Pitch
           </div>
-          <div style={{ ...bodyText, fontStyle: 'italic', color: C.muted }}>
+          <div style={{ ...bodyText, fontStyle: 'italic', color: C.muted, marginBottom: 8 }}>
             "MCP expands who gets value from Claude Code. When non-developer users can pull context from Jira, Datadog, and internal APIs through MCP connectors &mdash; Claude Code becomes accessible well beyond the engineering team."
+          </div>
+          <div style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.dark, lineHeight: 1.6 }}>
+            <strong>For Arcadia Financial:</strong> MCP connects Claude to their Jira board so developers stop context-switching. Combined with pre-commit hooks for compliance, this is the platform pitch.
           </div>
         </div>
       </div>

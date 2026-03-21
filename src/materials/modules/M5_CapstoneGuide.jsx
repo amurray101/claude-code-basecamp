@@ -45,27 +45,24 @@ const monoLabel = {
 };
 
 const timelineSteps = [
-  { duration: '20 min', task: 'Read the blind brief + research', color: C.blue },
-  { duration: '30 min', task: 'Architecture + solution design', color: C.green },
-  { duration: '45 min', task: 'Build working demo with Claude Code', color: C.orange },
-  { duration: '15 min', task: 'Prepare presentation', color: C.gray },
-  { duration: '10 min', task: 'Present to cohort', color: C.dark },
+  { duration: '15 min', task: 'Read the blind brief + analyze', color: C.blue },
+  { duration: '5 min', task: 'Plan your 3\u20134 demo moments (before building)', color: C.green },
+  { duration: '45 min', task: 'Architect + build working demo with Claude Code', color: C.orange },
+  { duration: '10 min', task: 'Prepare and rehearse presentation', color: C.gray },
+  { duration: '10 min', task: 'Present to cohort + Q&A', color: C.dark },
 ];
 
 const presentationStructure = [
-  { step: 1, name: 'Context', time: '2 min', detail: 'Customer situation, industry, pain points' },
-  { step: 2, name: 'Architecture', time: '2 min', detail: 'Deployment recommendation, integration pattern' },
-  { step: 3, name: 'Demo', time: '4 min', detail: 'Live Claude Code demo on their use case' },
-  { step: 4, name: 'ROI', time: '1 min', detail: 'Cost estimate, time savings, value proposition' },
-  { step: 5, name: 'Next Steps', time: '1 min', detail: 'Pilot proposal, timeline, ask' },
+  { step: 1, name: 'Their Problem', time: '2 min', detail: 'Customer situation, industry, pain points \u2014 start with their world, not your solution' },
+  { step: 2, name: 'Live Demo', time: '6 min', detail: 'Working Claude Code demo on their use case \u2014 3\u20134 moments max, show extended thinking' },
+  { step: 3, name: 'Next Steps', time: '2 min', detail: 'Rollout plan, cost estimate, pilot proposal \u2014 end with a specific ask' },
 ];
 
 const scoringCriteria = [
-  { criterion: 'Technical accuracy', question: 'Did the architecture make sense?' },
-  { criterion: 'Demo quality', question: 'Did it work? Was it compelling?' },
-  { criterion: 'Business acumen', question: 'Was the ROI credible? Was the close strong?' },
-  { criterion: 'Objection handling', question: 'Did they anticipate and address concerns?' },
-  { criterion: 'Communication', question: 'Was it clear, confident, and concise?' },
+  { criterion: 'Problem framing (25%)', question: 'Did they understand and articulate the customer\u2019s problem?' },
+  { criterion: 'Technical depth (25%)', question: 'Was the demo technically sound and working?' },
+  { criterion: 'Relevance to brief (25%)', question: 'Did the solution address the specific customer brief?' },
+  { criterion: 'Confidence under Q&A (25%)', question: 'Did they handle questions with poise and accuracy?' },
 ];
 
 const materialsIndex = [

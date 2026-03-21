@@ -221,15 +221,15 @@ export default function M4b_EnterpriseConversation() {
         <div style={sectionBox}>
           <h2 style={subHeading}>Live Cost Calculation</h2>
           <p style={{ ...bodyText, color: C.muted, marginBottom: 12 }}>
-            Walk through with the customer:
+            Walk through with the customer (see F7b for full ROI reference):
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {[
               'Team size: ___ developers',
-              'Monthly estimate: ___ \u00d7 $150 = $___',
-              'Time saved: 30 min/day \u00d7 ___ devs \u00d7 22 days = ___ hours',
-              'Value: ___ hours \u00d7 $160/hr = $___/month',
-              'ROI: ___\u00d7',
+              'Daily cost: ___ devs \u00d7 $6/day = $___/day',
+              'Time saved: ___ devs \u00d7 1 hr/day = ___ hours/day',
+              'Daily value: ___ hrs \u00d7 $150/hr = $___/day',
+              'ROI: $___/day value \u00f7 $___/day cost = ___\u00d7',
             ].map((line, i) => (
               <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <div style={fillLine}>

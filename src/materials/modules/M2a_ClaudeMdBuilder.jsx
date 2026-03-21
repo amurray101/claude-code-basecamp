@@ -105,6 +105,23 @@ export default function M2a_ClaudeMdBuilder() {
     >
       {/* ════════════ PAGE 1 ════════════ */}
       <div>
+        {/* Session-specific framing */}
+        <div
+          style={{
+            background: C.cream,
+            borderLeft: `3px solid ${C.blue}`,
+            borderRadius: 4,
+            padding: '10px 14px',
+            marginBottom: 16,
+            fontFamily: 'var(--sans)',
+            fontSize: 11,
+            color: C.muted,
+            lineHeight: 1.6,
+          }}
+        >
+          <strong style={{ color: C.dark }}>In today&apos;s session:</strong> You&apos;ll explore the basecamp-messy-repo &mdash; a codebase with no documentation, inconsistent patterns, and no CLAUDE.md. Use this worksheet to capture what you find, then write the CLAUDE.md that transforms Claude&apos;s output.
+        </div>
+
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
           {/* Left column */}
           <div>
@@ -162,38 +179,31 @@ export default function M2a_ClaudeMdBuilder() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
           {/* Left column */}
           <div>
-            {/* Prompt Pattern Library */}
-            <h2 style={sectionHeading}>Prompt Pattern Library</h2>
+            {/* CLAUDE.md Hierarchy */}
+            <h2 style={sectionHeading}>CLAUDE.md Hierarchy</h2>
+            <div style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.muted, lineHeight: 1.6, marginBottom: 12 }}>
+              Works like <span style={inlineCode}>.eslintrc</span> &mdash; cascading configuration that scales from one developer to 200.
+            </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {[
                 {
-                  num: 1,
-                  name: 'Migration',
-                  template: 'Refactor [module] to use [new approach]. Keep [constraint]. All tests passing.',
+                  level: '~/.claude/CLAUDE.md',
+                  scope: 'Personal',
+                  desc: 'Your preferences across all projects. Follows you everywhere.',
                 },
                 {
-                  num: 2,
-                  name: 'Testing',
-                  template: 'Write comprehensive tests for [module]. Cover happy paths, errors, edge cases. Aim for [X]% coverage.',
+                  level: 'repo-root/CLAUDE.md',
+                  scope: 'Project',
+                  desc: 'Project conventions shared with the team via git. Start here.',
                 },
                 {
-                  num: 3,
-                  name: 'Debugging',
-                  template: 'We\'re seeing [error] when [condition]. Trace across [scope]. Find root cause and fix.',
+                  level: 'repo-root/src/CLAUDE.md',
+                  scope: 'Subdirectory',
+                  desc: 'Team-specific overrides. Inherits from root, can override for this scope.',
                 },
-                {
-                  num: 4,
-                  name: 'Documentation',
-                  template: 'Analyze [codebase area] and generate [doc type]. Include [specific elements].',
-                },
-                {
-                  num: 5,
-                  name: 'Refactor',
-                  template: 'Refactor [area] to improve [quality]. Maintain [constraint]. Verify with tests.',
-                },
-              ].map((p) => (
+              ].map((h) => (
                 <div
-                  key={p.num}
+                  key={h.level}
                   style={{
                     background: C.cream,
                     border: `1px solid ${C.lightGray}`,
@@ -202,79 +212,59 @@ export default function M2a_ClaudeMdBuilder() {
                     padding: '10px 14px',
                   }}
                 >
-                  <div
-                    style={{
-                      fontFamily: 'var(--mono)',
-                      fontSize: 11,
-                      fontWeight: 600,
-                      color: C.blue,
-                      textTransform: 'uppercase',
-                      letterSpacing: '0.04em',
-                      marginBottom: 4,
-                    }}
-                  >
-                    {p.num}. {p.name}
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 600, color: C.blue, marginBottom: 2 }}>
+                    {h.level}
                   </div>
-                  <div
-                    style={{
-                      fontFamily: 'var(--sans)',
-                      fontSize: 11,
-                      color: C.dark,
-                      lineHeight: 1.5,
-                      fontStyle: 'italic',
-                    }}
-                  >
-                    &ldquo;{p.template}&rdquo;
+                  <div style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.dark, lineHeight: 1.5 }}>
+                    <strong>{h.scope}:</strong> {h.desc}
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Enterprise scaling note */}
+            <div
+              style={{
+                background: C.blue + '0a',
+                border: `1px solid ${C.blue}25`,
+                borderRadius: 6,
+                padding: '12px 14px',
+                marginTop: 14,
+              }}
+            >
+              <div style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.dark, lineHeight: 1.6 }}>
+                <strong>Enterprise answer:</strong> &ldquo;How does this scale to 200 developers?&rdquo; &mdash; The engineering director writes the root CLAUDE.md with company-wide standards. Each team adds their own file with team-specific conventions. Developers don&apos;t need to know it exists; it just works.
+              </div>
+            </div>
+
+            {/* Cross-references */}
+            <div style={{ fontFamily: 'var(--sans)', fontSize: 10, color: C.faint, marginTop: 14, lineHeight: 1.6 }}>
+              Prompt patterns: see M2b &nbsp;|&nbsp; Session commands: see M1b (Command Glossary)
             </div>
           </div>
 
           {/* Right column */}
           <div>
-            {/* Session Hygiene */}
-            <h2 style={sectionHeading}>Session Hygiene</h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 18 }}>
-              {[
-                {
-                  cmd: '/compact',
-                  desc: 'Compress conversation context. Use after completing a major step.',
-                },
-                {
-                  cmd: '/clear',
-                  desc: 'Fresh start. Use when switching tasks entirely.',
-                },
-                {
-                  cmd: 'Plan Mode',
-                  desc: 'Claude plans without executing. Use for complex tasks before committing.',
-                },
-                {
-                  cmd: '/review',
-                  desc: 'Code review mode. Use before committing.',
-                },
-              ].map((c) => (
-                <div
-                  key={c.cmd}
-                  style={{
-                    display: 'flex',
-                    gap: 10,
-                    alignItems: 'flex-start',
-                    background: C.cream,
-                    border: `1px solid ${C.lightGray}`,
-                    borderRadius: 6,
-                    padding: '10px 14px',
-                  }}
-                >
-                  <span style={inlineCode}>{c.cmd}</span>
-                  <span style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.muted, lineHeight: 1.5 }}>
-                    {c.desc}
-                  </span>
-                </div>
-              ))}
+            {/* Quality Checklist */}
+            <div style={sectionBox}>
+              <h2 style={subHeading}>Quality Checklist</h2>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                {[
+                  'Does your CLAUDE.md cover architecture?',
+                  'Are coding conventions documented?',
+                  'Are pre-commit checks specified?',
+                  'Would a new teammate find this useful on day one?',
+                  'Have you compared Claude\u2019s output WITH vs. WITHOUT this CLAUDE.md?',
+                ].map((item, i) => (
+                  <div key={i} style={checkboxLine}>
+                    <div style={checkbox} />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
-            {/* Monorepo Strategy */}
+            {/* Iteration Loop */}
             <div
               style={{
                 background: C.cream,
@@ -285,36 +275,30 @@ export default function M2a_ClaudeMdBuilder() {
                 marginBottom: 18,
               }}
             >
-              <h2 style={{ ...subHeading, color: C.blue }}>Monorepo Strategy</h2>
-              <ul style={{ margin: 0, paddingLeft: 18 }}>
-                <li style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.dark, lineHeight: 1.6, marginBottom: 4 }}>
-                  <strong>Root CLAUDE.md:</strong> shared conventions (language, testing, CI)
-                </li>
-                <li style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.dark, lineHeight: 1.6, marginBottom: 4 }}>
-                  <strong>Package CLAUDE.md files:</strong> team-specific patterns
-                </li>
-                <li style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.dark, lineHeight: 1.6 }}>
-                  <strong>Hierarchy:</strong> subdirectory files inherit from and can override root
-                </li>
-              </ul>
+              <h2 style={{ ...subHeading, color: C.blue }}>The Iteration Loop</h2>
+              <div style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.dark, lineHeight: 1.7 }}>
+                <strong>1.</strong> Write CLAUDE.md based on codebase exploration<br />
+                <strong>2.</strong> Run Claude on a task, observe output<br />
+                <strong>3.</strong> Ask Claude: &ldquo;What conventions should I add to my CLAUDE.md?&rdquo;<br />
+                <strong>4.</strong> Refine and repeat (plan 2&ndash;3 iterations in a customer engagement)
+              </div>
             </div>
 
-            {/* Quality Checklist */}
-            <div style={sectionBox}>
-              <h2 style={subHeading}>Quality Checklist</h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                {[
-                  'Does your CLAUDE.md cover architecture?',
-                  'Are coding conventions documented?',
-                  'Are pre-commit checks specified?',
-                  'Would a new teammate find this useful?',
-                  "Have you tested Claude's output with this CLAUDE.md?",
-                ].map((item, i) => (
-                  <div key={i} style={checkboxLine}>
-                    <div style={checkbox} />
-                    <span>{item}</span>
-                  </div>
-                ))}
+            {/* Before/After reminder */}
+            <div
+              style={{
+                background: C.blue + '0a',
+                border: `1px solid ${C.blue}25`,
+                borderLeft: `3px solid ${C.blue}`,
+                borderRadius: 6,
+                padding: '12px 14px',
+              }}
+            >
+              <div style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 600, color: C.blue, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 6 }}>
+                Key demo moment
+              </div>
+              <div style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.dark, lineHeight: 1.6 }}>
+                The before/after comparison &mdash; Claude without CLAUDE.md vs. with &mdash; is the single most persuasive demo in the program. Same task, same repo, different output. Conventions followed automatically.
               </div>
             </div>
           </div>
