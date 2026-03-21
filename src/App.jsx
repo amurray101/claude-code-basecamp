@@ -631,6 +631,104 @@ const FOUNDATIONS = [
     ],
     pages: [
   {
+    id: "how-to-use", label: "How to Use", title: "Four ways to use Claude Code",
+    content: [
+      { type: "text", value: "Claude Code meets developers where they work — terminal, desktop, phone, or browser. Each surface has a distinct strength, and knowing which to reach for makes your demos land.", simple: "You can use Claude Code in four places: terminal, desktop app, phone, or browser. Knowing which to recommend helps you match the tool to how someone works." },
+      { type: "surfaces", items: [
+        { id: "cli", title: "Command Line (CLI)", img: `${import.meta.env.BASE_URL}surfaces/cli.png`, bullets: [
+          "The original and most powerful surface — full agentic autonomy in your terminal",
+          "Supports headless mode for CI/CD pipelines and automated workflows",
+          "Direct access to your filesystem, git, and dev tools with no abstraction layer",
+          "Best for: power users, complex multi-file tasks, and automation",
+        ]},
+        { id: "desktop", title: "Desktop App", img: `${import.meta.env.BASE_URL}surfaces/desktop.png`, bullets: [
+          "Native macOS/Windows app with the same agentic engine as the CLI",
+          "Built-in file browser and diff viewer for visual feedback on changes",
+          "Lower barrier to entry — no terminal experience required",
+          "Best for: visual learners, code review, and onboarding new users",
+        ]},
+        { id: "mobile", title: "Mobile (iOS & Android)", img: `${import.meta.env.BASE_URL}surfaces/mobile.png`, bullets: [
+          "Start or continue coding conversations from anywhere",
+          "Review Claude's proposed changes and approve from your phone",
+          "Great for triaging issues, brainstorming architecture, or quick fixes on the go",
+          "Best for: async workflows, on-call debugging, and idea capture",
+        ]},
+        { id: "web", title: "Web (claude.ai)", img: `${import.meta.env.BASE_URL}surfaces/web.png`, bullets: [
+          "Zero install — open a browser tab and start prompting immediately",
+          "Integrated with Projects, Skills, and file uploads for rich context",
+          "Shareable conversations make it easy to collaborate across teams",
+          "Best for: first demos, non-technical stakeholders, and quick prototyping",
+        ]},
+      ]},
+    ],
+  },
+  {
+    id: "who-uses-it", label: "Who Uses It", title: "Who uses Claude Code — and why",
+    content: [
+      { type: "text", value: "Claude Code started as a developer tool, but its users go far beyond engineers. Anyone whose work involves files, data, or structured thinking gets value from an agentic partner.", simple: "Claude Code was built for programmers, but data analysts, managers, and designers all use it too." },
+      { type: "personas", items: [
+        { id: "swe", title: "Software Engineer", subtitle: "Full-stack development", color: C.green, desc: "The core use case — writing, refactoring, debugging, and shipping code across entire codebases. From individual features to full-stack migrations.", examples: [
+          { label: "Refactor a 50-file auth module in one prompt", prompt: "Refactor our authentication module across all 50 files in src/auth/. Replace the legacy session-based auth with JWT tokens. Update all middleware, route handlers, and tests. Keep backward compatibility with existing API contracts and make sure all tests pass." },
+          { label: "Write tests for an entire API surface", prompt: "Analyze every route in our Express API under src/routes/ and write comprehensive unit and integration tests using Jest and Supertest. Cover happy paths, error cases, auth checks, and edge cases. Aim for at least 90% code coverage." },
+          { label: "Debug a production issue across microservices", prompt: "We're seeing intermittent 502 errors in production when the orders service calls the inventory service. Trace the issue across both services — check the HTTP client config, retry logic, timeout settings, and connection pooling. Identify the root cause and implement a fix with proper error handling." },
+          { label: "Migrate from Express to Fastify with zero downtime", prompt: "Migrate our Node.js backend from Express to Fastify. Port all routes, middleware, error handlers, and plugins. Maintain the same API contract so clients don't break. Add Fastify-specific optimizations like schema validation and serialization. Update all tests to work with the new framework." },
+        ]},
+        { id: "data", title: "Data Scientist", subtitle: "Analysis & pipelines", color: C.blue, desc: "Exploring datasets, writing SQL and Python pipelines, generating visualizations, and iterating on analysis without context-switching between tools.", examples: [
+          { label: "Build an ETL pipeline from CSV to PostgreSQL", prompt: "Build a Python ETL pipeline that reads CSV files from a data/ directory, cleans and validates the data (handle missing values, normalize date formats, deduplicate rows), then loads it into a PostgreSQL database. Use pandas for transformation and sqlalchemy for the database connection. Add logging and error handling for production use." },
+          { label: "Generate matplotlib visualizations from raw data", prompt: "Read the sales data from data/sales_2024.csv and generate a comprehensive set of matplotlib visualizations: monthly revenue trends, top 10 products by volume, regional distribution as a choropleth, and year-over-year growth comparison. Style them with a clean, professional theme and save as high-res PNGs." },
+          { label: "Write and optimize complex SQL queries", prompt: "Write SQL queries for our analytics dashboard against a PostgreSQL database with tables: users, orders, products, and sessions. I need: daily active users with 7-day rolling average, cohort retention analysis by signup month, product revenue attribution with category rollups, and funnel conversion rates. Optimize each query with proper indexing suggestions and explain the query plans." },
+          { label: "Create a Jupyter notebook with full analysis", prompt: "Create a complete Jupyter notebook that analyzes our customer churn dataset (data/churn.csv). Include: exploratory data analysis with summary stats and distributions, correlation analysis, feature engineering, a logistic regression and random forest model comparison, ROC curves, feature importance plots, and a clear markdown narrative explaining each finding. Make it presentation-ready." },
+        ]},
+        { id: "devops", title: "DevOps Engineer", subtitle: "Infrastructure & CI/CD", color: C.orange, desc: "Writing infrastructure-as-code, debugging CI/CD pipelines, managing Kubernetes configs, and automating operational workflows.", examples: [
+          { label: "Write Terraform modules for AWS infrastructure", prompt: "Write reusable Terraform modules for our AWS infrastructure: a VPC with public/private subnets across 3 AZs, an ECS Fargate cluster with auto-scaling, an RDS PostgreSQL instance with read replicas, and an ALB with SSL termination. Include proper security groups, IAM roles, and output values. Use variables for environment-specific configuration (dev/staging/prod)." },
+          { label: "Debug a failing GitHub Actions workflow", prompt: "Our GitHub Actions CI/CD pipeline is failing intermittently on the 'deploy' step. Here's the workflow file. Debug the issue — check for race conditions, caching problems, environment variable misconfigurations, and Docker layer issues. Fix the workflow and add better error reporting so we can catch similar issues faster in the future." },
+          { label: "Generate Kubernetes manifests with health checks", prompt: "Generate production-ready Kubernetes manifests for a microservices app with 3 services: api-gateway, user-service, and notification-service. Include Deployments with resource limits and requests, liveness and readiness probes with proper thresholds, HorizontalPodAutoscalers, Services, NetworkPolicies, and ConfigMaps. Use kustomize for environment overlays." },
+          { label: "Automate log rotation and alerting scripts", prompt: "Write a comprehensive log management automation suite: a bash script for log rotation with configurable retention (compress logs older than 24h, delete after 30 days), a Python script that monitors log files for error patterns and sends Slack alerts via webhook, and a systemd timer unit to run rotation daily. Include monitoring for disk usage thresholds." },
+        ]},
+        { id: "leader", title: "Tech Lead", subtitle: "Architecture & oversight", color: C.green, desc: "Reviewing PRs, prototyping architectural ideas, generating documentation, and staying hands-on without blocking their team.", examples: [
+          { label: "Review a PR and suggest architectural improvements", prompt: "Review this pull request that adds a new payment processing module. Evaluate the code for: separation of concerns, error handling and idempotency, security vulnerabilities (PCI compliance considerations), test coverage gaps, naming conventions and code style consistency, and potential performance bottlenecks. Provide specific, actionable suggestions with code examples for each issue found." },
+          { label: "Prototype a new microservice in an afternoon", prompt: "Prototype a notification microservice in TypeScript with Fastify. It should support email (SendGrid), SMS (Twilio), and push notifications (Firebase) through a unified API. Include: a clean interface for adding new channels, a priority queue for rate limiting, template rendering with Handlebars, delivery status tracking, and retry logic with exponential backoff. Set up the project with proper TypeScript config, tests, and Docker." },
+          { label: "Generate ADRs from codebase patterns", prompt: "Analyze our codebase and generate Architecture Decision Records (ADRs) for the major technical decisions you can infer. Look at: the framework and library choices, database and caching patterns, authentication approach, API design conventions, error handling strategy, and testing philosophy. Write each ADR in the standard format (Title, Status, Context, Decision, Consequences) and explain the tradeoffs." },
+          { label: "Create onboarding docs from existing code", prompt: "Generate comprehensive developer onboarding documentation by analyzing our codebase. Include: a high-level architecture overview with a system diagram, how to set up the local development environment step-by-step, key code conventions and patterns used (with examples from actual code), a guide to the testing strategy, common debugging workflows, and a glossary of domain-specific terms found in the code." },
+        ]},
+        { id: "nondev", title: "PM / Designer", subtitle: "Strategy & prototyping", color: C.blue, desc: "Product managers brainstorming feature ideas, stress-testing positioning, and analyzing competitive landscapes. Designers tweaking front-end code and prototyping interactions. Anyone whose work shapes the product without writing code full-time.", examples: [
+          { label: "Brainstorm and stress-test a product strategy", prompt: "I'm the PM for our checkout flow. We're considering adding a one-click reorder feature for returning customers. Help me think through this: what are the strongest arguments for and against? What edge cases could bite us (partial inventory, changed prices, expired payment methods)? Draft a one-page product brief I can bring to the eng lead, including success metrics and a proposed rollout plan." },
+          { label: "Draft competitive positioning from market research", prompt: "I need to update our competitive positioning against [Competitor X] who just launched a new feature. Pull together a comparison framework covering: feature parity, pricing model differences, target persona overlap, and where we have genuine differentiation vs. where we're behind. Write it as a sales-ready one-pager with honest 'why us' and 'watch out for' sections." },
+          { label: "Analyze user data to build a case for a product bet", prompt: "Write a Python script that reads our user analytics export (data/users_export.csv) and generates a summary report with: total users by signup month, most common user actions in the last 30 days, average session duration trends, top features by usage frequency, and users at risk of churning (no activity in 14+ days). Output the report as both a formatted terminal table and a simple HTML file I can share with the team." },
+          { label: "Prototype a feature concept for stakeholder review", prompt: "I want to prototype a 'team activity feed' for our dashboard. Build a simple working version that shows recent actions (commits, deploys, PR reviews) in a timeline view with avatar, action type, and timestamp. Use our existing component library patterns. I don't need it production-ready — just enough to demo the concept in tomorrow's product review and get feedback on the interaction model." },
+        ]},
+      ]},
+      { type: "text", value: "This breadth matters for GTM. The buyer might be a VP of Engineering, but the value spreads across the org — you're showing a leader how agentic AI raises the floor for everyone.", simple: "The buyer is often an engineering leader, but the value reaches designers, data teams, and ops staff too. You're showing how agentic AI makes everyone more effective." },
+      { type: "text", value: "Expect resistance — some prospects will worry agentic tools threaten jobs. Don't dismiss it; reframe. Claude Code removes boilerplate, migration grunt work, and test chasing. What's left is the creative, high-judgment work. The best framing: this tool doesn't shrink your team — it unlocks the work they never had time to start.", simple: "Some people worry this could replace developers. Take it seriously — then reframe: Claude Code handles the tedious parts nobody enjoys. Creative work stays with humans. Teams report feeling more productive, not more replaceable." },
+    ],
+  },
+  {
+    id: "what-it-costs", label: "What It Costs", title: "Model selection & pricing",
+    content: [
+      { type: "model-selection-diagram" },
+      { type: "heading", value: "Model selection — Haiku, Sonnet, and Opus", simple: "Choosing the right AI model for each task" },
+      { type: "text", value: "Claude Code defaults to Sonnet 4, but users can switch models mid-conversation. This matters because different tasks have different needs — and understanding the tradeoffs is essential for advising customers on their deployment.", simple: "Claude Code comes with a default AI model (Sonnet 4), but you can swap to a different one anytime during a conversation. Think of models like car engines -- some are built for speed and fuel economy, others for raw power. Picking the right one for the job helps balance performance and cost." },
+      { type: "models", items: [
+        { name: "Haiku", tag: "speed", color: C.blue, desc: "The fastest model. Best for simple, high-volume tasks: renaming variables, formatting files, generating boilerplate, running quick checks. 10-20x cheaper than Opus. Ideal for CI/CD automation where latency and cost matter more than reasoning depth.", simpleDesc: "The lightweight, fast option for quick, repetitive tasks. 10-20x cheaper than Opus — ideal for CI/CD automation." },
+        { name: "Sonnet", tag: "default", color: C.orange, desc: "The balanced model and Claude Code's default. Excellent at multi-file refactors, test generation, debugging, and architecture analysis. The best tradeoff of intelligence, speed, and cost for daily coding work.", simpleDesc: "The all-rounder most people use daily. Best balance of intelligence, speed, and cost." },
+        { name: "Opus", tag: "depth", color: C.green, desc: "The most intelligent model. Best for novel architecture decisions, complex debugging across systems, and tasks requiring deep reasoning about tradeoffs. Slower and more expensive, but produces solutions that Sonnet might miss.", simpleDesc: "The most powerful model for genuinely hard problems. Takes longer and costs more, but solves things others can't." },
+      ]},
+      { type: "text", value: "In sales conversations, model selection is often the answer to \"How do we control costs?\" Teams can default to Sonnet for daily work, drop to Haiku for automated CI tasks, and escalate to Opus only when they hit a genuinely hard problem. This tiered approach typically reduces cost by 40-60% versus running everything on the strongest model.", simple: "Model selection answers the cost question. Use Sonnet daily, Haiku for CI, Opus for hard problems — typically 40-60% cheaper than running everything on the strongest model." },
+      { type: "divider" },
+      { type: "heading", value: "What it costs", simple: "How pricing works" },
+      { type: "text", value: "Claude Code is priced by token usage, not by seat. This is a fundamental shift from most developer tools and it changes the sales conversation. There's no per-user license to negotiate — customers pay for what they use, which means the conversation shifts from 'How many seats?' to 'How much value per dollar?'", simple: "Claude Code charges by usage, not per seat. Customers pay for what they use — the conversation shifts from 'How many seats?' to 'How much value per dollar?'" },
+      { type: "values", items: [
+        { title: "Input tokens", desc: "What Claude reads — your codebase files, CLAUDE.md, conversation history. Cached input tokens (repeated reads of the same files) cost 90% less.", simpleDesc: "Everything Claude reads — code files, instructions, conversation history. Cached reads cost 90% less." },
+        { title: "Output tokens", desc: "What Claude writes — code, explanations, plans, terminal commands. This is the larger cost driver for most coding tasks.", simpleDesc: "Output tokens are the text Claude produces -- the code it writes, its explanations, and any commands it runs. Writing new content costs more than reading existing content, so the amount Claude generates is usually the biggest factor in the bill." },
+        { title: "Thinking tokens", desc: "When extended thinking is active, Claude's reasoning steps are billed as output tokens. More complex problems = more thinking = higher cost, but also higher quality.", simpleDesc: "Claude's internal reasoning before acting. Harder problems need more thinking, costing more but producing better results." },
+      ]},
+      { type: "text", value: "A typical engineering team running Claude Code for daily development work sees costs between $50-200 per developer per month. Heavy users running large refactors or using Opus might see $300+. This is almost always cheaper than an additional engineering hire, which is the right comparison to draw in sales conversations — not the cost of a Copilot seat.", simple: "Most developers spend $50-200/month. Compare to an engineering hire ($15-25K/month), not a Copilot seat ($19/month)." },
+      { type: "cost-comparison-diagram" },
+      { type: "roi-card" },
+      { type: "reflect", prompt: "A prospect says: 'We're worried about runaway costs if developers use this all day.' How would you structure a response using model selection, prompt caching, and the per-token pricing model? What's the right comparison point?" },
+    ],
+  },
+  {
     id: "how-it-thinks", label: "How it thinks", title: "Under the hood",
     content: [
       { type: "text", value: "To demo Claude Code convincingly, you need to understand what's happening when it writes code — the reasoning, context management, model selection, and economics.", simple: "To show Claude Code to customers, you need to understand how it reasons, manages context, selects models, and what it costs." },
@@ -913,7 +1011,7 @@ const FOUNDATIONS = [
 // Contextual: delivered just-in-time as prework for the module that uses them
 const ORIENTATION_SECTIONS = [
   "welcome", "products", "claude-ai", "cowork", "model-family", "extensions",
-  "claude-code", "how-it-thinks",
+  "claude-code", "how-to-use", "who-uses-it", "what-it-costs", "how-it-thinks",
 ];
 
 const ORIENTATION_FOUNDATIONS = FOUNDATIONS.map(f => {
