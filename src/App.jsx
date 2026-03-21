@@ -516,9 +516,47 @@ const FOUNDATIONS = [
         content: [
           { type: "section-intro", step: "3", label: "Model Family", context: "Products > Models" },
           { type: "models", items: [
-            { name: "Claude Opus", color: C.orange, desc: "Maximum intelligence. Complex reasoning, nuanced analysis, research synthesis. For high-stakes decisions where depth matters more than speed.", tag: "Deepest reasoning", simpleDesc: "The most powerful model — the senior expert for the hardest problems. Takes more time and costs more, but catches things others miss." },
-            { name: "Claude Sonnet", color: C.blue, desc: "The workhorse powering Claude Code. Fast, intelligent, and versatile. Ideal for agentic coding, daily workflows, and most deployments.", tag: "Best all-around", simpleDesc: "The everyday model that balances speed, smarts, and cost. Powers Claude Code by default. Right starting point for most customers." },
-            { name: "Claude Haiku", color: C.green, desc: "Speed and efficiency. Real-time applications, high-volume classification, routing layers. Makes multi-model architectures economical.", tag: "Fastest + cheapest", simpleDesc: "Lightest and fastest. Great for simple, repetitive tasks at low cost. Teams use Haiku for easy stuff and save bigger models for harder work." },
+            { name: "Claude Opus", color: C.orange, desc: "Maximum intelligence. Complex reasoning, nuanced analysis, research synthesis. For high-stakes decisions where depth matters more than speed.", tag: "Deepest reasoning", simpleDesc: "The most powerful model — the senior expert for the hardest problems. Takes more time and costs more, but catches things others miss.",
+              greatFor: [
+                "Complex multi-file refactors across large codebases",
+                "Debugging subtle concurrency or logic bugs",
+                "Architecture design and system-level reasoning",
+                "Research synthesis — reading 50 files to answer a nuanced question",
+                "High-stakes code review where missing an edge case is costly",
+              ],
+              notSuitedFor: [
+                "High-volume, latency-sensitive pipelines (cost and speed add up)",
+                "Simple formatting, linting, or boilerplate generation",
+                "Real-time autocomplete or keystroke-level suggestions",
+              ],
+            },
+            { name: "Claude Sonnet", color: C.blue, desc: "The workhorse powering Claude Code. Fast, intelligent, and versatile. Ideal for agentic coding, daily workflows, and most deployments.", tag: "Best all-around", simpleDesc: "The everyday model that balances speed, smarts, and cost. Powers Claude Code by default. Right starting point for most customers.",
+              greatFor: [
+                "Day-to-day agentic coding — features, bug fixes, test writing",
+                "CLAUDE.md-guided workflows and prompt-driven development",
+                "Code generation, inline edits, and multi-step tool use",
+                "CI/CD automation via GitHub Actions (@claude in PRs)",
+                "Most customer deployments — the default recommendation",
+              ],
+              notSuitedFor: [
+                "Problems requiring Opus-level depth (novel algorithm design, ambiguous specs)",
+                "Ultra-high-volume classification where Haiku's cost wins",
+              ],
+            },
+            { name: "Claude Haiku", color: C.green, desc: "Speed and efficiency. Real-time applications, high-volume classification, routing layers. Makes multi-model architectures economical.", tag: "Fastest + cheapest", simpleDesc: "Lightest and fastest. Great for simple, repetitive tasks at low cost. Teams use Haiku for easy stuff and save bigger models for harder work.",
+              greatFor: [
+                "Routing and triage — classifying tickets, PRs, or support requests",
+                "Log parsing, data extraction, and structured output at scale",
+                "Real-time chat or embedded assistants where latency matters",
+                "Pre-processing pipelines that feed results into Sonnet or Opus",
+                "Cost-sensitive batch jobs — thousands of simple tasks per hour",
+              ],
+              notSuitedFor: [
+                "Multi-file code changes or agentic workflows requiring planning",
+                "Nuanced reasoning, ambiguous instructions, or open-ended research",
+                "Tasks where getting it wrong has high cost — use Sonnet or Opus instead",
+              ],
+            },
           ]},
         ],
       },
@@ -2415,6 +2453,32 @@ function ContentBlock({ block, idx, contentMode }) {
             <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: m.color, background: m.color + "12", padding: "2px 8px", borderRadius: 10 }}>{m.tag}</span>
           </div>
           <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.6, margin: 0 }}>{contentMode === "simplified" && m.simpleDesc ? m.simpleDesc : contentMode === "engineer" && m.engineerDesc ? m.engineerDesc : m.desc}</p>
+          {(m.greatFor || m.notSuitedFor) && (
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 14 }}>
+              {m.greatFor && (
+                <div style={{ padding: "12px 14px", background: C.green + "06", borderRadius: 8, border: `1px solid ${C.green}20` }}>
+                  <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.green, marginBottom: 8 }}>Great for</div>
+                  {m.greatFor.map((item, j) => (
+                    <div key={j} style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 5 }}>
+                      <span style={{ color: C.green, fontSize: 9, flexShrink: 0, lineHeight: 1 }}>{"\u2713"}</span>
+                      <span style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.dark, lineHeight: 1.45 }}>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {m.notSuitedFor && (
+                <div style={{ padding: "12px 14px", background: C.faint + "06", borderRadius: 8, border: `1px solid ${C.lightGray}` }}>
+                  <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.gray, marginBottom: 8 }}>Not well suited for</div>
+                  {m.notSuitedFor.map((item, j) => (
+                    <div key={j} style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 5 }}>
+                      <span style={{ color: C.gray, fontSize: 9, flexShrink: 0, lineHeight: 1 }}>{"\u2717"}</span>
+                      <span style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.muted, lineHeight: 1.45 }}>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       ))}
     </div>
@@ -3592,6 +3656,8 @@ export default function App() {
     });
   }, [foundationsDone, path, completed, phase, userName, foundationSectionsViewed, moduleSubProgress, checkpointsCompleted, certificateEarnedDate, preworkCompleted, diagnosticResults]);
 
+  const activeFoundations = foundationsViewContext === "orientation" ? ORIENTATION_FOUNDATIONS : FOUNDATIONS;
+
   // Track foundation section views (including sub-pages)
   useEffect(() => {
     if (phase === "foundations" && !showMethodology) {
@@ -3700,7 +3766,6 @@ export default function App() {
   if (phase === "loading") return <div style={{ minHeight: "100vh", background: C.bg }} />;
 
   const progress = Math.round((completed.size / MODULES.length) * 100);
-  const activeFoundations = foundationsViewContext === "orientation" ? ORIENTATION_FOUNDATIONS : FOUNDATIONS;
   const currentFoundation = activeFoundations[foundationStep];
 
   const navigateTo = (target, opts = {}) => {
