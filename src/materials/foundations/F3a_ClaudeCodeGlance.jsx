@@ -57,7 +57,7 @@ const personas = [
     tasks: 'ETL pipelines, SQL, visualizations, notebooks',
   },
   {
-    name: 'DevOps',
+    name: 'DevOps Engineer',
     tasks: 'Terraform, K8s, CI/CD debugging, automation',
   },
   {
@@ -67,6 +67,18 @@ const personas = [
   {
     name: 'PM / Designer',
     tasks: 'Strategy, competitive analysis, prototyping',
+  },
+  {
+    name: 'Engineering Leader',
+    tasks: 'Strategy, org leverage, migration readiness',
+  },
+  {
+    name: 'Solutions Architect',
+    tasks: 'System design, integration patterns, prototyping',
+  },
+  {
+    name: 'Security Engineer',
+    tasks: 'Vulnerability audit, policy as code, compliance',
   },
 ];
 
@@ -353,7 +365,7 @@ export default function F3a_ClaudeCodeGlance() {
             margin: '0 0 14px 0',
           }}
         >
-          Five Personas
+          Eight Personas
         </h2>
         <div
           style={{
