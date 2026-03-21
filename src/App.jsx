@@ -2032,10 +2032,6 @@ function PreworkView({ dayId, prework, mod, foundationSectionsViewed, onOpenFoun
     <div>
       <p style={{ fontFamily: "var(--sans)", fontSize: 14, color: C.muted, lineHeight: 1.65, margin: "0 0 20px" }}>{prework.description}</p>
 
-      <div style={{ display: "inline-block", marginBottom: 24, padding: "5px 14px", background: mod.color + "08", borderRadius: 12, border: `1px solid ${mod.color}20` }}>
-        <span style={{ fontFamily: "var(--mono)", fontSize: 11, color: mod.color }}>{"\u23F1"} Estimated: {prework.duration}</span>
-      </div>
-
       <div style={{ marginBottom: 28 }}>
         <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 2, color: mod.color, textTransform: "uppercase", marginBottom: 12 }}>Required reading</div>
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
