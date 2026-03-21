@@ -3228,6 +3228,7 @@ function CurriculumPlanContent() {
     { from: "Day 2", to: "Day 3", text: "CLAUDE.md conventions are prerequisites for hooks and MCP" },
     { from: "Day 3", to: "Day 4", text: "Technical depth gives credibility for customer conversations" },
     { from: "Day 4", to: "Day 5", text: "Conversation practice enables the capstone presentation" },
+    { from: "Day 5", to: "Field", text: "Blind brief under pressure proves readiness for real customer engagements" },
   ];
 
   const competencyData = [
