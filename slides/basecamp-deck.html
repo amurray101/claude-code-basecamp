@@ -389,7 +389,7 @@
 
     /* Large WIP banner on slides 1-13 */
     .reveal .slides > section:nth-child(-n+13)::before {
-      content: "Slides WIP \2014  skip to slide 16 for take-home slides \2192";
+      content: "Slides WIP \2014  skip to slide 14 for take-home slides \2192";
       position: absolute;
       bottom: -20px;
       left: 50%;
@@ -879,15 +879,15 @@
           <h2 style="color: white;">Meridian Health</h2>
           <div class="client-industry">Healthcare SaaS &middot; 8-person backend team &middot; Node.js API</div>
           <p class="client-situation">Meridian maintains a Node.js API powering patient scheduling across 200+ clinics. Their biggest pain: new API endpoints take 2&ndash;3 days because of boilerplate, tests, and compliance checks. Your job: show them a new endpoint built in minutes, not days.</p>
-          <div class="timeline-compare" style="margin-top: var(--space-lg);">
-            <div class="timeline-item pain">
-              <div class="timeline-bar pain">2&ndash;3 days</div>
-              <div class="timeline-label">New endpoint today</div>
+          <div style="display: flex; align-items: center; gap: var(--space-md); margin-top: var(--space-lg); max-width: 600px; margin-left: auto; margin-right: auto;">
+            <div style="flex: 3; background: var(--accent-terracotta); color: white; border-radius: var(--radius-md); padding: 10px 16px; text-align: center;">
+              <div style="font-weight: var(--weight-bold); font-size: var(--text-base);">2&ndash;3 days</div>
+              <div style="font-size: 11px; opacity: 0.7;">New endpoint today</div>
             </div>
-            <div class="timeline-arrow" style="color: rgba(255,255,255,0.4);">&#8594;</div>
-            <div class="timeline-item solution">
-              <div class="timeline-bar solution">Minutes</div>
-              <div class="timeline-label">With Claude Code</div>
+            <div style="color: rgba(255,255,255,0.4); font-size: var(--text-xl); flex-shrink: 0;">&#8594;</div>
+            <div style="flex: 1; background: var(--accent-sage); color: white; border-radius: var(--radius-md); padding: 10px 16px; text-align: center;">
+              <div style="font-weight: var(--weight-bold); font-size: var(--text-base);">Minutes</div>
+              <div style="font-size: 11px; opacity: 0.7;">With Claude Code</div>
             </div>
           </div>
         </div>
@@ -1185,15 +1185,15 @@
           <h2 style="color: white;">Lumen Logistics</h2>
           <div class="client-industry">Supply chain &middot; 40-developer team &middot; Node.js monorepo</div>
           <p class="client-situation">Lumen has a sprawling monorepo with zero documentation. New hires take 3 weeks to become productive. The CTO wants Claude Code to accelerate onboarding and enforce consistency &mdash; but without a CLAUDE.md, Claude guesses at their patterns and gets half wrong. Your job: write the CLAUDE.md that fixes this.</p>
-          <div class="timeline-compare" style="margin-top: var(--space-lg);">
-            <div class="timeline-item pain">
-              <div class="timeline-bar pain">3 weeks</div>
-              <div class="timeline-label">New hire onboarding today</div>
+          <div style="display: flex; align-items: center; gap: var(--space-md); margin-top: var(--space-lg); max-width: 600px; margin-left: auto; margin-right: auto;">
+            <div style="flex: 3; background: var(--accent-terracotta); color: white; border-radius: var(--radius-md); padding: 10px 16px; text-align: center;">
+              <div style="font-weight: var(--weight-bold); font-size: var(--text-base);">3 weeks</div>
+              <div style="font-size: 11px; opacity: 0.7;">Onboarding today</div>
             </div>
-            <div class="timeline-arrow" style="color: rgba(255,255,255,0.4);">&#8594;</div>
-            <div class="timeline-item solution">
-              <div class="timeline-bar solution">Days</div>
-              <div class="timeline-label">With CLAUDE.md</div>
+            <div style="color: rgba(255,255,255,0.4); font-size: var(--text-xl); flex-shrink: 0;">&#8594;</div>
+            <div style="flex: 1; background: var(--accent-sage); color: white; border-radius: var(--radius-md); padding: 10px 16px; text-align: center;">
+              <div style="font-weight: var(--weight-bold); font-size: var(--text-base);">Days</div>
+              <div style="font-size: 11px; opacity: 0.7;">With CLAUDE.md</div>
             </div>
           </div>
         </div>
@@ -1204,26 +1204,34 @@
       </section>
 
       <!-- SLIDE 18 — WHY MONOREPOS ARE HARD -->
-      <section>
+      <section style="text-align: left;">
         <h2>The Monorepo Problem</h2>
         <p style="color: var(--text-secondary);">One repo, many projects, zero documentation &mdash; standard at scale (Google, Meta, Stripe, most teams over 20 devs)</p>
-        <div class="card-grid card-grid-2" style="margin-top: var(--space-lg);">
-          <div class="card" style="padding: var(--space-lg); border-top: 3px solid var(--accent-terracotta);">
-            <h4 style="color: var(--accent-terracotta);">Scale</h4>
-            <p style="font-size: var(--text-sm);">Thousands of files across dozens of services. Claude can't read them all &mdash; it needs to know where to look.</p>
+        <div style="max-width: 750px; margin-top: var(--space-lg);">
+          <div style="display: flex; align-items: flex-start; gap: var(--space-md); margin-bottom: var(--space-lg);">
+            <div style="min-width: 36px; height: 36px; border-radius: var(--radius-full); background: var(--accent-terracotta); color: white; display: flex; align-items: center; justify-content: center; font-weight: var(--weight-bold); font-size: var(--text-sm); flex-shrink: 0;">1</div>
+            <div>
+              <h4 style="margin-bottom: 2px;">Scale</h4>
+              <p style="font-size: var(--text-sm); color: var(--text-secondary); margin: 0;">Thousands of files across dozens of services. Claude can't read them all &mdash; it needs to know where to look.</p>
+            </div>
           </div>
-          <div class="card" style="padding: var(--space-lg); border-top: 3px solid var(--accent-terracotta);">
-            <h4 style="color: var(--accent-terracotta);">Inconsistency</h4>
-            <p style="font-size: var(--text-sm);">Different teams, different conventions in the same repo. Without guidance, Claude picks up patterns from the wrong subproject.</p>
+          <div style="display: flex; align-items: flex-start; gap: var(--space-md); margin-bottom: var(--space-lg);">
+            <div style="min-width: 36px; height: 36px; border-radius: var(--radius-full); background: var(--accent-terracotta); color: white; display: flex; align-items: center; justify-content: center; font-weight: var(--weight-bold); font-size: var(--text-sm); flex-shrink: 0;">2</div>
+            <div>
+              <h4 style="margin-bottom: 2px;">Inconsistency</h4>
+              <p style="font-size: var(--text-sm); color: var(--text-secondary); margin: 0;">Different teams, different conventions in the same repo. Without guidance, Claude picks up patterns from the wrong subproject.</p>
+            </div>
           </div>
-          <div class="card" style="padding: var(--space-lg); border-top: 3px solid var(--accent-terracotta);">
-            <h4 style="color: var(--accent-terracotta);">Hidden knowledge</h4>
-            <p style="font-size: var(--text-sm);">Architecture decisions, testing patterns, and naming conventions exist only in senior engineers' heads. Nothing written down.</p>
+          <div style="display: flex; align-items: flex-start; gap: var(--space-md); margin-bottom: var(--space-lg);">
+            <div style="min-width: 36px; height: 36px; border-radius: var(--radius-full); background: var(--accent-terracotta); color: white; display: flex; align-items: center; justify-content: center; font-weight: var(--weight-bold); font-size: var(--text-sm); flex-shrink: 0;">3</div>
+            <div>
+              <h4 style="margin-bottom: 2px;">Hidden knowledge</h4>
+              <p style="font-size: var(--text-sm); color: var(--text-secondary); margin: 0;">Architecture decisions, testing patterns, and naming conventions exist only in senior engineers' heads. Nothing written down.</p>
+            </div>
           </div>
-          <div class="card" style="padding: var(--space-lg); border-top: 3px solid var(--accent-teal);">
-            <h4 style="color: var(--accent-teal);">Discovery question</h4>
-            <p style="font-size: var(--text-sm);">Ask prospects: &ldquo;How long until a new hire makes their first meaningful commit?&rdquo; Over a week = undocumented conventions = CLAUDE.md opportunity.</p>
-          </div>
+        </div>
+        <div style="max-width: 750px; background: var(--bg-secondary); border-radius: var(--radius-lg); padding: var(--space-md) var(--space-lg); border-left: 4px solid var(--accent-teal);">
+          <p style="margin: 0; font-size: var(--text-sm);"><strong style="color: var(--accent-teal);">Discovery question:</strong> &ldquo;How long until a new hire makes their first meaningful commit?&rdquo; Over a week signals undocumented conventions &mdash; the exact pain CLAUDE.md solves.</p>
         </div>
         <aside class="notes">
           <p><strong>[TRANSITION]</strong> "Before we dive into CLAUDE.md, let's make sure everyone understands why Lumen's setup is so common &mdash; and so painful."</p>
@@ -1232,7 +1240,63 @@
         </aside>
       </section>
 
-      <!-- SLIDE 19 — WHAT IS CLAUDE.MD -->
+      <!-- SLIDE 19 — WHAT CLAUDE.MD LOOKS LIKE -->
+      <section style="text-align: left;">
+        <h2>What Is CLAUDE.md?</h2>
+        <p style="color: var(--text-secondary);">A markdown file that tells Claude how your team works</p>
+        <div style="display: flex; gap: var(--space-xl); margin-top: var(--space-lg); align-items: flex-start;">
+          <div style="flex: 1;">
+            <div class="terminal-block" style="font-size: 12px; line-height: 1.6; margin: 0;">
+              <div class="terminal-header">
+                <div class="dot dot-red"></div>
+                <div class="dot dot-yellow"></div>
+                <div class="dot dot-green"></div>
+                <span style="color: #888; font-size: var(--text-xs); margin-left: 8px;">CLAUDE.md</span>
+              </div>
+              <div>
+                <div class="line-comment"># Lumen Logistics API</div>
+                <br>
+                <div class="line-comment">## Architecture</div>
+                <div class="line-output">Node.js monorepo. Services in /services,</div>
+                <div class="line-output">shared libs in /packages. Each service has</div>
+                <div class="line-output">its own package.json.</div>
+                <br>
+                <div class="line-comment">## Conventions</div>
+                <div class="line-output">- Use <span class="line-highlight">async/await</span>, never callbacks</div>
+                <div class="line-output">- Imports: node builtins, then external,</div>
+                <div class="line-output">&nbsp; then internal (alphabetical within each)</div>
+                <div class="line-output">- Error handling: custom AppError class</div>
+                <br>
+                <div class="line-comment">## Testing</div>
+                <div class="line-output">Run tests: <span class="line-highlight">npm test -- --bail</span></div>
+                <div class="line-output">Framework: Jest. One test file per module.</div>
+                <div class="line-output">Naming: <span class="line-highlight">*.test.ts</span> next to source file.</div>
+              </div>
+            </div>
+          </div>
+          <div style="flex: 0.8;">
+            <div class="card" style="padding: var(--space-md); border-left: 4px solid var(--accent-teal); margin-bottom: var(--space-md);">
+              <h4 style="color: var(--accent-teal); font-size: var(--text-sm);">Plain markdown</h4>
+              <p style="font-size: var(--text-xs); margin: 0;">No special syntax. Just headings, bullets, and prose. Anyone on the team can read and edit it.</p>
+            </div>
+            <div class="card" style="padding: var(--space-md); border-left: 4px solid var(--accent-coral); margin-bottom: var(--space-md);">
+              <h4 style="font-size: var(--text-sm);">Human-authored</h4>
+              <p style="font-size: var(--text-xs); margin: 0;">You write it, not Claude. It captures what your senior engineers know but haven't documented. Claude reads it at session start.</p>
+            </div>
+            <div class="card" style="padding: var(--space-md); border-left: 4px solid var(--accent-sage);">
+              <h4 style="color: var(--accent-sage); font-size: var(--text-sm);">Checked into git</h4>
+              <p style="font-size: var(--text-xs); margin: 0;">Lives in the repo root. Versioned, reviewed in PRs, shared by every developer using Claude Code on this project.</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "This is what a real CLAUDE.md looks like. Plain markdown &mdash; no special syntax, no config format. You write it by hand, capturing the conventions your team already follows."</p>
+          <p><strong>[KEY POINTS]</strong> Three things to emphasize: (1) It's plain markdown, not YAML or JSON &mdash; anyone can edit it. (2) Humans write it, Claude reads it &mdash; it's your instructions to Claude, not the other way around. (3) It lives in the repo and goes through code review like any other file.</p>
+          <p><strong>[COMMON QUESTION]</strong> "Can Claude write its own CLAUDE.md?" Yes, you can ask Claude to draft one based on reading the codebase &mdash; but a human should review and edit it. The value is encoding human judgment, not automated guesses.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 20 — WHERE CLAUDE.MD FITS -->
       <section>
         <h2>What Is CLAUDE.md?</h2>
         <p style="color: var(--text-secondary);">A markdown file that tells Claude how your team works</p>
@@ -1280,13 +1344,24 @@
           </div>
         </div>
         <aside class="notes">
-          <p><strong>[TRANSITION]</strong> "Before we see the before/after demo, let's be precise about what CLAUDE.md actually is. It's not a config file &mdash; it's a markdown file that Claude reads at the start of every session. Think of it as onboarding documentation for your AI teammate."</p>
+          <p><strong>[TRANSITION]</strong> "Now let's see where CLAUDE.md fits in the bigger picture and how the three tiers work."</p>
           <p><strong>[KEY POINTS]</strong> Three tiers: personal (your preferences), project (team conventions, checked into git), and subproject (directory-scoped overrides). Files merge top-down &mdash; more specific wins. The project-level file is the one that matters most for customers, because it's shared via git and enforces consistency across the whole team.</p>
           <p><strong>[ARCHITECTURE]</strong> Show where CLAUDE.md sits in the stack. It's the topmost layer &mdash; the first thing Claude reads. Hooks, MCP, and Skills are below it (Day 3). This preview of the full stack helps trainees see where today's work fits in the bigger picture.</p>
         </aside>
       </section>
 
-      <!-- SLIDE 20 — THE BEFORE -->
+      <!-- SLIDE 21 — DEMO: BEFORE AND AFTER -->
+      <section class="slide-divider" data-background-color="var(--bg-secondary)">
+        <div class="day-label">Live Demo</div>
+        <h2>Before &amp; After CLAUDE.md</h2>
+        <p class="part-description">Same task, same repo &mdash; with and without a CLAUDE.md</p>
+        <aside class="notes">
+          <p><strong>[DEMO CUE]</strong> "Now I'm going to show you the most persuasive demo in the entire program. Same repo, same prompt, two runs. First without a CLAUDE.md &mdash; watch Claude struggle. Then with one &mdash; watch everything change."</p>
+          <p>Pause on this slide for a beat. Let anticipation build before switching to the terminal.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 22 — THE BEFORE -->
       <section>
         <h2>The Before</h2>
         <p style="color: var(--text-secondary); margin-bottom: var(--space-md);">Claude without a CLAUDE.md &mdash; watch it guess</p>
@@ -1318,7 +1393,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 21 — THE AFTER -->
+      <!-- SLIDE 23 — THE AFTER -->
       <section>
         <h2>The After</h2>
         <p style="color: var(--text-secondary); margin-bottom: var(--space-md);">Same task, same repo &mdash; now with a CLAUDE.md</p>
@@ -1352,9 +1427,9 @@
         </aside>
       </section>
 
-      <!-- SLIDE 22 — CLAUDE.MD: SALES TALKING POINTS -->
+      <!-- SLIDE 24 — CLAUDE.MD: SALES TALKING POINTS -->
       <section>
-        <h2>What This Means for Sales Conversations</h2>
+        <h2>How a Well-Specified CLAUDE.md Helps Customers</h2>
         <p style="color: var(--text-secondary);">The before/after demo you just saw translates directly into customer value</p>
         <div class="card-grid card-grid-2" style="margin-top: var(--space-lg);">
           <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-sage);">
@@ -1384,7 +1459,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 23 — SESSION COMMANDS: WHEN TO RESET -->
+      <!-- SLIDE 25 — SESSION COMMANDS: WHEN TO RESET -->
       <section>
         <h2>Session Hygiene for Lumen's Monorepo</h2>
         <p style="color: var(--text-secondary);">A CLAUDE.md gets Claude started right &mdash; these commands keep it on track</p>
@@ -1406,7 +1481,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 24 — SESSION COMMANDS: WHEN TO IMPRESS -->
+      <!-- SLIDE 26 — SESSION COMMANDS: WHEN TO IMPRESS -->
       <section>
         <h2>Session Hygiene for Lumen's Monorepo</h2>
         <p style="color: var(--text-secondary);">Commands that also double as customer demo moments</p>
@@ -1429,7 +1504,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 25 — WHEN THINGS GO WRONG: SESSION-LEVEL -->
+      <!-- SLIDE 27 — WHEN THINGS GO WRONG: SESSION-LEVEL -->
       <section>
         <h2>Traps You'll Hit in the Lab</h2>
         <p style="color: var(--text-secondary);">Session-level patterns &mdash; recognize these before they waste your time</p>
@@ -1456,7 +1531,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 26 — WHEN THINGS GO WRONG: PROMPT-LEVEL -->
+      <!-- SLIDE 28 — WHEN THINGS GO WRONG: PROMPT-LEVEL -->
       <section>
         <h2>Traps You'll Hit in the Lab</h2>
         <p style="color: var(--text-secondary);">Prompt-level patterns &mdash; especially relevant when writing CLAUDE.md</p>
@@ -1488,7 +1563,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 27 — BEYOND LUMEN: WHERE CLAUDE.MD WINS DEALS -->
+      <!-- SLIDE 29 — BEYOND LUMEN: WHERE CLAUDE.MD WINS DEALS -->
       <section>
         <h2>Beyond Lumen: Where CLAUDE.md Wins Deals</h2>
         <p style="color: var(--text-secondary);">The same CLAUDE.md playbook applies whenever a team has unwritten rules</p>
@@ -1525,7 +1600,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 28 — DAY 2 SKILLS CHECK -->
+      <!-- SLIDE 30 — DAY 2 SKILLS CHECK -->
       <section>
         <h2>Day 2: Skills Check</h2>
         <p style="color: var(--text-secondary);">After the lab, these should be earned</p>
@@ -1567,7 +1642,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 29 — BRIDGE TO LAB -->
+      <!-- SLIDE 31 — BRIDGE TO LAB -->
       <section class="slide-exercise">
         <div class="exercise-header">
           <span class="exercise-badge">LAB</span>
@@ -1615,7 +1690,7 @@
            SECTION 3 — DAY 3: EXTEND & CUSTOMIZE
            ============================================================ -->
 
-      <!-- SLIDE 30 — DAY 3 DIVIDER -->
+      <!-- SLIDE 32 — DAY 3 DIVIDER -->
       <section class="slide-divider" data-background-color="var(--bg-secondary)">
         <div class="day-label">Day 3</div>
         <h2>Extend &amp; Customize</h2>
@@ -1627,7 +1702,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 31 — DAY 3 ROADMAP -->
+      <!-- SLIDE 33 — DAY 3 ROADMAP -->
       <section>
         <h2 style="font-size: var(--text-lg); color: var(--text-light); margin-bottom: var(--space-lg);">Your Week at a Glance</h2>
         <div class="roadmap-days">
@@ -1657,7 +1732,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 32 — DAY 3 KEY QUESTIONS -->
+      <!-- SLIDE 34 — DAY 3 KEY QUESTIONS -->
       <section>
         <h2>Day 3: Key Questions</h2>
         <ul class="key-questions">
@@ -1702,7 +1777,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 33 — CLIENT SCENARIO: ARCADIA FINANCIAL -->
+      <!-- SLIDE 35 — CLIENT SCENARIO: ARCADIA FINANCIAL -->
       <section data-background-color="#1A1A1A">
         <div class="client-scenario">
           <div class="client-badge">Client Scenario</div>
@@ -1736,7 +1811,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 34 — THE COMPOSED WORKFLOW -->
+      <!-- SLIDE 36 — THE COMPOSED WORKFLOW -->
       <section>
         <h2>The Composed Workflow</h2>
         <p style="color: var(--text-secondary);">The full pipeline you're about to build</p>
@@ -1759,7 +1834,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 35 — HOOKS: THE COMPLIANCE DEMO -->
+      <!-- SLIDE 37 — HOOKS: THE COMPLIANCE DEMO -->
       <section>
         <h2>Hooks: The Compliance Demo</h2>
         <p style="color: var(--text-secondary);">"When a CISO asks how you control Claude, show them this."</p>
@@ -1804,7 +1879,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 36 — MCP: THE INTEGRATION DEMO -->
+      <!-- SLIDE 38 — MCP: THE INTEGRATION DEMO -->
       <section>
         <h2>MCP: The Integration Demo</h2>
         <p style="color: var(--text-secondary);">"When a customer says 'can Claude pull from our Jira?' &mdash; show them this."</p>
@@ -1848,7 +1923,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 37 — THE ARCHITECTURE CONVERSATION -->
+      <!-- SLIDE 39 — THE ARCHITECTURE CONVERSATION -->
       <section>
         <h2>The Architecture Conversation</h2>
         <p style="color: var(--text-secondary);">The whiteboard sketch you will draw for customers</p>
@@ -1882,7 +1957,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 38 — DAY 3 SKILLS CHECK -->
+      <!-- SLIDE 40 — DAY 3 SKILLS CHECK -->
       <section>
         <h2>Day 3: Skills Check</h2>
         <p style="color: var(--text-secondary);">After the lab, these should be earned</p>
@@ -1924,7 +1999,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 39 — BRIDGE TO LAB -->
+      <!-- SLIDE 41 — BRIDGE TO LAB -->
       <section class="slide-exercise">
         <div class="exercise-header">
           <span class="exercise-badge">LAB</span>
@@ -1972,7 +2047,7 @@
            SECTION 4 — DAY 4: CUSTOMER SCENARIOS
            ============================================================ -->
 
-      <!-- SLIDE 40 — DAY 4 DIVIDER -->
+      <!-- SLIDE 42 — DAY 4 DIVIDER -->
       <section class="slide-divider" data-background-color="var(--bg-secondary)">
         <div class="day-label">Day 4</div>
         <h2>Customer Scenarios</h2>
@@ -1984,7 +2059,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 41 — DAY 4 ROADMAP -->
+      <!-- SLIDE 43 — DAY 4 ROADMAP -->
       <section>
         <h2 style="font-size: var(--text-lg); color: var(--text-light); margin-bottom: var(--space-lg);">Your Week at a Glance</h2>
         <div class="roadmap-days">
@@ -2014,7 +2089,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 42 — DAY 4 KEY QUESTIONS -->
+      <!-- SLIDE 44 — DAY 4 KEY QUESTIONS -->
       <section>
         <h2>Day 4: Key Questions</h2>
         <ul class="key-questions">
@@ -2059,7 +2134,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 43 — THREE CLIENT BRIEFS -->
+      <!-- SLIDE 45 — THREE CLIENT BRIEFS -->
       <section>
         <h2>Three Clients, Three Playbooks</h2>
         <div class="client-cards">
@@ -2088,7 +2163,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 44 — SECURITY DEEP DIVE -->
+      <!-- SLIDE 46 — SECURITY DEEP DIVE -->
       <section>
         <h2>Security: Defense-in-Depth</h2>
         <p style="color: var(--text-secondary);">The layered answer to "How do I know Claude won't..."</p>
@@ -2122,7 +2197,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 45 — ENTERPRISE DEPLOYMENT -->
+      <!-- SLIDE 47 — ENTERPRISE DEPLOYMENT -->
       <section>
         <h2>Enterprise Deployment Paths</h2>
         <div class="card-grid card-grid-3" style="margin-top: var(--space-lg);">
@@ -2154,7 +2229,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 46 — COST MODEL -->
+      <!-- SLIDE 48 — COST MODEL -->
       <section>
         <h2>Cost Model &amp; ROI Math</h2>
         <div style="display: flex; gap: var(--space-xl); margin-top: var(--space-lg); align-items: flex-start;">
@@ -2187,7 +2262,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 47 — COMPETITIVE POSITIONING -->
+      <!-- SLIDE 49 — COMPETITIVE POSITIONING -->
       <section>
         <h2>Competitive Positioning</h2>
         <p style="color: var(--text-secondary);">Honest differentiation wins trust</p>
@@ -2259,7 +2334,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 48 — HONEST DIFFERENTIATION -->
+      <!-- SLIDE 50 — HONEST DIFFERENTIATION -->
       <section class="slide-callout" data-background-color="var(--accent-peach)">
         <blockquote>Where we win. Where they are strong. How they coexist.</blockquote>
         <p class="callout-context" style="max-width: 700px; margin: 0 auto;">Claude Code leads in autonomous agentic coding. Copilot is the best autocomplete. Cursor is the best AI editor. Many teams use Claude Code alongside Copilot. The question isn't &ldquo;replace&rdquo; &mdash; it's &ldquo;what can your team do now that they couldn't before?&rdquo;</p>
@@ -2269,7 +2344,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 49 — OBJECTION HANDLING: PROCUREMENT -->
+      <!-- SLIDE 51 — OBJECTION HANDLING: PROCUREMENT -->
       <section>
         <h2>Objection Handling</h2>
         <p style="color: var(--text-secondary);">The two that block procurement</p>
@@ -2289,7 +2364,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 50 — OBJECTION HANDLING: ENGINEERS -->
+      <!-- SLIDE 52 — OBJECTION HANDLING: ENGINEERS -->
       <section>
         <h2>Objection Handling</h2>
         <p style="color: var(--text-secondary);">The two from engineers</p>
@@ -2309,7 +2384,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 51 — DAY 4 SKILLS EARNED -->
+      <!-- SLIDE 53 — DAY 4 SKILLS EARNED -->
       <section>
         <h2>Day 4: Skills Earned</h2>
         <p style="color: var(--text-secondary);">You can handle the conversations that make or break engagements</p>
@@ -2355,7 +2430,7 @@
            SECTION 5 — DAY 5: SHIP IT
            ============================================================ -->
 
-      <!-- SLIDE 52 — DAY 5 DIVIDER -->
+      <!-- SLIDE 54 — DAY 5 DIVIDER -->
       <section class="slide-divider" data-background-color="var(--bg-secondary)">
         <div class="day-label">Day 5</div>
         <h2>Ship It &mdash; Capstone</h2>
@@ -2367,7 +2442,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 53 — DAY 5 ROADMAP -->
+      <!-- SLIDE 55 — DAY 5 ROADMAP -->
       <section>
         <h2 style="font-size: var(--text-lg); color: var(--text-light); margin-bottom: var(--space-lg);">Your Week at a Glance</h2>
         <div class="roadmap-days">
@@ -2397,7 +2472,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 54 — DAY 5 KEY QUESTIONS -->
+      <!-- SLIDE 56 — DAY 5 KEY QUESTIONS -->
       <section>
         <h2>Day 5: Key Questions</h2>
         <ul class="key-questions">
@@ -2442,7 +2517,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 55 — CAPSTONE FORMAT -->
+      <!-- SLIDE 57 — CAPSTONE FORMAT -->
       <section>
         <h2>Capstone Format</h2>
         <div class="process-flow" style="margin-top: var(--space-xl);">
@@ -2483,7 +2558,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 56 — SCORING RUBRIC -->
+      <!-- SLIDE 58 — SCORING RUBRIC -->
       <section>
         <h2>Scoring Rubric</h2>
         <div class="rubric-grid">
@@ -2515,7 +2590,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 57 — DAY 5 SKILLS EARNED -->
+      <!-- SLIDE 59 — DAY 5 SKILLS EARNED -->
       <section>
         <h2>Day 5: Skills Earned</h2>
         <p style="color: var(--text-secondary);">All 15 skills complete</p>
@@ -2557,7 +2632,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 58 — CLOSING -->
+      <!-- SLIDE 60 — CLOSING -->
       <section class="slide-callout" data-background-color="var(--accent-peach)">
         <blockquote>You're ready.</blockquote>
         <p class="callout-context" style="max-width: 700px; margin: 0 auto;">Five days. Five client scenarios. Installed Claude Code, wrote CLAUDE.md files, built hooks and MCP servers, handled security and competitive objections, and delivered a cold-brief demo. You can draw the architecture stack on a whiteboard, explain every layer, and hold your own with any customer.</p>
@@ -2568,7 +2643,7 @@
         </aside>
       </section>
 
-      <!-- SLIDE 59 — END CARD -->
+      <!-- SLIDE 61 — END CARD -->
       <section class="slide-closing" data-background-color="var(--bg-secondary)">
         <div class="loop-badge build" style="font-size: var(--text-sm); padding: 6px 20px;">BASECAMP</div>
         <h2 style="margin-top: var(--space-md);">Basecamp Complete</h2>
@@ -2585,7 +2660,6 @@
     </div>
   </div>
 
-  <div class="session-badge">BASECAMP</div>
   <div class="course-footer">Claude Code Basecamp &mdash; Anthropic</div>
 
   <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
