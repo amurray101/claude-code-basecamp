@@ -1834,7 +1834,7 @@ function DayTimeline({ mod, phaseConfig, prework, activePhaseTab, onPhaseSelect,
   );
 }
 
-function PreworkView({ dayId, prework, mod, foundationSectionsViewed, onOpenFoundation, onOpenMaterial, preworkCompleted, onMarkPreworkDone }) {
+function PreworkView({ dayId, prework, mod, foundationSectionsViewed, onOpenFoundation, onOpenMaterial, preworkCompleted, onMarkPreworkDone, onContinue }) {
   if (!prework) return null;
   const isDone = preworkCompleted.includes(dayId);
 
@@ -1916,15 +1916,27 @@ function PreworkView({ dayId, prework, mod, foundationSectionsViewed, onOpenFoun
           Mark pre-work complete
         </button>
       ) : (
-        <div style={{ padding: "12px 18px", background: C.green + "06", borderRadius: 10, border: `1px solid ${C.green}20` }}>
-          <span style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.green, fontWeight: 500 }}>{"\u2713"} Pre-work complete — you're ready for the live session.</span>
+        <div>
+          <div style={{ padding: "16px 18px", background: C.green + "06", borderRadius: 10, border: `1px solid ${C.green}20`, marginBottom: 16 }}>
+            <span style={{ fontFamily: "var(--sans)", fontSize: 14, color: C.green, fontWeight: 500 }}>{"\u2713"} Great job — you're ready for the live session.</span>
+          </div>
+          {onContinue && (
+            <button onClick={onContinue} style={{
+              padding: "10px 24px", borderRadius: 8, cursor: "pointer", transition: "all 0.2s",
+              background: mod.color, border: "none", color: "#fff",
+              fontFamily: "var(--sans)", fontSize: 13, fontWeight: 500,
+            }}
+              onMouseEnter={e => e.currentTarget.style.opacity = "0.88"}
+              onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+            >Continue to Live Session →</button>
+          )}
         </div>
       )}
     </div>
   );
 }
 
-function LiveSessionView({ mod, phaseConfig, guide, simplified, facilitatorMode }) {
+function LiveSessionView({ mod, phaseConfig, guide, simplified, facilitatorMode, onContinue }) {
   const { live } = phaseConfig;
 
   return (
@@ -1973,6 +1985,17 @@ function LiveSessionView({ mod, phaseConfig, guide, simplified, facilitatorMode 
             <ExerciseSteps steps={live.stepIndices.map(idx => mod.steps[idx])} color={mod.color} simplified={simplified} facilitatorMode={facilitatorMode} />
           </div>
         </div>
+      )}
+
+      {onContinue && (
+        <button onClick={onContinue} style={{
+          padding: "10px 24px", borderRadius: 8, cursor: "pointer", transition: "all 0.2s",
+          background: mod.color, border: "none", color: "#fff",
+          fontFamily: "var(--sans)", fontSize: 13, fontWeight: 500,
+        }}
+          onMouseEnter={e => e.currentTarget.style.opacity = "0.88"}
+          onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+        >Continue to Lab →</button>
       )}
     </div>
   );
@@ -4119,13 +4142,14 @@ export default function App() {
                       setPreworkCompleted(prev => [...prev, mod.id]);
                     }
                   }}
+                  onContinue={() => { setActivePhaseTab("live"); window.scrollTo({ top: 0, behavior: "instant" }); }}
                 />
               </div>
             )}
 
             {activePhaseTab === "live" && phaseConfig?.mode === "standard" && (
               <div style={{ ...st.fadeUp, animationDelay: "0.22s" }}>
-                <LiveSessionView mod={mod} phaseConfig={phaseConfig} guide={guide} simplified={simplified} facilitatorMode={facilitatorMode} />
+                <LiveSessionView mod={mod} phaseConfig={phaseConfig} guide={guide} simplified={simplified} facilitatorMode={facilitatorMode} onContinue={() => { setActivePhaseTab("lab"); window.scrollTo({ top: 0, behavior: "instant" }); }} />
               </div>
             )}
 
