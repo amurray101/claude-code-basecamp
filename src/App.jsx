@@ -3056,13 +3056,15 @@ function PathSelectPage({ onSelect }) {
               onMouseLeave={e => { e.currentTarget.style.borderColor = C.lightGray; e.currentTarget.style.background = C.bg; }}
             >
               <div style={{ flex: 1 }}>
+                {p.id !== "pe-pre" && (
+                  <div style={{ marginBottom: 4 }}>
+                    <span style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 0.5, color: C.faint, background: C.lightGray + "60", padding: "2px 8px", borderRadius: 10 }}>Work in progress</span>
+                  </div>
+                )}
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 3, flexWrap: "wrap" }}>
                   <span style={{ fontFamily: "var(--sans)", fontSize: 15, fontWeight: 500, color: C.dark }}>{p.label}</span>
                   {outcomes && (
                     <span style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 0.5, color: C.orange, background: C.orange + "10", padding: "2px 8px", borderRadius: 10 }}>{outcomes.verb}</span>
-                  )}
-                  {p.id !== "pe-pre" && (
-                    <span style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 0.5, color: C.faint, background: C.lightGray + "60", padding: "2px 8px", borderRadius: 10 }}>Work in progress</span>
                   )}
                 </div>
                 <div style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.faint, lineHeight: 1.5 }}>{p.desc}</div>
