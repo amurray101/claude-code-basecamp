@@ -3525,14 +3525,19 @@ function CohortFeedbackContent() {
           </div>
           <div style={{ marginBottom: 28, padding: "24px 24px", background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}` }}>
             <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.green, marginBottom: 16 }}>Analysis based on course best practices & data</div>
-            {section.answer.map((block, bi) => {
+            {section.answer ? section.answer.map((block, bi) => {
               if (block.type === "heading") {
                 return <h3 key={bi} style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 600, color: C.dark, margin: bi === 0 ? "0 0 8px" : "20px 0 8px", lineHeight: 1.4 }}>{block.text}</h3>;
               }
               return <p key={bi} style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.7, margin: "0 0 12px" }}>{block.text}</p>;
-            })}
+            }) : section.items && section.items.map((item, ii) => (
+              <div key={ii} style={{ marginBottom: 16 }}>
+                <h3 style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 600, color: C.dark, margin: "0 0 6px", lineHeight: 1.4 }}>{item.problem}</h3>
+                <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.7, margin: 0 }}>{item.analysis}</p>
+              </div>
+            ))}
           </div>
-          <div style={{ marginBottom: 8 }}>
+          {section.addressed && section.addressed.length > 0 && <div style={{ marginBottom: 8 }}>
             <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.orange, marginBottom: 14 }}>How this has been addressed in the current program</div>
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               {section.addressed.map((item, ai) => (
@@ -3555,7 +3560,7 @@ function CohortFeedbackContent() {
                 </div>
               ))}
             </div>
-          </div>
+          </div>}
         </div>
       ))}
 
@@ -4179,7 +4184,7 @@ export default function App() {
         <>
           <div style={st.topBar}>
             <div style={st.topBarInner}>
-              <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 2, color: C.faint, textTransform: "uppercase" }}>{foundationsViewContext === "orientation" ? "Orientation" : "Foundations"}</div>
+              <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 2, color: C.faint, textTransform: "uppercase" }}>Foundations</div>
             </div>
             <div style={st.tabRow}>
               {activeFoundations.map((f, i) => (
