@@ -630,7 +630,7 @@ const FOUNDATIONS = [
         { stat: "24", label: "Hook events available for custom automation — from pre-commit to post-edit to CI/CD", source: "Hooks docs", sourceUrl: "https://docs.anthropic.com/en/docs/claude-code/hooks" },
         { stat: "4", label: "Permission modes — default, plan, auto-accept, and headless for CI/CD pipelines", source: "Security docs", sourceUrl: "https://docs.anthropic.com/en/docs/claude-code/security" },
       ]},
-      { type: "heading", value: "Four ways to use Claude Code", simple: "The four places you can run Claude Code" },
+      { type: "reflect", prompt: "Think about the difference between a developer using GitHub Copilot (line-level autocomplete) versus Claude Code (agentic, multi-step). How would you explain this difference to a VP of Engineering in 60 seconds?" },
       { type: "text", value: "Claude Code meets developers where they work — terminal, desktop, phone, or browser. Each surface has a distinct strength, and knowing which to reach for makes your demos land.", simple: "You can use Claude Code in four places: terminal, desktop app, phone, or browser. Knowing which to recommend helps you match the tool to how someone works." },
       { type: "surfaces", items: [
         { id: "cli", title: "Command Line (CLI)", img: `${import.meta.env.BASE_URL}surfaces/cli.png`, bullets: [
@@ -761,6 +761,7 @@ const FOUNDATIONS = [
       ]},
       { type: "text", value: "A typical engineering team running Claude Code for daily development work sees costs between $50–200 per developer per month. Heavy users running large refactors or using Opus might see $300+. This is almost always cheaper than an additional engineering hire, which is the right comparison to draw in sales conversations — not the cost of a Copilot seat.", simple: "Most developers spend $50-200/month. Compare to an engineering hire ($15-25K/month), not a Copilot seat ($19/month)." },
       { type: "cost-comparison-diagram" },
+      { type: "roi-card" },
       { type: "reflect", prompt: "A prospect says: 'We're worried about runaway costs if developers use this all day.' How would you structure a response using model selection, prompt caching, and the per-token pricing model? What's the right comparison point?" },
     ],
   },
@@ -2216,7 +2217,7 @@ function LabView({ mod, phaseConfig, contentMode, checkpointsCompleted, onCheckp
         <div style={{ marginBottom: 20 }}>
           {gaps.map((gap, gi) => (
             <div key={gi} style={{ margin: "0 0 12px", padding: "18px 22px", background: C.blue + "06", borderRadius: 10, border: `1px dashed ${C.blue}40` }}>
-              <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, color: C.blue, textTransform: "uppercase", marginBottom: 6 }}>Go deeper</div>
+              <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, color: C.blue, textTransform: "uppercase", marginBottom: 6 }}>Practice on your own</div>
               <div style={{ fontFamily: "var(--serif)", fontSize: 15, color: C.dark, marginBottom: 6 }}>{gap.title}</div>
               <p style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted, lineHeight: 1.6, margin: 0 }}>{gap.why}</p>
               {gap.topics && (
@@ -2258,7 +2259,7 @@ function IntegratedSessionView({ mod, phaseConfig, contentMode, checkpointsCompl
         <div style={{ marginBottom: 20 }}>
           {gaps.map((gap, gi) => (
             <div key={gi} style={{ margin: "0 0 12px", padding: "18px 22px", background: C.blue + "06", borderRadius: 10, border: `1px dashed ${C.blue}40` }}>
-              <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, color: C.blue, textTransform: "uppercase", marginBottom: 6 }}>Go deeper</div>
+              <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, color: C.blue, textTransform: "uppercase", marginBottom: 6 }}>Practice on your own</div>
               <div style={{ fontFamily: "var(--serif)", fontSize: 15, color: C.dark, marginBottom: 6 }}>{gap.title}</div>
               <p style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted, lineHeight: 1.6, margin: 0 }}>{gap.why}</p>
               {gap.topics && (
@@ -2391,6 +2392,28 @@ function ContentBlock({ block, idx, contentMode }) {
   if (block.type === "model-selection-diagram") return <div style={{ ...st.fadeUp, animationDelay: delay }}><ModelSelectionDiagram /></div>;
   if (block.type === "deployment-paths-diagram") return <div style={{ ...st.fadeUp, animationDelay: delay }}><DeploymentPathsDiagram /></div>;
   if (block.type === "cost-comparison-diagram") return <div style={{ ...st.fadeUp, animationDelay: delay }}><CostComparisonDiagram /></div>;
+
+  if (block.type === "roi-card") return (
+    <div style={{ margin: "20px 0", background: C.green + "06", borderRadius: 10, border: `1px solid ${C.green}25`, padding: "20px 24px", ...st.fadeUp, animationDelay: delay }}>
+      <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: C.green, marginBottom: 12 }}>ROI pocket math — use this with customers</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        {[
+          { left: "Team size", right: "50 developers", color: C.dark },
+          { left: "Claude Code cost", right: "50 × $150/mo = $7,500/mo", color: C.orange },
+          { left: "Time saved", right: "30 min/dev/day = 2.5 hrs/dev/week", color: C.dark },
+          { left: "Hours recovered", right: "50 × 2.5 = 125 hrs/week", color: C.dark },
+          { left: "Value at $175/hr fully loaded", right: "125 × $175 = $21,875/week", color: C.green },
+          { left: "Monthly ROI", right: "$87,500 value vs. $7,500 cost = 11.7× return", color: C.green },
+        ].map((row, i) => (
+          <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", padding: "6px 0", borderBottom: i < 5 ? `1px solid ${C.lightGray}` : "none" }}>
+            <span style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.muted }}>{row.left}</span>
+            <span style={{ fontFamily: "var(--mono)", fontSize: 12, fontWeight: 600, color: row.color }}>{row.right}</span>
+          </div>
+        ))}
+      </div>
+      <div style={{ fontFamily: "var(--sans)", fontSize: 11, color: C.faint, marginTop: 10, lineHeight: 1.5 }}>Adjust the numbers for your customer. The formula: (devs × hours saved × hourly rate) vs. (devs × Claude Code cost). Even conservative estimates show 5–15× return.</div>
+    </div>
+  );
 
   if (block.type === "overview") return (
     <div style={{ background: C.cream, border: `1px solid ${C.lightGray}`, borderRadius: 10, padding: "20px 24px", margin: "16px 0 24px", ...st.fadeUp, animationDelay: delay }}>
@@ -2530,7 +2553,7 @@ function ContentBlock({ block, idx, contentMode }) {
 
   if (block.type === "placeholder") return (
     <div style={{ margin: "20px 0", padding: "20px 24px", background: C.blue + "06", borderRadius: 10, border: `1px dashed ${C.blue}40`, ...st.fadeUp, animationDelay: delay }}>
-      <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 2, color: C.blue, textTransform: "uppercase", marginBottom: 8 }}>Go deeper</div>
+      <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 2, color: C.blue, textTransform: "uppercase", marginBottom: 8 }}>Practice on your own</div>
       <div style={{ fontFamily: "var(--serif)", fontSize: 16, color: C.dark, marginBottom: 8 }}>{block.title}</div>
       <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.muted, lineHeight: 1.6, margin: 0 }}>{block.why}</p>
       {block.topics && (
@@ -3813,32 +3836,28 @@ export default function App() {
 
             {/* Nav items */}
             <div style={{ flex: 1, padding: "16px 0", overflowY: "auto" }}>
-              <button
-                onClick={() => navigateTo("welcome")}
-                style={{
-                  display: "flex", alignItems: "center", gap: 10, width: "100%",
-                  padding: "12px 24px", background: phase === "welcome" ? C.dark + "08" : "transparent",
-                  border: "none", borderLeft: phase === "welcome" ? `3px solid ${C.dark}` : "3px solid transparent",
-                  cursor: "pointer", textAlign: "left", marginBottom: 8,
-                }}
-              >
-                <span style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: phase === "welcome" ? 600 : 400, color: phase === "welcome" ? C.dark : C.muted }}>Home</span>
-              </button>
-              <button
-                onClick={() => navigateTo("how-it-works")}
-                style={{
-                  display: "flex", alignItems: "center", gap: 10, width: "100%",
-                  padding: "12px 24px", background: phase === "how-it-works" ? C.dark + "08" : "transparent",
-                  border: "none", borderLeft: phase === "how-it-works" ? `3px solid ${C.dark}` : "3px solid transparent",
-                  cursor: "pointer", textAlign: "left",
-                }}
-              >
-                <span style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: phase === "how-it-works" ? 600 : 400, color: phase === "how-it-works" ? C.dark : C.muted }}>How It Works</span>
-              </button>
-              <div style={{ borderBottom: `1px solid ${C.lightGray}`, marginBottom: 8 }} />
               {[
-                { label: "Orientation", phase: "foundations", color: C.orange, active: phase === "foundations", onNav: () => { setFoundationsViewContext("orientation"); navigateTo("foundations"); } },
-                { label: "Role-Based Training", phase: "path-select", color: C.blue, active: phase === "hub" || phase === "module" || phase === "path-select" },
+                { label: "Home", phase: "welcome", color: C.orange, active: phase === "welcome" },
+                { label: "How It Works", phase: "how-it-works", color: C.blue, active: phase === "how-it-works" },
+                { label: "Orientation", phase: "foundations", color: C.green, active: phase === "foundations", onNav: () => { setFoundationsViewContext("orientation"); navigateTo("foundations"); } },
+                { label: "Role-Based Training", phase: "path-select", color: C.orange, active: phase === "hub" || phase === "module" || phase === "path-select" },
+              ].map((item, idx) => (
+                <button
+                  key={item.phase}
+                  onClick={() => item.onNav ? item.onNav() : navigateTo(item.phase)}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 10, width: "100%",
+                    padding: "12px 24px", background: item.active ? item.color + "08" : "transparent",
+                    border: "none", borderLeft: item.active ? `3px solid ${item.color}` : "3px solid transparent",
+                    cursor: "pointer", textAlign: "left",
+                  }}
+                >
+                  <span style={{ fontFamily: "var(--mono)", fontSize: 12, fontWeight: 600, color: item.color, flexShrink: 0, width: 16 }}>{idx + 1}.</span>
+                  <span style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: item.active ? 600 : 400, color: item.active ? C.dark : C.muted }}>{item.label}</span>
+                </button>
+              ))}
+              <div style={{ borderBottom: `1px solid ${C.lightGray}`, margin: "8px 0" }} />
+              {[
                 { label: "Resource Library", phase: "materials", color: C.green, active: phase === "materials" },
                 { label: "Facilitator Guide", phase: "facilitator", color: C.gray, active: phase === "facilitator" },
               ].map(item => (
@@ -4685,6 +4704,13 @@ export default function App() {
             {/* Next: back to hub to see badges */}
             {isComplete && (() => {
               const nextMod = MODULES.find(m => m.id === mod.id + 1);
+              const teasers = {
+                2: "Tomorrow: the CLAUDE.md before/after demo that changes how customers see Claude Code.",
+                3: "Tomorrow: hooks, MCP servers, and slash commands — turn Claude Code into a platform.",
+                4: "Tomorrow: role-play a CISO, a skeptical VP, and a Copilot user. Practice under pressure.",
+                5: "Tomorrow: a blind customer brief, 45 minutes to build, and a live presentation. The transfer test.",
+              };
+              const teaser = nextMod ? teasers[nextMod.id] : null;
               return (
                 <div style={{ marginTop: 24, padding: "20px 24px", background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}`, display: "flex", justifyContent: "space-between", alignItems: "center", ...st.fadeUp, animationDelay: "0.46s" }}>
                   <div>
@@ -4694,6 +4720,7 @@ export default function App() {
                     <div style={{ fontFamily: "var(--serif)", fontSize: 17, color: C.dark }}>
                       {nextMod ? `${nextMod.day}: ${nextMod.title}` : "Head back to see your progress and badges"}
                     </div>
+                    {teaser && <div style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.muted, marginTop: 4, lineHeight: 1.5 }}>{teaser}</div>}
                   </div>
                   <button onClick={() => { setActiveModule(null); setPhase("hub"); window.scrollTo({ top: 0, behavior: "instant" }); }} style={{ ...st.primaryBtnCustom, background: nextMod ? nextMod.color : C.green, flexShrink: 0 }}
                     onMouseEnter={e => e.currentTarget.style.opacity = "0.88"} onMouseLeave={e => e.currentTarget.style.opacity = "1"}
@@ -4919,14 +4946,34 @@ export default function App() {
             </div>
           )}
 
-          {/* Materials link */}
-          <div style={{ marginTop: 32, textAlign: "center", ...st.fadeUp, animationDelay: "0.75s" }}>
-            <button onClick={() => setPhase("materials")}
-              style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 500, color: C.bg, background: C.blue, border: "none", borderRadius: 8, padding: "12px 24px", cursor: "pointer", transition: "opacity 0.2s", letterSpacing: 0.3 }}
-              onMouseEnter={e => e.currentTarget.style.opacity = "0.88"}
-              onMouseLeave={e => e.currentTarget.style.opacity = "1"}
-            >Browse all materials →</button>
-          </div>
+          {/* First week in the field */}
+          {completed.size === MODULES.length && (
+            <div style={{ marginTop: 28, padding: "20px 24px", background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}`, ...st.fadeUp, animationDelay: "0.78s" }}>
+              <div style={{ fontFamily: "var(--mono)", fontSize: 10, letterSpacing: 1.5, textTransform: "uppercase", color: C.orange, marginBottom: 10 }}>Your first week in the field</div>
+              <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.muted, lineHeight: 1.6, margin: "0 0 12px" }}>Print these and keep them at your desk. They cover 90% of what you'll need in your first customer conversations.</p>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {[
+                  { id: "M2b", label: "Prompt Patterns cheat sheet", why: "Your daily reference for steering Claude Code" },
+                  { id: "F6a", label: "Security Objection Handler", why: "The battlecard for every CISO conversation" },
+                  { id: "M4a", label: "Competitive Battlecard", why: "Claude Code vs. Copilot vs. Cursor positioning" },
+                  { id: "F7b", label: "Cost & ROI Pocket Math", why: "Close the cost conversation in 60 seconds" },
+                ].map(mat => (
+                  <button key={mat.id} onClick={() => { setInitialMaterialId(mat.id); setPhase("materials"); }}
+                    style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", textAlign: "left", padding: "10px 14px", background: C.bg, border: `1px solid ${C.lightGray}`, borderRadius: 6, cursor: "pointer", transition: "all 0.15s" }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor = C.orange + "60"; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor = C.lightGray; }}
+                  >
+                    <div>
+                      <div style={{ fontFamily: "var(--sans)", fontSize: 12, fontWeight: 500, color: C.dark }}>{mat.label}</div>
+                      <div style={{ fontFamily: "var(--sans)", fontSize: 11, color: C.faint, marginTop: 1 }}>{mat.why}</div>
+                    </div>
+                    <span style={{ fontFamily: "var(--mono)", fontSize: 9, color: C.orange, flexShrink: 0, marginLeft: 12 }}>View →</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
 
           {/* Reset */}
           <div style={{ marginTop: 24, textAlign: "center" }}>
