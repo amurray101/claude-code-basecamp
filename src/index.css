@@ -81,4 +81,28 @@
     animation: none !important;
     transition: none !important;
   }
+
+  /* Certificate print mode */
+  body.printing-certificate #root > div > *:not([data-certificate-overlay]) {
+    display: none !important;
+  }
+
+  [data-certificate-overlay] {
+    position: static !important;
+    background: none !important;
+    backdrop-filter: none !important;
+    padding: 0 !important;
+  }
+
+  [data-certificate-card] {
+    box-shadow: none !important;
+    border: none !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+  }
+
+  @page {
+    margin: 1in;
+    size: letter landscape;
+  }
 }

@@ -991,6 +991,11 @@ steps: [
       { title: "Set up your IDE and clone the repo", context: "vscode", desc: "Open VS Code (or JetBrains) and install the Claude Code extension. Search for 'Claude Code' in the Extensions marketplace and click Install. Then open the Command Palette and run 'Claude Code: Sign In' to authenticate. Once your IDE is ready, clone the sample Express API we'll use as our playground.", commands: ["git clone https://github.com/amurray101/claude-code-sample-api.git", "cd claude-code-sample-api", "npm install"], tip: "In JetBrains, the plugin is available in the JetBrains Marketplace under the same name. The setup flow is similar." },
       { title: "Launch Claude Code", context: "terminal", desc: "Start an interactive Claude Code session. Watch how it reads the directory structure and key files automatically — this is the agentic difference.", commands: ["claude"], tip: "Notice how Claude reads your package.json, directory structure, and any CLAUDE.md file before you even type a prompt. This is context gathering — the first step of the agentic loop." },
       { title: "Your first agentic task", context: "claude", desc: "Give Claude a real task that requires reading existing code, planning changes, and modifying multiple files. Type this prompt into the Claude Code session:", prompt: "Add a GET /health endpoint that returns { status: 'ok', timestamp: Date.now(), uptime: process.uptime() }. Put it in the existing routes file. Then write a test for it using the same testing patterns as the existing tests.", expected: "Claude should: 1) Read the existing route files and test files, 2) Plan the changes, 3) Add the endpoint, 4) Write a matching test, 5) Optionally run the test to verify." },
+      { type: "quick-check", question: "Claude Code just completed a multi-file task. Which sequence best describes what happened?", options: [
+        { text: "Claude generated code line by line as you typed", correct: false },
+        { text: "Claude read the codebase, planned changes, edited files, and ran tests to verify", correct: true },
+        { text: "Claude copied a template from its training data and pasted it in", correct: false },
+      ], explanation: "The agentic loop — read, plan, act, verify — is what makes Claude Code different from autocomplete tools. Claude understood the existing code before changing anything." },
       { title: "Verify and compare surfaces", context: "terminal", desc: "Run the tests to verify Claude's work, then open the same repo in VS Code to compare the IDE experience. Notice how the terminal gives you raw speed while the IDE gives you inline diffs and a visual file tree.", commands: ["npm test"], expected: "All tests should pass, including the new health endpoint test.", tip: "Open the Claude Code panel in VS Code (click the Claude icon in the sidebar or use Cmd/Ctrl+Shift+P → 'Claude Code: Open') and try a similar prompt like 'Add a GET /version endpoint that returns the package version from package.json. Write a test for it.' Compare the experience: both surfaces use the same agentic engine underneath." },
       { type: "checkpoint", title: "Reflect and compare", desc: "You've now used Claude Code in both the terminal and your IDE. Before moving on, think about: What felt different between the two surfaces? When would you reach for the CLI vs. the IDE? How would you describe the agentic loop to a customer who's used to autocomplete tools like Copilot?" },
     ],
@@ -1026,6 +1031,11 @@ steps: [
       { title: "Explore the codebase without Claude", context: "terminal", desc: "Before writing a CLAUDE.md, understand what you\'re working with. Browse the directory structure and notice the inconsistencies.", commands: ["ls -la src/", "cat package.json"], keyPoint: "You have to understand the conventions before you can teach them to Claude. This exploration step is what you\'d do in a real customer engagement \u2014 and it\'s what you\'d coach the customer\'s tech lead to do.", timing: "3 min" },
       { title: "The 'before' \u2014 Claude without CLAUDE.md", context: "claude", desc: "Launch Claude Code in the messy repo. Without a CLAUDE.md, Claude infers conventions from the code itself \u2014 sometimes right, sometimes wrong. Ask it to refactor a module and watch where it guesses.", prompt: "Refactor src/utils/helpers.js \u2014 improve the code quality and add error handling.", narration: "After Claude finishes: 'Look at the output. Did it use async/await or Promises? Did it add JSDoc or just inline comments? Did it put the test file in the right place? It made choices \u2014 but they were guesses. In a customer codebase with strong conventions, guesses create inconsistency.'", keyPoint: "This is the most important demo moment in the entire program. The 'before' output isn\'t bad \u2014 it\'s just inconsistent. That\'s the problem CLAUDE.md solves.", timing: "8 min" },
       { title: "Write your CLAUDE.md", context: "file", materialRef: { id: "M2a", note: "Use the CLAUDE.md Builder worksheet to structure your file" }, desc: "Based on what you saw exploring the codebase, write a CLAUDE.md at the repo root. Capture the patterns you noticed — how the code is organized, what style choices were made, where things are inconsistent. There's no fixed template. The goal is to describe this codebase the way you'd describe it to a new teammate on their first day.", tip: "In a customer engagement, writing the first CLAUDE.md together is a powerful onboarding moment. It forces the team to articulate conventions they've never written down — which is itself valuable even without Claude Code.", timing: "8 min" },
+      { type: "quick-check", question: "What happens if your CLAUDE.md says 'use TypeScript strict mode' but a subdirectory CLAUDE.md says 'use JavaScript'?", options: [
+        { text: "The root CLAUDE.md always wins", correct: false },
+        { text: "The subdirectory CLAUDE.md overrides for files in that directory", correct: true },
+        { text: "Claude ignores both and uses its default behavior", correct: false },
+      ], explanation: "CLAUDE.md files are hierarchical — subdirectory files override project-level ones for their scope, just like .gitignore or .eslintrc." },
       { title: "The 'after' \u2014 Claude with CLAUDE.md", context: "claude", desc: "Exit and re-launch Claude Code so it picks up your CLAUDE.md. Ask the exact same refactoring question. The difference should be visible \u2014 async/await instead of callbacks, JSDoc instead of inline comments, co-located tests.", prompt: "Refactor src/utils/helpers.js to follow our project conventions.", narration: "As Claude works: 'Same task, same repo, different output. Watch \u2014 async/await instead of callbacks. JSDoc instead of inline comments. Tests co-located with the source file. It\'s following the CLAUDE.md like a new team member who actually read the onboarding doc.'", keyPoint: "This before/after comparison is the single most persuasive demo in the entire Basecamp program. When you show this to a customer, you\'re not talking about AI in the abstract \u2014 you\'re showing their conventions being followed automatically.", timing: "8 min" },
       { title: "The CLAUDE.md iteration loop", context: "claude", desc: "Your first CLAUDE.md is never perfect. Look at Claude\'s output from step 9 \u2014 what did it get right? What would you add? Try refining your CLAUDE.md based on what you observed.", prompt: "What conventions did you infer from the existing code that I should add to my CLAUDE.md?", narration: "'Ask Claude itself what you should add. This is a powerful move in customer engagements \u2014 Claude can help you write the CLAUDE.md by analyzing the codebase. The loop is: write CLAUDE.md, observe output, ask Claude what\'s missing, refine. Each iteration makes the output better.'", tip: "This iteration loop \u2014 write, observe, refine \u2014 is how teams get the most value from CLAUDE.md. In a customer engagement, plan to iterate 2-3 times during the first session.", timing: "5 min" },
       { title: "Session management: /compact", context: "claude", desc: "In long coding sessions, Claude\'s context window fills up. The /compact command summarizes the conversation to free space while preserving important context.", commands: ["/compact"], narration: "'After 15-20 minutes of work, you\'ll notice Claude starting to forget earlier context. That\'s the context window filling up. /compact is your pressure release valve \u2014 it summarizes what happened and frees up space. Watch what it preserves and what it drops.'", keyPoint: "Teach customers to use /compact proactively, not reactively. If you wait until Claude starts forgetting, you\'ve already lost context. Compact every 15-20 minutes in long sessions.", timing: "3 min" },
@@ -1065,6 +1075,11 @@ steps: [
       { title: "Test your hooks", context: "claude", desc: "Launch Claude and make a change that should trigger your hooks. Watch how the hooks enforce quality automatically.", prompt: "Introduce a deliberate bug in one of the route handlers — change a status code from 200 to 500. Then try to commit.", expected: "The pre-commit hook should catch the failing test and prevent the commit. Claude should then fix the bug and retry." },
       { title: "Set up an MCP server", context: "terminal", desc: "MCP connects Claude to external tools. We'll set up a mock Jira server that Claude can query for ticket context.", commands: ["mkdir -p .claude/mcp-servers", "npm init -y --prefix .claude/mcp-servers/mock-jira"], tip: "In real deployments, MCP servers connect to Jira, Slack, Datadog, Confluence, and internal APIs. The setup pattern is the same — Claude discovers available tools from the MCP server dynamically." },
       { title: "Configure Claude to use your MCP server", context: "file", desc: "Add the MCP server to your Claude Code configuration so it's available in every session.", code: "// .claude/settings.json\n{\n  \"mcpServers\": {\n    \"mock-jira\": {\n      \"command\": \"node\",\n      \"args\": [\".claude/mcp-servers/mock-jira/server.js\"]\n    }\n  }\n}", codeTitle: ".claude/settings.json" },
+      { type: "quick-check", question: "A compliance team requires all code to pass lint checks before Claude can commit. Should you use a hook or a slash command?", options: [
+        { text: "A slash command — developers can run /lint-check when they want", correct: false },
+        { text: "A pre-commit hook — it enforces the check automatically and can't be bypassed", correct: true },
+        { text: "Either works — they're interchangeable", correct: false },
+      ], explanation: "Hooks are enforced gates that run automatically. Slash commands are opt-in conveniences. For compliance requirements, hooks are the answer because they can't be skipped." },
       { title: "Create a custom slash command", context: "file", desc: "Slash commands package workflows your team can share. Create a deploy-check command that runs a pre-deployment checklist.", code: "Run the following pre-deployment checklist:\n1. Run the full test suite and report results\n2. Check for any TODO or FIXME comments in changed files\n3. Verify all environment variables are documented in .env.example\n4. Check for console.log statements in production code\n5. Validate that API endpoints have error handling\n6. Generate a summary of changes since last deploy tag", codeTitle: ".claude/commands/deploy-check.md", tip: "Custom commands are shared via git — a tech lead defines them once and the entire team inherits them. This is a powerful selling point for engineering managers." },
       { title: "Test your custom command", context: "claude", desc: "Launch Claude and run your new slash command to see it in action.", commands: ["/deploy-check"], expected: "Claude should execute each step of your checklist and report results. This is how teams standardize quality checks." },
       { title: "Compose the full workflow", context: "claude", desc: "Now bring hooks, MCP, and commands together. Ask Claude to use the full toolchain.", prompt: "Pull the details for ticket JIRA-1234 from our mock Jira server, implement the feature it describes, then run /deploy-check to verify everything is ready.", tip: "This composed workflow — external context via MCP, implementation via Claude, quality gates via hooks and commands — is the enterprise pitch. Demonstrate this in customer conversations." },
@@ -1105,6 +1120,11 @@ steps: [
       { title: "Role-play 2: The VP of Engineering", context: "claude", desc: "Now your partner is a VP who wants a deployment plan for 200 developers on AWS. This is a cost and architecture conversation.", prompt: "I need to present a Claude Code deployment plan for a 200-developer team on AWS. Help me build: a Bedrock deployment architecture, a phased rollout from pilot to org-wide, a cost estimate using ~$6/dev/day average, and an ROI comparison against the cost of additional engineering hires.", tip: "Lead with the ROI framing: $6/day × 200 devs = ~$1,200/day. If each dev saves 1 hour, that's 200 hours × $150/hour fully-loaded = $30,000/day in recovered time. 25× return." },
       { title: "Role-play 3: The Copilot skeptic", context: "claude", desc: "Your partner is an engineering manager who loves Copilot and doesn't see why they need Claude Code. Handle the objection.", prompt: "Help me prepare for an objection handling conversation where the prospect says 'We already use GitHub Copilot and our developers love it. Why would we switch to Claude Code?' Give me the honest positioning — where we're better, where they're different, and how they can coexist.", tip: "Don't trash Copilot — it loses trust. Instead: Copilot is excellent at line-level autocomplete. Claude Code operates at the project level. Many teams use both. The question isn't 'replace' — it's 'what can your team do now that they couldn't before?'" },
       { title: "Build your competitive battlecard", context: "claude", materialRef: { id: "M4a", note: "Compare your work against the Claude Code vs. Competition battlecard" }, desc: "Use Claude to help you create a reference document you'll use in the field.", prompt: "Create a competitive battlecard comparing Claude Code vs GitHub Copilot vs Cursor vs Devin. For each competitor, include: what they do well, where Claude Code is stronger, honest gaps, and the recommended positioning angle. Format it as a clean reference I can pull up during sales calls." },
+      { type: "quick-check", question: "A prospect says: 'We already have Copilot, why do we need Claude Code?' What's the strongest positioning?", options: [
+        { text: "Claude Code is better than Copilot at everything — they should switch", correct: false },
+        { text: "They serve different layers: Copilot for line-level autocomplete, Claude Code for project-level agentic tasks. Many teams run both.", correct: true },
+        { text: "Claude Code is cheaper per seat", correct: false },
+      ], explanation: "Position Claude Code as a new capability, not a replacement. Copilot suggests the next line; Claude Code understands the whole project and executes multi-step changes." },
       { type: "checkpoint", title: "Debrief with your cohort", desc: "Share what worked and what didn't in each role-play. Which objections were hardest to handle? Where did you feel most confident? What do you need to practice more before your first real customer conversation?" },
     ],
         challenge: "Three role-plays: (1) Walk Nova's CISO through sandboxing, permissions, managed settings, and compliance. (2) Build Atlas a Bedrock deployment architecture with phasing and cost projections. (3) Position Claude Code honestly against Copilot for Prism — where it's different, where it's better, and how they coexist.",
@@ -1132,6 +1152,11 @@ steps: [
       { title: "Receive your blind customer brief", desc: "Your facilitator will hand you a customer brief you haven't seen before. Read it carefully — you have 15 minutes to analyze before you start building. Identify: the customer's industry, team size, current tools, key pain points, and what success looks like for them.", tip: "Don't jump to solutions immediately. Spend the first 5 minutes understanding the customer's world. The best demos are tailored to what the customer cares about, not what you're most comfortable showing." },
       { title: "Architect your solution", context: "claude", materialRef: { id: "M4c", note: "Use the Demo Planning worksheet to structure your approach" }, desc: "Use Claude Code to help you plan your approach. Think about which Claude Code features map to their pain points.", prompt: "I've received this customer brief: [paste brief]. Help me architect a Claude Code solution for them. I need: which features to demo (pick 3-4 max), a CLAUDE.md tailored to their codebase, which MCP integrations would be most valuable, and a phased rollout plan.", tip: "Limit yourself to 3-4 demo moments. Too many features overwhelms the audience. Pick the ones that map directly to their stated pain points." },
       { title: "Build your working demo", context: "claude", desc: "You have 45 minutes to build a working demo that addresses the customer brief. Use everything you've learned — CLAUDE.md, hooks, MCP, slash commands.", tip: "Build for reliability, not flash. A simple demo that works perfectly is better than an ambitious one that breaks. Test your demo at least twice before presenting." },
+      { type: "quick-check", question: "You have 45 minutes to build a demo for an unfamiliar customer brief. What should you do first?", options: [
+        { text: "Start coding immediately to maximize build time", correct: false },
+        { text: "Spend 5-10 minutes analyzing the brief and planning your demo's 3 key moments before touching code", correct: true },
+        { text: "Ask the facilitator what to build", correct: false },
+      ], explanation: "Planning pays off under time pressure. Identify the customer's pain point, your 3 demo moments, and the story arc before building. Teams that plan first consistently outperform those who dive in." },
       { title: "Prepare your 10-minute presentation", desc: "Structure your presentation: 2 minutes on understanding their problem, 6 minutes on the live demo, 2 minutes on next steps and rollout plan. Practice the transitions between sections.", tip: "Start with their problem, not your solution. 'You mentioned your team spends 40% of their time on migration work — let me show you how that changes.' Then demo. Then close with a concrete next step." },
       { title: "Present to your cohort", desc: "Deliver your presentation. Your cohort will score you on: clarity of problem framing, technical depth of the demo, relevance to the customer brief, and confidence in handling questions. This simulates your first real customer engagement." },
       { type: "checkpoint", title: "Peer feedback and reflection", desc: "After all presentations: What was the most effective demo you saw today? What technique will you steal for your own customer conversations? What's the one thing you want to practice more before your first real engagement?" },
@@ -1181,7 +1206,19 @@ const DAY_PREWORK = {
       { id: "M3", label: "Integration Patterns architecture reference", why: "Study the architecture diagrams for hooks, MCP, and slash commands before building them." },
     ],
   },
-  4: null,
+  4: {
+    duration: "30 min",
+    description: "Review security and enterprise deployment foundations before today's competitive positioning and customer role-plays.",
+    foundations: [
+      { sectionId: "security", label: "Security & Trust", why: "Fluency in the defense-in-depth model is essential for the CISO objection-handling role-play." },
+      { sectionId: "enterprise", label: "Enterprise Deployment & Costs", why: "Understand deployment options and cost models before the VP of Engineering role-play." },
+    ],
+    materials: [
+      { id: "F6a", label: "Security Battlecard", why: "Your cheat sheet for the CISO role-play." },
+      { id: "F7a", label: "Deployment Path Finder", why: "Decision tree for Bedrock vs. Vertex vs. Foundry." },
+      { id: "F7b", label: "Cost & ROI Pocket Math", why: "Quick math reference for cost conversations." },
+    ],
+  },
   5: null,
 };
 
@@ -1198,7 +1235,7 @@ const DAY_PHASE_CONFIG = {
     lab: {
       duration: "45 min",
       description: "Now it's your turn. Work through all the steps independently on the sample repo.",
-      stepIndices: [0, 1, 2, 3, 4, 5],
+      stepIndices: [0, 1, 2, 3, 4, 5, 6],
     },
   },
   2: {
@@ -1206,13 +1243,13 @@ const DAY_PHASE_CONFIG = {
     live: {
       duration: "60 min",
       description: "Watch the facilitator build a CLAUDE.md live, demo the before/after comparison, and walk through session management, Plan Mode, and prompt patterns.",
-      stepIndices: [0, 1, 2, 3, 5, 7, 8, 9, 10, 11, 12],
+      stepIndices: [0, 1, 2, 3, 6, 8, 9, 10, 11, 12, 13],
       useGuideSegments: true,
     },
     lab: {
       duration: "60 min",
       description: "Write your own CLAUDE.md for the messy repo, iterate on it based on Claude's output, and practice the full workflow.",
-      stepIndices: [4, 6, 13],
+      stepIndices: [4, 5, 7, 14],
     },
   },
   3: {
@@ -1220,13 +1257,13 @@ const DAY_PHASE_CONFIG = {
     live: {
       duration: "45 min",
       description: "The facilitator builds hooks, sets up an MCP server, creates a slash command, and demos the composed workflow end-to-end.",
-      stepIndices: [0, 1, 2, 3, 4, 5, 6],
+      stepIndices: [0, 1, 2, 3, 4, 5, 6, 7],
       useGuideSegments: true,
     },
     lab: {
       duration: "75 min",
       description: "Build your own hooks, MCP server, slash command, and composed workflow for Arcadia Financial.",
-      stepIndices: [0, 1, 2, 3, 4, 5, 6, 7],
+      stepIndices: [0, 1, 2, 3, 4, 5, 6, 7, 8],
     },
   },
   4: {
@@ -1240,14 +1277,14 @@ const DAY_PHASE_CONFIG = {
     lab: {
       duration: "30 min",
       description: "Build your competitive battlecard and debrief with your cohort.",
-      stepIndices: [3, 4],
+      stepIndices: [3, 4, 5],
     },
   },
   5: {
     mode: "integrated",
     duration: "120 min",
     description: "Capstone: receive a blind customer brief, build a working demo, and present to your cohort. One continuous session.",
-    stepIndices: [0, 1, 2, 3, 4, 5],
+    stepIndices: [0, 1, 2, 3, 4, 5, 6],
   },
 };
 
@@ -1726,10 +1763,53 @@ const MATERIAL_META = {
 };
 
 // ─── STEP-BY-STEP EXERCISE COMPONENT ───
+function QuickCheck({ step, color }) {
+  const [selected, setSelected] = useState(null);
+  const [revealed, setRevealed] = useState(false);
+  const correct = step.options.findIndex(o => o.correct);
+  const isCorrect = selected === correct;
+
+  return (
+    <div style={{ padding: "24px 20px", margin: "8px 0", background: C.blue + "04", borderRadius: 10, border: `1px solid ${C.blue}20`, borderLeft: `3px solid ${C.blue}` }}>
+      <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.blue, marginBottom: 8 }}>Quick check</div>
+      <div style={{ fontFamily: "var(--serif)", fontSize: 15, color: C.dark, lineHeight: 1.5, marginBottom: 14 }}>{step.question}</div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+        {step.options.map((opt, oi) => {
+          const isSelected = selected === oi;
+          const showResult = revealed && isSelected;
+          const isCorrectOption = oi === correct;
+          return (
+            <button key={oi} onClick={() => { if (!revealed) { setSelected(oi); setRevealed(true); } }}
+              style={{
+                textAlign: "left", width: "100%", padding: "10px 14px", borderRadius: 6, cursor: revealed ? "default" : "pointer",
+                fontFamily: "var(--sans)", fontSize: 12.5, lineHeight: 1.5, transition: "all 0.2s",
+                background: revealed && isCorrectOption ? C.green + "10" : showResult && !isCorrect ? C.orange + "08" : isSelected ? C.blue + "06" : C.bg,
+                border: `1px solid ${revealed && isCorrectOption ? C.green + "40" : showResult && !isCorrect ? C.orange + "30" : isSelected ? C.blue + "30" : C.lightGray}`,
+                color: C.dark,
+              }}
+            >
+              <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.faint, marginRight: 8 }}>{String.fromCharCode(65 + oi)}.</span>
+              {opt.text}
+              {revealed && isCorrectOption && <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.green, marginLeft: 8 }}>{"\u2713"}</span>}
+            </button>
+          );
+        })}
+      </div>
+      {revealed && step.explanation && (
+        <div style={{ marginTop: 12, padding: "10px 14px", background: C.cream, borderRadius: 6, border: `1px solid ${C.lightGray}` }}>
+          <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: isCorrect ? C.green : C.orange, marginRight: 6 }}>{isCorrect ? "Correct!" : "Not quite."}</span>
+          <span style={{ fontFamily: "var(--sans)", fontSize: 12, color: C.muted, lineHeight: 1.5 }}>{step.explanation}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function ExerciseSteps({ steps, color, contentMode, facilitatorMode }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
       {steps.map((step, i) => {
+        if (step.type === "quick-check") return <QuickCheck key={i} step={step} color={color} />;
         const isCheckpoint = step.type === "checkpoint";
         return (
         <div key={i} style={{ display: "flex", gap: 16, padding: isCheckpoint ? "32px 16px" : "28px 0", borderBottom: i < steps.length - 1 ? `2px solid ${C.lightGray}` : "none", ...(isCheckpoint ? { background: color + "04", borderRadius: 10, borderLeft: `3px solid ${color}`, margin: "8px 0" } : {}) }}>
@@ -2768,9 +2848,18 @@ function NameInputModal({ onSubmit, onSkip }) {
 function CompletionCertificate({ userName, path, earnedSkills, date, onClose }) {
   const pathLabel = PATHS.find(p => p.id === path)?.label || "Claude Code";
   const displayDate = new Date(date).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+
+  function handleDownloadPDF() {
+    document.body.classList.add("printing-certificate");
+    setTimeout(() => {
+      window.print();
+      document.body.classList.remove("printing-certificate");
+    }, 100);
+  }
+
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(20,20,19,0.5)", backdropFilter: "blur(4px)", padding: 20 }} onClick={onClose}>
-      <div style={{
+    <div data-certificate-overlay="" style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(20,20,19,0.5)", backdropFilter: "blur(4px)", padding: 20 }} onClick={onClose}>
+      <div data-certificate-card="" style={{
         background: C.bg, borderRadius: 16, border: `1px solid ${C.lightGray}`, maxWidth: 520, width: "100%",
         boxShadow: "0 16px 48px rgba(0,0,0,0.12)", animation: "fadeUp 0.3s ease forwards", overflow: "hidden",
       }} onClick={e => e.stopPropagation()}>
@@ -2798,8 +2887,15 @@ function CompletionCertificate({ userName, path, earnedSkills, date, onClose }) 
             </div>
           </div>
 
-          <div style={{ textAlign: "center", marginTop: 20 }}>
-            <p style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.faint, margin: "0 0 16px" }}>Take a screenshot to save your certificate</p>
+          <div className="no-print" style={{ textAlign: "center", marginTop: 20, display: "flex", gap: 10, justifyContent: "center" }}>
+            <button onClick={handleDownloadPDF} style={{
+              fontFamily: "var(--sans)", fontSize: 13, fontWeight: 500, color: C.bg, background: C.orange,
+              border: "none", borderRadius: 8, padding: "10px 24px",
+              cursor: "pointer", transition: "opacity 0.2s",
+            }}
+              onMouseEnter={e => e.currentTarget.style.opacity = "0.88"}
+              onMouseLeave={e => e.currentTarget.style.opacity = "1"}
+            >Download as PDF</button>
             <button onClick={onClose} style={{
               fontFamily: "var(--sans)", fontSize: 13, color: C.muted, background: "transparent",
               border: `1px solid ${C.lightGray}`, borderRadius: 8, padding: "10px 24px",
@@ -3676,14 +3772,14 @@ export default function App() {
               </button>
               <div style={{ borderBottom: `1px solid ${C.lightGray}`, marginBottom: 8 }} />
               {[
-                { label: "Foundations", phase: "foundations", color: C.orange, active: phase === "foundations" },
+                { label: "Orientation", phase: "foundations", color: C.orange, active: phase === "foundations", onNav: () => { setFoundationsViewContext("orientation"); navigateTo("foundations"); } },
                 { label: "Role-Based Training", phase: "path-select", color: C.blue, active: phase === "hub" || phase === "module" || phase === "path-select" },
                 { label: "Resource Library", phase: "materials", color: C.green, active: phase === "materials" },
                 { label: "Facilitator Guide", phase: "facilitator", color: C.gray, active: phase === "facilitator" },
               ].map(item => (
                 <button
                   key={item.phase}
-                  onClick={() => navigateTo(item.phase)}
+                  onClick={() => item.onNav ? item.onNav() : navigateTo(item.phase)}
                   style={{
                     display: "flex", alignItems: "center", gap: 10, width: "100%",
                     padding: "12px 24px", background: item.active ? item.color + "08" : "transparent",
@@ -3817,7 +3913,7 @@ export default function App() {
               onMouseEnter={e => e.currentTarget.style.opacity = "0.88"}
               onMouseLeave={e => e.currentTarget.style.opacity = "1"}
             >How this course works →</button>
-            <p style={{ fontFamily: "var(--mono)", fontSize: 11, color: C.faint, marginTop: 12 }}>~45 min foundations · then 5 days of hands-on modules</p>
+            <p style={{ fontFamily: "var(--mono)", fontSize: 11, color: C.faint, marginTop: 12 }}>~20 min orientation · then 5 days of hands-on modules</p>
           </div>
         </div>
       )}
@@ -3832,13 +3928,13 @@ export default function App() {
             <div style={st.eyebrow}>Program structure</div>
             <div style={{ height: 2, width: 48, background: C.orange, margin: "16px 0 28px", borderRadius: 1 }} />
             <h1 style={{ ...st.heroTitle, fontSize: 36 }}>How this<br /><span style={{ color: C.orange }}>course works.</span></h1>
-            <p style={st.heroBody}>A week-long program in three layers: shared foundations, a role you choose, and five days of building real things.</p>
+            <p style={st.heroBody}>A week-long program in three layers: a shared orientation, a role you choose, and five days of building real things.</p>
           </div>
 
           {/* ── THREE-LAYER OVERVIEW ── */}
           <div style={{ marginTop: 40, display: "flex", flexDirection: "column", gap: 0, ...st.fadeUp, animationDelay: "0.15s" }}>
             {[
-              { num: "1", label: "Foundations", color: C.orange, desc: "Everyone starts with the same base. Self-paced readings on Anthropic, the product stack, Claude Code's architecture, security, and configuration. This shared context means every conversation starts from the same page.", time: "~45 min self-paced" },
+              { num: "1", label: "Orientation", color: C.orange, desc: "Everyone starts with the same base. Self-paced readings on Anthropic, the product stack, and how Claude Code works. Configuration, security, and enterprise topics are covered as prework for the days that use them.", time: "~20 min self-paced" },
               { num: "2", label: "Choose your role", color: C.blue, desc: "Select the lens that matches your job: PE Pre-Sales, PE Post-Sales, Solutions Architect, or Applied Research. Same technical content, different practice scenarios and deliverables.", time: "4 roles available" },
               { num: "3", label: "Five-day learning path", color: C.green, desc: "One module per day, each building on the last. Every day has three parts: self-directed pre-work, a facilitator-led live session, and a hands-on lab. You finish the week with a capstone presentation under time pressure.", time: "5 days" },
             ].map((layer, i) => (
@@ -3955,10 +4051,10 @@ export default function App() {
 
           {/* ── CTA ── */}
           <div style={{ marginTop: 44, ...st.fadeUp, animationDelay: "0.6s" }}>
-            <button onClick={() => setPhase("foundations")} style={st.primaryBtn}
+            <button onClick={() => { setFoundationsViewContext("orientation"); setPhase("foundations"); }} style={st.primaryBtn}
               onMouseEnter={e => e.currentTarget.style.opacity = "0.88"}
               onMouseLeave={e => e.currentTarget.style.opacity = "1"}
-            >Start foundations →</button>
+            >Start orientation →</button>
             <p style={{ fontFamily: "var(--mono)", fontSize: 11, color: C.faint, marginTop: 12 }}>Begin with the shared knowledge base everyone needs</p>
           </div>
         </div>
@@ -4420,14 +4516,19 @@ export default function App() {
                   mod={mod}
                   foundationSectionsViewed={foundationSectionsViewed}
                   onOpenFoundation={(sectionId) => {
-                    const topIdx = FOUNDATIONS.findIndex(f => f.id === sectionId);
+                    // Determine if this is an orientation or contextual foundation
+                    const isOrientation = ORIENTATION_SECTIONS.includes(sectionId);
+                    const ctx = isOrientation ? "orientation" : "contextual";
+                    const lookupArray = isOrientation ? ORIENTATION_FOUNDATIONS : FOUNDATIONS;
+                    setFoundationsViewContext(ctx);
+                    const topIdx = lookupArray.findIndex(f => f.id === sectionId);
                     if (topIdx >= 0) {
                       setFoundationStep(topIdx);
                       setSubPage(-1);
                       setPhase("foundations");
                     } else {
-                      for (let fi = 0; fi < FOUNDATIONS.length; fi++) {
-                        const pages = FOUNDATIONS[fi].pages || [];
+                      for (let fi = 0; fi < lookupArray.length; fi++) {
+                        const pages = lookupArray[fi].pages || [];
                         const pi = pages.findIndex(p => p.id === sectionId);
                         if (pi >= 0) {
                           setFoundationStep(fi);
