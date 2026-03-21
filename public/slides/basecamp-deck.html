@@ -1459,22 +1459,103 @@
         </aside>
       </section>
 
-      <!-- SLIDE 25 — COMMANDS YOU'LL NEED IN THE LAB -->
+      <!-- SLIDE 25 — PLAN MODE -->
       <section style="text-align: left;">
-        <h2>Two Commands You'll Need in the Lab</h2>
-        <p style="color: var(--text-secondary);">Lumen's monorepo is large &mdash; these keep your session productive</p>
+        <h2>Plan Mode: Think Before Acting</h2>
+        <p style="color: var(--text-secondary);">The trust-building tool for skeptical engineers</p>
         <div style="max-width: 750px; margin-top: var(--space-lg);">
           <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-teal); margin-bottom: var(--space-md);">
-            <h4 style="color: var(--accent-teal); font-family: var(--font-mono);">/compact</h4>
-            <p style="font-size: var(--text-sm); margin: 0;"><strong>Use when:</strong> Claude starts repeating itself or forgetting earlier context. On a repo this size, you'll likely need this after 15&ndash;20 minutes of continuous work. It summarizes the conversation so far and frees up context space.</p>
+            <h4 style="color: var(--accent-teal); font-family: var(--font-mono); margin: 0 0 var(--space-sm);">plan: Analyze this codebase and propose a TypeScript migration strategy</h4>
+            <p style="font-size: var(--text-sm); margin: 0; color: var(--text-secondary);">Claude reads the codebase, reasons about the approach, and presents a plan &mdash; <strong>without changing a single file</strong>. The engineer reviews, gives feedback, then green-lights execution.</p>
           </div>
-          <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-coral);">
-            <h4 style="font-family: var(--font-mono);">/clear</h4>
-            <p style="font-size: var(--text-sm); margin: 0;"><strong>Use when:</strong> You're switching tasks &mdash; for example, between exploring the repo (step 1) and refactoring with your CLAUDE.md (step 3). Different tasks need fresh context. Start clean.</p>
+          <div class="card-grid card-grid-3" style="margin-top: var(--space-md);">
+            <div class="card" style="padding: var(--space-md); text-align: center;">
+              <div style="font-size: 24px; margin-bottom: var(--space-xs);">1. Plan</div>
+              <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0;">Claude analyzes and proposes</p>
+            </div>
+            <div class="card" style="padding: var(--space-md); text-align: center;">
+              <div style="font-size: 24px; margin-bottom: var(--space-xs);">2. Review</div>
+              <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0;">Engineer gives feedback</p>
+            </div>
+            <div class="card" style="padding: var(--space-md); text-align: center;">
+              <div style="font-size: 24px; margin-bottom: var(--space-xs);">3. Execute</div>
+              <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0;">&ldquo;That plan look right? Build it.&rdquo;</p>
+            </div>
+          </div>
+        </div>
+        <p style="font-size: var(--text-sm); color: var(--accent-coral); font-weight: var(--weight-semibold); margin-top: var(--space-lg);">In customer demos, always start complex tasks in Plan Mode. It's the difference between trust and anxiety.</p>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "CLAUDE.md tells Claude how to write code. Plan Mode tells Claude to stop and think before writing any. These are complementary tools."</p>
+          <p><strong>[KEY POINT]</strong> Plan Mode is your secret weapon with skeptical engineers. They don't trust AI that immediately starts editing their code. Plan Mode lets them see Claude's reasoning first &mdash; what it would change and why. They review the plan, give feedback, then green-light execution.</p>
+          <p><strong>[DEMO CUE]</strong> If time allows, show a quick Plan Mode prompt: "plan: Analyze this codebase and propose a strategy for adding TypeScript." Let the audience see Claude reason without touching files. Then ask: "That plan look right? Let's build it."</p>
+          <p><strong>[SALES TIP]</strong> When a prospect says "I don't trust AI to edit my code" &mdash; Plan Mode is the answer. Show them Claude's reasoning first. Once they see the quality of the plan, the trust follows.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 26 — PROMPT PATTERNS -->
+      <section style="text-align: left;">
+        <h2>Prompt Patterns That Work</h2>
+        <p style="color: var(--text-secondary);">The difference between a good prompt and a great one: specificity and structure</p>
+        <div style="max-width: 750px; margin-top: var(--space-lg);">
+          <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-terracotta); margin-bottom: var(--space-md);">
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent-terracotta); margin-bottom: var(--space-xs);">Vague &mdash; Claude guesses</div>
+            <p style="font-family: var(--font-mono); font-size: var(--text-sm); margin: 0; color: var(--text-secondary); font-style: italic;">&ldquo;Add a shipments endpoint.&rdquo;</p>
+          </div>
+          <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-sage); margin-bottom: var(--space-lg);">
+            <div style="font-family: var(--font-mono); font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent-sage); margin-bottom: var(--space-xs);">Structured &mdash; Claude follows</div>
+            <p style="font-family: var(--font-mono); font-size: var(--text-sm); margin: 0; color: var(--text-primary); font-style: italic;">&ldquo;Add a new POST /api/shipments endpoint that creates a shipment record. Follow the same patterns as the existing routes in our CLAUDE.md.&rdquo;</p>
+          </div>
+          <div style="background: var(--bg-secondary); border-radius: var(--radius-md); padding: var(--space-md) var(--space-lg);">
+            <h4 style="margin: 0 0 var(--space-sm); font-size: var(--text-sm);">The two-part pattern</h4>
+            <div style="display: flex; gap: var(--space-lg); font-size: var(--text-sm);">
+              <div>
+                <span style="color: var(--accent-teal); font-weight: var(--weight-bold);">WHAT</span>
+                <span style="color: var(--text-secondary);"> &mdash; the task you want done</span>
+              </div>
+              <div style="color: var(--text-light);">+</div>
+              <div>
+                <span style="color: var(--accent-sage); font-weight: var(--weight-bold);">HOW</span>
+                <span style="color: var(--text-secondary);"> &mdash; the conventions and patterns to follow</span>
+              </div>
+            </div>
           </div>
         </div>
         <aside class="notes">
-          <p><strong>[TRANSITION]</strong> "Two commands. That's it for today. /compact when Claude gets fuzzy, /clear when you switch tasks. You will need both during the lab."</p>
+          <p><strong>[TRANSITION]</strong> "CLAUDE.md gives Claude the conventions. But your prompt is what activates them. A vague prompt forces Claude to guess even with a perfect CLAUDE.md. A structured prompt gets consistent output on the first try."</p>
+          <p><strong>[KEY POINT]</strong> The WHAT + HOW pattern is the single most useful prompt structure for agentic coding. WHAT is the task. HOW is which conventions to follow, which patterns to match, which quality bar to hit. Vague prompts force Claude to guess. Specific prompts get convention-matching output on the first try.</p>
+          <p><strong>[EXERCISE CUE]</strong> Ask the room: "Take the vague prompt on screen. How would you make it specific?" Get 2-3 answers. Compare them to the structured version. The goal is for trainees to internalize this pattern before the lab.</p>
+        </aside>
+      </section>
+
+      <!-- SLIDE 27 — SESSION HYGIENE -->
+      <section style="text-align: left;">
+        <h2>Session Hygiene</h2>
+        <p style="color: var(--text-secondary);">Three commands and one rule that keep your sessions productive</p>
+        <div style="max-width: 750px; margin-top: var(--space-lg);">
+          <div class="card-grid card-grid-3" style="margin-bottom: var(--space-md);">
+            <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--accent-teal);">
+              <h4 style="color: var(--accent-teal); font-family: var(--font-mono); font-size: var(--text-sm);">/compact</h4>
+              <p style="font-size: var(--text-xs); margin: var(--space-xs) 0 0; color: var(--text-secondary);">Summarizes the conversation and frees context space. Use proactively every 15&ndash;20 min &mdash; don't wait until Claude starts forgetting.</p>
+            </div>
+            <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--accent-coral);">
+              <h4 style="font-family: var(--font-mono); font-size: var(--text-sm);">/clear</h4>
+              <p style="font-size: var(--text-xs); margin: var(--space-xs) 0 0; color: var(--text-secondary);">Resets the entire context. Use when switching tasks &mdash; different tasks need fresh context.</p>
+            </div>
+            <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--accent-sage);">
+              <h4 style="color: var(--accent-sage); font-family: var(--font-mono); font-size: var(--text-sm);">/cost</h4>
+              <p style="font-size: var(--text-xs); margin: var(--space-xs) 0 0; color: var(--text-secondary);">Shows tokens consumed and total spend. Run after a real task in customer demos: &ldquo;That refactor cost $0.08. Your developer would have spent 45 minutes.&rdquo;</p>
+            </div>
+          </div>
+          <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--text-primary); background: var(--bg-secondary);">
+            <h4 style="margin: 0 0 var(--space-xs);">The one-job-one-session rule</h4>
+            <p style="font-size: var(--text-sm); margin: 0; color: var(--text-secondary);">Don't cram unrelated tasks into one session. Refactor a module, then add a feature, then fix a bug in a different file &mdash; quality drops after the third task. The context fills with unrelated code. For complex work: Plan Mode to scope it, then a fresh session to execute each piece.</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Three commands and one habit. /compact is your pressure release valve. /clear is your fresh start. /cost is your sales weapon. And the one-job-one-session rule is what separates power users from frustrated users."</p>
+          <p><strong>[KEY POINT]</strong> Teach customers to use /compact proactively, not reactively. If you wait until Claude starts forgetting, you've already lost context. Compact every 15-20 minutes in long sessions.</p>
+          <p><strong>[SALES TIP]</strong> /cost is your friend in customer conversations about pricing. Run it after a real task during a demo: "That refactoring task &mdash; reading the codebase, planning changes, writing code, running tests &mdash; cost $0.08. Your developer would have spent 45 minutes." Let the math speak for itself.</p>
+          <p><strong>[KITCHEN SINK PATTERN]</strong> The one-job-one-session rule addresses the "kitchen sink" anti-pattern. If trainees ask about it, explain: multiple unrelated tasks in one session means Claude's context fills with code from task 1 that's irrelevant to task 3. Quality degrades. The fix is simple: /clear between tasks, or start a new session.</p>
         </aside>
       </section>
 
