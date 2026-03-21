@@ -667,7 +667,7 @@
     }
     /* WIP overlay on all slides EXCEPT slide 1 and Day 2 (slides 14–32) */
     .slides > section:nth-child(n+2):nth-child(-n+13)::after,
-    .slides > section:nth-child(n+33)::after {
+    .slides > section:nth-child(n+35)::after {
       content: "Slides WIP — go to Slide 14 for Take Home Slides";
       position: absolute;
       top: 50%;
@@ -718,7 +718,7 @@
       <section>
         <h2>Five Days, Five Milestones</h2>
         <div class="agenda-days">
-          <div class="agenda-day">
+          <div class="agenda-day fragment">
             <div class="agenda-day-num" style="background: var(--accent-coral);">1</div>
             <div>
               <h4>First Contact</h4>
@@ -726,7 +726,7 @@
             </div>
             <span class="agenda-time">90 min</span>
           </div>
-          <div class="agenda-day">
+          <div class="agenda-day fragment">
             <div class="agenda-day-num" style="background: var(--accent-teal);">2</div>
             <div>
               <h4>Prompt Craft</h4>
@@ -734,7 +734,7 @@
             </div>
             <span class="agenda-time">120 min</span>
           </div>
-          <div class="agenda-day">
+          <div class="agenda-day fragment">
             <div class="agenda-day-num" style="background: var(--accent-sage);">3</div>
             <div>
               <h4>Extend &amp; Customize</h4>
@@ -742,7 +742,7 @@
             </div>
             <span class="agenda-time">120 min</span>
           </div>
-          <div class="agenda-day">
+          <div class="agenda-day fragment">
             <div class="agenda-day-num" style="background: var(--accent-terracotta);">4</div>
             <div>
               <h4>Customer Scenarios</h4>
@@ -750,7 +750,7 @@
             </div>
             <span class="agenda-time">120 min</span>
           </div>
-          <div class="agenda-day">
+          <div class="agenda-day fragment">
             <div class="agenda-day-num" style="background: var(--text-primary);">5</div>
             <div>
               <h4>Ship It &mdash; Capstone</h4>
@@ -807,7 +807,7 @@
            ============================================================ -->
 
       <!-- SLIDE 4 — DAY 1 DIVIDER -->
-      <section class="slide-divider" data-background-color="var(--bg-secondary)">
+      <section class="slide-divider" data-transition="fade" data-background-color="var(--bg-secondary)">
         <div class="day-label">Day 1</div>
         <h2>First Contact</h2>
         <p class="part-description">Install, navigate, and deliver a first win</p>
@@ -852,9 +852,9 @@
       <section>
         <h2>Day 1: Key Questions</h2>
         <ul class="key-questions">
-          <li><span class="q-num">1</span>Can you install Claude Code from scratch in under 5 minutes?</li>
-          <li><span class="q-num">2</span>Can you narrate the agentic loop live while it runs?</li>
-          <li><span class="q-num">3</span>Can you deliver a first win and explain why it matters?</li>
+          <li class="fragment"><span class="q-num">1</span>Can you install Claude Code from scratch in under 5 minutes?</li>
+          <li class="fragment"><span class="q-num">2</span>Can you narrate the agentic loop live while it runs?</li>
+          <li class="fragment"><span class="q-num">3</span>Can you deliver a first win and explain why it matters?</li>
         </ul>
         <div class="skill-map">
           <div class="skill-day-col">
@@ -894,7 +894,7 @@
       </section>
 
       <!-- SLIDE 7 — CLIENT SCENARIO: MERIDIAN HEALTH -->
-      <section data-background-color="#1A1A1A">
+      <section data-transition="fade" data-background-color="#1A1A1A">
         <div class="client-scenario">
           <div class="client-badge">Client Scenario</div>
           <h2 style="color: white;">Meridian Health</h2>
@@ -923,19 +923,19 @@
         <h2>What You Already Know</h2>
         <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">From the self-paced foundations &mdash; 30-second recap</p>
         <div class="card-grid card-grid-2" style="margin-top: var(--space-md);">
-          <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--accent-teal);">
+          <div class="card fragment" style="padding: var(--space-md); border-top: 3px solid var(--accent-teal);">
             <h4 style="color: var(--accent-teal);">Agentic, not autocomplete</h4>
             <p>Claude Code completes entire tasks &mdash; reads your codebase, plans changes, writes code, runs tests, fixes what breaks.</p>
           </div>
-          <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--accent-coral);">
+          <div class="card fragment" style="padding: var(--space-md); border-top: 3px solid var(--accent-coral);">
             <h4>The agentic loop</h4>
             <p>Read &#8594; Plan &#8594; Act &#8594; Verify &#8594; repeat. Every task follows this loop. You saw it in the foundations material.</p>
           </div>
-          <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--accent-sage);">
+          <div class="card fragment" style="padding: var(--space-md); border-top: 3px solid var(--accent-sage);">
             <h4 style="color: var(--accent-sage);">Four surfaces</h4>
             <p>CLI, VS Code / JetBrains, Desktop &amp; Mobile, Web. Match the surface to the audience.</p>
           </div>
-          <div class="card" style="padding: var(--space-md); border-top: 3px solid var(--text-primary);">
+          <div class="card fragment" style="padding: var(--space-md); border-top: 3px solid var(--text-primary);">
             <h4 style="color: var(--text-primary);">The numbers</h4>
             <p>72.7% SWE-bench Verified. 200K&ndash;1M token context. ~$6/dev/day. 4 permission modes.</p>
           </div>
@@ -953,13 +953,13 @@
         <h2>The Agentic Loop (Live)</h2>
         <p style="color: var(--text-secondary);">What to say out loud when the loop is running</p>
         <div class="agentic-loop" style="margin-top: var(--space-2xl); margin-bottom: var(--space-2xl);">
-          <div class="loop-node read">Read</div>
-          <div class="loop-connector">&#8594;</div>
-          <div class="loop-node plan">Plan</div>
-          <div class="loop-connector">&#8594;</div>
-          <div class="loop-node act">Act</div>
-          <div class="loop-connector">&#8594;</div>
-          <div class="loop-node verify">Verify</div>
+          <div class="loop-node read fragment">Read</div>
+          <div class="loop-connector fragment">&#8594;</div>
+          <div class="loop-node plan fragment">Plan</div>
+          <div class="loop-connector fragment">&#8594;</div>
+          <div class="loop-node act fragment">Act</div>
+          <div class="loop-connector fragment">&#8594;</div>
+          <div class="loop-node verify fragment">Verify</div>
         </div>
         <p style="text-align: center; font-size: var(--text-base); font-weight: var(--weight-semibold); color: var(--accent-coral);">Your job: narrate each phase as it happens.</p>
         <aside class="notes">
@@ -972,19 +972,19 @@
       <section>
         <h2>Demo Narration Guide</h2>
         <div class="card-grid card-grid-2" style="margin-top: var(--space-lg);">
-          <div class="card" style="padding: var(--space-lg); border-top: 3px solid var(--accent-teal);">
+          <div class="card fragment" style="padding: var(--space-lg); border-top: 3px solid var(--accent-teal);">
             <h4 style="color: var(--accent-teal);">Read</h4>
             <p>"Watch &mdash; it's scanning the existing routes, reading the test patterns, checking the package.json..."</p>
           </div>
-          <div class="card" style="padding: var(--space-lg); border-top: 3px solid var(--accent-coral);">
+          <div class="card fragment" style="padding: var(--space-lg); border-top: 3px solid var(--accent-coral);">
             <h4>Plan</h4>
             <p>"It's breaking this into steps &mdash; new route file, validation, tests, update the index..."</p>
           </div>
-          <div class="card" style="padding: var(--space-lg); border-top: 3px solid var(--accent-sage);">
+          <div class="card fragment" style="padding: var(--space-lg); border-top: 3px solid var(--accent-sage);">
             <h4 style="color: var(--accent-sage);">Act</h4>
             <p>"Now it's writing across multiple files &mdash; matching the conventions it found..."</p>
           </div>
-          <div class="card" style="padding: var(--space-lg); border-top: 3px solid var(--text-primary);">
+          <div class="card fragment" style="padding: var(--space-lg); border-top: 3px solid var(--text-primary);">
             <h4 style="color: var(--text-primary);">Verify</h4>
             <p>"It's running the tests to check its own work. If something fails, it reads the error and fixes it."</p>
           </div>
@@ -1003,15 +1003,15 @@
         <h2>Watch and Listen</h2>
         <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">The facilitator is about to install Claude Code from scratch and build Meridian's first endpoint live. Your job: observe.</p>
         <div class="card-grid card-grid-3" style="margin-top: var(--space-md);">
-          <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-teal);">
+          <div class="card fragment" style="padding: var(--space-lg); border-left: 4px solid var(--accent-teal);">
             <h4 style="color: var(--accent-teal);">1. What does Claude read?</h4>
             <p>Before you even type a prompt, what files does Claude scan? What does it learn from the project structure?</p>
           </div>
-          <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-coral);">
+          <div class="card fragment" style="padding: var(--space-lg); border-left: 4px solid var(--accent-coral);">
             <h4>2. Where does it pause to plan?</h4>
             <p>Watch for the extended thinking. How does it break the task into steps before writing any code?</p>
           </div>
-          <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-sage);">
+          <div class="card fragment" style="padding: var(--space-lg); border-left: 4px solid var(--accent-sage);">
             <h4 style="color: var(--accent-sage);">3. How does it handle test results?</h4>
             <p>When tests pass &mdash; or fail &mdash; what does Claude do next? This is the verify-and-loop moment.</p>
           </div>
@@ -1079,21 +1079,21 @@
         <h2>Now You Do It for Meridian</h2>
         <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Install Claude Code in both CLI and VS Code. Add the /health endpoint. Practice your narration out loud.</p>
         <div class="exercise-steps">
-          <div class="step">
+          <div class="step fragment">
             <span class="step-number">1</span>
             <div class="step-content">
               <h4>Install from scratch</h4>
               <p><code style="font-family: var(--font-mono); font-size: var(--text-sm); background: var(--bg-secondary); padding: 2px 6px; border-radius: 4px;">curl -fsSL https://cli.anthropic.com/install.sh | sh</code> in terminal, then add the VS Code extension</p>
             </div>
           </div>
-          <div class="step">
+          <div class="step fragment">
             <span class="step-number">2</span>
             <div class="step-content">
               <h4>Clone the sample API, give Claude the task</h4>
               <p>"Add a GET /health endpoint with tests" &mdash; watch the loop run, narrate it out loud to your partner</p>
             </div>
           </div>
-          <div class="step">
+          <div class="step fragment">
             <span class="step-number">3</span>
             <div class="step-content">
               <h4>Practice the pitch</h4>
@@ -1113,7 +1113,7 @@
            ============================================================ -->
 
       <!-- SLIDE 14 — DAY 2 DIVIDER -->
-      <section class="slide-divider" data-background-color="var(--bg-secondary)">
+      <section class="slide-divider" data-transition="fade" data-background-color="var(--bg-secondary)">
         <div class="day-label">Day 2</div>
         <h2>Prompt Craft</h2>
         <p class="part-description">CLAUDE.md, context management, and the art of steering multi-step workflows</p>
@@ -1158,9 +1158,9 @@
       <section>
         <h2>Day 2: Key Questions</h2>
         <ul class="key-questions">
-          <li><span class="q-num">1</span>Can you write a CLAUDE.md that measurably changes Claude's output?</li>
-          <li><span class="q-num">2</span>Can you manage sessions to avoid context overload on a large codebase?</li>
-          <li><span class="q-num">3</span>Can you show a customer the before/after of adding a CLAUDE.md?</li>
+          <li class="fragment"><span class="q-num">1</span>Can you write a CLAUDE.md that measurably changes Claude's output?</li>
+          <li class="fragment"><span class="q-num">2</span>Can you manage sessions to avoid context overload on a large codebase?</li>
+          <li class="fragment"><span class="q-num">3</span>Can you show a customer the before/after of adding a CLAUDE.md?</li>
         </ul>
         <div class="skill-map">
           <div class="skill-day-col">
@@ -1200,7 +1200,7 @@
       </section>
 
       <!-- SLIDE 17 — CLIENT SCENARIO: LUMEN LOGISTICS -->
-      <section data-background-color="#1A1A1A">
+      <section data-transition="fade" data-background-color="#1A1A1A">
         <div class="client-scenario">
           <div class="client-badge">Client Scenario</div>
           <h2 style="color: white;">Lumen Logistics</h2>
@@ -1229,21 +1229,21 @@
         <h2>The Monorepo Problem</h2>
         <p style="color: var(--text-secondary);">One repo, many projects, zero documentation &mdash; standard at scale (Google, Meta, Stripe, most teams over 20 devs)</p>
         <div style="max-width: 750px; margin-top: var(--space-lg);">
-          <div style="display: flex; align-items: flex-start; gap: var(--space-md); margin-bottom: var(--space-lg);">
+          <div class="fragment" style="display: flex; align-items: flex-start; gap: var(--space-md); margin-bottom: var(--space-lg);">
             <div style="min-width: 36px; height: 36px; border-radius: var(--radius-full); background: var(--accent-terracotta); color: white; display: flex; align-items: center; justify-content: center; font-weight: var(--weight-bold); font-size: var(--text-sm); flex-shrink: 0;">1</div>
             <div>
               <h4 style="margin-bottom: 2px;">Scale</h4>
               <p style="font-size: var(--text-sm); color: var(--text-secondary); margin: 0;">Thousands of files across dozens of services. Claude can't read them all &mdash; it needs to know where to look.</p>
             </div>
           </div>
-          <div style="display: flex; align-items: flex-start; gap: var(--space-md); margin-bottom: var(--space-lg);">
+          <div class="fragment" style="display: flex; align-items: flex-start; gap: var(--space-md); margin-bottom: var(--space-lg);">
             <div style="min-width: 36px; height: 36px; border-radius: var(--radius-full); background: var(--accent-terracotta); color: white; display: flex; align-items: center; justify-content: center; font-weight: var(--weight-bold); font-size: var(--text-sm); flex-shrink: 0;">2</div>
             <div>
               <h4 style="margin-bottom: 2px;">Inconsistency</h4>
               <p style="font-size: var(--text-sm); color: var(--text-secondary); margin: 0;">Different teams, different conventions in the same repo. Without guidance, Claude picks up patterns from the wrong subproject.</p>
             </div>
           </div>
-          <div style="display: flex; align-items: flex-start; gap: var(--space-md); margin-bottom: var(--space-lg);">
+          <div class="fragment" style="display: flex; align-items: flex-start; gap: var(--space-md); margin-bottom: var(--space-lg);">
             <div style="min-width: 36px; height: 36px; border-radius: var(--radius-full); background: var(--accent-terracotta); color: white; display: flex; align-items: center; justify-content: center; font-weight: var(--weight-bold); font-size: var(--text-sm); flex-shrink: 0;">3</div>
             <div>
               <h4 style="margin-bottom: 2px;">Hidden knowledge</h4>
@@ -1372,7 +1372,7 @@
       </section>
 
       <!-- SLIDE 21 — DEMO: BEFORE AND AFTER -->
-      <section class="slide-divider" data-background-color="var(--bg-secondary)">
+      <section class="slide-divider" data-transition="fade" data-background-color="var(--bg-secondary)">
         <div class="day-label">Live Demo</div>
         <h2>Before &amp; After CLAUDE.md</h2>
         <p class="part-description">Same task, same repo &mdash; with and without a CLAUDE.md</p>
@@ -1387,19 +1387,19 @@
         <h2>The Before</h2>
         <p style="color: var(--text-secondary); margin-bottom: var(--space-md);">Claude without a CLAUDE.md &mdash; watch it guess</p>
         <div style="max-width: 700px; margin: 0 auto;">
-          <div class="metric-row">
+          <div class="metric-row fragment">
             <div class="metric-label">Files scanned</div>
             <div class="metric-track"><div class="metric-fill bad" style="width: 90%;">30+ files</div></div>
           </div>
-          <div class="metric-row">
+          <div class="metric-row fragment">
             <div class="metric-label">Conventions</div>
             <div class="metric-track"><div class="metric-fill bad" style="width: 45%;">Guessed wrong</div></div>
           </div>
-          <div class="metric-row">
+          <div class="metric-row fragment">
             <div class="metric-label">Test runner</div>
             <div class="metric-track"><div class="metric-fill bad" style="width: 60%;">Wrong command</div></div>
           </div>
-          <div class="metric-row">
+          <div class="metric-row fragment">
             <div class="metric-label">Time to result</div>
             <div class="metric-track"><div class="metric-fill bad" style="width: 85%;">Slow &mdash; lots of backtracking</div></div>
           </div>
@@ -1419,19 +1419,19 @@
         <h2>The After</h2>
         <p style="color: var(--text-secondary); margin-bottom: var(--space-md);">Same task, same repo &mdash; now with a CLAUDE.md</p>
         <div style="max-width: 700px; margin: 0 auto;">
-          <div class="metric-row">
+          <div class="metric-row fragment">
             <div class="metric-label">Files scanned</div>
             <div class="metric-track"><div class="metric-fill good" style="width: 20%;">5 files</div></div>
           </div>
-          <div class="metric-row">
+          <div class="metric-row fragment">
             <div class="metric-label">Conventions</div>
             <div class="metric-track"><div class="metric-fill good" style="width: 95%;">Exact match</div></div>
           </div>
-          <div class="metric-row">
+          <div class="metric-row fragment">
             <div class="metric-label">Test runner</div>
             <div class="metric-track"><div class="metric-fill good" style="width: 95%;">Correct command</div></div>
           </div>
-          <div class="metric-row">
+          <div class="metric-row fragment">
             <div class="metric-label">Time to result</div>
             <div class="metric-track"><div class="metric-fill good" style="width: 25%;">Fast &mdash; straight to the answer</div></div>
           </div>
@@ -1453,19 +1453,19 @@
         <h2>How a Well-Specified CLAUDE.md Helps Customers</h2>
         <p style="color: var(--text-secondary);">The before/after demo you just saw translates directly into customer value</p>
         <div class="card-grid card-grid-2" style="margin-top: var(--space-lg);">
-          <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-sage);">
+          <div class="card fragment" style="padding: var(--space-lg); border-left: 4px solid var(--accent-sage);">
             <h4 style="color: var(--accent-sage);">Faster onboarding</h4>
             <p>A CLAUDE.md encodes tribal knowledge that normally takes weeks to absorb. New hires become productive in days instead of sprints. Pitch this to any team lead frustrated with ramp-up time.</p>
           </div>
-          <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-teal);">
+          <div class="card fragment" style="padding: var(--space-lg); border-left: 4px solid var(--accent-teal);">
             <h4 style="color: var(--accent-teal);">Lower token cost</h4>
             <p>Without a CLAUDE.md, Claude reads 30+ files to guess at conventions. With one, it reads 5. Fewer tokens in = lower cost per task. This directly addresses the &ldquo;costs will spiral&rdquo; objection.</p>
           </div>
-          <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-coral);">
+          <div class="card fragment" style="padding: var(--space-lg); border-left: 4px solid var(--accent-coral);">
             <h4>Consistent output</h4>
             <p>Every developer on the team gets the same conventions enforced. No more style drift across PRs. Code reviews shrink because Claude already follows the team's patterns.</p>
           </div>
-          <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--text-primary);">
+          <div class="card fragment" style="padding: var(--space-lg); border-left: 4px solid var(--text-primary);">
             <h4 style="color: var(--text-primary);">Easy proof-of-value</h4>
             <p>The before/after demo takes 10 minutes and requires zero infrastructure. It's the lowest-friction way to show a skeptical engineering team that Claude Code understands their codebase.</p>
           </div>
@@ -1490,15 +1490,15 @@
             <p style="font-size: var(--text-sm); margin: 0; color: var(--text-secondary);">Claude reads the codebase, reasons about the approach, and presents a plan &mdash; <strong>without changing a single file</strong>. The engineer reviews, gives feedback, then green-lights execution.</p>
           </div>
           <div class="card-grid card-grid-3" style="margin-top: var(--space-md);">
-            <div class="card" style="padding: var(--space-md); text-align: center;">
+            <div class="card fragment" style="padding: var(--space-md); text-align: center;">
               <div style="font-size: 24px; margin-bottom: var(--space-xs);">1. Plan</div>
               <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0;">Claude analyzes and proposes</p>
             </div>
-            <div class="card" style="padding: var(--space-md); text-align: center;">
+            <div class="card fragment" style="padding: var(--space-md); text-align: center;">
               <div style="font-size: 24px; margin-bottom: var(--space-xs);">2. Review</div>
               <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0;">Engineer gives feedback</p>
             </div>
-            <div class="card" style="padding: var(--space-md); text-align: center;">
+            <div class="card fragment" style="padding: var(--space-md); text-align: center;">
               <div style="font-size: 24px; margin-bottom: var(--space-xs);">3. Execute</div>
               <p style="font-size: var(--text-xs); color: var(--text-secondary); margin: 0;">&ldquo;That plan look right? Build it.&rdquo;</p>
             </div>
@@ -1692,7 +1692,7 @@
       </section>
 
       <!-- SLIDE 29 — LAB INTRO -->
-      <section class="slide-divider" data-background-color="var(--bg-secondary)">
+      <section class="slide-divider" data-transition="fade" data-background-color="var(--bg-secondary)">
         <div class="day-label">Hands-On Lab</div>
         <h2>Time to Build</h2>
         <p class="part-description">Partner up &mdash; one drives, one narrates. Switch halfway.</p>
@@ -1770,21 +1770,21 @@
         <h2>Day 2 Recap</h2>
         <p style="color: var(--text-secondary);">Before we move on &mdash; let's debrief</p>
         <div style="max-width: 750px; margin-top: var(--space-lg);">
-          <div style="display: flex; align-items: flex-start; gap: var(--space-md); margin-bottom: var(--space-lg);">
+          <div class="fragment" style="display: flex; align-items: flex-start; gap: var(--space-md); margin-bottom: var(--space-lg);">
             <div style="min-width: 36px; height: 36px; border-radius: var(--radius-full); background: var(--accent-teal); color: white; display: flex; align-items: center; justify-content: center; font-weight: var(--weight-bold); font-size: var(--text-lg); flex-shrink: 0;">?</div>
             <div>
               <h4 style="margin-bottom: 2px;">What surprised you?</h4>
               <p style="font-size: var(--text-sm); color: var(--text-secondary); margin: 0;">About the before/after difference, about writing a CLAUDE.md, about how Claude uses it.</p>
             </div>
           </div>
-          <div style="display: flex; align-items: flex-start; gap: var(--space-md); margin-bottom: var(--space-lg);">
+          <div class="fragment" style="display: flex; align-items: flex-start; gap: var(--space-md); margin-bottom: var(--space-lg);">
             <div style="min-width: 36px; height: 36px; border-radius: var(--radius-full); background: var(--accent-sage); color: white; display: flex; align-items: center; justify-content: center; font-weight: var(--weight-bold); font-size: var(--text-lg); flex-shrink: 0;">?</div>
             <div>
               <h4 style="margin-bottom: 2px;">What was harder than expected?</h4>
               <p style="font-size: var(--text-sm); color: var(--text-secondary); margin: 0;">Deciding what to include? Keeping it under 80 lines? Managing the session on a large repo?</p>
             </div>
           </div>
-          <div style="display: flex; align-items: flex-start; gap: var(--space-md); margin-bottom: var(--space-lg);">
+          <div class="fragment" style="display: flex; align-items: flex-start; gap: var(--space-md); margin-bottom: var(--space-lg);">
             <div style="min-width: 36px; height: 36px; border-radius: var(--radius-full); background: var(--accent-coral); color: white; display: flex; align-items: center; justify-content: center; font-weight: var(--weight-bold); font-size: var(--text-lg); flex-shrink: 0;">?</div>
             <div>
               <h4 style="margin-bottom: 2px;">What would you tell a customer?</h4>
@@ -1839,7 +1839,7 @@
            ============================================================ -->
 
       <!-- SLIDE 33 — DAY 3 DIVIDER -->
-      <section class="slide-divider" data-background-color="var(--bg-secondary)">
+      <section class="slide-divider" data-transition="fade" data-background-color="var(--bg-secondary)">
         <div class="day-label">Day 3</div>
         <h2>Extend &amp; Customize</h2>
         <p class="part-description">Hooks, MCP, Skills, and composed workflows</p>
@@ -1884,9 +1884,9 @@
       <section>
         <h2>Day 3: Key Questions</h2>
         <ul class="key-questions">
-          <li><span class="q-num">1</span>Can you build a hook that enforces compliance gates a CISO would trust?</li>
-          <li><span class="q-num">2</span>Can you connect Claude to an external tool via MCP?</li>
-          <li><span class="q-num">3</span>Can you demo a composed workflow &mdash; Jira to deploy-check &mdash; end-to-end?</li>
+          <li class="fragment"><span class="q-num">1</span>Can you build a hook that enforces compliance gates a CISO would trust?</li>
+          <li class="fragment"><span class="q-num">2</span>Can you connect Claude to an external tool via MCP?</li>
+          <li class="fragment"><span class="q-num">3</span>Can you demo a composed workflow &mdash; Jira to deploy-check &mdash; end-to-end?</li>
         </ul>
         <div class="skill-map">
           <div class="skill-day-col">
@@ -1926,7 +1926,7 @@
       </section>
 
       <!-- SLIDE 36 — CLIENT SCENARIO: ARCADIA FINANCIAL -->
-      <section data-background-color="#1A1A1A">
+      <section data-transition="fade" data-background-color="#1A1A1A">
         <div class="client-scenario">
           <div class="client-badge">Client Scenario</div>
           <h2 style="color: white;">Arcadia Financial</h2>
@@ -2196,7 +2196,7 @@
            ============================================================ -->
 
       <!-- SLIDE 43 — DAY 4 DIVIDER -->
-      <section class="slide-divider" data-background-color="var(--bg-secondary)">
+      <section class="slide-divider" data-transition="fade" data-background-color="var(--bg-secondary)">
         <div class="day-label">Day 4</div>
         <h2>Customer Scenarios</h2>
         <p class="part-description">Security, deployment, cost, and competitive positioning</p>
@@ -2483,7 +2483,7 @@
       </section>
 
       <!-- SLIDE 51 — HONEST DIFFERENTIATION -->
-      <section class="slide-callout" data-background-color="var(--accent-peach)">
+      <section class="slide-callout" data-transition="fade" data-background-color="var(--accent-peach)">
         <blockquote>Where we win. Where they are strong. How they coexist.</blockquote>
         <p class="callout-context" style="max-width: 700px; margin: 0 auto;">Claude Code leads in autonomous agentic coding. Copilot is the best autocomplete. Cursor is the best AI editor. Many teams use Claude Code alongside Copilot. The question isn't &ldquo;replace&rdquo; &mdash; it's &ldquo;what can your team do now that they couldn't before?&rdquo;</p>
         <aside class="notes">
@@ -2579,7 +2579,7 @@
            ============================================================ -->
 
       <!-- SLIDE 55 — DAY 5 DIVIDER -->
-      <section class="slide-divider" data-background-color="var(--bg-secondary)">
+      <section class="slide-divider" data-transition="fade" data-background-color="var(--bg-secondary)">
         <div class="day-label">Day 5</div>
         <h2>Ship It &mdash; Capstone</h2>
         <p class="part-description">Blind brief. Working demo. Peer review.</p>
@@ -2781,7 +2781,7 @@
       </section>
 
       <!-- SLIDE 61 — CLOSING -->
-      <section class="slide-callout" data-background-color="var(--accent-peach)">
+      <section class="slide-callout" data-transition="fade" data-background-color="var(--accent-peach)">
         <blockquote>You're ready.</blockquote>
         <p class="callout-context" style="max-width: 700px; margin: 0 auto;">Five days. Five client scenarios. Installed Claude Code, wrote CLAUDE.md files, built hooks and MCP servers, handled security and competitive objections, and delivered a cold-brief demo. You can draw the architecture stack on a whiteboard, explain every layer, and hold your own with any customer.</p>
         <aside class="notes">
@@ -2817,7 +2817,7 @@
       hash: true,
       slideNumber: 'c/t',
       showSlideNumber: 'all',
-      transition: 'none',
+      transition: 'slide',
       transitionSpeed: 'fast',
       backgroundTransition: 'fade',
       center: true,
