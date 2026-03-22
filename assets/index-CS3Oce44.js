@@ -310,12 +310,12 @@ The choice between VS Code and JetBrains is about your editor preference, not Cl
 1. Create the directory: mkdir -p .claude/commands
 2. Create a markdown file with your command’s instructions
 3. Launch Claude and run your command with /your-command-name
-4. Verify it executes the workflow correctly`,commands:["mkdir -p .claude/commands"],code:`Analyze the current codebase and generate a brief status report:
+4. Verify it executes the workflow correctly`,code:`Analyze the current codebase and generate a brief status report:
 1. Count the total number of source files and test files
 2. Run the test suite and report pass/fail counts
 3. Check for any TODO or FIXME comments and list them
 4. Report the last 3 git commits
-5. Summarize the overall health of the project in 2-3 sentences`,codeTitle:".claude/commands/status-report.md",commands:["/status-report"],expected:"Claude executes each step of your checklist and produces a structured report. Anyone who clones this repo now has access to this command."},{type:"checkpoint",title:"Day 3 reflection",desc:`You’ve extended Claude Code with hooks, MCP, and custom commands. Before moving on:
+5. Summarize the overall health of the project in 2-3 sentences`,codeTitle:".claude/commands/status-report.md",commands:["mkdir -p .claude/commands","/status-report"],expected:"Claude executes each step of your checklist and produces a structured report. Anyone who clones this repo now has access to this command."},{type:"checkpoint",title:"Day 3 reflection",desc:`You’ve extended Claude Code with hooks, MCP, and custom commands. Before moving on:
 
 • Which extension point (hooks, MCP, slash commands) would be most valuable for your work?
 • What external tool or data source would you connect Claude to first?
