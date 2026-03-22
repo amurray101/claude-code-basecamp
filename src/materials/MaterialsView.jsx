@@ -110,7 +110,7 @@ const MATERIALS = [
   { id: "M1b", title: "Command Glossary", format: "Cheat Sheet", pages: "2 pages", category: "Modules" },
   { id: "M1c", title: "What is Claude Code", format: "Cheat Sheet", pages: "2 pages", category: "Modules" },
   { id: "M1d", title: "How Claude Code Works", format: "Quick Reference Card", pages: "1 front/back", category: "Modules" },
-  { id: "M2a", title: "CLAUDE.md Builder", format: "Worksheet", pages: "2 pages", category: "Modules" },
+  { id: "M2a", title: "CLAUDE.md Builder Guide", format: "Lab Guide", pages: "2 pages", category: "Modules" },
   { id: "M2b", title: "Prompt Patterns for Agentic Coding", format: "Cheat Sheet", pages: "1 front/back", category: "Modules" },
   { id: "M2c", title: "Configuration Reference", format: "Cheat Sheet", pages: "2 pages", category: "Modules" },
   { id: "M2d", title: "Plan Mode & Session Tools", format: "Quick Reference Card", pages: "1 front/back", category: "Modules" },
