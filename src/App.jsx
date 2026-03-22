@@ -1020,6 +1020,711 @@ const FOUNDATIONS = [
   },
     ],
   },
+  // ─── DAY 1 PRE-WORK FOUNDATIONS ───
+  {
+    id: "day1-what-is-claude-code",
+    label: "What is Claude Code",
+    title: "What is Claude Code, Installation, First Interaction",
+    content: [
+      { type: "text", value: "Claude Code is an agentic coding tool built by Anthropic. Unlike autocomplete tools like GitHub Copilot that predict the next line of code as you type, Claude Code operates at the project level. It reads your entire codebase, plans multi-step changes across multiple files, edits those files, runs commands to verify its work, and iterates when something breaks — all from a single natural-language prompt. You describe what you want at the level of intent ('refactor auth to use JWT,' 'add pagination to every API endpoint'), and Claude Code figures out which files to read, what changes to make, what tests to run, and how to fix anything that fails. This is a fundamentally different interaction model from anything most developers have used before." },
+      { type: "text", value: "This section covers what Claude Code is, how it differs from the autocomplete tools your customers already know, how to install it, and what happens during your very first interaction. By the end, you'll be ready to open a terminal and start your first agentic session." },
+      { type: "divider" },
+      { type: "heading", value: "Agentic coding vs. autocomplete" },
+      { type: "text", value: "The distinction between agentic coding and autocomplete is the single most important concept to internalize before you demo Claude Code. Every customer has seen autocomplete — it's the gray text that appears as you type in VS Code or IntelliJ, predicting the next token, line, or block. It's fast and frictionless, but it's fundamentally reactive: it waits for you to type, and it suggests what comes next in that specific location. It cannot read a file you haven't opened, run a test, or decide that a change in one file requires an update in three others." },
+      { type: "text", value: "Agentic coding inverts that relationship. Instead of the developer driving every keystroke while the AI suggests completions, the developer describes an outcome and the AI drives execution. Claude Code reads files across your project to build understanding, reasons about the best approach, creates a plan, makes edits across multiple files, runs commands to verify its work, and loops back to fix anything that broke. The developer shifts from writing code line-by-line to reviewing, guiding, and approving the AI's work." },
+      { type: "values", items: [
+        { title: "Autocomplete (e.g., Copilot)", desc: "Predicts the next token or line based on the current file. Operates inside a single file at the cursor position. The developer writes code; the AI accelerates typing. No ability to run commands, read other files, or verify its own output. Fast and low-friction, but limited to local context." },
+        { title: "Agentic coding (Claude Code)", desc: "Reads your entire codebase, plans a multi-step approach, edits multiple files, runs terminal commands, and verifies its own work — all from one prompt. The developer describes intent; the AI executes. When a test fails, it reads the error, reasons about the fix, and retries autonomously. Operates at the project level, not the line level." },
+      ]},
+      { type: "text", value: "Both approaches have their place. Autocomplete is excellent for flow-state coding where you know what you want to write and just want to get there faster. Agentic coding shines for tasks that span multiple files, require investigation, or involve tedious multi-step changes you'd rather delegate entirely. Many developers use both — Copilot for in-the-moment completions, Claude Code for larger tasks." },
+      { type: "divider" },
+      { type: "heading", value: "Four surfaces" },
+      { type: "text", value: "Claude Code is available in four environments. All four use the same underlying engine — the same agentic loop, the same model, the same tool capabilities. The difference is the interface wrapping it. You can start a task in the CLI and continue it in VS Code, or use the Desktop App for visual review. Choose the surface that matches your workflow." },
+      { type: "overview", heading: "Where Claude Code runs", items: [
+        { label: "CLI (Terminal)", desc: "The original and most powerful surface. Raw speed, full control, headless mode for CI/CD. Runs anywhere you have a terminal — local, SSH, containers. Best for power users and automation." },
+        { label: "VS Code Extension", desc: "Inline diffs, a visual file tree, and the full agentic loop embedded in your editor. See changes as they happen. Approve or reject edits without leaving VS Code. Best for developers who live in VS Code." },
+        { label: "JetBrains Plugin", desc: "Same agentic engine inside IntelliJ, PyCharm, WebStorm, and other JetBrains IDEs. Integrates with JetBrains' built-in diff viewer and project navigation. Best for teams standardized on JetBrains." },
+        { label: "Desktop App", desc: "A standalone native application for macOS and Windows. Built-in file browser and diff viewer with a lower barrier to entry — no terminal experience required. Best for visual learners, code review, and onboarding new users." },
+      ]},
+      { type: "divider" },
+      { type: "stats", items: [
+        { stat: "72.7%", label: "SWE-bench Verified — the industry benchmark for real-world coding ability", source: "Anthropic Sonnet 4 model card, May 2025" },
+        { stat: "200K", label: "token context window — Claude reads entire codebases, not just open files", source: "API docs" },
+        { stat: "7 min", label: "average time to first agentic task after installation", source: "Anthropic internal data" },
+        { stat: "2x", label: "code output — developers report doubling their throughput on multi-file tasks", source: "Anthropic customer research" },
+      ]},
+      { type: "divider" },
+      { type: "heading", value: "Installation" },
+      { type: "text", value: "Installing Claude Code takes about two minutes. You need Node.js 18+ installed (Claude Code is a Node.js CLI tool under the hood). The install script downloads the binary, adds it to your PATH, and you authenticate via your browser." },
+      { type: "terminal", title: "Install Claude Code", lines: [
+        "# Install the CLI",
+        "$ curl -fsSL https://cli.anthropic.com/install.sh | sh",
+        "",
+        "# Authenticate (opens your browser)",
+        "$ claude auth",
+        "→ Opening browser for authentication...",
+        "→ Authentication successful.",
+        "",
+        "# Verify the installation",
+        "$ claude --version",
+        "→ Claude Code v1.x.x",
+      ]},
+      { type: "text", value: "That's it. No API keys to manage manually, no config files to create, no environment variables to set. The auth command handles OAuth through your browser, and Claude Code stores your credentials securely. If you're behind a corporate proxy, see the Troubleshooting section below." },
+      { type: "divider" },
+      { type: "heading", value: "VS Code & JetBrains setup" },
+      { type: "text", value: "If you prefer working inside an IDE rather than a standalone terminal, Claude Code has first-class extensions for both VS Code and JetBrains. These give you the full agentic engine with the added benefit of inline diffs, visual file trees, and editor-native approval flows." },
+      { type: "terminal", title: "VS Code", lines: [
+        "# Option 1: Install from the VS Code Marketplace",
+        "  Search for 'Claude Code' in the Extensions panel (Cmd+Shift+X)",
+        "  Click Install",
+        "",
+        "# Option 2: Install from the command line",
+        "$ code --install-extension anthropic.claude-code",
+        "",
+        "# Open the Claude Code panel",
+        "  Cmd+Shift+P → 'Claude Code: Open'",
+      ]},
+      { type: "terminal", title: "JetBrains (IntelliJ, PyCharm, WebStorm)", lines: [
+        "# Install from JetBrains Marketplace",
+        "  Settings → Plugins → Marketplace → Search 'Claude Code'",
+        "  Click Install → Restart IDE",
+        "",
+        "# Open the Claude Code tool window",
+        "  View → Tool Windows → Claude Code",
+      ]},
+      { type: "text", value: "Both extensions use the same CLI under the hood, so your authentication, CLAUDE.md files, and settings carry over automatically. You don't need to configure anything twice." },
+      { type: "divider" },
+      { type: "heading", value: "Your first interaction" },
+      { type: "text", value: "When you run the `claude` command inside a project directory, something important happens before you type a single character. Claude Code automatically reads the directory structure, looks for a package.json (or equivalent), and loads any CLAUDE.md file it finds. This is context gathering — the first step of the agentic loop. Claude is building a mental model of your project before you even ask a question." },
+      { type: "terminal", title: "Starting Claude Code in a project", lines: [
+        "$ cd ~/projects/my-app",
+        "$ claude",
+        "",
+        "→ Reading project structure...",
+        "  Found package.json (Node.js project)",
+        "  Found CLAUDE.md (project instructions)",
+        "  Found tsconfig.json (TypeScript)",
+        "  Indexed 147 files across 12 directories",
+        "",
+        "→ What would you like to work on?",
+      ]},
+      { type: "text", value: "This automatic context gathering is why Claude Code can give project-aware answers from the very first prompt. It already knows your tech stack, your file structure, and any instructions you've left in CLAUDE.md. You don't need to explain your project — just tell it what you want to accomplish." },
+      { type: "text", value: "Try a simple first prompt to see the loop in action. Something like 'explain this project's architecture' or 'what does the auth module do?' — a read-only question that lets you watch Claude navigate your codebase without making any changes. You'll see it read files, reason about what it finds, and synthesize an answer. That's the agentic loop at work." },
+      { type: "divider" },
+      { type: "heading", value: "Troubleshooting" },
+      { type: "text", value: "Most installation issues fall into a handful of categories. Here are the common ones and how to fix them." },
+      { type: "overview", heading: "Common issues", items: [
+        { label: "Command not found", desc: "The claude binary isn't on your PATH. Restart your terminal, or manually add the install directory to your shell profile (~/.zshrc or ~/.bashrc). Run 'which claude' to verify." },
+        { label: "Authentication error", desc: "Run 'claude auth' again to re-authenticate. If your browser didn't open, copy the URL from the terminal output and paste it manually. Make sure you're signed in to the correct Anthropic account." },
+        { label: "Corporate proxy / SSL errors", desc: "Set the NODE_EXTRA_CA_CERTS environment variable to point to your corporate CA bundle. Then run 'claude /doctor' — a built-in diagnostic that checks connectivity, auth, and proxy configuration." },
+        { label: "Node.js version too old", desc: "Claude Code requires Node.js 18 or later. Run 'node --version' to check. Use nvm or your package manager to upgrade: 'nvm install 18' or 'brew install node@18'." },
+        { label: "Permission denied on install", desc: "The install script needs write access to /usr/local/bin (or equivalent). Either run with sudo, or use the --prefix flag to install to a user-owned directory." },
+      ]},
+      { type: "divider" },
+      { type: "reflect", prompt: "You've just read about what Claude Code is and how to install it. How would you explain the difference between agentic coding and autocomplete to someone who's never seen either?" },
+    ],
+  },
+
+  {
+    id: "day1-agentic-loop",
+    label: "How Claude Code works",
+    title: "Agentic Loop, Context Window Basics, Tool Overview, Permission System",
+    content: [
+      { type: "text", value: "To use Claude Code effectively — and to explain it convincingly to customers — you need to understand four things: the agentic loop (how it works), the context window (its working memory), the tools (what it can do), and the permission system (how you stay in control). These four concepts form the mental model that makes everything else in this training click. Once you understand them, you'll know why Claude Code makes certain choices, where it excels, and how to troubleshoot when something goes wrong." },
+      { type: "outcomes", items: [
+        "Trace the five steps of the agentic loop — Read, Plan, Edit, Test, Iterate — and explain what happens at each stage",
+        "Describe the context window's size and role, and know when to use /compact or /clear",
+        "List the core tool categories Claude Code uses and explain how it selects which tools to invoke",
+        "Distinguish the three permission modes and recommend the right one for different scenarios",
+        "Explain self-correction: why Claude Code fixes its own mistakes without developer intervention",
+      ]},
+      { type: "divider" },
+      { type: "heading", value: "The agentic loop" },
+      { type: "text", value: "The agentic loop is the core execution model of Claude Code. Every task — from a one-line fix to a multi-file refactor — follows the same five-step cycle: Read, Plan, Edit, Test, Iterate. Understanding this loop is essential because it's what makes Claude Code agentic rather than just generative. A generative tool produces output and stops. An agentic tool produces output, checks whether it worked, and keeps going until the job is done." },
+      { type: "values", items: [
+        { title: "1. Read", desc: "Claude examines relevant files, directory structures, configuration, and existing code. It doesn't guess at your project — it reads it. This step uses tools like file read, grep, and glob to gather the context it needs for the current task. The more specific your prompt, the more targeted this reading is." },
+        { title: "2. Plan", desc: "Based on what it read, Claude formulates an approach. For complex tasks, it uses extended thinking to reason step-by-step — weighing tradeoffs, considering edge cases, and sequencing changes to minimize breakage. You'll see this plan surfaced in the output before any edits begin, giving you a chance to redirect before code is written." },
+        { title: "3. Edit", desc: "Claude makes the actual changes — writing new files, modifying existing ones, updating configuration, adding dependencies. Edits happen across as many files as the task requires. In a JWT migration, this might mean touching 15 files in a single pass: creating new modules, updating middleware, modifying routes, and adjusting tests." },
+        { title: "4. Test", desc: "After editing, Claude runs your test suite, linter, type checker, or whatever verification commands your project uses. It reads the output of these commands to determine if the changes worked. This step is critical — it closes the loop by producing evidence of success or failure rather than assuming the edits were correct." },
+        { title: "5. Iterate", desc: "If tests fail or errors appear, Claude reads the failure output, reasons about the cause, and loops back to step 3 (or step 1 if it needs to gather more context). This cycle repeats until the task passes verification or Claude determines it needs your input. Most tasks converge in 1-3 iterations." },
+      ]},
+      { type: "text", value: "Here's what the loop looks like in practice. Watch how Claude reads files, forms a plan, makes edits, runs a test, encounters a failure, and self-corrects — all without the developer intervening." },
+      { type: "terminal", title: "The agentic loop in action", lines: [
+        "$ claude",
+        "→ What would you like to work on?",
+        "",
+        "$ Add a /health endpoint that returns uptime and version from package.json",
+        "",
+        "→ I'll add a health endpoint. Let me read the current setup...",
+        "",
+        "  Reading src/routes/index.ts",
+        "  Reading src/app.ts",
+        "  Reading package.json",
+        "",
+        "→ Plan:",
+        "  1. Create src/routes/health.ts with GET /health",
+        "  2. Return { status: 'ok', uptime: process.uptime(), version } from package.json",
+        "  3. Register the route in src/app.ts",
+        "  4. Run existing tests to verify nothing breaks",
+        "",
+        "  Creating src/routes/health.ts",
+        "  Editing src/app.ts — adding health route import and registration",
+        "",
+        "$ npm test",
+        "",
+        "→ 2 tests failed: 'route registration' expects 5 routes, now finds 6",
+        "",
+        "→ I see — the test has a hardcoded route count assertion.",
+        "  Updating tests/routes.test.ts to expect 6 routes.",
+        "",
+        "$ npm test",
+        "",
+        "→ All 24 tests passed.",
+        "→ Health endpoint is live at GET /health.",
+      ]},
+      { type: "text", value: "The self-correction step is what makes this agentic, not just generative. When Claude ran the test suite and it failed, it read the error message, reasoned that the route-count assertion was hardcoded, updated the test, and re-ran verification — all without you intervening. A generative tool would have created the health endpoint and stopped, leaving you to discover and fix the broken test yourself." },
+      { type: "divider" },
+      { type: "heading", value: "Context window" },
+      { type: "text", value: "The context window is Claude's working memory. It's the total amount of information Claude can hold and reason about at any given moment. Claude Code has a 200K-token context window — roughly 150,000 words, or the equivalent of 500+ source files of typical code. Everything Claude reads, writes, and discusses during a session lives in this window: files it has read, code it has written, terminal output from commands, and the full conversation history." },
+      { type: "text", value: "This window is large, but it's finite. As a session goes on and more files are read and more output is generated, the window fills up. When it gets too full, Claude's quality can degrade — it may lose track of earlier context or make less precise edits. The fix is simple: use /compact to summarize the conversation and free up space, or /clear to start fresh. One focused task per session gets the best results." },
+      { type: "stats", items: [
+        { stat: "200K", label: "tokens — roughly 150,000 words of working memory per session", source: "API docs" },
+        { stat: "~500", label: "source files of typical code can fit in a single context window", source: "Anthropic engineering estimates" },
+        { stat: "90%", label: "cache savings — repeated file reads cost 90% less via prompt caching", source: "API pricing" },
+      ]},
+      { type: "text", value: "Think of the context window as Claude's working memory. It's large but finite. One focused task per session gets the best results. If you're doing a massive refactor, break it into logical chunks — 'migrate the auth module,' then a new session for 'migrate the billing module' — rather than trying to do everything in a single marathon session." },
+      { type: "divider" },
+      { type: "heading", value: "Tool overview" },
+      { type: "text", value: "Claude Code accomplishes tasks by invoking tools — discrete capabilities it can call during the agentic loop. When you give Claude a prompt, it decides which tools it needs based on the task. You don't need to tell it 'read this file' or 'run this command' — it figures that out from your prompt. Here are the core tool categories." },
+      { type: "values", items: [
+        { title: "File read/write", desc: "Read any file in your project, create new files, and edit existing ones. This is the most frequently used tool. Claude reads files to understand context and writes files to implement changes. It handles binary files, configuration files, source code, and documentation." },
+        { title: "Bash / terminal", desc: "Execute shell commands — run tests, install packages, start servers, check git status, run linters, and anything else you'd do in a terminal. Claude reads the command output to inform its next step. This is how the 'Test' step of the agentic loop works." },
+        { title: "Search (grep, glob)", desc: "Find files by name patterns (glob) or search file contents by regex (grep). Claude uses these to navigate codebases efficiently — finding all files that import a module, locating every usage of a function, or identifying configuration files by naming convention." },
+        { title: "Browser / web", desc: "Fetch and read web pages. Claude can pull up documentation, check API references, read Stack Overflow answers, or review URLs you share. Useful for tasks that require external context beyond your local files." },
+        { title: "MCP tools (external services)", desc: "Connect to external services through the Model Context Protocol — databases, Jira, Slack, GitHub, internal APIs, and any custom tool your team builds. MCP tools extend Claude Code's reach beyond the local filesystem into the systems your team uses daily." },
+      ]},
+      { type: "text", value: "Claude chooses which tools to use based on the task. You don't need to tell it 'read this file' — it figures that out from your prompt. If you say 'fix the failing test in auth,' Claude will search for test files related to auth, read them, run the tests to see the failure, read the source code under test, make the fix, and re-run the tests. The tool selection is part of the 'Plan' step in the agentic loop." },
+      { type: "divider" },
+      { type: "heading", value: "Permission system" },
+      { type: "text", value: "The permission system is how you stay in control of what Claude Code does. Because Claude Code can read files, write files, and execute terminal commands, Anthropic built a layered permission model that lets you choose how much autonomy to grant. There are three main modes, each offering a different balance of control and speed." },
+      { type: "overview", heading: "Permission modes", items: [
+        { label: "Suggest mode (default)", desc: "Claude proposes every action — file edits, terminal commands, tool calls — and waits for your explicit approval before executing. You see exactly what Claude wants to do and approve or reject each step. This is the safest mode and the best starting point for new users." },
+        { label: "Auto-edit mode", desc: "Claude applies file edits automatically but still asks permission before running terminal commands. This speeds up the edit-test cycle for trusted coding tasks while keeping you in the loop for anything that touches the shell. Good for developers who trust Claude's edits but want to review commands." },
+        { label: "Full auto mode", desc: "Claude executes everything — file edits and terminal commands — without asking for approval. Designed for experienced users who trust their setup, or for CI/CD pipelines running in headless mode. Combine with hooks and permission rules (deny lists) to maintain guardrails even in full auto." },
+      ]},
+      { type: "text", value: "Start with the default Suggest mode. Seeing what Claude wants to do at each step helps you learn the agentic loop — you'll develop an intuition for how it reads, plans, and acts. As that intuition builds, you can progressively open up permissions. Most experienced users settle on auto-edit mode for daily work and reserve full auto for well-defined, repeatable tasks." },
+      { type: "text", value: "Beyond the three modes, you can configure granular permission rules for specific commands and tools. For example, you can allow 'npm test' and 'npm run lint' to execute automatically while blocking 'rm -rf' or 'git push' from ever running without approval. Deny rules always take precedence — they override everything else, giving security teams a hard stop on dangerous operations regardless of the mode the developer has selected." },
+      { type: "divider" },
+      { type: "reflect", prompt: "Think about the agentic loop: Read, Plan, Edit, Test, Iterate. How is this different from how you currently write code? Where does self-correction add the most value?" },
+    ],
+  },
+  // ─── DAY 2 PRE-WORK FOUNDATIONS ───
+  {
+    id: "day2-claude-md", label: "CLAUDE.md & config", title: "CLAUDE.md Files, Settings Files, CLI Flags",
+    content: [
+      { type: "text", value: "CLAUDE.md is the file that transforms Claude from a generic tool into a codebase expert. Without it, Claude infers conventions — sometimes right, sometimes wrong. With it, Claude follows your standards consistently. A single well-written CLAUDE.md can eliminate an entire class of code-review feedback: wrong naming conventions, missing tests, inconsistent error handling. It's the highest-leverage five minutes you'll spend configuring any AI tool." },
+      { type: "outcomes", items: [
+        "Explain what belongs in a CLAUDE.md and why each section matters",
+        "Write a CLAUDE.md for a real project in under five minutes",
+        "Describe the CLAUDE.md hierarchy and how layers cascade",
+        "Configure settings.json for project-level and global preferences",
+        "Use CLI flags to adjust Claude Code behavior on the fly",
+      ]},
+      { type: "heading", value: "What to put in a CLAUDE.md" },
+      { type: "text", value: "A good CLAUDE.md answers the questions a senior engineer would ask on their first day: What does this project do? How is it organized? What patterns do we follow? How do I know my code is ready to ship? You don't need to document everything — just the things Claude would otherwise guess wrong." },
+      { type: "values", items: [
+        { title: "Project overview", desc: "One to two sentences: what the project is, what runtime it uses, any critical constraints. This orients Claude before it reads a single file." },
+        { title: "Architecture", desc: "Directory structure and the role of each top-level folder. Claude uses this to decide where new code should live and which files to read for context." },
+        { title: "Conventions", desc: "Coding patterns the team has agreed on — async/await vs. callbacks, error handling strategy, naming conventions. These are the rules Claude would have no way to infer from code alone." },
+        { title: "Quality gates", desc: "The commands that must pass before code ships: lint, type-check, test. Claude will run these automatically after making changes if you list them here." },
+        { title: "Team notes", desc: "Anything specific to how your team works — PR conventions, branch naming, areas of the codebase that are off-limits or in active migration." },
+      ]},
+      { type: "heading", value: "A real CLAUDE.md example" },
+      { type: "text", value: "Here's a complete CLAUDE.md for a shipment-tracking API. Notice how every line is actionable — there's nothing generic or aspirational." },
+      { type: "terminal", title: "CLAUDE.md", lines: [
+        "# Project Overview",
+        "Express API for shipment tracking. Node.js 20, TypeScript strict mode.",
+        "",
+        "# Architecture",
+        "- src/routes/ — API endpoints, one file per resource",
+        "- src/services/ — Business logic, no HTTP concerns",
+        "- src/models/ — Database models (Prisma)",
+        "- tests/ — Co-located with source using .test.ts suffix",
+        "",
+        "# Conventions",
+        "- async/await, never raw Promises",
+        "- JSDoc on all exported functions",
+        "- Error handling: throw AppError, never generic Error",
+        "",
+        "# Quality Gates",
+        "- npm run lint && npm run type-check && npm test",
+      ]},
+      { type: "text", value: "The CLAUDE.md doesn't need to be long — it needs to be specific. 20 focused lines beat 200 generic ones." },
+      { type: "heading", value: "CLAUDE.md hierarchy" },
+      { type: "text", value: "CLAUDE.md files cascade like CSS or .eslintrc — each layer adds to or overrides the one above it. There are three levels: personal (applies to everything you do), project (applies to this repo), and subdirectory (applies to a specific package or folder). When Claude starts a session, it merges all applicable layers top-down." },
+      { type: "terminal", title: "CLAUDE.md hierarchy", lines: [
+        "~/.claude/CLAUDE.md            # Personal — your preferences across all projects",
+        "  ↓ merged with",
+        "repo/CLAUDE.md                  # Project — team standards for this repo",
+        "  ↓ merged with",
+        "repo/src/CLAUDE.md              # Subdirectory — overrides for this folder",
+        "",
+        "# Example: personal CLAUDE.md",
+        "# ~/.claude/CLAUDE.md",
+        "- Always explain your reasoning before making changes",
+        "- Use verbose commit messages",
+        "",
+        "# Example: subdirectory CLAUDE.md",
+        "# repo/src/frontend/CLAUDE.md",
+        "- Use React functional components with hooks",
+        "- Style with Tailwind utility classes, never inline styles",
+      ]},
+      { type: "text", value: "This hierarchy scales to large organizations. An engineering director writes the root CLAUDE.md with company-wide standards — TypeScript strict, no any types, required test coverage. Each team adds their own subdirectory CLAUDE.md with framework-specific patterns. Individual developers add personal preferences that never touch the shared repo." },
+      { type: "heading", value: "Settings files" },
+      { type: "text", value: "While CLAUDE.md controls how Claude thinks about your code, settings files control how Claude Code itself behaves — which tools it can use, which MCP servers to connect to, and what hooks to run. There are two levels: project settings (committed to the repo, shared with the team) and global settings (personal, on your machine)." },
+      { type: "terminal", title: ".claude/settings.json (project)", lines: [
+        "{",
+        "  \"allowedTools\": [",
+        "    \"Bash(npm run lint)\",",
+        "    \"Bash(npm test)\",",
+        "    \"Bash(npx prisma generate)\"",
+        "  ],",
+        "  \"mcpServers\": {",
+        "    \"postgres\": {",
+        "      \"command\": \"npx\",",
+        "      \"args\": [\"-y\", \"@anthropic/mcp-postgres\"]",
+        "    }",
+        "  }",
+        "}",
+      ]},
+      { type: "text", value: "Project settings live in .claude/settings.json and get committed to git — so the whole team shares the same tool permissions and MCP connections. Global settings live in ~/.claude/settings.json and apply everywhere. Project settings override global settings when both define the same key." },
+      { type: "heading", value: "CLI flags" },
+      { type: "text", value: "CLI flags let you adjust Claude Code's behavior for a single session without changing any files. They're useful for one-off tasks, scripting, and CI/CD pipelines." },
+      { type: "overview", heading: "Key CLI flags", items: [
+        { label: "--model sonnet", desc: "Switch the model for this session. Use 'opus' for hard problems, 'haiku' for quick tasks." },
+        { label: "--print \"prompt\"", desc: "Non-interactive mode — send a prompt, get a response, exit. Perfect for scripts and CI/CD." },
+        { label: "--allowedTools", desc: "Grant tool permissions for this session only. Overrides settings files without editing them." },
+        { label: "--resume", desc: "Resume the most recent conversation instead of starting fresh. Useful when you get interrupted." },
+        { label: "--verbose", desc: "Show detailed output including tool calls and token usage. Helpful for debugging prompts." },
+      ]},
+      { type: "reflect", prompt: "Think about a codebase you work with. What would you put in its CLAUDE.md? What conventions would be most important to capture?" },
+    ],
+  },
+  {
+    id: "day2-plan-mode", label: "Plan mode & tools", title: "Plan Mode, Slash Commands, Keyboard Shortcuts, Session Management",
+    content: [
+      { type: "text", value: "These are the tools and techniques that separate surface-level users from power users. Plan mode builds trust by showing Claude's reasoning before it touches your code. Slash commands save time by packaging common workflows into single keystrokes. And session management keeps quality high by preventing context pollution. Together, they form the operational toolkit for working with Claude Code effectively." },
+      { type: "outcomes", items: [
+        "Use plan mode to preview Claude's approach before it edits any files",
+        "Identify when plan mode is the right choice versus prompting directly",
+        "List the built-in slash commands and what each one does",
+        "Use keyboard shortcuts to control generation and navigate efficiently",
+        "Apply the one-job-one-session rule to maintain output quality",
+      ]},
+      { type: "heading", value: "Plan mode" },
+      { type: "text", value: "Plan mode tells Claude to analyze and reason without making any changes. It reads your code, identifies the problem, maps out a solution — then stops and shows you the plan. You review it, adjust if needed, and only then give the go-ahead to execute. This is critical for complex tasks, unfamiliar codebases, and any situation where you want to understand the approach before code gets modified." },
+      { type: "terminal", title: "Plan mode in action", lines: [
+        "$ plan: Migrate our auth module from sessions to JWT",
+        "",
+        "→ I'll analyze the current auth implementation and plan the migration.",
+        "",
+        "  Reading src/auth/session.ts",
+        "  Reading src/middleware/auth.ts",
+        "  Reading src/routes/login.ts",
+        "  Reading tests/auth.test.ts",
+        "  Reading package.json",
+        "",
+        "→ Here's my migration plan:",
+        "",
+        "  1. Install jsonwebtoken and @types/jsonwebtoken",
+        "  2. Create src/auth/jwt.ts with sign() and verify() helpers",
+        "  3. Update auth middleware to check Authorization header for Bearer token",
+        "  4. Update login route to return JWT instead of setting session cookie",
+        "  5. Update 3 other routes that read session data to use JWT claims",
+        "  6. Remove express-session from dependencies",
+        "  7. Update all 12 test cases to use JWT auth headers",
+        "",
+        "  Files affected: 7",
+        "  Estimated scope: medium",
+        "",
+        "  Ready to proceed? (y/n)",
+      ]},
+      { type: "text", value: "Start complex tasks in Plan Mode. It shows the reasoning, builds trust, and lets you stay in control. For straightforward tasks — fixing a typo, adding a log line — just prompt directly. For anything involving multiple files or architectural decisions, plan first." },
+      { type: "heading", value: "Built-in slash commands" },
+      { type: "text", value: "Slash commands are single-word shortcuts you type at the prompt. They trigger built-in workflows without writing a full prompt. Think of them as keyboard shortcuts for common Claude Code operations." },
+      { type: "overview", heading: "Built-in commands", items: [
+        { label: "/compact", desc: "Summarize the conversation and free up context space. Use every 15-20 minutes in long sessions to keep Claude sharp." },
+        { label: "/clear", desc: "Reset the conversation entirely. Use when switching tasks — starts a fresh context with no carryover." },
+        { label: "/cost", desc: "Show token usage and cost for the current session. Useful for monitoring spend during long tasks." },
+        { label: "/help", desc: "Show all available commands, including any custom commands the project defines." },
+        { label: "/doctor", desc: "Diagnose configuration and connection issues. First thing to run when something isn't working." },
+        { label: "/config", desc: "View or modify Claude Code settings for the current session without editing files." },
+      ]},
+      { type: "heading", value: "Keyboard shortcuts" },
+      { type: "text", value: "These work during an active Claude Code session. They're small time-savers that add up over a full day of coding." },
+      { type: "overview", heading: "Key shortcuts", items: [
+        { label: "Esc", desc: "Cancel the current generation. Use when Claude is heading in the wrong direction — stop it early rather than waiting." },
+        { label: "Tab", desc: "Accept Claude's suggestion or autocomplete. Moves the workflow forward without typing." },
+        { label: "Up arrow", desc: "Recall your previous prompt. Useful for iterating on a prompt without retyping it." },
+      ]},
+      { type: "heading", value: "Session management" },
+      { type: "text", value: "The single most important habit for maintaining quality output: one focused task per session. When you mix unrelated tasks in the same session, Claude's context fills up with irrelevant code, old conversations, and conflicting instructions. Quality degrades noticeably after two or three unrelated tasks in the same context window." },
+      { type: "values", items: [
+        { title: "Start with a clear task", desc: "Begin each session with one specific goal. 'Add JWT auth to the payments route' — not 'work on the backend.' Specificity gives Claude a clear target." },
+        { title: "Compact every 15-20 minutes", desc: "Run /compact regularly in long sessions. It summarizes what's happened so far and frees up context for new work. Think of it as clearing your desk." },
+        { title: "Clear when switching tasks", desc: "Run /clear when you move to an unrelated task. The small cost of re-establishing context is far less than the cost of Claude confusing two different tasks." },
+      ]},
+      { type: "text", value: "The 'one job, one session' rule separates power users from frustrated users. When someone says Claude Code 'lost the thread' or 'started making weird suggestions,' the cause is almost always a session that ran too long or mixed too many tasks." },
+      { type: "reflect", prompt: "When would you reach for Plan Mode vs. just prompting directly? Think of a scenario where seeing the plan first would be critical." },
+    ],
+  },
+  {
+    id: "day2-prompt-patterns", label: "Prompt patterns", title: "Prompting Patterns, Common Workflows",
+    content: [
+      { type: "text", value: "The difference between a good prompt and a great prompt comes down to structure. Three patterns consistently get better output from Claude Code — not because they're magic formulas, but because they give Claude the same information a skilled colleague would need: what to build, how to build it, and what to avoid." },
+      { type: "outcomes", items: [
+        "Apply the WHAT + HOW pattern to get code that follows existing project conventions",
+        "Use constraint specification to prevent unwanted side effects",
+        "Break complex work into iterative refinement steps for higher-quality results",
+        "Match common development tasks to proven prompt templates",
+        "Recognize and avoid the anti-patterns that degrade output quality",
+      ]},
+      { type: "heading", value: "Pattern 1: WHAT + HOW" },
+      { type: "text", value: "The most common prompting mistake is saying what to build without saying how. Claude will make reasonable guesses about patterns and conventions — but they're guesses. When you specify both the outcome and the approach, Claude follows your team's actual patterns instead of inventing its own." },
+      { type: "terminal", title: "Bad vs. good: WHAT + HOW", lines: [
+        "# Bad — what only, no how:",
+        "$ Add a shipments endpoint",
+        "",
+        "# Good — what AND how:",
+        "$ Add a POST /api/shipments endpoint that creates a shipment",
+        "  record. Follow the same patterns as the existing routes in",
+        "  src/routes/, including validation middleware and the AppError",
+        "  error handling convention.",
+      ]},
+      { type: "text", value: "The good prompt does two things: it describes the feature, and it points Claude at existing code to use as a reference. Claude will read those files and match the patterns it finds — naming, error handling, middleware structure, test format — all without you spelling them out." },
+      { type: "heading", value: "Pattern 2: Constraint specification" },
+      { type: "text", value: "Tell Claude what NOT to do. Constraints prevent the over-eager refactoring that can turn a small change into a sprawling rewrite. They're especially important for refactoring tasks where you want to improve internals without breaking the external interface." },
+      { type: "terminal", title: "Constraint specification", lines: [
+        "$ Refactor the payment processing module to use the",
+        "  strategy pattern. Constraints:",
+        "  - Don't change the public API — all existing callers",
+        "    must work without modification",
+        "  - Keep backward compatibility with the current",
+        "    database schema",
+        "  - Don't add new dependencies",
+      ]},
+      { type: "text", value: "Without constraints, Claude might rename exports, restructure the database layer, or add a library that 'improves' the implementation. Constraints keep the scope tight and the blast radius small." },
+      { type: "heading", value: "Pattern 3: Iterative refinement" },
+      { type: "text", value: "For complex work, don't try to get everything in one prompt. Start broad to understand the landscape, then narrow down to specific changes. Each step gives you a checkpoint to verify direction before committing further." },
+      { type: "terminal", title: "Iterative refinement", lines: [
+        "# Step 1 — Understand the landscape:",
+        "$ What are the top 3 code quality issues in src/utils/?",
+        "",
+        "# Step 2 — Fix one specific issue:",
+        "$ Refactor src/utils/helpers.js to fix issue #1 (the",
+        "  duplicated validation logic). Extract a shared validator.",
+        "",
+        "# Step 3 — Verify with tests:",
+        "$ Add tests for the refactored validation functions.",
+        "  Cover edge cases: empty input, null values, and",
+        "  strings exceeding 255 characters.",
+      ]},
+      { type: "text", value: "Each prompt builds on the last. Claude retains context from the previous steps, so step 2 already knows what issue #1 was, and step 3 knows exactly which functions were refactored. This iterative approach catches problems early and keeps each change reviewable." },
+      { type: "heading", value: "Common workflows" },
+      { type: "text", value: "These are battle-tested prompt templates for the tasks developers do every day. Each one applies the patterns above — specific outcome, reference to existing code, and clear constraints." },
+      { type: "values", items: [
+        { title: "Refactoring", desc: "\"Refactor [file] to follow [conventions]. Don't change the public API. Keep all existing tests passing.\"" },
+        { title: "Adding features", desc: "\"Add [feature] following the same patterns as [existing similar feature]. Include validation, error handling, and tests.\"" },
+        { title: "Writing tests", desc: "\"Write tests for [module] using the same patterns as [existing test file]. Cover happy paths, error cases, and edge cases.\"" },
+        { title: "Debugging", desc: "\"This test is failing: [paste error]. Diagnose the root cause and fix it. Explain what went wrong.\"" },
+        { title: "Code review", desc: "\"Review [file or PR] for: separation of concerns, error handling, test coverage, and naming consistency. Flag issues by severity.\"" },
+        { title: "Documentation", desc: "\"Add JSDoc to all exported functions in [directory]. Follow the style in [existing documented file]. Don't change any implementation code.\"" },
+      ]},
+      { type: "heading", value: "Anti-patterns to avoid" },
+      { type: "text", value: "Three anti-patterns account for most frustrating Claude Code experiences. First, the kitchen-sink session: cramming five unrelated tasks into one conversation until context is polluted and output quality craters. Use /clear between unrelated tasks. Second, the correction spiral: instead of resetting after a wrong turn, stacking 'no, I meant...' corrections that confuse Claude further. If you're three corrections deep, start fresh with a better initial prompt. Third, the over-specified CLAUDE.md: a 500-line CLAUDE.md that tries to cover every edge case. Claude spends so many tokens reading instructions that it has less room for your actual code. Keep it under 50 lines per scope level." },
+      { type: "reflect", prompt: "Which of the three patterns (WHAT+HOW, constraints, iterative) would be most useful for your daily work? Why?" },
+    ],
+  },
+  // ─── DAY 3 PRE-WORK FOUNDATIONS ───
+  {
+    id: "day3-core-extensions", label: "Core extensions", title: "Hooks, MCP Servers, Sub-Agents, Custom Slash Commands",
+    content: [
+      { type: "text", value: "Claude Code's power comes from its extension points. Hooks enforce quality gates that can't be skipped, MCP connects Claude to external tools and data sources, sub-agents enable parallel work across files, and custom slash commands standardize team workflows. Together, they transform Claude Code from a coding assistant into a programmable engineering platform." },
+      { type: "outcomes", items: [
+        "Explain each extension point — hooks, MCP, sub-agents, and custom commands — and when to recommend each",
+        "Configure a PostToolUse hook that enforces automated testing after file edits",
+        "Set up an MCP server and describe how Claude discovers and uses its tools",
+        "Describe how sub-agents enable parallel work and the cost tradeoffs involved",
+        "Create a custom slash command and explain how it's shared across a team via git",
+        "Choose the right extension point for a given customer workflow need",
+      ]},
+      { type: "heading", value: "Hooks" },
+      { type: "text", value: "Hooks are automated actions that fire on specific events in the agentic loop. They are enforced gates — not suggestions. If a hook fails, the action is blocked. There are three hook types: PreToolUse fires before a tool runs (validate before acting), PostToolUse fires after a tool completes (verify after acting), and Notification fires on events like task completion or errors." },
+      { type: "terminal", title: "Hook configuration — PostToolUse runs tests after file edits", lines: [
+        "{",
+        "  \"hooks\": {",
+        "    \"PostToolUse\": [",
+        "      {",
+        "        \"matcher\": \"Write|Edit\",",
+        "        \"hooks\": [",
+        "          {",
+        "            \"type\": \"command\",",
+        "            \"command\": \"npm test -- --bail\"",
+        "          }",
+        "        ]",
+        "      }",
+        "    ]",
+        "  }",
+        "}",
+      ]},
+      { type: "text", value: "Hooks are the answer when someone asks 'How do we control what Claude does?' They're enforced gates, not suggestions. A failing hook blocks the action and feeds the error back to Claude, so it can self-correct — test failures become instant feedback loops." },
+      { type: "divider" },
+      { type: "heading", value: "MCP servers" },
+      { type: "text", value: "Model Context Protocol (MCP) connects Claude to external tools and data sources. The flow: you configure an MCP server in settings, Claude discovers the tools it exposes on startup, and then uses them as part of the agentic loop — just like its built-in tools. No special prompting required." },
+      { type: "terminal", title: "MCP server configuration", lines: [
+        "// .claude/settings.json",
+        "{",
+        "  \"mcpServers\": {",
+        "    \"jira\": {",
+        "      \"command\": \"npx\",",
+        "      \"args\": [\"-y\", \"@anthropic/mcp-server-jira\"],",
+        "      \"env\": {",
+        "        \"JIRA_URL\": \"https://yourcompany.atlassian.net\",",
+        "        \"JIRA_TOKEN\": \"${JIRA_API_TOKEN}\"",
+        "      }",
+        "    }",
+        "  }",
+        "}",
+      ]},
+      { type: "overview", heading: "Common MCP servers", items: [
+        { label: "Jira", desc: "Read tickets, create issues, update status — Claude understands the task before writing code" },
+        { label: "Slack", desc: "Search messages, post updates — Claude can notify channels when work is done" },
+        { label: "Datadog", desc: "Query metrics, read alerts — Claude can investigate production issues with real observability data" },
+        { label: "Confluence", desc: "Read documentation, search knowledge bases — Claude gets context from your team's written knowledge" },
+        { label: "GitHub", desc: "Read PRs, check CI status, review comments — Claude participates in the code review workflow" },
+        { label: "PostgreSQL", desc: "Query databases, inspect schemas — Claude can verify its changes against real data" },
+      ]},
+      { type: "text", value: "MCP is where Claude Code stops being a coding tool and becomes a platform that understands your entire engineering workflow. When Claude can read the Jira ticket, check Datadog for related errors, and reference the Confluence architecture doc — all before writing a line of code — that's a fundamentally different value proposition." },
+      { type: "divider" },
+      { type: "heading", value: "Sub-agents" },
+      { type: "text", value: "Claude can spawn additional Claude instances — sub-agents — to work in parallel. This is useful when a task naturally decomposes into independent pieces that don't need to wait on each other." },
+      { type: "values", items: [
+        { title: "Writer/reviewer pair", desc: "One agent writes the implementation, another reviews it independently — catching issues the writer is blind to, just like human code review." },
+        { title: "Fan-out across files", desc: "When a change touches many files with the same pattern (e.g., updating 20 API endpoints), sub-agents handle files in parallel instead of sequentially." },
+        { title: "Research agent", desc: "A dedicated sub-agent explores the codebase, reads documentation, or investigates a question — feeding findings back to the primary agent without interrupting its work." },
+      ]},
+      { type: "text", value: "The tradeoff is cost: each sub-agent consumes its own tokens and context window. Use sub-agents when the parallelism saves meaningful time — large refactors, multi-file migrations, or tasks where independent verification adds quality. For small, sequential tasks, a single agent is more efficient." },
+      { type: "divider" },
+      { type: "heading", value: "Custom slash commands" },
+      { type: "text", value: "Create a markdown file in .claude/commands/ and it becomes a slash command available to everyone who clones the repo. The filename becomes the command name — deploy-check.md becomes /deploy-check. The file's content is the prompt Claude receives when the command is invoked." },
+      { type: "terminal", title: ".claude/commands/deploy-check.md", lines: [
+        "Run the following pre-deployment checklist:",
+        "",
+        "1. Run the full test suite and report results",
+        "2. Check for any TODO or FIXME comments in changed files",
+        "3. Verify all environment variables are documented in .env.example",
+        "4. Check for console.log statements in production code",
+        "5. Validate that API endpoints have error handling",
+        "6. Generate a summary of changes since the last tag",
+      ]},
+      { type: "text", value: "A tech lead defines commands once, and the entire team inherits them via git. This is a powerful adoption pattern: standardized workflows that don't rely on anyone remembering a process, and that evolve alongside the codebase." },
+      { type: "divider" },
+      { type: "heading", value: "When to use what" },
+      { type: "values", items: [
+        { title: "Hooks", desc: "Use for enforcement and compliance — things that must happen and can't be skipped. Linting before commits, tests after edits, security scans before pushes. The answer to 'how do we guarantee quality?'" },
+        { title: "Custom commands", desc: "Use for convenience and team workflows — things that should happen but are opt-in. Deploy checklists, status reports, onboarding guides. The answer to 'how do we standardize how we work?'" },
+        { title: "MCP", desc: "Use for external data and integration — connecting Claude to tools and context beyond the codebase. Jira tickets, Datadog metrics, Confluence docs. The answer to 'how does Claude understand our workflow?'" },
+      ]},
+      { type: "reflect", prompt: "Think about your team's workflow. Which extension point would deliver the most value first — hooks for quality enforcement, MCP for external context, or commands for workflow consistency?" },
+    ],
+  },
+  {
+    id: "day3-ide-integration", label: "IDE integration", title: "IDE Integration (VS Code, JetBrains)",
+    content: [
+      { type: "text", value: "Claude Code works in your editor, not just the terminal. The VS Code extension and JetBrains plugin give you inline diffs, visual file trees, and the same agentic engine in a familiar environment. For many developers, this is the surface they'll use most." },
+      { type: "outcomes", items: [
+        "Install and configure the Claude Code VS Code extension and describe its key features",
+        "Explain the JetBrains plugin setup and how it differs from VS Code",
+        "Recommend when to use the IDE integration vs. the CLI based on the task at hand",
+      ]},
+      { type: "heading", value: "VS Code extension" },
+      { type: "text", value: "Setup: search for 'Claude Code' in the VS Code Marketplace, install, and sign in via the Command Palette (Cmd/Ctrl+Shift+P, then 'Claude Code: Sign In'). Once connected, Claude appears as a sidebar panel with full agentic capabilities." },
+      { type: "values", items: [
+        { title: "Inline diffs", desc: "See exactly what Claude proposes to change, highlighted directly in the editor. Accept or reject hunks individually — the same review experience as a pull request, but in real time." },
+        { title: "Claude panel", desc: "A dedicated sidebar for the conversation. Click the Claude icon or open via Command Palette. Your full chat history, tool use, and file changes are visible in one place." },
+        { title: "Command palette", desc: "All Claude commands accessible via Cmd/Ctrl+Shift+P — start a session, switch modes, run slash commands, and manage settings without leaving the keyboard." },
+        { title: "File context", desc: "Claude automatically knows which file you have open and uses it as context. Select a code block and ask Claude about it — no copy-pasting required." },
+      ]},
+      { type: "divider" },
+      { type: "heading", value: "JetBrains plugin" },
+      { type: "text", value: "The JetBrains plugin is available in the JetBrains Marketplace — search 'Claude Code' and install. It works with IntelliJ IDEA, PyCharm, WebStorm, and other JetBrains IDEs. Setup: install from Marketplace, then sign in via the plugin settings. JetBrains uses a tool window instead of a sidebar panel, but the core capabilities are the same — inline diffs, dedicated conversation view, and command access." },
+      { type: "divider" },
+      { type: "heading", value: "When to use IDE vs. CLI" },
+      { type: "values", items: [
+        { title: "IDE", desc: "Best when you want inline diffs, a visual file tree, or when the task involves files you're actively reading. Lower barrier to entry — great for onboarding developers who aren't terminal-first." },
+        { title: "CLI", desc: "Best for raw speed, working across many files, terminal-first workflows, and automation. Supports headless mode for CI/CD. More powerful for complex multi-step tasks and scripting." },
+      ]},
+      { type: "text", value: "Both surfaces use the same agentic engine underneath — the choice is about your preferred workflow, not capability. Many developers use both: IDE when reading and reviewing code, CLI when executing large changes or running automated workflows." },
+      { type: "reflect", prompt: "Think about your typical coding workflow. When would you reach for the IDE integration vs. the CLI? Is there a task you do daily that would benefit from switching surfaces?" },
+    ],
+  },
+  {
+    id: "day3-cicd", label: "CI/CD & automation", title: "CI/CD Automation, Headless Mode, GitHub Actions",
+    content: [
+      { type: "text", value: "Claude Code isn't just interactive — it can run in CI/CD pipelines, review PRs automatically, and generate code as part of automated workflows. Headless mode removes the human from the loop, turning Claude into an infrastructure component." },
+      { type: "outcomes", items: [
+        "Use the --print flag to run Claude Code non-interactively in scripts and pipelines",
+        "Configure a GitHub Actions workflow that uses Claude Code for automated PR review",
+        "Identify CI/CD tasks that benefit from Claude Code automation and explain the tradeoffs",
+      ]},
+      { type: "heading", value: "Headless mode" },
+      { type: "text", value: "The --print flag (also called headless mode) runs Claude non-interactively. It takes a prompt, executes, and returns the result — no human in the loop. This is the foundation for all CI/CD integrations." },
+      { type: "terminal", title: "Headless mode examples", lines: [
+        "# Review a PR and output the result",
+        "$ claude --print \"Review this PR for security issues and bugs\"",
+        "",
+        "# Pipe output to a file",
+        "$ claude --print \"Generate a changelog from the last 10 commits\" > CHANGELOG.md",
+        "",
+        "# Use in a script with specific context",
+        "$ claude --print \"Analyze src/auth/ for SQL injection vulnerabilities\" \\",
+        "    --model sonnet",
+        "",
+        "# Chain with other tools",
+        "$ git diff main..HEAD | claude --print \"Review this diff for breaking changes\"",
+      ]},
+      { type: "divider" },
+      { type: "heading", value: "GitHub Actions integration" },
+      { type: "text", value: "Claude Code can be embedded directly in GitHub Actions workflows. The most common pattern is automated PR review — Claude reads the diff, analyzes the changes, and posts a review comment." },
+      { type: "terminal", title: "GitHub Actions workflow — automated PR review", lines: [
+        "# .github/workflows/claude-review.yml",
+        "name: Claude PR Review",
+        "on:",
+        "  pull_request:",
+        "    types: [opened, synchronize]",
+        "",
+        "jobs:",
+        "  review:",
+        "    runs-on: ubuntu-latest",
+        "    steps:",
+        "      - uses: actions/checkout@v4",
+        "        with:",
+        "          fetch-depth: 0",
+        "",
+        "      - name: Install Claude Code",
+        "        run: npm install -g @anthropic-ai/claude-code",
+        "",
+        "      - name: Run Claude review",
+        "        env:",
+        "          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}",
+        "        run: |",
+        "          claude --print \"Review this PR. Focus on bugs,",
+        "          security issues, and breaking changes.",
+        "          Post a summary with actionable feedback.\" > review.md",
+        "",
+        "      - name: Post review comment",
+        "        uses: actions/github-script@v7",
+        "        with:",
+        "          script: |",
+        "            const fs = require('fs');",
+        "            const review = fs.readFileSync('review.md', 'utf8');",
+        "            github.rest.issues.createComment({",
+        "              owner: context.repo.owner,",
+        "              repo: context.repo.repo,",
+        "              issue_number: context.issue.number,",
+        "              body: review",
+        "            });",
+      ]},
+      { type: "text", value: "This is a starting point — production workflows add authentication, model selection, error handling, cost controls, and conditional logic based on file types or PR labels." },
+      { type: "divider" },
+      { type: "heading", value: "When to automate" },
+      { type: "values", items: [
+        { title: "PR review", desc: "Catch issues before human review — security vulnerabilities, style violations, missing tests, breaking changes. Claude provides a first pass so human reviewers can focus on architecture and design decisions." },
+        { title: "Code generation", desc: "Automate boilerplate, database migrations, API client generation, and scaffolding. Triggered by events like new schema definitions or configuration changes." },
+        { title: "Documentation", desc: "Keep docs in sync with code — auto-generate API docs, update changelogs, and flag stale documentation when the underlying code changes." },
+        { title: "Compliance", desc: "Automated security scanning, license checking, and policy enforcement on every PR. Hooks and headless mode combine to create continuous compliance pipelines." },
+      ]},
+      { type: "reflect", prompt: "What's one task in your CI/CD pipeline that could benefit from Claude Code automation? What would the prompt look like, and what guardrails would you put around it?" },
+    ],
+  },
+  {
+    id: "day3-agent-sdk", label: "Agent SDK & MCP", title: "Agent SDK Intro, Building MCP Servers",
+    content: [
+      { type: "text", value: "For advanced use cases, the Agent SDK lets you build custom agents with Claude as the reasoning engine, and you can create your own MCP servers to connect Claude to any internal data source or tool. This is where Claude Code becomes a platform you build on, not just a tool you use." },
+      { type: "outcomes", items: [
+        "Describe what the Agent SDK is and identify use cases where it's the right tool",
+        "Write a basic Agent SDK script that uses Claude with custom tools",
+        "Explain the three primitives an MCP server provides: tools, resources, and prompts",
+        "Build a minimal MCP server and connect it to Claude Code",
+      ]},
+      { type: "heading", value: "Agent SDK" },
+      { type: "text", value: "The Agent SDK is a Python/TypeScript library for building custom agents powered by Claude. Use it when you need custom logic beyond what Claude Code provides out of the box — multi-agent orchestration, structured output pipelines, or embedding Claude's reasoning into your own applications." },
+      { type: "terminal", title: "Basic Agent SDK usage", lines: [
+        "import Anthropic from \"@anthropic-ai/sdk\";",
+        "",
+        "const client = new Anthropic();",
+        "",
+        "const tools = [",
+        "  {",
+        "    name: \"get_weather\",",
+        "    description: \"Get current weather for a location\",",
+        "    input_schema: {",
+        "      type: \"object\",",
+        "      properties: {",
+        "        location: { type: \"string\", description: \"City name\" }",
+        "      },",
+        "      required: [\"location\"]",
+        "    }",
+        "  }",
+        "];",
+        "",
+        "const response = await client.messages.create({",
+        "  model: \"claude-sonnet-4-20250514\",",
+        "  max_tokens: 1024,",
+        "  tools: tools,",
+        "  messages: [",
+        "    { role: \"user\", content: \"What's the weather in SF?\" }",
+        "  ]",
+        "});",
+      ]},
+      { type: "text", value: "The SDK gives you full control over the agentic loop — you decide which tools are available, how to handle tool calls, when to continue the conversation, and how to structure the output. Claude Code itself is built on these same primitives." },
+      { type: "divider" },
+      { type: "heading", value: "Building MCP servers" },
+      { type: "text", value: "An MCP server exposes three primitives to Claude: Tools are functions Claude can call (e.g., query a database, create a ticket), Resources are data Claude can read (e.g., configuration files, documentation), and Prompts are templates for common tasks (e.g., 'review this PR with our standards'). You build the server, Claude discovers it on startup, and uses it like any other tool." },
+      { type: "terminal", title: "MCP server skeleton (TypeScript)", lines: [
+        "import { McpServer } from \"@modelcontextprotocol/sdk/server/mcp.js\";",
+        "import { StdioServerTransport } from",
+        "  \"@modelcontextprotocol/sdk/server/stdio.js\";",
+        "",
+        "const server = new McpServer({",
+        "  name: \"my-internal-tool\",",
+        "  version: \"1.0.0\"",
+        "});",
+        "",
+        "// Define a tool Claude can call",
+        "server.tool(",
+        "  \"get_ticket\",",
+        "  \"Fetch a ticket by ID from our internal tracker\",",
+        "  { ticket_id: { type: \"string\", description: \"Ticket ID\" } },",
+        "  async ({ ticket_id }) => {",
+        "    // Replace with real API call",
+        "    const ticket = await fetchTicket(ticket_id);",
+        "    return {",
+        "      content: [",
+        "        { type: \"text\", text: JSON.stringify(ticket) }",
+        "      ]",
+        "    };",
+        "  }",
+        ");",
+        "",
+        "// Start the server",
+        "const transport = new StdioServerTransport();",
+        "await server.connect(transport);",
+      ]},
+      { type: "text", value: "Start simple — build a server that returns hardcoded data, verify Claude can discover and use it, then add real integrations. A working MCP server with fake data is more valuable than a perfect one that's never finished. Most servers take an afternoon to build." },
+      { type: "reflect", prompt: "If you could connect Claude to any internal system at your company, what would it be? What tools would that MCP server expose, and how would it change your team's workflow?" },
+    ],
+  },
 ];
 
 // ─── ORIENTATION vs CONTEXTUAL FOUNDATIONS ───
@@ -1043,83 +1748,60 @@ const MODULES = [
   {
     id: 1, number: "01", day: "Day 1",
     title: "First contact",
-    subtitle: "Install Claude Code in the terminal and VS Code, navigate both interfaces, and complete your first agentic task. Everyone starts here.",
-    customerFraming: "Run a live install for a prospect and deliver their first \"wow\" moment in under 10 minutes.",
-    clientScenario: { company: "Meridian Health", industry: "Healthcare SaaS", situation: "Meridian Health's 8-person backend team needs 2–3 days to add new API endpoints due to boilerplate and testing overhead. Your job: install Claude Code and deliver their first real productivity win — a new endpoint built in minutes, not days." },
+    swbat: "Set up Claude Code, begin to create with it",
+    subtitle: "Install Claude Code, have your first interaction, and understand the agentic loop that makes it different. Common core — everyone starts here.",
     materials: [
-      { id: "M1", label: "Install & First Run cheat sheet", when: "Print before starting — follow alongside steps 1-4" },
+      { id: "M1", label: "Install & First Run cheat sheet", when: "Print before starting — follow alongside the installation steps" },
       { id: "M1b", label: "Command Glossary", when: "Desk reference — every command, shortcut, and flag in one place" },
     ],
-    skills: ["Terminal install", "VS Code / JetBrains setup", "Basic prompting", "Navigation", "First agentic task"],
+    skills: ["Installation", "Authentication", "Agentic loop", "Context window basics", "Tool overview", "Permission system"],
     modality: { live: "45 min", lab: "45 min", selfPaced: "30 min pre-work" },
-steps: [
-      { title: "Install and authenticate", context: "terminal", desc: "Install Claude Code globally, authenticate with your Anthropic account, and verify the installation.", commands: ["curl -fsSL https://cli.anthropic.com/install.sh | sh", "claude auth", "claude --version"], expected: "You should see a success message with the installed version number, a browser window to log in, and the version number confirming everything works.", materialRef: { id: "M1", note: "Follow along with the Install & First Run cheat sheet for troubleshooting tips" }, tip: "If you're on a company network that blocks the browser redirect, ask your facilitator for the manual token flow." },
-      { title: "Set up your IDE and clone the repo", context: "vscode", desc: "Open VS Code (or JetBrains) and install the Claude Code extension. Search for 'Claude Code' in the Extensions marketplace and click Install. Then open the Command Palette and run 'Claude Code: Sign In' to authenticate. Once your IDE is ready, clone the sample Express API we'll use as our playground.", commands: ["git clone https://github.com/amurray101/claude-code-sample-api.git", "cd claude-code-sample-api", "npm install"], tip: "In JetBrains, the plugin is available in the JetBrains Marketplace under the same name. The setup flow is similar." },
-      { title: "Launch Claude Code", context: "terminal", desc: "Start an interactive Claude Code session. Watch how it reads the directory structure and key files automatically — this is the agentic difference.", commands: ["claude"], tip: "Notice how Claude reads your package.json, directory structure, and any CLAUDE.md file before you even type a prompt. This is context gathering — the first step of the agentic loop." },
-      { title: "Your first agentic task", context: "claude", desc: "Give Claude a real task that requires reading existing code, planning changes, and modifying multiple files. Type this prompt into the Claude Code session:", prompt: "Add a GET /health endpoint that returns { status: 'ok', timestamp: Date.now(), uptime: process.uptime() }. Put it in the existing routes file. Then write a test for it using the same testing patterns as the existing tests.", expected: "Claude should: 1) Read the existing route files and test files, 2) Plan the changes, 3) Add the endpoint, 4) Write a matching test, 5) Optionally run the test to verify." },
+    steps: [
+      // Hands-on only — self-guided content moved to pre-work handouts (M1c, M1d)
+      { title: "Installation and authentication", contentType: "hands-on", desc: "Install Claude Code globally, authenticate, and verify everything works. Then set up the IDE extension.", commands: ["curl -fsSL https://cli.anthropic.com/install.sh | sh", "claude auth", "claude --version"], expected: "You should see the installed version number, a browser window for authentication, and the version confirmation. If you\u2019re on a corporate network that blocks the browser redirect, ask your facilitator for the manual token flow.", materialRef: { id: "M1c", note: "Follow along with the What is Claude Code handout for troubleshooting" }, tip: "For VS Code: search \u2018Claude Code\u2019 in Extensions and click Install, then Cmd/Ctrl+Shift+P \u2192 \u2018Claude Code: Sign In\u2019. For JetBrains: search in the JetBrains Marketplace under the same name." },
+      { title: "Your first interaction", contentType: "hands-on", desc: "Launch Claude Code in a project directory and watch what happens before you type anything.", commands: ["git clone https://github.com/amurray101/claude-code-sample-api.git", "cd claude-code-sample-api && npm install", "claude"], expected: "Claude reads the directory structure, package.json, and any CLAUDE.md file automatically. This is context gathering \u2014 the first step of the agentic loop. You haven\u2019t typed a prompt yet, and Claude already knows what\u2019s in the project.", keyPoint: "This automatic codebase reading is the \u2018aha\u2019 moment for most people. Autocomplete tools don\u2019t do this \u2014 they wait for you to type." },
+      { title: "Complete your first agentic task", contentType: "hands-on", desc: "Now give Claude a real task that exercises the full agentic loop \u2014 reading existing code, planning changes, editing multiple files, and verifying. Use the sample API repo you cloned earlier:", prompt: "Add a GET /health endpoint that returns { status: 'ok', timestamp: Date.now(), uptime: process.uptime() }. Put it in the existing routes file, following the same patterns as the other routes. Then write a test for it using the same testing patterns as the existing tests.", expected: "Watch what Claude does: (1) Reads the existing route files and test files to understand the patterns, (2) Plans the changes, (3) Adds the endpoint in the routes file, (4) Writes a matching test, (5) Optionally runs the tests to verify. This is the full agentic loop in action.", commands: ["npm test"], tip: "After Claude finishes, run the tests yourself to verify. Then try a second task: \u2018Add a GET /version endpoint that returns the package version from package.json. Write a test for it.\u2019 Notice how Claude follows the same patterns it learned from reading the codebase." },
       { type: "quick-check", question: "Claude Code just completed a multi-file task. Which sequence best describes what happened?", options: [
         { text: "Claude generated code line by line as you typed", correct: false },
         { text: "Claude read the codebase, planned changes, edited files, and ran tests to verify", correct: true },
         { text: "Claude copied a template from its training data and pasted it in", correct: false },
-      ], explanation: "The agentic loop — read, plan, act, verify — is what makes Claude Code different from autocomplete tools. Claude understood the existing code before changing anything." },
-      { title: "Verify and compare surfaces", context: "terminal", desc: "Run the tests to verify Claude's work, then open the same repo in VS Code to compare the IDE experience. Notice how the terminal gives you raw speed while the IDE gives you inline diffs and a visual file tree.", commands: ["npm test"], expected: "All tests should pass, including the new health endpoint test.", tip: "Open the Claude Code panel in VS Code (click the Claude icon in the sidebar or use Cmd/Ctrl+Shift+P → 'Claude Code: Open') and try a similar prompt like 'Add a GET /version endpoint that returns the package version from package.json. Write a test for it.' Compare the experience: both surfaces use the same agentic engine underneath." },
-      { type: "checkpoint", title: "Reflect and compare", desc: "You've now used Claude Code in both the terminal and your IDE. Before moving on, think about: What felt different between the two surfaces? When would you reach for the CLI vs. the IDE? How would you describe the agentic loop to a customer who's used to autocomplete tools like Copilot?" },
+      ], explanation: "The agentic loop \u2014 read, plan, act, verify \u2014 is what makes Claude Code different from autocomplete tools. Claude understood the existing code before changing anything." },
+      { type: "checkpoint", title: "Day 1 reflection", desc: "You\u2019ve installed Claude Code and completed your first agentic task. Before moving on, think about:\n\n\u2022 What surprised you about how Claude Code works?\n\u2022 How would you describe the agentic loop in one sentence?\n\u2022 What felt different between the terminal and IDE experience (if you tried both)?\n\u2022 When did Claude ask for permission, and when did it act on its own?" },
     ],
-        challenge: "Install Claude Code in both the terminal and VS Code on Meridian's sample API repo. Use it to add a /health endpoint with tests. Explain to the team lead how the agentic approach changes their velocity.",
-    output: "Working install (CLI + IDE) + first agentic task recording + client talking points",
-    gaps: [
-      { title: "Troubleshooting installation in customer environments", why: "The happy path install takes 5 minutes, but PEs encounter corporate proxies, PATH conflicts, WSL2 sandbox issues, and Docker edge cases regularly. A hands-on troubleshooting exercise using the /doctor diagnostic command would prepare trainees for real-world install failures.", topics: ["Corporate proxy / VPN", "TLS/SSL certificate errors", "PATH conflicts", "WSL2 sandbox setup", "Docker installs", "/doctor command"] },
-      { title: "Narrating the agentic loop during a live demo", why: "Using Claude Code and demoing it are different skills. Trainees need practice narrating each phase of the agentic loop (read, plan, act, verify) in real time — especially recovering gracefully when Claude makes a mistake mid-demo.", topics: ["Live narration technique", "Recovering from mistakes", "Pacing and pausing", "What to highlight vs. skip", "Handling audience questions mid-demo"] },
-    ],
+    challenge: "Install Claude Code in both the terminal and your IDE. Complete your first multi-file agentic task. Articulate what makes the agentic approach different from autocomplete.",
+    output: "Working install (CLI + IDE) + first agentic task completed",
     color: C.orange,
     competencies: {
-      "pe-pre": "Demo Claude Code's install and first-run experience to a prospect — narrate the agentic loop as it happens and explain why it matters vs. autocomplete",
+      "pe-pre": "Demo Claude Code's install and first-run experience — narrate the agentic loop as it happens and explain why it matters vs. autocomplete",
       "pe-post": "Set up Claude Code in a customer's dev environment, troubleshoot common installation issues, and guide a developer through their first agentic task",
-      "sa": "Articulate the agentic coding value proposition to a technical audience and map it to common customer pain points (manual refactors, slow onboarding, test coverage gaps)",
+      "sa": "Articulate the agentic coding value proposition to a technical audience and map it to common customer pain points",
       "ar": "Analyze Claude Code's agentic loop behavior — tool calls, planning steps, error recovery — and identify areas where model capabilities could be extended",
     },
   },
   {
     id: 2, number: "02", day: "Day 2",
-    title: "Prompt craft for agentic coding",
-    subtitle: "CLAUDE.md, context and session management, and the art of steering multi-step workflows. The module that separates surface-level users from power users.",
-    customerFraming: "Show a customer how to make Claude Code an expert on their codebase — not just a generic tool.",
-    clientScenario: { company: "Lumen Logistics", industry: "Supply chain / logistics", situation: "Lumen Logistics has 40 developers, a sprawling Node.js monorepo, and zero documentation. New hires take 3 weeks to become productive because conventions are unwritten. Your job: write the CLAUDE.md that makes Claude an effective team member, then prove it by refactoring a messy module to match." },
+    title: "Prompt craft",
+    swbat: "Customize Claude Code and work more effectively with it",
+    subtitle: "CLAUDE.md files, settings, plan mode, session management, and the prompt patterns that separate surface-level users from power users. Common core.",
     materials: [
-      { id: "M2a", label: "CLAUDE.md Builder worksheet", when: "Use during step 4 to structure your CLAUDE.md" },
-      { id: "M2b", label: "Prompt Patterns cheat sheet", when: "Reference while practicing prompt craft in steps 6-8" },
+      { id: "M2a", label: "CLAUDE.md Builder worksheet", when: "Use during the CLAUDE.md authoring exercise" },
+      { id: "M2b", label: "Prompt Patterns cheat sheet", when: "Reference while practicing prompt craft" },
     ],
-    skills: ["CLAUDE.md authoring", "Context management", "Session hygiene", "Multi-step workflows", "Prompt patterns"],
+    skills: ["CLAUDE.md authoring", "CLAUDE.md hierarchy", "Settings files", "CLI flags", "Plan mode", "Slash commands", "Keyboard shortcuts", "Session management", "Prompting patterns", "Common workflows"],
     modality: { live: "60 min", lab: "60 min", selfPaced: "30 min pre-work" },
-steps: [
-      { title: "Set the scene: Lumen\'s problem", desc: "Before touching any code, internalize the customer scenario. Lumen Logistics has 40 developers, zero documentation, and a 3-week ramp time for new hires. The CTO wants Claude Code to fix this. Your job today: prove that a single file \u2014 CLAUDE.md \u2014 can transform how Claude understands and works within their codebase.", narration: "Open with: 'Imagine you\'re walking into Lumen Logistics. Their CTO tells you: our new hires take three weeks to get productive because nothing is written down. Can Claude Code fix that?' Pause. Let that land. The answer is yes \u2014 and the key is CLAUDE.md.", timing: "2 min" },
-      { title: "Fork and clone the messy repo", context: "terminal", desc: "We\'ve prepared a repo with no documentation, inconsistent patterns, and no CLAUDE.md. Fork it to your account and clone locally.", commands: ["git clone https://github.com/amurray101/basecamp-messy-repo.git", "cd basecamp-messy-repo", "npm install"], narration: "As you clone: 'This repo is designed to be messy on purpose. Mixed coding styles, no docs, no tests in some modules. It\'s what a real customer codebase looks like on day one.'", timing: "3 min" },
-      { title: "Explore the codebase without Claude", context: "terminal", desc: "Before writing a CLAUDE.md, understand what you\'re working with. Browse the directory structure and notice the inconsistencies.", commands: ["ls -la src/", "cat package.json"], keyPoint: "You have to understand the conventions before you can teach them to Claude. This exploration step is what you\'d do in a real customer engagement \u2014 and it\'s what you\'d coach the customer\'s tech lead to do.", timing: "3 min" },
-      { title: "The 'before' \u2014 Claude without CLAUDE.md", context: "claude", desc: "Launch Claude Code in the messy repo. Without a CLAUDE.md, Claude infers conventions from the code itself \u2014 sometimes right, sometimes wrong. Ask it to refactor a module and watch where it guesses.", prompt: "Refactor src/utils/helpers.js \u2014 improve the code quality and add error handling.", narration: "After Claude finishes: 'Look at the output. Did it use async/await or Promises? Did it add JSDoc or just inline comments? Did it put the test file in the right place? It made choices \u2014 but they were guesses. In a customer codebase with strong conventions, guesses create inconsistency.'", keyPoint: "This is the most important demo moment in the entire program. The 'before' output isn\'t bad \u2014 it\'s just inconsistent. That\'s the problem CLAUDE.md solves.", timing: "8 min" },
-      { title: "Write your CLAUDE.md", context: "file", materialRef: { id: "M2a", note: "Use the CLAUDE.md Builder worksheet to structure your file" }, desc: "Based on what you saw exploring the codebase, write a CLAUDE.md at the repo root. Capture the patterns you noticed — how the code is organized, what style choices were made, where things are inconsistent. There's no fixed template. The goal is to describe this codebase the way you'd describe it to a new teammate on their first day.", tip: "In a customer engagement, writing the first CLAUDE.md together is a powerful onboarding moment. It forces the team to articulate conventions they've never written down — which is itself valuable even without Claude Code.", timing: "8 min" },
-      { type: "quick-check", question: "What happens if your CLAUDE.md says 'use TypeScript strict mode' but a subdirectory CLAUDE.md says 'use JavaScript'?", options: [
-        { text: "The root CLAUDE.md always wins", correct: false },
-        { text: "The subdirectory CLAUDE.md overrides for files in that directory", correct: true },
-        { text: "Claude ignores both and uses its default behavior", correct: false },
-      ], explanation: "CLAUDE.md files are hierarchical — subdirectory files override project-level ones for their scope, just like .gitignore or .eslintrc." },
-      { title: "The 'after' \u2014 Claude with CLAUDE.md", context: "claude", desc: "Exit and re-launch Claude Code so it picks up your CLAUDE.md. Ask the exact same refactoring question. The difference should be visible \u2014 async/await instead of callbacks, JSDoc instead of inline comments, co-located tests.", prompt: "Refactor src/utils/helpers.js to follow our project conventions.", narration: "As Claude works: 'Same task, same repo, different output. Watch \u2014 async/await instead of callbacks. JSDoc instead of inline comments. Tests co-located with the source file. It\'s following the CLAUDE.md like a new team member who actually read the onboarding doc.'", keyPoint: "This before/after comparison is the single most persuasive demo in the entire Basecamp program. When you show this to a customer, you\'re not talking about AI in the abstract \u2014 you\'re showing their conventions being followed automatically.", timing: "8 min" },
-      { title: "The CLAUDE.md iteration loop", context: "claude", desc: "Your first CLAUDE.md is never perfect. Look at Claude\'s output from step 9 \u2014 what did it get right? What would you add? Try refining your CLAUDE.md based on what you observed.", prompt: "What conventions did you infer from the existing code that I should add to my CLAUDE.md?", narration: "'Ask Claude itself what you should add. This is a powerful move in customer engagements \u2014 Claude can help you write the CLAUDE.md by analyzing the codebase. The loop is: write CLAUDE.md, observe output, ask Claude what\'s missing, refine. Each iteration makes the output better.'", tip: "This iteration loop \u2014 write, observe, refine \u2014 is how teams get the most value from CLAUDE.md. In a customer engagement, plan to iterate 2-3 times during the first session.", timing: "5 min" },
-      { title: "Session management: /compact", context: "claude", desc: "In long coding sessions, Claude\'s context window fills up. The /compact command summarizes the conversation to free space while preserving important context.", commands: ["/compact"], narration: "'After 15-20 minutes of work, you\'ll notice Claude starting to forget earlier context. That\'s the context window filling up. /compact is your pressure release valve \u2014 it summarizes what happened and frees up space. Watch what it preserves and what it drops.'", keyPoint: "Teach customers to use /compact proactively, not reactively. If you wait until Claude starts forgetting, you\'ve already lost context. Compact every 15-20 minutes in long sessions.", timing: "3 min" },
-      { title: "Session management: /clear and /cost", context: "claude", desc: "Two more essential commands for session hygiene:", commands: ["/cost", "/clear"], narration: "'/cost shows you exactly what this session has consumed \u2014 tokens in, tokens out, total spend. Essential for customers tracking costs. /clear resets the entire context. Use it when you\'re switching tasks or when /compact isn\'t enough.'", tip: "/cost is your friend in customer conversations about pricing. Run it after a real task: 'That refactoring task \u2014 reading the codebase, planning changes, writing code, running tests \u2014 cost $0.08. Your developer would have spent 45 minutes.'", timing: "3 min" },
-      { title: "Plan Mode: think before acting", context: "claude", desc: "Plan Mode is Claude Code\'s most powerful trust-building feature. The 'plan:' prefix tells Claude to analyze and plan without making any changes.", prompt: "plan: Analyze this codebase and propose a strategy for adding TypeScript. Identify the riskiest files to migrate first, suggest a tsconfig.json, and outline the migration order.", narration: "'Plan Mode is your secret weapon in customer demos. Skeptical engineers don\'t trust AI that immediately starts editing their code. Plan Mode lets them see Claude\'s reasoning first \u2014 what it would change and why. They can review the plan, give feedback, then green-light execution. It\'s the difference between trust and anxiety.'", expected: "Claude should produce a detailed analysis and migration plan WITHOUT making any file changes. The output is a plan you can review, modify, and then execute.", keyPoint: "In customer demos, always start complex tasks in Plan Mode. It shows the reasoning, builds trust, and lets the customer feel in control. Then switch to execution: 'That plan look right? Let\'s build it.'", timing: "5 min" },
-      { title: "Prompt patterns that work", context: "claude", materialRef: { id: "M2b", note: "Reference the Prompt Patterns cheat sheet for the full pattern library" }, desc: "The difference between a good prompt and a great prompt comes down to specificity and structure. Compare these patterns:", prompt: "Using the patterns from our CLAUDE.md, add a new POST /api/shipments endpoint that creates a shipment record. Follow the same patterns as the existing routes.", narration: "'Notice the prompt structure: what to build, which patterns to follow, and what quality means. Vague prompts like \'add a shipments endpoint\' force Claude to guess. Specific prompts like this one get consistent, convention-matching output on the first try.'", tip: "The two-part prompt pattern: WHAT (the task) + HOW (the conventions/patterns to follow). Vague prompts force Claude to guess. Specific prompts get consistent output on the first try.", timing: "5 min" },
-      { title: "Anti-pattern: the kitchen-sink session", context: "claude", desc: "One of the most common mistakes is cramming too many unrelated tasks into a single session. Claude\'s context fills up, quality degrades, and you end up fighting the tool instead of using it.", narration: "'Let me show you what NOT to do. If you ask Claude to refactor a module, then add a new feature, then fix a bug in a different file, then update the README \u2014 all in one session \u2014 quality drops after the third task. The context is full of unrelated code. The fix: one session per task, or /compact between tasks.'", keyPoint: "Teach customers the 'one job, one session' rule. For complex work: Plan Mode to scope it, then a fresh session to execute each piece. This is the habit that separates power users from frustrated users.", timing: "3 min" },
-      { title: "CLAUDE.md hierarchy: team-wide conventions", context: "file", desc: "In enterprise deployments, CLAUDE.md works at multiple levels. A root-level file sets org-wide standards. Team-level files add team-specific conventions. Project-level files override where needed.", code: "# Hierarchy (top to bottom, each layer overrides):\n\n~/.claude/CLAUDE.md           # Personal preferences\nrepo-root/CLAUDE.md            # Project conventions\nrepo-root/src/CLAUDE.md        # Subdirectory overrides\n\n# Example: org-level CLAUDE.md (repo root)\n# Sets company-wide rules:\n# - Always use TypeScript\n# - All PRs need tests\n# - Follow the company style guide\n\n# Example: team-level CLAUDE.md (subdirectory)\n# Adds team-specific rules:\n# - This service uses PostgreSQL\n# - API routes follow REST conventions\n# - Integration tests use the staging DB", codeTitle: "CLAUDE.md hierarchy", narration: "'When a customer asks: how does this scale to 200 developers? \u2014 this is the answer. The engineering director writes the root CLAUDE.md with company-wide standards. Each team adds their own file with team-specific conventions. It\'s the same pattern as .eslintrc \u2014 cascading configuration. Developers don\'t need to know it exists; it just works.'", keyPoint: "The hierarchy question always comes up in enterprise conversations. Having this answer ready \u2014 with the .eslintrc analogy \u2014 closes the 'but how does it scale?' objection.", timing: "4 min" },
-      { type: "checkpoint", title: "The pitch to Lumen\'s CTO", desc: "You\'ve now seen the full arc: messy codebase without CLAUDE.md (inconsistent output) vs. with CLAUDE.md (convention-matching output). You know session management, Plan Mode, and prompt patterns. Now practice the pitch: How would you explain to Lumen\'s CTO what you just did? What\'s the one-sentence version? What\'s the three-minute version? What would you show them?", narration: "'The one-sentence pitch: CLAUDE.md turns your team\'s unwritten conventions into explicit instructions that Claude follows automatically \u2014 so every developer, including Claude, writes code that looks like your best engineer wrote it. The three-minute version: show the before/after. The ten-minute version: do it live on their repo.'" },
+    steps: [
+      // Hands-on only — self-guided content moved to pre-work handouts (M2c, M2d, M2e)
+      { title: "Slash commands and keyboard shortcuts", contentType: "hands-on", desc: "Built-in slash commands you\u2019ll use daily:\n\n\u2022 /compact \u2014 Summarize the conversation to free context window space\n\u2022 /clear \u2014 Reset the entire context (start fresh)\n\u2022 /cost \u2014 Show token usage and cost for this session\n\u2022 /help \u2014 Show available commands\n\u2022 /doctor \u2014 Diagnose installation and configuration issues\n\u2022 /config \u2014 View or modify settings\n\nKey keyboard shortcuts:\n\n\u2022 Esc \u2014 Cancel the current generation\n\u2022 Tab \u2014 Accept a suggestion\n\u2022 Up arrow \u2014 Recall previous prompts", commands: ["/cost", "/compact"], tip: "Try running /cost now to see what your Day 1 session consumed. Then try /compact to see how it summarizes and frees space." },
+      { title: "Session management", contentType: "hands-on", desc: "The most important habit for working effectively with Claude Code: one focused task per session.\n\nWhy: when you mix unrelated tasks in one session, the context window fills with irrelevant code from earlier tasks. Quality degrades after the third unrelated task.\n\nThe workflow:\n1. Start a session with a clear task\n2. Use /compact proactively every 15\u201320 minutes (don\u2019t wait for quality to degrade)\n3. When switching tasks, use /clear or start a new session\n4. For complex work: Plan Mode to scope it, then a fresh session to execute each piece", commands: ["/compact", "/clear"], keyPoint: "The \u2018one job, one session\u2019 rule is the habit that separates power users from frustrated users. Proactive /compact beats reactive /clear." },
+      { title: "Write a CLAUDE.md", contentType: "hands-on", desc: "The before/after exercise \u2014 the most persuasive demo in the program:\n\n1. Open the sample repo from Day 1 (or clone a messy repo your facilitator provides)\n2. Without a CLAUDE.md, ask Claude to refactor a module:\n   \u2018Refactor src/utils/helpers.js \u2014 improve the code quality and add error handling.\u2019\n3. Note the output \u2014 did it follow consistent conventions? Probably not.\n4. Write a CLAUDE.md at the repo root capturing the conventions you want\n5. Exit and re-launch Claude Code (so it picks up the new CLAUDE.md)\n6. Run the exact same prompt. Compare the output.\n\nThe difference should be visible: consistent style, correct patterns, co-located tests.", materialRef: { id: "M2a", note: "Use the CLAUDE.md Builder worksheet to structure your file" }, tip: "Your first CLAUDE.md won\u2019t be perfect. After seeing Claude\u2019s output, ask: \u2018What conventions did you infer from the code that I should add to my CLAUDE.md?\u2019 Then refine and re-run. This iteration loop \u2014 write, observe, refine \u2014 is how teams get the most value." },
+      { title: "Prompt pattern practice", contentType: "hands-on", desc: "Practice the three prompt patterns on real tasks. For each, try the vague version first, then the structured version, and compare output quality:", prompt: "Task 1 (WHAT+HOW): Add a POST /api/shipments endpoint that creates a shipment record. Follow the same patterns as the existing routes, including validation and error handling.\n\nTask 2 (Constraints): Refactor src/routes/index.js to use async/await instead of callbacks. Don\u2019t change the route paths or response formats. Keep all existing tests passing.\n\nTask 3 (Iterative): First ask \u2018What are the top 3 code quality issues in this project?\u2019 Then pick one and ask Claude to fix it.", tip: "Compare how Claude responds to \u2018add a shipments endpoint\u2019 vs. the structured version. The difference in output quality is the whole argument for prompt craft." },
+      { type: "checkpoint", title: "Day 2 reflection", desc: "You\u2019ve written a CLAUDE.md and practiced prompt patterns. Before moving on:\n\n\u2022 What was the most noticeable difference in the before/after CLAUDE.md comparison?\n\u2022 Which prompt pattern (WHAT+HOW, constraints, iterative) felt most natural?\n\u2022 When would you reach for Plan Mode vs. just prompting directly?\n\u2022 How would you explain the value of CLAUDE.md to someone in one sentence?" },
     ],
-        challenge: "Lumen's CTO says: 'Our new hires take three weeks to get productive. Can Claude Code fix that?' Write a CLAUDE.md that captures their conventions, then use Claude to refactor their messiest utility module with tests and docs that match. Show a before/after that makes the case.",
-    output: "CLAUDE.md template library + prompt pattern cheat sheet + client before/after comparison",
-    gaps: [
-      { title: "Common failure patterns and how to recover", why: "Five anti-patterns trip up even experienced users: kitchen-sink sessions that exhaust context, correction spirals that degrade output, over-specified CLAUDE.md files that conflict, skipping review in auto-accept mode, and open-ended exploration that burns tokens. A pattern-recognition exercise would build the diagnostic instinct trainees need in the field.", topics: ["Kitchen sink sessions", "Over-specified CLAUDE.md", "Correction spirals", "Trust-then-verify gap", "Context exhaustion", "When to start fresh"] },
-    ],
+    challenge: "Write a CLAUDE.md for a codebase, demonstrate a before/after comparison, and practice prompt patterns on real tasks.",
+    output: "CLAUDE.md + before/after demo + prompt pattern practice results",
     color: C.blue,
     competencies: {
-      "pe-pre": "Write a CLAUDE.md for a prospect's repo during a live evaluation, showing how context transforms output quality — a best practice you can teach in every technical evaluation",
+      "pe-pre": "Write a CLAUDE.md for a prospect's repo during a live evaluation, showing how context transforms output quality",
       "pe-post": "Pair-program with a customer engineering team to author CLAUDE.md files tailored to their codebase, conventions, and CI/CD pipeline",
       "sa": "Design a CLAUDE.md strategy for a multi-team engineering org — root-level standards, team-level overrides, and integration patterns with existing style guides",
       "ar": "Evaluate how CLAUDE.md content affects model reasoning quality, identify prompt patterns that improve code generation accuracy, and build evaluation harnesses to measure impact",
@@ -1127,115 +1809,105 @@ steps: [
   },
   {
     id: 3, number: "03", day: "Day 3",
-    title: "Extend and customize",
-    subtitle: "Hooks, MCP servers, Skills, Plugins, subagents, and the Agent SDK. Turn Claude Code into your customer's engineering platform.",
-    customerFraming: "Design the hooks, integrations, and guardrails that make a customer's security and compliance team say yes.",
-    clientScenario: { company: "Arcadia Financial", industry: "Fintech / regulated", situation: "Arcadia Financial has 60 engineers and hard compliance requirements: nothing ships without lint, type checks, and tests. Their PM team lives in Jira and developers constantly context-switch. Can Claude Code enforce quality gates and pull Jira context automatically?" },
+    title: "Extend & customize",
+    swbat: "Connect outside data sources, further customize for more advanced workflows",
+    subtitle: "Hooks, MCP servers, sub-agents, custom slash commands, IDE integration, CI/CD automation, and the Agent SDK. Common core.",
     materials: [
       { id: "M3", label: "Integration Patterns architecture reference", when: "Architecture diagrams for hooks, MCP, and slash commands" },
     ],
-    skills: ["Hooks", "MCP integration", "Skills & Plugins", "Subagents & Agent Teams", "Agent SDK"],
+    skills: ["Hooks", "MCP servers", "Sub-agents", "Custom slash commands", "Skills", "IDE integration", "CI/CD automation", "Headless mode", "GitHub Actions", "Agent SDK intro", "Building MCP servers"],
     modality: { live: "45 min", lab: "75 min", selfPaced: "45 min pre-work" },
-steps: [
-      { title: "Create a pre-commit hook", context: "file", desc: "Hooks are the answer to 'How do I control what Claude does?' Create a hooks configuration that enforces quality gates before any commit.", code: "// .claude/hooks.json\n{\n  \"pre-commit\": [\n    \"npm run lint\",\n    \"npm run type-check\",\n    \"npm test -- --bail\"\n  ],\n  \"post-edit\": [\n    \"npm test -- --related --bail\"\n  ]\n}", codeTitle: ".claude/hooks.json", tip: "The post-edit hook runs tests only on files related to what Claude just changed. The --bail flag stops on the first failure, saving time. This is the pattern enterprise customers love." },
-      { title: "Test your hooks", context: "claude", desc: "Launch Claude and make a change that should trigger your hooks. Watch how the hooks enforce quality automatically.", prompt: "Introduce a deliberate bug in one of the route handlers — change a status code from 200 to 500. Then try to commit.", expected: "The pre-commit hook should catch the failing test and prevent the commit. Claude should then fix the bug and retry." },
-      { title: "Set up an MCP server", context: "terminal", desc: "MCP connects Claude to external tools. We'll set up a mock Jira server that Claude can query for ticket context.", commands: ["mkdir -p .claude/mcp-servers", "npm init -y --prefix .claude/mcp-servers/mock-jira"], tip: "In real deployments, MCP servers connect to Jira, Slack, Datadog, Confluence, and internal APIs. The setup pattern is the same — Claude discovers available tools from the MCP server dynamically." },
-      { title: "Configure Claude to use your MCP server", context: "file", desc: "Add the MCP server to your Claude Code configuration so it's available in every session.", code: "// .claude/settings.json\n{\n  \"mcpServers\": {\n    \"mock-jira\": {\n      \"command\": \"node\",\n      \"args\": [\".claude/mcp-servers/mock-jira/server.js\"]\n    }\n  }\n}", codeTitle: ".claude/settings.json" },
-      { type: "quick-check", question: "A compliance team requires all code to pass lint checks before Claude can commit. Should you use a hook or a slash command?", options: [
-        { text: "A slash command — developers can run /lint-check when they want", correct: false },
-        { text: "A pre-commit hook — it enforces the check automatically and can't be bypassed", correct: true },
-        { text: "Either works — they're interchangeable", correct: false },
-      ], explanation: "Hooks are enforced gates that run automatically. Slash commands are opt-in conveniences. For compliance requirements, hooks are the answer because they can't be skipped." },
-      { title: "Create a custom slash command", context: "file", desc: "Slash commands package workflows your team can share. Create a deploy-check command that runs a pre-deployment checklist.", code: "Run the following pre-deployment checklist:\n1. Run the full test suite and report results\n2. Check for any TODO or FIXME comments in changed files\n3. Verify all environment variables are documented in .env.example\n4. Check for console.log statements in production code\n5. Validate that API endpoints have error handling\n6. Generate a summary of changes since last deploy tag", codeTitle: ".claude/commands/deploy-check.md", tip: "Custom commands are shared via git — a tech lead defines them once and the entire team inherits them. This is a powerful selling point for engineering managers." },
-      { title: "Test your custom command", context: "claude", desc: "Launch Claude and run your new slash command to see it in action.", commands: ["/deploy-check"], expected: "Claude should execute each step of your checklist and report results. This is how teams standardize quality checks." },
-      { title: "Compose the full workflow", context: "claude", desc: "Now bring hooks, MCP, and commands together. Ask Claude to use the full toolchain.", prompt: "Pull the details for ticket JIRA-1234 from our mock Jira server, implement the feature it describes, then run /deploy-check to verify everything is ready.", tip: "This composed workflow — external context via MCP, implementation via Claude, quality gates via hooks and commands — is the enterprise pitch. Demonstrate this in customer conversations." },
-      { type: "checkpoint", title: "Architecture your integration", desc: "For Arcadia Financial specifically: what additional hooks would their compliance team want beyond lint/type-check/tests? Which MCP servers would you add next — Datadog for error context, Confluence for documentation, or their internal deployment API? What slash command would their team lead use most often? Sketch the full integration architecture you'd present to Arcadia's Head of Engineering." },
+    steps: [
+      // Hands-on only — self-guided content moved to pre-work handouts (M3b, M3c, M3d)
+      // IDE integration
+      { title: "IDE integration: VS Code", contentType: "hands-on", desc: "The VS Code extension gives you Claude Code inside your editor with features the CLI doesn\u2019t have:\n\n\u2022 Inline diffs \u2014 See exactly what Claude wants to change, highlighted in the editor\n\u2022 Claude panel \u2014 A dedicated sidebar for the conversation (click the Claude icon or Cmd/Ctrl+Shift+P \u2192 \u2018Claude Code: Open\u2019)\n\u2022 Command palette \u2014 All Claude commands accessible via Cmd/Ctrl+Shift+P\n\u2022 File context \u2014 Claude automatically knows which file you have open\n\nWhen to use IDE vs. CLI:\n\u2022 IDE \u2014 When you want to see inline diffs, work with the visual file tree, or when the task involves files you\u2019re actively reading\n\u2022 CLI \u2014 When you want raw speed, are working across many files, or prefer a terminal-first workflow\n\nBoth surfaces use the same agentic engine underneath.", tip: "Try the same task from Day 1 in VS Code. Notice the inline diffs \u2014 you can see exactly what Claude is proposing before accepting." },
+      { title: "IDE integration: JetBrains", contentType: "hands-on", desc: "The JetBrains plugin is available in the JetBrains Marketplace (search \u2018Claude Code\u2019). It works with IntelliJ IDEA, PyCharm, WebStorm, and other JetBrains IDEs.\n\nKey differences from VS Code:\n\u2022 Same core capabilities (inline diffs, dedicated panel, command palette)\n\u2022 Setup: install from Marketplace, then sign in via the plugin settings\n\u2022 JetBrains uses a tool window instead of a sidebar panel\n\nThe choice between VS Code and JetBrains is about your editor preference, not Claude Code capability \u2014 the agentic engine is the same." },
+      // Hands-on exercises
+      { title: "Build a hook", contentType: "hands-on", desc: "Create a hooks configuration that enforces quality gates. Follow these steps:\n\n1. Open (or create) .claude/settings.json in your project\n2. Add a PostToolUse hook that runs tests after any file edit\n3. Launch Claude and ask it to make a change\n4. Watch the hook fire automatically after the edit\n5. Deliberately introduce a bug and see the hook catch it", code: "{\n  \"hooks\": {\n    \"PostToolUse\": [\n      {\n        \"matcher\": \"Write|Edit\",\n        \"hooks\": [\n          {\n            \"type\": \"command\",\n            \"command\": \"npm test -- --bail\"\n          }\n        ]\n      }\n    ]\n  }\n}", codeTitle: ".claude/settings.json \u2014 add this hooks section", expected: "After Claude edits a file, the hook runs tests automatically. If tests fail, Claude sees the failure output and can self-correct." },
+      { title: "Connect an MCP server", contentType: "hands-on", desc: "Set up an MCP server and verify Claude can use it:\n\n1. Add an MCP server configuration to your .claude/settings.json\n2. Start (or restart) Claude Code so it discovers the new server\n3. Ask Claude a question that requires the MCP server\u2019s tools\n4. Verify Claude queries the server and uses the results", code: "// Add to .claude/settings.json\n{\n  \"mcpServers\": {\n    \"filesystem\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"@anthropic/mcp-server-filesystem\", \"/tmp/shared-docs\"]\n    }\n  }\n}", codeTitle: "MCP server configuration \u2014 filesystem example", tip: "The filesystem MCP server is the simplest one to start with. It gives Claude access to read files from a specified directory. For a more advanced exercise, try the GitHub or PostgreSQL MCP server." },
+      { title: "Create a custom slash command", contentType: "hands-on", desc: "Build a slash command that packages a useful workflow:\n\n1. Create the directory: mkdir -p .claude/commands\n2. Create a markdown file with your command\u2019s instructions\n3. Launch Claude and run your command with /your-command-name\n4. Verify it executes the workflow correctly", commands: ["mkdir -p .claude/commands"], code: "Analyze the current codebase and generate a brief status report:\n1. Count the total number of source files and test files\n2. Run the test suite and report pass/fail counts\n3. Check for any TODO or FIXME comments and list them\n4. Report the last 3 git commits\n5. Summarize the overall health of the project in 2-3 sentences", codeTitle: ".claude/commands/status-report.md", commands: ["/status-report"], expected: "Claude executes each step of your checklist and produces a structured report. Anyone who clones this repo now has access to this command." },
+      { type: "checkpoint", title: "Day 3 reflection", desc: "You\u2019ve extended Claude Code with hooks, MCP, and custom commands. Before moving on:\n\n\u2022 Which extension point (hooks, MCP, slash commands) would be most valuable for your work?\n\u2022 What external tool or data source would you connect Claude to first?\n\u2022 When would you use a hook (enforced) vs. a slash command (opt-in)?\n\u2022 How do these extension points compose together?" },
     ],
-        challenge: "Build Arcadia's proof-of-concept: a pre-commit hook enforcing lint/type-check/tests, a mock Jira MCP server for ticket context, and a deploy-check slash command. Demo the full loop: Claude reads a Jira ticket, implements the feature, passes quality gates, and runs the deploy checklist.",
-    output: "Custom hook + MCP server + Skill + client integration architecture guide",
-    gaps: [
-      { title: "Agent teams and multi-agent orchestration", why: "Claude Code can run multiple agents in parallel — writer/reviewer pairs or fan-out across files. The tradeoff is cost (~7x tokens). Trainees should understand when to use agent teams vs. single agents and how to configure them via .claude/agents/.", topics: ["Writer/reviewer pattern", "Fan-out across files", "Teammate mode", "Cost management (7x multiplier)", "When to use vs. single agent", "Agent SDK configuration"] },
-      { title: "Plugins and code intelligence", why: "Code intelligence plugins give Claude IDE-level navigation (go to definition, find references) instead of text search. This dramatically improves accuracy in large codebases and is the answer when a prospect asks 'can Claude handle our 2M-line repo?'", topics: ["Code intelligence plugins", "Symbol navigation vs. text search", "Plugin marketplace", "Installing and managing plugins", "Impact on large codebases"] },
-    ],
+    challenge: "Build a hook, connect an MCP server, and create a custom slash command. Demo the composed workflow end-to-end.",
+    output: "Custom hook + MCP server connection + custom slash command",
     color: C.green,
     competencies: {
-      "pe-pre": "Architect a Claude Code integration pattern for a customer evaluation — hooks for guardrails, MCP for their internal tools, slash commands for team workflows — and present it as a reference architecture",
-      "pe-post": "Build and deploy custom MCP servers, hooks, and slash commands in a customer's environment — debugging integration issues live and leaving behind working implementations",
-      "sa": "Design a phased Claude Code adoption plan — from individual developer pilot to team-wide deployment — with integration patterns for the customer's existing toolchain (Jira, Datadog, CI/CD)",
-      "ar": "Build custom tooling with the Agent SDK — automated code review pipelines, evaluation harnesses, and workflows that connect Claude Code to model training infrastructure",
+      "pe-pre": "Architect a Claude Code integration pattern for a customer evaluation — hooks for guardrails, MCP for their tools, slash commands for team workflows",
+      "pe-post": "Build and deploy custom MCP servers, hooks, and slash commands in a customer's environment — debugging integration issues live",
+      "sa": "Design a phased Claude Code adoption plan with integration patterns for the customer's existing toolchain (Jira, Datadog, CI/CD)",
+      "ar": "Build custom tooling with the Agent SDK — automated code review pipelines, evaluation harnesses, and multi-agent workflows",
     },
   },
   {
     id: 4, number: "04", day: "Day 4",
-    title: "Customer scenarios",
-    subtitle: "Role-specific breakouts. Handle security reviews, architect enterprise deployments, navigate cost conversations, and present to real skeptics.",
-    customerFraming: "Handle the three conversations that close deals: the CISO, the VP of Engineering, and the Copilot skeptic.",
-    clientScenario: { company: "Three different clients", industry: "Cross-industry", situation: "Three client conversations back-to-back. Nova Insurance's CISO grills you on security. Atlas Manufacturing's VP wants a deployment plan for 200 developers on AWS. Prism Analytics' engineering manager already uses Copilot and doesn't see why they need another tool." },
+    title: "Role-specific scenarios",
+    swbat: "Connect Claude Code to their role and what their customers may need or use it for",
+    subtitle: "Role breakouts — each path gets tailored scenarios covering security, deployment, competitive positioning, and customer conversations.",
+    clientScenario: { company: "Vertex Dynamics", industry: "Enterprise SaaS", situation: "Vertex Dynamics is a 200-person engineering org evaluating Claude Code for company-wide adoption. Each role engages with a different aspect: Pre-Sales runs the technical evaluation, Post-Sales handles implementation, SA designs the adoption roadmap, and Applied Research scopes advanced capabilities. Same company, four perspectives." },
     materials: [
-      { id: "M4a", label: "Claude Code vs. Competition battlecard", when: "Have open during the Copilot skeptic role-play (step 3)" },
-      { id: "M4b", label: "Enterprise Deployment talk track", when: "Reference during the VP of Engineering role-play (step 2)" },
-      { id: "M4c", label: "Demo Planning worksheet", when: "Fill out after role-plays to plan your first real demo" },
-      { id: "F6a", label: "Security Objection Handler", when: "Your cheat sheet for the CISO role-play (step 1)" },
+      { id: "M4a", label: "Claude Code vs. Competition battlecard", when: "Reference during competitive positioning discussions" },
+      { id: "M4b", label: "Enterprise Deployment talk track", when: "Reference during deployment architecture work" },
+      { id: "M4c", label: "Demo Planning worksheet", when: "Plan your role-specific demo" },
+      { id: "F6a", label: "Security Objection Handler", when: "Your cheat sheet for security conversations" },
+      { id: "F6b", label: "Security Architecture Diagram", when: "Visual reference for the defense-in-depth model" },
+      { id: "F7a", label: "Deployment Path Finder", when: "Decision tree for deployment options" },
       { id: "F7b", label: "Cost & ROI Pocket Math", when: "Quick math reference for cost conversations" },
     ],
-    skills: ["Security objection handling", "Enterprise deployment architecture", "Cost & ROI conversations", "Competitive positioning", "Live demo skills"],
+    skills: ["Security model", "Best practices", "Competitive positioning", "Deployment architecture", "Customer objection handling"],
     modality: { live: "90 min (breakouts)", lab: "30 min", selfPaced: "none" },
-steps: [
-      { title: "Prepare for the security role-play", context: "browser", materialRef: { id: "F6a", note: "Print the Security Objection Handler battlecard — you\'ll need it" }, desc: "Review the security foundations you covered earlier (Security tab under Claude Code). You'll need fluent recall of sandboxing, permissions, hooks, and managed settings. Open the Anthropic Trust Center to have it ready.", tip: "The order matters: start with sandboxing (OS-level), then permissions (tool-level), then hooks (team-level), then managed settings (admin-level). Layer by layer builds confidence." },
-      { title: "Role-play 1: The CISO", context: "claude", desc: "Your partner plays a CISO who asks tough security questions. Use Claude Code to pull up real documentation and demonstrate security features live.", prompt: "I'm preparing for a meeting with a CISO who will ask about: sandboxing and filesystem isolation, data retention and training opt-out, prompt injection protections, and SOC 2 compliance. Help me rehearse — play the CISO and challenge my answers.", tip: "Practice answering without reading from notes. The CISO will trust you more if you can explain the security model from memory, then show them the documentation for specifics." },
-      { title: "Role-play 2: The VP of Engineering", context: "claude", desc: "Now your partner is a VP who wants a deployment plan for 200 developers on AWS. This is a cost and architecture conversation.", prompt: "I need to present a Claude Code deployment plan for a 200-developer team on AWS. Help me build: a Bedrock deployment architecture, a phased rollout from pilot to org-wide, a cost estimate using ~$6/dev/day average, and an ROI comparison against the cost of additional engineering hires.", tip: "Lead with the ROI framing: $6/day × 200 devs = ~$1,200/day. If each dev saves 1 hour, that's 200 hours × $150/hour fully-loaded = $30,000/day in recovered time. 25× return." },
-      { title: "Role-play 3: The Copilot skeptic", context: "claude", desc: "Your partner is an engineering manager who loves Copilot and doesn't see why they need Claude Code. Handle the objection.", prompt: "Help me prepare for an objection handling conversation where the prospect says 'We already use GitHub Copilot and our developers love it. Why would we switch to Claude Code?' Give me the honest positioning — where we're better, where they're different, and how they can coexist.", tip: "Don't trash Copilot — it loses trust. Instead: Copilot is excellent at line-level autocomplete. Claude Code operates at the project level. Many teams use both. The question isn't 'replace' — it's 'what can your team do now that they couldn't before?'" },
-      { title: "Build your competitive battlecard", context: "claude", materialRef: { id: "M4a", note: "Compare your work against the Claude Code vs. Competition battlecard" }, desc: "Use Claude to help you create a reference document you'll use in the field.", prompt: "Create a competitive battlecard comparing Claude Code vs GitHub Copilot vs Cursor vs Devin. For each competitor, include: what they do well, where Claude Code is stronger, honest gaps, and the recommended positioning angle. Format it as a clean reference I can pull up during sales calls." },
-      { type: "quick-check", question: "A prospect says: 'We already have Copilot, why do we need Claude Code?' What's the strongest positioning?", options: [
-        { text: "Claude Code is better than Copilot at everything — they should switch", correct: false },
-        { text: "They serve different layers: Copilot for line-level autocomplete, Claude Code for project-level agentic tasks. Many teams run both.", correct: true },
-        { text: "Claude Code is cheaper per seat", correct: false },
-      ], explanation: "Position Claude Code as a new capability, not a replacement. Copilot suggests the next line; Claude Code understands the whole project and executes multi-step changes." },
-      { type: "checkpoint", title: "Debrief with your cohort", desc: "Share what worked and what didn't in each role-play. Which objections were hardest to handle? Where did you feel most confident? What do you need to practice more before your first real customer conversation?" },
+    steps: [
+      // Role-specific content varying by path
+      { title: "Role-specific scenarios", contentType: "self-guided", desc: "Content tailored to your selected role path. PE Pre-Sales focuses on technical evaluations and demos. PE Post-Sales on implementation and pair programming. SA on adoption roadmaps and architecture. Applied Research on advanced capabilities and the Agent SDK. Each role works on the same company (Vertex Dynamics) but from different angles." },
+      { title: "Role-specific hands-on", contentType: "hands-on", desc: "Four scenario tracks for Vertex Dynamics — each role gets different aspects and instructions. The goal is to understand how your job connects to the other roles in the org." },
+      // Security model, best practices
+      { title: "Security model and best practices", contentType: "self-guided", desc: "The defense-in-depth security model — sandboxing, permissions, hooks, managed settings, and compliance. Weighted by role: deeper for SA and Pre-Sales, practical for Post-Sales, architectural for Applied Research.", materialRef: { id: "F6a", note: "Use the Security Objection Handler for quick reference" } },
+      // Competitive positioning, deployment architecture, objection handling
+      { title: "Competitive positioning", contentType: "self-guided", desc: "Claude Code vs. Copilot vs. Cursor vs. Devin — honest positioning, where we're stronger, where they're different, and how they coexist.", materialRef: { id: "M4a", note: "Reference the Competition battlecard" } },
+      { title: "Deployment architecture", contentType: "self-guided", desc: "Enterprise deployment options — Bedrock, Vertex, direct API. Phased rollout patterns, cost modeling, and managed settings for admin control.", materialRef: { id: "F7a", note: "Use the Deployment Path Finder decision tree" } },
+      { title: "Customer objection handling", contentType: "self-guided", desc: "The objections that come up in every customer conversation — security, cost, 'we already have Copilot,' developer dependency, and privacy concerns. How to handle each one honestly and effectively." },
+      // Hands-on: 4 tailored scenarios
+      { title: "Scenario exercise", contentType: "hands-on", desc: "Work through your role-specific scenario for Vertex Dynamics. Show how to do your job and how your work connects to the other roles in the org. Each scenario has different deliverables matched to your path.", materialRef: { id: "M4c", note: "Use the Demo Planning worksheet to structure your approach" } },
+      { type: "checkpoint", title: "Day 4 reflection", desc: "Which customer objection was hardest to handle? How does your role connect to the other roles working with Vertex Dynamics? What do you need to practice more?" },
     ],
-        challenge: "Three role-plays: (1) Walk Nova's CISO through sandboxing, permissions, managed settings, and compliance. (2) Build Atlas a Bedrock deployment architecture with phasing and cost projections. (3) Position Claude Code honestly against Copilot for Prism — where it's different, where it's better, and how they coexist.",
-    output: "Security FAQ for Nova + Atlas deployment template + Prism competitive battlecard + demo scripts",
+    challenge: "Complete your role-specific scenario for Vertex Dynamics. Demonstrate how your work connects to the other roles in the org.",
+    output: "Role-specific deliverables for Vertex Dynamics + security/competitive/deployment reference materials",
     color: C.orange,
     competencies: {
-      "pe-pre": "Run a full technical evaluation against a real customer use case — build a reference architecture, handle objections on security and cost, position against Copilot/Cursor/Devin, and close with a next-steps demo plan",
-      "pe-post": "Navigate a live customer debugging session using Claude Code — diagnose a failing integration, fix it with the customer watching, and turn the save into a relationship-building moment",
-      "sa": "Assess a customer's engineering org, identify the highest-leverage Claude Code insertion points, position honestly against competitors, and present a strategic adoption roadmap with timeline and milestones",
-      "ar": "Advise on Claude Code's capabilities and limitations for ML/training workflows — propose custom tooling workarounds, design evaluation pipelines, and scope what's possible vs. what requires model-level changes",
+      "pe-pre": "Run a full technical evaluation — build a reference architecture, handle objections on security and cost, position against competitors, and close with a next-steps demo plan",
+      "pe-post": "Navigate a live customer implementation — diagnose issues, pair-program through the hard parts, and deliver a working system",
+      "sa": "Assess a customer's engineering org, identify the highest-leverage insertion points, position honestly against competitors, and present a strategic adoption roadmap",
+      "ar": "Advise on capabilities and limitations for advanced workflows — propose custom tooling, design evaluation pipelines, and scope what's possible vs. what requires model-level changes",
     },
   },
   {
     id: 5, number: "05", day: "Day 5",
-    title: "Ship it",
-    subtitle: "Blind customer brief. Working demo. Peer review. Make it count.",
-    customerFraming: "Prove you can go from a blind customer brief to a working demo and a compelling pitch — under pressure.",
-    clientScenario: { company: "Unknown — blind brief", industry: "Varies", situation: "A customer brief you've never seen — a real company with a real problem. You have 2 hours to understand their world, architect a solution, build a working demo, and present to your cohort as if they were the customer's leadership team." },
+    title: "Capstone — Ship it",
+    swbat: "Break customer problem down, identify relevant Claude Code tools, and build custom solution to customer problem on the fly using Claude Code",
+    subtitle: "Blind brief matched to your role. Build a working demo from scratch. Present to peers. Integrates all Days 1-4 skills.",
     materials: [
-      { id: "M5", label: "Capstone Presentation Guide", when: "Structure your 10-minute presentation with this framework" },
+      { id: "M5", label: "Capstone Presentation Guide", when: "Structure your presentation with this framework" },
       { id: "M4c", label: "Demo Planning worksheet", when: "Use to plan your demo moments before building" },
     ],
-    skills: ["End-to-end architecture", "Live demo", "Peer review", "Presentation"],
+    skills: ["Selling Claude", "End-to-end architecture", "Live demo", "Peer review", "Presentation"],
     modality: { live: "120 min session", lab: "integrated", selfPaced: "none" },
-steps: [
-      { title: "Receive your blind customer brief", desc: "Your facilitator will hand you a customer brief you haven't seen before. Read it carefully — you have 15 minutes to analyze before you start building. Identify: the customer's industry, team size, current tools, key pain points, and what success looks like for them.", tip: "Don't jump to solutions immediately. Spend the first 5 minutes understanding the customer's world. The best demos are tailored to what the customer cares about, not what you're most comfortable showing." },
-      { title: "Architect your solution", context: "claude", materialRef: { id: "M4c", note: "Use the Demo Planning worksheet to structure your approach" }, desc: "Use Claude Code to help you plan your approach. Think about which Claude Code features map to their pain points.", prompt: "I've received this customer brief: [paste brief]. Help me architect a Claude Code solution for them. I need: which features to demo (pick 3-4 max), a CLAUDE.md tailored to their codebase, which MCP integrations would be most valuable, and a phased rollout plan.", tip: "Limit yourself to 3-4 demo moments. Too many features overwhelms the audience. Pick the ones that map directly to their stated pain points." },
-      { title: "Build your working demo", context: "claude", desc: "You have 45 minutes to build a working demo that addresses the customer brief. Use everything you've learned — CLAUDE.md, hooks, MCP, slash commands.", tip: "Build for reliability, not flash. A simple demo that works perfectly is better than an ambitious one that breaks. Test your demo at least twice before presenting." },
-      { type: "quick-check", question: "You have 45 minutes to build a demo for an unfamiliar customer brief. What should you do first?", options: [
-        { text: "Start coding immediately to maximize build time", correct: false },
-        { text: "Spend 5-10 minutes analyzing the brief and planning your demo's 3 key moments before touching code", correct: true },
-        { text: "Ask the facilitator what to build", correct: false },
-      ], explanation: "Planning pays off under time pressure. Identify the customer's pain point, your 3 demo moments, and the story arc before building. Teams that plan first consistently outperform those who dive in." },
-      { title: "Prepare your 10-minute presentation", desc: "Structure your presentation: 2 minutes on understanding their problem, 6 minutes on the live demo, 2 minutes on next steps and rollout plan. Practice the transitions between sections.", tip: "Start with their problem, not your solution. 'You mentioned your team spends 40% of their time on migration work — let me show you how that changes.' Then demo. Then close with a concrete next step." },
-      { title: "Present to your cohort", desc: "Deliver your presentation. Your cohort will score you on: clarity of problem framing, technical depth of the demo, relevance to the customer brief, and confidence in handling questions. This simulates your first real customer engagement." },
-      { type: "checkpoint", title: "Peer feedback and reflection", desc: "After all presentations: What was the most effective demo you saw today? What technique will you steal for your own customer conversations? What's the one thing you want to practice more before your first real engagement?" },
+    steps: [
+      // Selling Claude
+      { title: "Selling Claude", contentType: "self-guided", desc: "How to position and sell Claude Code effectively — the value proposition, the demo moments that matter, handling live questions, and closing with clear next steps." },
+      // Hands-on: Blind brief, build, present
+      { title: "Receive your blind brief", contentType: "hands-on", desc: "A customer brief you've never seen, matched to your role. Read it carefully — identify the customer's industry, team size, current tools, key pain points, and what success looks like.", tip: "Don't jump to solutions immediately. Spend the first 5 minutes understanding the customer's world." },
+      { title: "Architect and build", contentType: "hands-on", desc: "Use everything you've learned across Days 1-4: CLAUDE.md, hooks, MCP, slash commands, prompt patterns, and your role-specific knowledge. Build a working demo/implementation from scratch.", materialRef: { id: "M4c", note: "Use the Demo Planning worksheet to structure your approach" }, tip: "Build for reliability, not flash. A simple demo that works perfectly beats an ambitious one that breaks." },
+      { title: "Present to peers", contentType: "hands-on", desc: "Deliver your presentation. Your cohort scores on: problem framing (25%), technical depth (25%), relevance to the brief (25%), and confidence under Q&A (25%).", materialRef: { id: "M5", note: "Use the Capstone Presentation Guide for structure" } },
+      { title: "Peer feedback", contentType: "hands-on", desc: "Give and receive structured feedback. What was the most effective demo moment? What technique will you adopt? What's the one thing to practice before your first real engagement?" },
+      { type: "checkpoint", title: "Capstone reflection", desc: "You've gone from a blind brief to a working demo under time pressure. What would you do differently? Which Days 1-4 skills were most valuable? What's your plan for continued practice?" },
     ],
-        challenge: "From a blind customer brief: identify the 3–4 Claude Code features that map to their pain points, build a tailored working demo, and deliver a 10-minute presentation. Your cohort scores on: problem framing (25%), technical depth (25%), relevance to the brief (25%), and confidence under Q&A (25%).",
-    output: "Client-tailored capstone presentation + working demo + peer feedback",
+    challenge: "From a blind customer brief: build a working demo/implementation from scratch using all Days 1-4 skills. Present to peers with feedback.",
+    output: "Working demo + presentation + peer feedback",
     color: C.green,
     competencies: {
-      "pe-pre": "Deliver a compelling, tailored Claude Code demo from a cold customer brief in under 2 hours — including architecture proposal, integration patterns, live demo, and a clear next-steps ask",
-      "pe-post": "Scope, build, and deliver a working Claude Code implementation from a customer brief — pair-program through the hard parts, leave behind documentation, and hand off a running system",
-      "sa": "Present a complete Claude Code adoption strategy — architecture diagrams, phased rollout, integration patterns, ROI estimates, and honest risk assessment — from a blind customer brief",
-      "ar": "Design and present a Claude Code-powered research workflow — custom Agent SDK tooling, evaluation metrics, integration with training pipelines — with a working prototype",
+      "pe-pre": "Deliver a compelling, tailored Claude Code demo from a cold customer brief — including architecture, integration patterns, live demo, and a clear next-steps ask",
+      "pe-post": "Scope, build, and deliver a working Claude Code implementation from a customer brief — pair-program through the hard parts and hand off a running system",
+      "sa": "Present a complete Claude Code adoption strategy — architecture, phased rollout, integration patterns, ROI estimates, and honest risk assessment — from a blind brief",
+      "ar": "Design and present a Claude Code-powered research workflow — custom Agent SDK tooling, evaluation metrics, and a working prototype",
     },
   },
 ];
@@ -1243,49 +1915,52 @@ steps: [
 // ─── DAY PREWORK (Foundation readings assigned per day) ───
 const DAY_PREWORK = {
   1: {
-    duration: "30 min",
-    description: "Complete these readings before the live session so you arrive ready to install and build.",
+    duration: "45 min",
+    description: "Read these before the session so you arrive ready to install and start building.",
     foundations: [
-      { sectionId: "how-to-use", label: "How to Use Claude Code", why: "Know the four surfaces (CLI, desktop, mobile, web) so you understand what you're installing and which interface to reach for." },
-      { sectionId: "how-it-thinks", label: "How It Thinks", why: "Learn the agentic loop (read, plan, act, verify) so the live demo makes sense." },
+      { sectionId: "day1-what-is-claude-code", label: "What is Claude Code, Installation, First Interaction", why: "Understand what agentic coding is, how it differs from autocomplete, and what to expect during installation." },
+      { sectionId: "day1-agentic-loop", label: "Agentic Loop, Context Window, Tools, Permissions", why: "Learn how Claude Code works under the hood before experiencing it firsthand." },
     ],
     materials: [
-      { id: "M1", label: "Install & First Run cheat sheet", why: "Skim the install steps so you're not seeing them cold." },
+      { id: "M1c", label: "What is Claude Code (printable)", why: "Printable quick reference for installation and first interaction." },
+      { id: "M1b", label: "Command Glossary", why: "Desk reference — every command, shortcut, and flag in one place." },
     ],
   },
   2: {
-    duration: "30 min",
-    description: "Read the configuration foundations and understand model selection before the live CLAUDE.md authoring session.",
+    duration: "45 min",
+    description: "Read these before the session so you arrive ready to write your first CLAUDE.md and practice prompt patterns.",
     foundations: [
-      { sectionId: "configuration", label: "Configuration & Customization", why: "Understand CLAUDE.md, hooks, permissions, and settings before the live CLAUDE.md authoring session." },
-      { sectionId: "what-it-costs", label: "What It Costs", why: "Understand model selection (Haiku, Sonnet, Opus) and token pricing — you'll make model choices in your CLAUDE.md today." },
+      { sectionId: "day2-claude-md", label: "CLAUDE.md Files, Settings Files, CLI Flags", why: "Learn CLAUDE.md authoring, hierarchy, settings, and CLI flags before the hands-on exercises." },
+      { sectionId: "day2-plan-mode", label: "Plan Mode, Slash Commands, Session Management", why: "Understand plan mode, session tools, and keyboard shortcuts before practicing them." },
+      { sectionId: "day2-prompt-patterns", label: "Prompting Patterns, Common Workflows", why: "Study the prompt patterns you'll practice in the lab." },
     ],
     materials: [
-      { id: "M2a", label: "CLAUDE.md Builder worksheet", why: "Familiarize yourself with the worksheet structure before the live authoring exercise." },
+      { id: "M2a", label: "CLAUDE.md Builder worksheet", why: "Familiarize yourself with the worksheet you'll fill out during the lab." },
     ],
   },
   3: {
     duration: "45 min",
-    description: "Study the integration patterns and hooks architecture before the live build session.",
+    description: "Read these before the session so you arrive ready to build hooks, connect MCP servers, and create custom commands.",
     foundations: [
-      { sectionId: "configuration", label: "Review: Configuration (hooks & extensions)", why: "Review hooks syntax and permission tiers — you'll build them live today." },
-      { sectionId: "how-it-thinks", label: "Review: How It Thinks", why: "Revisit the agentic loop — understanding tool dispatch helps when you wire up hooks and MCP servers." },
+      { sectionId: "day3-core-extensions", label: "Hooks, MCP Servers, Sub-Agents, Custom Commands", why: "Learn how the core extension points work before building them." },
+      { sectionId: "day3-ide-integration", label: "IDE Integration (VS Code, JetBrains)", why: "Understand VS Code and JetBrains integration before trying them." },
+      { sectionId: "day3-cicd", label: "CI/CD Automation, Headless Mode, GitHub Actions", why: "Understand headless mode and GitHub Actions integration." },
+      { sectionId: "day3-agent-sdk", label: "Agent SDK Intro, Building MCP Servers", why: "Introduction to the Agent SDK and building custom MCP servers." },
     ],
     materials: [
-      { id: "M3", label: "Integration Patterns architecture reference", why: "Study the architecture diagrams for hooks, MCP, and slash commands before building them." },
+      { id: "M3", label: "Integration Patterns", why: "Architecture diagrams for how hooks, MCP, and slash commands connect." },
     ],
   },
   4: {
     duration: "45 min",
-    description: "Study the personas, security, and enterprise foundations before today's competitive positioning and customer role-plays.",
+    description: "Study security, deployment, and competitive positioning before your role-specific breakout.",
     foundations: [
-      { sectionId: "who-uses-it", label: "Who Uses Claude Code", why: "Know the five buyer personas and their use cases — you'll role-play customer conversations today." },
-      { sectionId: "security", label: "Security & Trust", why: "Fluency in the defense-in-depth model is essential for the CISO objection-handling role-play." },
-      { sectionId: "enterprise", label: "Enterprise Deployment & Costs", why: "Understand deployment options and cost models before the VP of Engineering role-play." },
-      { sectionId: "what-it-costs", label: "Review: What It Costs", why: "Revisit pricing and model selection — you'll need cost figures ready for customer conversations." },
+      { sectionId: "who-uses-it", label: "Who Uses Claude Code", why: "Know the buyer personas and use cases for your role-specific scenarios." },
+      { sectionId: "security", label: "Security & Trust", why: "Fluency in the defense-in-depth model is essential for security conversations." },
+      { sectionId: "enterprise", label: "Enterprise Deployment & Costs", why: "Understand deployment options and cost models for architecture discussions." },
     ],
     materials: [
-      { id: "F6a", label: "Security Battlecard", why: "Your cheat sheet for the CISO role-play." },
+      { id: "F6a", label: "Security Battlecard", why: "Quick reference for security objection handling." },
       { id: "F7a", label: "Deployment Path Finder", why: "Decision tree for Bedrock vs. Vertex vs. Foundry." },
       { id: "F7b", label: "Cost & ROI Pocket Math", why: "Quick math reference for cost conversations." },
     ],
@@ -1299,63 +1974,63 @@ const DAY_PHASE_CONFIG = {
     mode: "standard",
     live: {
       duration: "45 min",
-      description: "Your facilitator demos the full install, first agentic task, and VS Code comparison. Follow along and take notes — you'll repeat these steps independently in the lab.",
+      description: "Your facilitator reviews key concepts from the pre-work handouts and demos the install + first agentic task. Follow along and take notes.",
       stepIndices: [],
       useGuideSegments: true,
     },
     lab: {
       duration: "45 min",
-      description: "Now it's your turn. Work through all the steps independently on the sample repo.",
-      stepIndices: [0, 1, 2, 3, 4, 5, 6],
+      description: "Install Claude Code, authenticate, and complete your first agentic task independently.",
+      stepIndices: [0, 1, 2, 3, 4],
     },
   },
   2: {
     mode: "standard",
     live: {
       duration: "60 min",
-      description: "Watch the facilitator build a CLAUDE.md live, demo the before/after comparison, and walk through session management, Plan Mode, and prompt patterns.",
-      stepIndices: [0, 1, 2, 3, 6, 8, 9, 10, 11, 12, 13],
+      description: "Your facilitator reviews key concepts from the pre-work handouts and demos CLAUDE.md authoring, session management, and prompt patterns.",
+      stepIndices: [],
       useGuideSegments: true,
     },
     lab: {
       duration: "60 min",
-      description: "Write your own CLAUDE.md for the messy repo, iterate on it based on Claude's output, and practice the full workflow.",
-      stepIndices: [4, 5, 7, 14],
+      description: "Practice slash commands, write your own CLAUDE.md with the before/after demo, and practice prompt patterns on real tasks.",
+      stepIndices: [0, 1, 2, 3, 4],
     },
   },
   3: {
     mode: "standard",
     live: {
       duration: "45 min",
-      description: "The facilitator builds hooks, sets up an MCP server, creates a slash command, and demos the composed workflow end-to-end.",
-      stepIndices: [0, 1, 2, 3, 4, 5, 6, 7],
+      description: "Your facilitator reviews key concepts from the pre-work handouts and demos hooks, MCP servers, and custom commands.",
+      stepIndices: [],
       useGuideSegments: true,
     },
     lab: {
       duration: "75 min",
-      description: "Build your own hooks, MCP server, slash command, and composed workflow for Arcadia Financial.",
-      stepIndices: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+      description: "Try IDE integration, build a hook, connect an MCP server, and create a custom slash command.",
+      stepIndices: [0, 1, 2, 3, 4, 5],
     },
   },
   4: {
     mode: "standard",
     live: {
       duration: "90 min",
-      description: "Three role-plays in pairs: CISO security review, VP deployment architecture, and Copilot skeptic handling.",
-      stepIndices: [0, 1, 2],
+      description: "Role-specific breakouts — each path works through tailored scenarios for Vertex Dynamics.",
+      stepIndices: [0, 1, 2, 3, 4, 5],
       useGuideSegments: true,
     },
     lab: {
       duration: "30 min",
-      description: "Build your competitive battlecard and debrief with your cohort.",
-      stepIndices: [3, 4, 5],
+      description: "Complete your role-specific scenario exercise and debrief.",
+      stepIndices: [6, 7],
     },
   },
   5: {
     mode: "integrated",
     duration: "120 min",
-    description: "Capstone: receive a blind customer brief, build a working demo, and present to your cohort. One continuous session.",
-    stepIndices: [0, 1, 2, 3, 4, 5, 6],
+    description: "Capstone: selling Claude, blind brief, build a working demo, and present to your cohort.",
+    stepIndices: [0, 1, 2, 3, 4, 5],
   },
 };
 
@@ -1365,119 +2040,116 @@ const FACILITATOR_GUIDES = [
     moduleId: 1, day: "Day 1", title: "First contact",
     duration: "90 min total (45 min live + 45 min lab)",
     slidesDeck: "slides/basecamp-deck.html",
-    slidesNote: "Basecamp slide deck, Day 1 section — covers the agentic difference, the agentic loop diagram, terminal vs. IDE comparison, and the live install demo script.",
+    slidesNote: "Basecamp slide deck, Day 1 section — covers what Claude Code is, the agentic loop, context window, tools, and permissions.",
     setup: [
-      "Ensure the sample repo (claude-code-sample-api) is accessible and npm install completes cleanly",
+      "Ensure a sample repo is accessible and npm install completes cleanly",
       "Have a backup install plan for corporate proxy/VPN issues — pre-download the binary if needed",
       "Test both terminal and VS Code extension installs on the presentation machine",
-      "Pre-load the Meridian Health client scenario so you can reference it naturally",
     ],
     segments: [
-      { time: "0–5 min", title: "Open with the client scenario", notes: "Don't start with 'today we'll learn to install Claude Code.' Start with: 'Meridian Health has an 8-person backend team. New endpoints take them 2–3 days. By the end of this session, you'll be able to show them how to do it in minutes.' Frame the entire session through the client lens." },
-      { time: "5–15 min", title: "Live install walkthrough", notes: "Install Claude Code from scratch on a clean terminal. Narrate every step — what's happening, what could go wrong, what you'd tell the customer. Then install the VS Code extension. Call out the differences explicitly: 'Terminal gives you raw speed. IDE gives you inline diffs. Same engine underneath.'" },
-      { time: "15–30 min", title: "First agentic task — live demo", notes: "Open the sample API repo. Show Claude reading the directory, package.json, and existing code before you've typed anything. Then prompt: 'Add a /health endpoint with tests.' Narrate the agentic loop as it happens: 'See — it's reading the existing routes to match the pattern. Now it's planning. Now it's writing. Now it's running the tests.'" },
-      { time: "30–40 min", title: "VS Code comparison", notes: "Do the same task from VS Code. Highlight inline diffs, the file tree, checkpoints. Ask the group: 'When would you reach for the terminal vs. the IDE in a customer demo?'" },
-      { time: "40–45 min", title: "Bridge to the lab", notes: "'You've seen me do it. Now you're going to do it as if you're onboarding Meridian's team. Your job isn't just to install Claude Code — it's to deliver their first win.'" },
+      { time: "0–10 min", title: "What is Claude Code?", notes: "Start with the big picture: what Claude Code is, how it differs from autocomplete tools, and the surfaces available (CLI, IDE, desktop, mobile, web). Frame it as an agentic coding tool, not a chatbot." },
+      { time: "10–20 min", title: "The agentic loop and context window", notes: "Walk through Read, Plan, Edit, Test, Iterate. Explain context window basics — what gets loaded, how it fills up, why it matters. This is the conceptual foundation for everything that follows." },
+      { time: "20–30 min", title: "Tool overview and permissions", notes: "Show what tools Claude has access to — file read/write, terminal, search. Then cover the permission system: what requires approval, what runs automatically, how to configure trust levels." },
+      { time: "30–40 min", title: "Live install and first interaction", notes: "Install Claude Code from scratch. Show it reading the directory structure before you type anything. Narrate what's happening: 'This is context gathering — the first step of the agentic loop.'" },
+      { time: "40–45 min", title: "Bridge to the lab", notes: "'You've seen me do it. Now you're going to install, authenticate, and complete your first agentic task independently.'" },
     ],
-    labNotes: "45 min. Trainees work through the steps independently. Watch for proxy/firewall issues, confusion about terminal vs. IDE, and trainees who finish early (give them the troubleshooting exercise). Debrief: 'What would you say to Meridian's team lead? How do you explain the agentic loop in one sentence?'",
+    labNotes: "45 min. Students work through installation, authentication, and their first agentic task independently. Watch for proxy/firewall issues and students who finish early (give them additional tasks). Debrief: 'What surprised you? How would you describe the agentic loop in one sentence?'",
     keyMoments: [
       "The first time Claude reads the codebase before being asked — call this out, it's the 'aha' for most people",
       "When Claude runs tests after making changes — this is the 'verify' step and it surprises people",
-      "If Claude makes a mistake and self-corrects — don't skip this, it's a powerful demo moment",
+      "If Claude makes a mistake and self-corrects — don't skip this, it's a powerful moment",
     ],
   },
   {
-    moduleId: 2, day: "Day 2", title: "Prompt craft for agentic coding",
+    moduleId: 2, day: "Day 2", title: "Prompt craft",
     duration: "120 min total (60 min live + 60 min lab)",
     slidesDeck: "slides/basecamp-deck.html",
-    slidesNote: "Basecamp slide deck, Day 2 section — CLAUDE.md anatomy, before/after comparison, prompt patterns, session management commands, and common anti-patterns.",
+    slidesNote: "Basecamp slide deck, Day 2 section — CLAUDE.md anatomy, before/after comparison, prompt patterns, session management, plan mode.",
     setup: [
-      "Fork and prepare the messy repo — ensure it has intentional inconsistencies",
+      "Prepare a sample repo for CLAUDE.md authoring exercise",
       "Have a 'bad CLAUDE.md' example ready to show over-specification",
-      "Pre-load the Lumen Logistics client scenario",
-      "Test /compact and /clear so you can demo session management smoothly",
+      "Test /compact, /clear, /cost, and plan mode so you can demo smoothly",
     ],
     segments: [
-      { time: "0–5 min", title: "Open with Lumen's problem", notes: "'Lumen Logistics has 40 developers and zero documentation. New hires take three weeks to become productive. Their CTO asked us: can Claude Code fix that?' CLAUDE.md isn't a config file — it's the answer to a real customer pain point." },
-      { time: "5–20 min", title: "Live CLAUDE.md authoring", notes: "Open the messy repo without a CLAUDE.md. Show how Claude guesses at conventions — sometimes wrong. Then create a CLAUDE.md live. Restart Claude and show the difference: faster startup, targeted reads, correct conventions. This before/after is the most persuasive demo in the entire program." },
-      { time: "20–35 min", title: "Multi-step refactoring workflow", notes: "Refactor the messiest module using your CLAUDE.md. Pause: 'What would you add to the CLAUDE.md based on what you just saw?' This teaches the iteration loop." },
-      { time: "35–50 min", title: "Session management deep dive", notes: "Demo /compact, /clear, /cost, and Plan Mode. Show a real scenario: start a long task, notice context degradation, recover with /compact. This separates 'tried it once' from 'uses it daily.'" },
-      { time: "50–60 min", title: "Failure patterns", notes: "Intentionally trigger failures: over-specified CLAUDE.md, kitchen-sink session. Demonstrate recovery. 'In a customer engagement, you'll see this. Here's how you diagnose it.'" },
+      { time: "0–10 min", title: "CLAUDE.md authoring", notes: "What CLAUDE.md is, how to write one, what goes in it. Show a before/after: Claude without CLAUDE.md (guesses at conventions) vs. with CLAUDE.md (follows them). This before/after is the most persuasive demo in the program." },
+      { time: "10–20 min", title: "CLAUDE.md hierarchy and settings", notes: "Show the cascade: personal → project → subdirectory. Cover settings.json and CLI flags. The .eslintrc analogy works well for enterprise audiences." },
+      { time: "20–35 min", title: "Plan mode and session management", notes: "Demo plan mode — analyze without editing. Then /compact, /clear, /cost. Show a real scenario: start a long task, notice context degradation, recover with /compact." },
+      { time: "35–50 min", title: "Prompt patterns and workflows", notes: "Walk through the WHAT + HOW pattern, constraint specification, iterative refinement. Show common workflows: refactoring, adding features, writing tests, debugging." },
+      { time: "50–60 min", title: "Bridge to the lab", notes: "'Now you'll write your own CLAUDE.md, run the before/after, and practice these prompt patterns on real tasks.'" },
     ],
-    labNotes: "60 min. Trainees write their own CLAUDE.md, refactor a module, and practice session management. Watch for CLAUDE.md files over 200 lines and trainees skipping the before/after comparison. Debrief: show CLAUDE.md approaches, compare, and coach the CTO pitch.",
+    labNotes: "60 min. Students write their own CLAUDE.md, run the before/after comparison, and practice prompt patterns. Watch for CLAUDE.md files over 200 lines and students skipping the before/after. Debrief: share approaches, compare, and discuss what worked.",
     keyMoments: [
-      "The before/after CLAUDE.md comparison — this single demo wins more customer conversations than anything else",
-      "When Plan Mode reveals Claude's reasoning — builds trust with skeptical technical audiences",
-      "When a trainee's CLAUDE.md is too prescriptive and output suffers — teaches restraint",
+      "The before/after CLAUDE.md comparison — this single demo is the most persuasive in the program",
+      "When Plan Mode reveals Claude's reasoning — builds trust",
+      "When a student's CLAUDE.md is too prescriptive and output suffers — teaches restraint",
     ],
   },
   {
-    moduleId: 3, day: "Day 3", title: "Extend and customize",
+    moduleId: 3, day: "Day 3", title: "Extend & customize",
     duration: "120 min total (45 min live + 75 min lab)",
     slidesDeck: "slides/basecamp-deck.html",
-    slidesNote: "Basecamp slide deck, Day 3 section — integration architecture diagram, hooks as guardrails, MCP connection model, slash commands for team workflows, composed workflow demo.",
+    slidesNote: "Basecamp slide deck, Day 3 section — hooks, MCP, slash commands, IDE integration, CI/CD, Agent SDK.",
     setup: [
-      "Prepare the mock Jira MCP server and test it responds correctly",
-      "Have working hook and Skill configs ready as fallbacks",
-      "Pre-load the Arcadia Financial client scenario",
-      "Test the full composed workflow end to end",
+      "Prepare a sample MCP server and test it responds correctly",
+      "Have working hook and slash command configs ready as fallbacks",
+      "Test IDE extensions in both VS Code and JetBrains if possible",
     ],
     segments: [
-      { time: "0–5 min", title: "Open with Arcadia's requirements", notes: "'Arcadia Financial has 60 engineers building a payment platform. Compliance requires: nothing ships without lint, type checks, and tests. Developers waste hours context-switching to Jira. Can Claude Code enforce quality gates and pull context automatically?' Today you build that." },
-      { time: "5–15 min", title: "Hooks — the compliance answer", notes: "Build a pre-commit hook live. Show it catching a deliberate bug. 'When a CISO asks how you control what Claude does, this is the answer. These hooks are enforced gates, not suggestions.'" },
-      { time: "15–25 min", title: "MCP — connecting to the customer's world", notes: "Set up the mock Jira server. Show Claude querying it. 'This is where Claude Code stops being a coding assistant and starts being a platform.'" },
-      { time: "25–35 min", title: "Skills and the composed workflow", notes: "Create a deploy-check Skill. Run the full loop: Jira context → implementation → hooks → deploy-check. 'One prompt. Full context. Automatic quality gates. Ready to ship.'" },
-      { time: "35–45 min", title: "Architecture discussion", notes: "Sketch the integration architecture for Arcadia. 'What other MCP servers would they need? What hooks would compliance want? How would you phase this?'" },
+      { time: "0–10 min", title: "Hooks and MCP servers", notes: "Cover hooks (enforced gates) and MCP (external data sources). Show the difference: hooks enforce, slash commands are opt-in. MCP connects Claude to the customer's world." },
+      { time: "10–20 min", title: "Sub-agents and custom commands", notes: "Cover sub-agents (parallel execution, writer/reviewer pairs) and custom slash commands (team-shareable workflows via git)." },
+      { time: "20–30 min", title: "IDE integration", notes: "Deep dive into VS Code and JetBrains extensions. When to use IDE vs. CLI. Inline diffs, Claude panel, command palette integration." },
+      { time: "30–40 min", title: "CI/CD and headless mode", notes: "Running Claude in non-interactive mode. GitHub Actions integration. Automated code review workflows. This is more relevant for technical roles." },
+      { time: "40–45 min", title: "Agent SDK intro", notes: "Brief intro to the Agent SDK and building MCP servers. What's possible, when to use it. Bridge to the lab." },
     ],
-    labNotes: "75 min — the longest lab. Trainees build hook, MCP server, Skill, and composed workflow. Some will struggle with MCP setup — have fallbacks ready. Goal is the composed demo, not perfecting each piece. Debrief: demo the workflow to a partner playing Arcadia's Head of Engineering.",
+    labNotes: "75 min — the longest lab. Students build a hook, connect an MCP server, and create a custom slash command. Some will struggle with MCP setup — have fallbacks ready. Goal is getting all three working, not perfecting any one piece.",
     keyMoments: [
       "When the hook blocks a bad commit — this is the 'control' answer security teams need",
-      "When Claude pulls Jira context unprompted — the MCP 'aha' moment",
-      "The composed workflow demo — single prompt to shipped feature. This is the enterprise pitch in 60 seconds.",
+      "When Claude pulls external context via MCP — the platform 'aha' moment",
+      "A working composed workflow — hook + MCP + slash command together",
     ],
   },
   {
-    moduleId: 4, day: "Day 4", title: "Customer scenarios",
+    moduleId: 4, day: "Day 4", title: "Role-specific scenarios",
     duration: "120 min total (90 min breakouts + 30 min lab)",
     slidesDeck: null,
-    slidesNote: "No slide deck — entirely role-play and discussion. Have the Anthropic Trust Center open for the security role-play.",
+    slidesNote: "No slide deck — role-specific breakouts and scenario work.",
     setup: [
-      "Pair trainees — mix experience levels",
-      "Share the three client briefs: Nova Insurance, Atlas Manufacturing, Prism Analytics",
+      "Group students by role path",
+      "Prepare the Vertex Dynamics scenario with 4 role-specific briefs",
       "Have competitive positioning data ready: Claude Code vs. Copilot vs. Cursor vs. Devin",
-      "Prepare the ROI calculator: $6/dev/day × team size vs. hourly cost × hours saved",
+      "Have security and deployment reference materials accessible",
     ],
     segments: [
-      { time: "0–5 min", title: "Frame the day", notes: "'No new features today. Today is about the conversations that make or break your first engagements. Three client scenarios, three different playbooks.'" },
-      { time: "5–35 min", title: "Role-play 1: Nova Insurance CISO", notes: "One trainee plays you, one plays the CISO asking about data exfiltration, prompt injection, training data, and compliance. Debrief: coach the defense-in-depth narrative (sandbox → permissions → hooks → managed settings → compliance)." },
-      { time: "35–60 min", title: "Role-play 2: Atlas Manufacturing VP", notes: "200 developers on AWS. Architect the solution live — Bedrock deployment, phasing, cost estimate. Debrief: was the cost math convincing? Did you address 'what if it doesn't work?'" },
-      { time: "60–80 min", title: "Role-play 3: Prism Analytics Copilot skeptic", notes: "Handle the objection. Debrief: did you trash Copilot? (Bad.) Did you position honestly? (Good.) Coach: 'line-level autocomplete vs. project-level agentic work. Many teams use both.'" },
-      { time: "80–90 min", title: "Group debrief", notes: "Which was hardest? What phrases landed? Collect the best one-liners — these become shared team assets." },
+      { time: "0–5 min", title: "Frame the day", notes: "'Today you connect everything you've learned to your specific role. Same company — Vertex Dynamics — but each role engages differently. Your job is to understand your piece and how it connects to the others.'" },
+      { time: "5–30 min", title: "Role-specific content walkthrough", notes: "Each role group works through their tailored content. Pre-Sales focuses on technical evaluation, Post-Sales on implementation, SA on adoption strategy, Applied Research on advanced capabilities." },
+      { time: "30–55 min", title: "Security, positioning, and deployment", notes: "Cover security model, competitive positioning, and deployment architecture — weighted by role relevance. All roles need baseline fluency; depth varies." },
+      { time: "55–80 min", title: "Scenario exercise", notes: "Each role works through their Vertex Dynamics scenario. The goal is showing how your work connects to the other roles in the org." },
+      { time: "80–90 min", title: "Cross-role debrief", notes: "Bring all roles together. Each group shares their perspective on Vertex Dynamics. 'How does your work connect to the other roles? What handoffs need to happen?'" },
     ],
-    labNotes: "30 min. Trainees use Claude Code to build their reference materials: security FAQ, deployment template, competitive battlecard. These are real leave-behinds for the field.",
+    labNotes: "30 min. Students complete their role-specific deliverables and debrief. These are real reference materials they can use in the field.",
     keyMoments: [
-      "The first stumble on a security question — this is the learning moment",
-      "When someone accidentally trashes a competitor and the room feels it — coach honest positioning",
-      "A confident ROI calculation delivered on the spot — celebrate this, it's field-ready",
+      "When students realize how their role connects to others — the org-level 'aha'",
+      "The first stumble on a security or competitive question — this is the learning moment",
+      "A confident, role-specific deliverable — celebrate this, it's field-ready",
     ],
   },
   {
-    moduleId: 5, day: "Day 5", title: "Ship it — capstone",
+    moduleId: 5, day: "Day 5", title: "Capstone — Ship it",
     duration: "120 min (integrated session)",
     slidesDeck: null,
-    slidesNote: "No slides — trainees are presenting. Have a visible timer and scoring rubric ready.",
+    slidesNote: "No slides — students are presenting. Have a visible timer and scoring rubric ready.",
     setup: [
-      "Prepare 3–5 blind customer briefs (vary by industry, team size, pain point)",
+      "Prepare blind customer briefs matched to each role path",
       "Set up a shared timer visible to everyone",
       "Distribute peer scoring rubrics: problem framing 25%, technical depth 25%, relevance 25%, confidence/Q&A 25%",
-      "Ensure every trainee has a working Claude Code install",
+      "Ensure every student has a working Claude Code install",
     ],
     segments: [
-      { time: "0–5 min", title: "Set the stage", notes: "'This is the closest thing to your first real engagement. Brief you've never seen, company you don't know. 90 minutes to understand, architect, build, and present. Make it count.'" },
-      { time: "5–20 min", title: "Brief distribution and analysis", notes: "Hand out briefs. 15 minutes for reading and planning. Resist helping — this is a transfer test. Answer questions in character as the customer." },
-      { time: "20–65 min", title: "Build time", notes: "45 minutes to architect and build. Watch for: jumping to building without planning, demoing too many features, building something unrelated to the brief." },
-      { time: "65–110 min", title: "Presentations", notes: "10 min each, strict timer. 2 min Q&A from cohort in character, then 1 min peer scoring. Keep the pace tight." },
-      { time: "110–120 min", title: "Debrief and close", notes: "Read scores. Celebrate the top presentation. 'What was the most effective demo moment? What will you steal? What's the one thing to practice before your first real engagement?' Close: 'You've earned this. You're ready.'" },
+      { time: "0–10 min", title: "Selling Claude + set the stage", notes: "Brief overview of how to sell Claude effectively. Then: 'This is the closest thing to your first real engagement. Brief you've never seen. Make it count.'" },
+      { time: "10–25 min", title: "Brief distribution and analysis", notes: "Hand out role-matched briefs. 15 minutes for reading and planning. Resist helping — this is a transfer test." },
+      { time: "25–70 min", title: "Build time", notes: "45 minutes to architect and build. Watch for: jumping to building without planning, demoing too many features, building something unrelated to the brief." },
+      { time: "70–110 min", title: "Presentations + feedback", notes: "10 min each, strict timer. 2 min Q&A from cohort in character, then 1 min peer scoring. Keep the pace tight." },
+      { time: "110–120 min", title: "Debrief and close", notes: "Read scores. Celebrate. 'What was the most effective demo moment? What will you steal? What's the one thing to practice before your first real engagement?' Close: 'You've earned this. You're ready.'" },
     ],
     labNotes: null,
     keyMoments: [
@@ -1546,20 +2218,20 @@ const PATH_OUTCOMES = {
 // ─── SKILL CREDENTIALS ───
 const SKILL_CREDENTIALS = {
   1: [
-    { name: "CLI Navigation", icon: ">_", desc: "Terminal fluency" },
-    { name: "Agentic Tasking", icon: "~>", desc: "Multi-step execution" },
+    { name: "Installation", icon: ">_", desc: "Setup & authentication" },
+    { name: "Agentic Loop", icon: "~>", desc: "Read, plan, edit, verify" },
   ],
   2: [
-    { name: "Prompt Architecture", icon: "{}", desc: "Structured context" },
-    { name: "Context Management", icon: "//", desc: "Session mastery" },
+    { name: "CLAUDE.md Mastery", icon: "{}", desc: "Context & conventions" },
+    { name: "Session Management", icon: "//", desc: "Prompt craft & workflow" },
   ],
   3: [
-    { name: "MCP Integration", icon: "::", desc: "External tools" },
-    { name: "Hooks & Extensions", icon: "&&", desc: "Guardrails & automation" },
+    { name: "Extensions & Hooks", icon: "&&", desc: "Guardrails & automation" },
+    { name: "IDE Integration", icon: "::", desc: "VS Code & JetBrains" },
   ],
   4: [
-    { name: "Objection Handling", icon: "<>", desc: "Counter & reframe" },
-    { name: "Competitive Positioning", icon: "||", desc: "Differentiation" },
+    { name: "Role Fluency", icon: "<>", desc: "Role-specific mastery" },
+    { name: "Customer Scenarios", icon: "||", desc: "Real-world application" },
   ],
   5: [
     { name: "Solution Architecture", icon: "=>", desc: "End-to-end design" },
@@ -1575,159 +2247,53 @@ const ALL_MODULE_BADGES = Object.entries(SKILL_CREDENTIALS).flatMap(
 // ─── KNOWLEDGE CHECKPOINTS ───
 const KNOWLEDGE_CHECKPOINTS = {
   1: [
-    { question: "You're demoing Claude Code to a prospect who uses Copilot. Claude reads their codebase before you've typed a prompt — their Copilot never did this. How do you turn that moment into a compelling differentiator without trashing Copilot?", hint: "Frame it as complementary, not competitive. 'Copilot helps your developers write the next line faster. Claude Code understands your entire project — it reads the codebase, plans multi-step changes, and verifies its own work. Many teams use both.' The codebase-reading moment is the 'aha' — narrate it." },
-    { question: "A customer's install fails behind a corporate proxy — they get a TLS/SSL error. You have 5 minutes before the demo loses momentum. What do you do?", hint: "Run 'claude /doctor' to diagnose. Most likely fix: set NODE_EXTRA_CA_CERTS to point to their corporate CA bundle, or export HTTPS_PROXY. Have the backup plan ready: pre-downloaded binary install. The key is confidence — if you've seen this before and fix it quickly, it builds trust rather than destroying it." },
+    { question: "You just completed your first agentic task. How would you describe the difference between Claude Code's approach and a traditional autocomplete tool to someone who's never seen either?", hint: "The key difference: autocomplete suggests the next line of code. Claude Code reads your codebase, plans multi-step changes, edits multiple files, and verifies its own work. It's the difference between a spell-checker and a co-author." },
+    { question: "Claude Code asked for permission before running a terminal command. Why does the permission system exist, and when would you want to change the default settings?", hint: "The permission system gives you control over what Claude can do autonomously. By default, file edits need approval. You can adjust trust levels based on context — more permissive for trusted repos, more restrictive for production environments." },
   ],
   2: [
-    { question: "A customer's 40-person team has no written conventions. Claude Code produces inconsistent output across different developers. The CTO asks: 'How do we fix this without slowing everyone down?' Walk through your answer.", hint: "CLAUDE.md is the answer — a single file at the repo root that encodes team conventions. Root-level for org-wide standards, team-level overrides in subdirectories. The pitch: 'Writing this file forces your team to articulate conventions they've never written down — that's valuable even without Claude Code. With it, every developer and Claude write code that matches your best engineer's style.'" },
-    { question: "You're in a long Claude Code session and notice the output quality degrading — Claude is repeating itself and forgetting earlier context. What happened, and how do you recover without losing your work?", hint: "The context window is full. Use /compact to summarize the conversation and free space — do this proactively every 15-20 minutes, not reactively. If /compact isn't enough, use /clear and restart with a focused prompt. The 'one task per session' rule prevents this: combine only tightly related tasks." },
+    { question: "You wrote a CLAUDE.md and saw the before/after difference. What's the single most important thing a CLAUDE.md should contain, and why?", hint: "Project conventions — how code is organized, what patterns to follow, what style choices matter. Without this, Claude guesses. With it, Claude follows your team's standards consistently. The CLAUDE.md forces teams to articulate conventions they've never written down." },
+    { question: "You're in a long Claude Code session and notice the output quality degrading. What happened, and how do you recover?", hint: "The context window is full. Use /compact to summarize and free space — do this proactively every 15-20 minutes. If that's not enough, /clear and start fresh. The 'one job, one session' principle prevents this from happening." },
   ],
   3: [
-    { question: "Arcadia Financial's compliance team says: 'We need a guarantee that no code ships without passing lint, type checks, and tests.' How do you configure Claude Code to enforce this — and what's the difference between a hook and a slash command for this use case?", hint: "Pre-commit hooks are enforced gates — they block the action if checks fail. Slash commands are opt-in workflows the developer chooses to run. For compliance requirements, hooks are the answer because they can't be bypassed. Commands are for convenience (like /deploy-check), not enforcement." },
-    { question: "A prospect's engineering team already uses Jira, Datadog, and Confluence. Name the three MCP servers you'd set up first and explain why each one changes their workflow.", hint: "Jira: developers stop tab-switching to look up ticket details — Claude pulls context directly. Datadog: when debugging, Claude reads error logs and metrics without leaving the terminal. Confluence: Claude references team documentation when making architectural decisions. The pitch: 'Claude Code stops being a coding tool and becomes a platform that understands your engineering workflow.'" },
+    { question: "You built a hook, connected an MCP server, and created a slash command. When would you use each one — what's the decision framework?", hint: "Hooks are enforced gates that run automatically (compliance, quality). MCP connects Claude to external data (Jira, Datadog, internal APIs). Slash commands package repeatable workflows for the team. Hooks = enforcement, MCP = context, commands = convenience." },
+    { question: "A team wants Claude Code to pull context from their internal tools during coding sessions. Which extension point would you use, and what's the setup look like?", hint: "MCP (Model Context Protocol). Set up an MCP server that connects to their internal API, configure it in .claude/settings.json, and Claude discovers the available tools dynamically. The key selling point: Claude stops being isolated and becomes part of their engineering workflow." },
   ],
   4: [
-    { question: "A VP says: 'I'm worried AI will make our developers dependent — they'll forget how to code.' You have 60 seconds. Go.", hint: "Reframe: Claude Code removes what developers like least — boilerplate, migration grunt work, chasing test failures. What's left is creative, high-judgment work. Teams report taking on refactors they'd deferred for quarters. The analogy: 'Calculators didn't make mathematicians worse — they freed them to work on harder problems.'" },
-    { question: "A prospect asks for your honest opinion: 'When should we NOT use Claude Code?' What do you say?", hint: "Be direct: if their users aren't developers (recommend Claude.ai/Cowork instead), if they only want line-level autocomplete (Copilot is simpler), or if their security review process can't accommodate the evaluation timeline. Honesty builds trust — and it positions you as an advisor, not a salesperson." },
+    { question: "From your role's perspective on the Vertex Dynamics scenario — what was the most important thing you delivered, and how does it connect to what the other roles produced?", hint: "Each role produces something different but complementary: Pre-Sales delivers the evaluation and demo, Post-Sales the implementation plan, SA the adoption roadmap, Applied Research the advanced capability assessment. Together they form a complete customer engagement." },
+    { question: "A customer raises a concern that maps to your role. How would you handle it using what you learned today — and when would you hand off to another role?", hint: "Handle what's in your domain with confidence. Recognize when a question crosses into another role's territory and make the handoff explicit. The strength of the team is that each role has deep expertise in their area." },
   ],
   5: [
-    { question: "You have 10 minutes to demo Claude Code to a CTO you've never met. What are your 3 demo moments, and what do you narrate at each one?", hint: "1) Multi-file refactor from one prompt — narrate the agentic loop as it happens ('reading, planning, editing, testing'). 2) CLAUDE.md before/after — show how conventions are followed automatically. 3) The moment Claude self-corrects after a test failure — this builds trust more than perfection does. Keep it to 3 moments max; more overwhelms." },
-    { question: "It's week 2 post-Basecamp, your first real customer engagement. They ask: 'How long until our team is productive with Claude Code?' What's your answer, and what data supports it?", hint: "Most developers are productive within 1-2 days for basic tasks, 1-2 weeks for advanced workflows (hooks, MCP, custom commands). The CLAUDE.md is the unlock — teams with a good CLAUDE.md see faster ramp. Back it up: 'Our median time to first agentic task is 7 minutes from install. The real ramp is learning to write good prompts and configure context — that's what the first two weeks build.'" },
+    { question: "You went from a blind brief to a working demo under time pressure. What would you do differently next time, and which Days 1-4 skills were most valuable?", hint: "Most people wish they'd spent more time planning and less building. The CLAUDE.md (Day 2) and prompt patterns (Day 2) are usually the most leveraged skills — they determine output quality. Hooks and MCP (Day 3) add polish but aren't essential for a time-boxed demo." },
+    { question: "How would you sell Claude Code to a skeptical technical audience? What's the 30-second version and what's the 3-minute version?", hint: "30 seconds: 'Claude Code reads your codebase, plans changes, edits multiple files, and verifies its own work — from a single prompt. It's not autocomplete, it's an agentic coding tool.' 3 minutes: add the CLAUDE.md before/after, show a multi-file refactor, and demonstrate self-correction." },
   ],
 };
 
-// ─── DIAGNOSTIC QUIZZES ───
-const DIAGNOSTIC_QUIZZES = {
-  1: {
-    title: "Day 1 Readiness Check",
-    description: "Quick check on your CLI comfort and AI coding tool experience. This helps us adjust the content depth for you.",
-    questions: [
-      { id: "d1q1", axis: "technical", text: "How comfortable are you using the command line (terminal)?", options: [
-        { label: "I rarely use the terminal — I mostly use GUIs for everything", points: 0 },
-        { label: "I can navigate directories, run scripts, and install packages from the command line", points: 1 },
-        { label: "I regularly use the CLI for development workflows, write shell scripts, and debug PATH/environment issues", points: 2 },
-      ]},
-      { id: "d1q2", axis: "technical", text: "How familiar are you with setting up development environments (Node.js, Git, IDE extensions)?", options: [
-        { label: "I usually need help setting up dev tools and managing dependencies", points: 0 },
-        { label: "I can clone repos, run npm install, and install VS Code extensions without much trouble", points: 1 },
-        { label: "I regularly configure development environments, troubleshoot proxy/firewall issues, and manage multiple runtime versions", points: 2 },
-      ]},
-      { id: "d1q3", axis: "ai", text: "Have you used any AI-powered coding tools (Copilot, Cursor, Claude Code, etc.)?", options: [
-        { label: "I have not used AI coding tools or have only seen brief demos", points: 0 },
-        { label: "I have used autocomplete-style tools like Copilot for writing code snippets", points: 1 },
-        { label: "I have used agentic coding tools that read codebases, plan multi-step changes, and run commands autonomously", points: 2 },
-      ]},
-      { id: "d1q4", axis: "ai", text: "How would you describe the difference between autocomplete-style AI coding and agentic coding?", options: [
-        { label: "I'm not sure what the difference is", points: 0 },
-        { label: "I understand that autocomplete suggests the next line while agentic tools can plan and execute multi-file changes, but I haven't experienced it firsthand", points: 1 },
-        { label: "I can explain the agentic loop (read, plan, act, verify) and have seen or used tools that autonomously navigate codebases and run tests", points: 2 },
-      ]},
-    ],
-  },
-  2: {
-    title: "Day 2 Readiness Check",
-    description: "Quick check on your experience with project configuration and AI prompting. This helps us set the right content depth.",
-    questions: [
-      { id: "d2q1", axis: "technical", text: "How familiar are you with project-level configuration files like .eslintrc, .editorconfig, or tsconfig.json?", options: [
-        { label: "I know these files exist but rarely create or modify them", points: 0 },
-        { label: "I can read and modify existing configuration files and understand cascading/override patterns", points: 1 },
-        { label: "I regularly design multi-level configuration hierarchies and enforce team-wide coding standards through config files", points: 2 },
-      ]},
-      { id: "d2q2", axis: "technical", text: "When you join a new codebase, how do you learn the project conventions?", options: [
-        { label: "I mostly figure things out by reading code as I go — I don't have a systematic approach", points: 0 },
-        { label: "I look for README files, style guides, and example code before starting, then ask teammates", points: 1 },
-        { label: "I audit the full project structure, identify patterns, document unwritten conventions, and create onboarding guides", points: 2 },
-      ]},
-      { id: "d2q3", axis: "ai", text: "Have you written structured prompts or instructions to get better results from an AI tool?", options: [
-        { label: "I usually just type natural language requests without much structure", points: 0 },
-        { label: "I have learned basic prompt techniques like providing context, specifying output format, or giving examples", points: 1 },
-        { label: "I regularly use structured prompt patterns (system prompts, constraint specifications) and have experimented with how context affects AI output quality", points: 2 },
-      ]},
-      { id: "d2q4", axis: "ai", text: "Have you heard of or used CLAUDE.md (or similar project-context files for AI tools)?", options: [
-        { label: "I have not heard of CLAUDE.md or project-context files for AI tools", points: 0 },
-        { label: "I know that CLAUDE.md gives Claude project-level instructions, but I haven't written one", points: 1 },
-        { label: "I have authored or contributed to CLAUDE.md files and seen how they change Claude Code's output quality", points: 2 },
-      ]},
-    ],
-  },
-  3: {
-    title: "Day 3 Readiness Check",
-    description: "Quick check on your integration and extensibility experience. This helps us calibrate the technical depth.",
-    questions: [
-      { id: "d3q1", axis: "technical", text: "How familiar are you with git hooks, pre-commit checks, or CI/CD pipeline configuration?", options: [
-        { label: "I know tests and linting run somewhere before code ships, but I haven't configured these myself", points: 0 },
-        { label: "I have used pre-commit hooks or CI pipelines and understand the concept of automated quality gates", points: 1 },
-        { label: "I have built custom hook configurations, CI/CD pipelines, and automated enforcement workflows for teams", points: 2 },
-      ]},
-      { id: "d3q2", axis: "technical", text: "Have you worked with API integrations, webhook-driven workflows, or plugin/extension architectures?", options: [
-        { label: "I understand APIs conceptually but haven't built integrations myself", points: 0 },
-        { label: "I have connected tools via APIs or configured integrations between services (e.g., Jira, Slack, Datadog)", points: 1 },
-        { label: "I have built custom API integrations, designed plugin architectures, or created servers that other tools consume", points: 2 },
-      ]},
-      { id: "d3q3", axis: "ai", text: "Are you familiar with MCP (Model Context Protocol) or the concept of giving AI tools access to external services?", options: [
-        { label: "I have not heard of MCP or tool-use protocols for AI", points: 0 },
-        { label: "I understand the concept of AI tools calling external APIs, but haven't configured MCP servers", points: 1 },
-        { label: "I have set up MCP servers, configured tool permissions, or built integrations that extend AI tool capabilities", points: 2 },
-      ]},
-      { id: "d3q4", axis: "ai", text: "Have you customized an AI coding tool with hooks, slash commands, or custom workflows?", options: [
-        { label: "I have used AI coding tools with their default settings only", points: 0 },
-        { label: "I have adjusted AI tool settings or configurations but haven't built custom extensions", points: 1 },
-        { label: "I have created custom slash commands, hooks, agent configurations, or workflows for AI coding tools", points: 2 },
-      ]},
-    ],
-  },
-  4: {
-    title: "Day 4 Readiness Check",
-    description: "Quick check on your enterprise and customer-facing experience. This helps us set the right depth for today's scenarios.",
-    questions: [
-      { id: "d4q1", axis: "technical", text: "How familiar are you with enterprise deployment patterns (cloud platforms, managed services, compliance requirements)?", options: [
-        { label: "I'm not familiar with enterprise deployment considerations like Bedrock, Vertex, or SOC 2", points: 0 },
-        { label: "I understand basic cloud deployment concepts and know that enterprises have specific security and compliance needs", points: 1 },
-        { label: "I have worked on enterprise deployments, navigated compliance reviews, or architected solutions for organizations with strict security requirements", points: 2 },
-      ]},
-      { id: "d4q2", axis: "technical", text: "How comfortable are you discussing costs, ROI, and business value of developer tools with stakeholders?", options: [
-        { label: "I haven't had to make business cases or discuss ROI for technical tools", points: 0 },
-        { label: "I can follow a cost/ROI conversation and understand metrics like developer time savings, but haven't led one", points: 1 },
-        { label: "I regularly build cost models, present ROI analyses, and position technical tools for executive audiences", points: 2 },
-      ]},
-      { id: "d4q3", axis: "ai", text: "Can you articulate how Claude Code differs from competitors like GitHub Copilot, Cursor, or Devin?", options: [
-        { label: "I'm not familiar enough with these tools to compare them", points: 0 },
-        { label: "I have a general sense of the differences but would need reference material to discuss specifics", points: 1 },
-        { label: "I can confidently explain the architectural differences, strengths, and honest trade-offs between Claude Code and its competitors", points: 2 },
-      ]},
-      { id: "d4q4", axis: "ai", text: "Have you handled security or data privacy objections about AI coding tools from customers or stakeholders?", options: [
-        { label: "I haven't been in conversations about AI security or data privacy concerns", points: 0 },
-        { label: "I understand common concerns (data retention, sandboxing) but haven't fielded live objections", points: 1 },
-        { label: "I have addressed security objections about AI tools in customer conversations and can explain trust architectures fluently", points: 2 },
-      ]},
-    ],
-  },
-  5: {
-    title: "Day 5 Readiness Check",
-    description: "Quick check on your demo-building and presentation readiness. This helps us calibrate the capstone guidance.",
-    questions: [
-      { id: "d5q1", axis: "technical", text: "How comfortable are you building a working technical demo from a customer brief under time pressure?", options: [
-        { label: "I haven't built demos or prototypes under time constraints", points: 0 },
-        { label: "I can build simple demos if given clear requirements and enough time", points: 1 },
-        { label: "I regularly build tailored demos or proofs-of-concept from customer requirements and am comfortable with time pressure", points: 2 },
-      ]},
-      { id: "d5q2", axis: "technical", text: "How comfortable are you presenting technical solutions to an audience that includes both engineers and business stakeholders?", options: [
-        { label: "I have limited presentation experience with technical content", points: 0 },
-        { label: "I can present technical material to peers but am less experienced with mixed audiences", points: 1 },
-        { label: "I regularly present technical solutions to mixed audiences, adjusting depth based on the room", points: 2 },
-      ]},
-      { id: "d5q3", axis: "ai", text: "After this week, how confident are you in your ability to architect a Claude Code solution for a real customer?", options: [
-        { label: "I would need significant support and reference materials", points: 0 },
-        { label: "I could outline a solution using CLAUDE.md, hooks, and basic integrations but would want a colleague present", points: 1 },
-        { label: "I could independently assess a customer's needs, select the right features, and present a phased adoption plan", points: 2 },
-      ]},
-      { id: "d5q4", axis: "ai", text: "How ready do you feel to narrate the agentic loop live during a demo, including recovering from unexpected results?", options: [
-        { label: "I'm not yet comfortable narrating what Claude Code does in real time", points: 0 },
-        { label: "I can explain the agentic loop conceptually but haven't narrated it live or recovered from mistakes during a demo", points: 1 },
-        { label: "I can confidently narrate each phase of the agentic loop during a live demo and turn unexpected results into teaching moments", points: 2 },
-      ]},
-    ],
-  },
+// ─── DIAGNOSTIC QUIZ (WEEK-LONG) ───
+const WEEK_DIAGNOSTIC = {
+  title: "Basecamp Readiness Check",
+  description: "Four quick questions to calibrate the content depth for your entire week. Your answers set whether you see simplified, standard, or technical explanations across all five days.",
+  questions: [
+    { id: "wq1", axis: "technical", text: "How comfortable are you using the command line (terminal)?", options: [
+      { label: "I rarely use the terminal — I mostly use GUIs for everything", points: 0 },
+      { label: "I can navigate directories, run scripts, and install packages from the command line", points: 1 },
+      { label: "I regularly use the CLI for development workflows, write shell scripts, and debug PATH/environment issues", points: 2 },
+    ]},
+    { id: "wq2", axis: "technical", text: "How familiar are you with setting up development environments (Node.js, Git, IDE extensions)?", options: [
+      { label: "I usually need help setting up dev tools and managing dependencies", points: 0 },
+      { label: "I can clone repos, run npm install, and install VS Code extensions without much trouble", points: 1 },
+      { label: "I regularly configure development environments, troubleshoot proxy/firewall issues, and manage multiple runtime versions", points: 2 },
+    ]},
+    { id: "wq3", axis: "ai", text: "Have you used any AI-powered coding tools (Copilot, Cursor, Claude Code, etc.)?", options: [
+      { label: "I have not used AI coding tools or have only seen brief demos", points: 0 },
+      { label: "I have used autocomplete-style tools like Copilot for writing code snippets", points: 1 },
+      { label: "I have used agentic coding tools that read codebases, plan multi-step changes, and run commands autonomously", points: 2 },
+    ]},
+    { id: "wq4", axis: "ai", text: "How would you describe the difference between autocomplete-style AI coding and agentic coding?", options: [
+      { label: "I'm not sure what the difference is", points: 0 },
+      { label: "I understand that autocomplete suggests the next line while agentic tools can plan and execute multi-file changes, but I haven't experienced it firsthand", points: 1 },
+      { label: "I can explain the agentic loop (read, plan, act, verify) and have seen or used tools that autonomously navigate codebases and run tests", points: 2 },
+    ]},
+  ],
 };
 
 // ─── PERSONA CHARACTER SVG ───
@@ -1891,6 +2457,7 @@ function ExerciseSteps({ steps, color, contentMode }) {
             <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 6 }}>
               <div style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 500, color: C.dark }}>{step.title}</div>
               {step.context && <ContextBadge context={step.context} />}
+              {step.contentType && <span style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 0.5, color: step.contentType === "hands-on" ? C.green : C.blue, background: (step.contentType === "hands-on" ? C.green : C.blue) + "10", padding: "2px 8px", borderRadius: 10 }}>{step.contentType}</span>}
             </div>
             {step.desc && <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.muted, lineHeight: 1.6, margin: "0 0 8px" }}>{step.desc}</p>}
             {step.commands && step.commands.map((cmd, j) => (
@@ -2389,7 +2956,7 @@ function ContentModeSelect({ contentMode, onChange, moduleId, onRetake }) {
       <option value="simplified">Simplified</option>
       <option value="standard">Standard</option>
       <option value="engineer">Engineer</option>
-      {moduleId && <option value="__retake">Retake diagnostic...</option>}
+      <option value="__retake">Retake diagnostic...</option>
     </select>
   );
 }
@@ -2759,8 +3326,8 @@ function KnowledgeCheckpoint({ moduleId, color, onComplete, isCompleted }) {
 
 // ─── NAME INPUT MODAL ───
 // ─── DIAGNOSTIC QUIZ ───
-function DiagnosticQuiz({ moduleId, color, onComplete, existingResult }) {
-  const quiz = DIAGNOSTIC_QUIZZES[moduleId];
+function DiagnosticQuiz({ color, onComplete, existingResult }) {
+  const quiz = WEEK_DIAGNOSTIC;
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState(
     existingResult ? [...existingResult.answers] : Array(quiz.questions.length).fill(null)
@@ -3083,126 +3650,110 @@ const FEEDBACK_RESPONSE = [
   {
     id: "diagnosis",
     number: "01",
-    question: "What are the biggest problems in this feedback? How would you change it for the next cohort?",
+    question: "Diagnosis: What are the 2-3 most important problems this feedback reveals? What's signal vs. noise?",
     items: [
       {
-        problem: "Too much content per day",
-        analysis: "31% said pacing was too fast — roughly 5 out of 17 respondents. This is a relatively small sample, so no single statistic is conclusive. But, when taken together, a clear trend emerges. The same signal appeared in three independent places: the pacing survey (31% too fast), the written comments ('too much content packed into the day'), and the confidence data (flat at 4.29, 4.28, 4.28 across all three days). It is likely that the first iteration of Basecamp jammed too much content into each day without enough time to digest. Those who fared better likely had stronger technical backgrounds coming in, but the course needs to scale across backgrounds and roles.",
+        problem: "1. Program needs to be longer",
+        analysis: "The program needs more breathing room and more hands-on time to make sure people feel adequately prepared for the job. 31% rated \"Pacing\" as \"Too fast,\" and the qualitative feedback was direct: \"I felt there was too much content packed into the day. Less content at a more reasonable pace would allow for better learning and retention.\" Three days forces a choice between breadth and depth, and the feedback suggests Cohort 1 chose breadth at the expense of retention. When content moves too fast, participants see concepts without truly digesting them — they leave feeling like they covered the material, but without the hands-on repetition needed to actually be ready for a customer conversation or deployment.",
         implementation: {
           label: "Expanded from 3 days to 5, moved lectures to pre-work",
           detail: "The program runs 5 days now instead of 3 — about 40% less content per day. Conceptual material is moved to self-paced pre-work, leaving live time to focus on hands-on exercises.",
         },
       },
       {
-        problem: "Pair lectures with hands-on activities to reinforce concepts",
-        analysis: "The Evals session scored 3.9 engagement — half a point below average. The feedback was specific: 'too much time on abstract component taxonomy without enough concrete examples.' Same person said 'the build-along afterward was far more effective.' Sessions where people got hands-on and built themselves scored higher than listening-only lectures.",
-        implementation: {
-          label: "Every session starts with building now",
-          detail: "Every day opens with a client scenario and hands-on work. Day 1: 'Meridian Health takes 2-3 days per endpoint — show them how to do it in minutes.' Day 3: 'Arcadia Financial needs compliance gates — build it.' Eval concepts moved to the Applied Research track where people build working harnesses instead of reading taxonomy charts.",
-        },
-      },
-      {
-        problem: "No sense of progress, no role differentiation",
-        analysis: "Confidence flat. 'Apply independently' went up then back down (4.2, 4.5, 4.3) — it should just go up. Day 3 'realistic work simulation' dropped to 3.9 from 4.3-4.4 on Days 1-2, meaning the most technical day felt the least connected to actual work. People asked for 'more splits between SA, Engineer, Research' and 'guidance as to what is more relevant for each group.' A single curriculum for all roles means some content doesn't map to some people's jobs. Critically, Cohort 1's survey data wasn't segmented by role — making this the biggest analytical blind spot. The flat confidence curve may mask divergent role trajectories: PEs improving while SAs plateau, averaging to flat. And the 31% who said 'too fast' likely clusters in less technical roles, while AR may have found it too slow. Without role-segmented data, we're guessing. Fixing this instrumentation gap is as important as fixing the curriculum itself.",
+        problem: "2. Break up based on role",
+        analysis: "Start with common tool foundations relevant across all roles, then move into role-specific content. When content stays role-generic for too long, participants whose daily work doesn't map to the examples disengage. \"More splits between SA, Engineer, Research. Guidance as to what is more relevant for each group. More technical discovery / sales-focused sessions for SAs.\" A shared technical foundation matters — every role needs to understand how Claude Code works — but participants need to see their specific job reflected in the material earlier than the current design allows. An SA preparing for a technical account conversation and a Post-Sales PE preparing to pair-program with a customer team have fundamentally different needs by midweek, and a one-size-fits-all curriculum past the foundations means some content doesn't map to some people's actual work.",
         implementation: {
           label: "Four role tracks with different outcomes per module",
           detail: "PE Pre-Sales, PE Post-Sales, Solutions Architect, Applied Research. Each module shows a role-specific outcome — a PE sees 'Demo the install to a prospect,' an SA sees 'Explain the value prop to a technical audience.' Day 4 splits into role-specific breakouts. Skill badges give people a way to see their progress.",
         },
       },
       {
-        problem: "Install issues during live sessions",
-        analysis: "Several people spent Day 1 lab time fighting their setup — npm, proxy, version issues. Time spent on that is time not spent on the training.",
+        problem: "3. Make it interactive and specific",
+        analysis: "Hands-on sessions during self-guided work, hands-on labs during live trainings, working together with peers, presenting back to the group. The Evals sessions scored lowest on \"Session engagement avg\" (3.9 vs. 4.39 overall), and the feedback was precise about why: \"The Evals session spent too much time on abstract component taxonomy without enough concrete examples. The build-along afterward was far more effective for actually learning evals.\" The pattern is consistent across the qualitative data — participants praised the interactive HTML presentations, asked for more peer collaboration, and pushed back on passive lecture. \"Presenting back to the class is an essential skill. We need more of this and less of people talking at us.\" The \"Realistic work simulation\" score also dipped to 3.9 on Day 3, and the convergence of low engagement and low realism on the same day is telling: when a session feels abstract, it simultaneously feels disconnected from the job.",
         implementation: {
-          label: "Install happens as pre-work now",
-          detail: "CLI install, IDE setup, and repo clone all happen before Day 1. Facilitator checklists include fallback plans for proxy, PATH, and WSL issues. Goal is zero install debugging during live time.",
-        },
-      },
-      {
-        problem: "The flat confidence curve has multiple explanations",
-        analysis: "A flat line at 4.29 across three days is clearly a problem — but it's worth asking why it's flat before assuming the answer. There are at least four competing hypotheses. (1) Overload: too much content suppresses learning, so confidence can't rise. (2) Ceiling effect: 4.3 out of 5 is already high, and the scale may not have enough room to capture real growth. (3) Dunning-Kruger reset: Day 1 confidence is artificially high because people don't yet know what they don't know; Days 2-3 reveal complexity, creating a dip that offsets real learning — flat could actually mean progress. (4) Mixed population: some roles' confidence is rising while others' is falling, and they average to flat. Each hypothesis leads to a different intervention. We're designing for #1 (reduce content load) and #4 (segment by role). If the curve stays flat in Cohort 2 with reduced load and role segmentation, hypotheses #2 and #3 become more likely — and that would mean redesigning the survey instrument, not the curriculum.",
-        implementation: {
-          label: "Designed to test the overload and mixed-population hypotheses first",
-          detail: "Cohort 2 reduces content per day by ~40% (testing hypothesis #1) and segments all survey data by role (testing hypothesis #4). If confidence still doesn't climb, we revisit the measurement scale and consider whether flat-at-high is actually a healthy signal of calibrated self-assessment.",
+          label: "Every session starts with building now",
+          detail: "Every day opens with a client scenario and hands-on work. Day 1: 'Meridian Health takes 2-3 days per endpoint — show them how to do it in minutes.' Day 3: 'Arcadia Financial needs compliance gates — build it.' Eval concepts moved to the Applied Research track where people build working harnesses instead of reading taxonomy charts.",
         },
       },
     ],
-    signalVsNoise: "Some of this feedback points to real structural problems. Some of it is individual preference. Here's how we separated the two. The clearest problems — the ones we're most confident need fixing — showed up in multiple places at once. Pacing and overload appeared in the survey numbers (31% said too fast), in the written comments ('too much content'), and in the confidence data (flat across all three days). When three different data sources say the same thing, that's a real problem. The Evals session scored low (3.9) and got specific, actionable feedback about what went wrong — that's a real problem. People asked for role-specific content in their own words — that's a real gap. Setup friction showed up in multiple reports and has a clear fix — that's worth addressing. Other feedback was real but narrower. Day 3's realism score dipped to 3.9, but it was one day and one metric — worth watching, not worth redesigning around. One person asked for a fully async track. That's a valid preference and points to a real learning style gap, but 67% said pacing was fine in the live format. We addressed it with a light-touch accommodation (self-paced pre-work, Claude Chat for on-demand help) rather than building a parallel program. What the silence tells us is just as important. Nobody said the content was wrong or outdated — the material was accurate, just too dense. That's a delivery problem, not a content problem, and it's much easier to fix. Nobody said 'I already knew this' — the audience was appropriately targeted and the baseline was right. And nobody asked for more content on any specific topic; every piece of feedback pointed in the same direction: less, slower, more hands-on. The direction is unanimous even if the magnitude is debated. One more gap worth noting: 54 survey responses across 3 days from a cohort of roughly 18 people suggests near-100% daily response rate — which means this feedback is representative of the full group, not a self-selected subset. That's unusually strong signal for a pilot.",
+    signalVsNoise: "Signal: The flat trend in \"Self-rated confidence\" (~4.28 across all three days) is a negative signal — students should be getting more confident as the week progresses as they gain increased comfort and mastery of Claude Code. That said, maintaining high confidence could also mean that content was calibrated appropriately to the group, since student confidence is important for maintaining classroom engagement. Too much content in too few days — people not actually digesting material could be leading to artificially high \"Self-rated confidence\" and \"Apply independently\" scores because they couldn't actually absorb everything. Noise: NPS (35, n=17) didn't have high enough representation from the cohort (17 responses out of 54 surveys) — setting this aside entirely. \"Apply independently\" scores (4.2, 4.5, 4.3) are fairly high, which is a good sign on its face. However, it's easy to learn a concept and think you understand implementation when the gulf between the two is actually quite wide. Would be curious to know how this was assessed in the first round of Basecamp and whether high self-reported readiness translated to actual field performance.",
+  },
+  {
+    id: "changes",
+    number: "02",
+    question: "Changes: What specific changes would you make to the program for the next cohort?",
+    items: [
+      {
+        problem: "1. Extend the program from 3 days to 5 days",
+        analysis: "The single highest-leverage change. Three days forces a choice between breadth and depth, and Cohort 1 feedback says we chose breadth at the expense of retention. A five-day structure allows each module to include both the conceptual introduction and the hands-on practice time participants are asking for, without rushing. Each day carries roughly 2-2.5 hours of content instead of cramming 4+ hours, leaving room for the repetition and application that drive retention.",
+        implementation: {
+          label: "Expanded from 3 days to 5, moved lectures to pre-work",
+          detail: "The program runs 5 days now instead of 3 — about 40% less content per day. Conceptual material is moved to self-paced pre-work, leaving live time to focus on hands-on exercises.",
+        },
+      },
+      {
+        problem: "2. Role-specific tracks",
+        analysis: "Rather than running fully parallel tracks (which fragments the cohort and doubles facilitator load), keep the first days shared but tag every exercise with role-specific framing. A Pre-Sales PE and a Post-Sales PE both write a CLAUDE.md, but the Pre-Sales PE writes one for a prospect evaluation while the Post-Sales PE writes one for a customer's production codebase. Later days diverge fully: SAs run adoption strategy scenarios, PEs run technical evaluation or implementation sessions, AR goes deep on custom tooling. This answers the 'more splits' feedback without losing the cross-role learning that shared sessions provide.",
+        implementation: {
+          label: "Four role tracks with different outcomes per module",
+          detail: "PE Pre-Sales, PE Post-Sales, Solutions Architect, Applied Research. Each module shows a role-specific outcome — a PE sees 'Demo the install to a prospect,' an SA sees 'Explain the value prop to a technical audience.' Day 4 splits into role-specific breakouts.",
+        },
+      },
+      {
+        problem: "3. Move setup to self-guided pre-work with a push to ask Claude for help",
+        analysis: "\"Ensure everyone has cloned and tested the GitHub repo before the first build-along — setup friction eats into the exercise time.\" CLI install, IDE setup, and repo clone all happen before Day 1 as self-guided pre-work. When participants hit issues, encourage them to use Claude to troubleshoot — this serves double duty: it solves their setup problem and gives them their first real experience using the tool before the program even starts. Zero lab time should be spent on environment setup.",
+        implementation: {
+          label: "Install happens as pre-work now",
+          detail: "Pre-work checklist sent 48 hours before the program: install Claude Code, clone the training repo, run a verification script. Participants are encouraged to ask Claude for help with any setup issues they encounter — making the pre-work itself a learning moment.",
+        },
+      },
+      {
+        problem: "4. Daily office hours to provide help with relevant setup",
+        analysis: "Offer a 1-hour optional office hours slot every day for participants who need help with setup relevant to that day's content. Day 0 (afternoon before the program) covers initial install and environment issues. Day 1 might cover IDE integration or repo cloning. Day 3 might cover MCP server configuration or hook setup. As the curriculum introduces new tools and integrations throughout the week, each day brings its own setup surface area — office hours ensure participants aren't spending live session time debugging environment issues at any point in the program, not just on Day 1.",
+      },
+      {
+        problem: "5. Specific hands-on exercises and labs to bring concepts to life",
+        analysis: "Every live session should be restructured around the 'I do, we do, you do' pattern. The facilitator demos first, then the group works through a guided exercise together, then individuals tackle an independent lab. Build in a peer teaching moment in every module — participants present back a concept or demo to their table. Labs should be framed through realistic client scenarios, not abstract exercises: Day 1 isn't 'install Claude Code,' it's 'you're onboarding Meridian Health's backend team and delivering their first win.' This is what participants asked for, and it's what the engagement data confirms works.",
+        implementation: {
+          label: "Every session starts with building now",
+          detail: "Every day opens with a client scenario and hands-on work. The HTML interactive format that scored highest in Cohort 1 feedback becomes the standard for all sessions.",
+        },
+      },
+    ],
+    summary: "Risks: Expanding to 5 days increases scheduling friction — mitigated by keeping each day to 2-2.75 hours instead of full days. Moving content to pre-work creates a dependency on completion — mitigated by tracking completion, building facilitator fallback scripts, and daily office hours. Four role tracks may fragment small cohorts — mitigated by merging adjacent roles (PE Pre-Sales with SA, PE Post-Sales with AR) when any track falls below 3 participants. And shifting to build-first may overcorrect from the Evals session failure — mitigated by starting every lab with a short client scenario that provides context and motivation, so participants know what they're building and why before they start.",
   },
   {
     id: "measurement",
-    number: "02",
-    question: "How do you know if the changes worked?",
-    items: [
-      {
-        problem: "NPS — target 50+ (was 35)",
-        analysis: "The single best measure of whether the program works as a whole. 35 with 18% detractors means people left unsatisfied. Target: 50+ with detractors under 10% and promoters over 60%. Under 45 means the core problems aren't fixed.",
-      },
-      {
-        problem: "Day-over-day confidence slope",
-        analysis: "Cohort 1 was flat: 4.29, 4.28, 4.28. The number that matters isn't the absolute score — it's the slope. Measure daily on the same 1-5 scale. Day 1 should be lowest, each day higher. A flat or declining line means the program isn't building felt mastery, regardless of what the content covers.",
-      },
-      {
-        problem: "Per-session engagement floor — no session below 4.2",
-        analysis: "The Evals session hit 3.9. Measure engagement per session, not per day — a strong morning can mask a weak afternoon. Any session below 4.0 is a structural problem with that session, not a fluke.",
-      },
-      {
-        problem: "30-day field application rate",
-        analysis: "The metric that matters most and the one Cohort 1 didn't track: are people using what they learned? Survey participants 30 days after the program. Ask: 'Have you used Claude Code in a customer conversation, demo, or deployment since Basecamp?' and 'Which specific skills from the program have you applied?' A training program that scores well on day-of surveys but doesn't change behavior in the field hasn't worked.",
-      },
-      {
-        problem: "Time to first customer use",
-        analysis: "How many days after completing Basecamp does someone use Claude Code with a customer for the first time? Shorter is better. If people leave Day 5 feeling ready but don't use it for six weeks, there's a transfer gap between the training environment and the real one.",
-      },
-      {
-        problem: "Pre-work completion rate — target 100%",
-        analysis: "If people show up without doing the pre-work, the live session breaks down — the facilitator ends up lecturing on material that should have been read. Track completion. If it drops below 90%, the pre-work is either too long, too hard to access, or not seen as valuable.",
-      },
-      {
-        problem: "Role relevance — target 4.3+",
-        analysis: "New daily question: 'Today's content was relevant to my role' (1-5). Segment by role. If SAs score lower than PEs on shared days, those days need more SA-relevant framing. This tells us whether the four-path system is landing or just decorative.",
-      },
-    ],
-    summary: "Cohort 2 works if NPS hits 50+, confidence climbs each day, no session scores below 4.2, and — most importantly — people are using Claude Code with customers within 30 days of finishing the program.",
-  },
-  {
-    id: "risks",
     number: "03",
-    question: "What are the risks of these changes?",
+    question: "Measurement: How would you know if your changes worked? What would you measure, and what does \"success\" look like for Cohort 2?",
     items: [
       {
-        problem: "Expanding from 3 days to 5 days",
-        analysis: "More calendar time means more scheduling friction. Participants may struggle to block five days, and attendance could drop on Days 4-5 as competing priorities pull people away. A 5-day program also raises the bar for perceived ROI — if Day 4 doesn't feel essential, people will question the investment.",
-        implementation: {
-          label: "Each day is 2-2.75 hours, not a full day",
-          detail: "The 5-day structure uses shorter daily sessions rather than five full days. This reduces calendar pressure while maintaining the spaced-repetition benefit of learning across multiple days. We monitor day-over-day attendance as a leading indicator — if it drops below 90% on Days 4-5, the program is too long or Day 4's content isn't pulling its weight.",
-        },
+        problem: "1. \"Self-rated confidence\" trend",
+        analysis: "Measure daily on the same 1-5 scale. The number that matters isn't the absolute score — it's the slope. Cohort 1 was flat: 4.29, 4.28, 4.28. Target: a visible upward trend (e.g. Day 1: ~3.8 → Day 5: ~4.5). A rising trend — especially one that starts slightly lower — means the program is building genuine felt mastery, not coasting on surface familiarity. A flat or declining line means the program isn't working, regardless of what the content covers. If it stays flat after reducing content load and adding role segmentation, the issue may be the measurement scale itself rather than the curriculum.",
       },
       {
-        problem: "Moving content to pre-work",
-        analysis: "The entire live curriculum depends on participants having completed the pre-work. If completion rates fall below target, facilitators are forced to re-teach foundational content during live time — exactly the problem the redesign was meant to solve. Pre-work non-completion is the single biggest structural risk in the new design.",
-        implementation: {
-          label: "Target 100%, design for 85%",
-          detail: "Pre-work completion is tracked and visible to facilitators before Day 1. The facilitator guide includes fallback plans for every foundation topic — 5-minute recap scripts that cover the essentials without consuming the full live session. The app itself includes a progress tracker that makes incomplete sections visible. If completion drops below 90%, the pre-work is too long, too hard to access, or not positioned as valuable — and we shorten or restructure it, not add more live lecture.",
-        },
+        problem: "2. \"Pacing\"",
+        analysis: "Reduce \"Too fast\" responses from 31% to under 15%. This is the most direct measure of whether the 3→5 day expansion worked. If it doesn't move, the problem wasn't just duration — it was density or delivery, and the next iteration should focus on cutting content rather than spreading it over more days.",
       },
       {
-        problem: "Four role tracks may fragment small cohorts",
-        analysis: "With cohorts of 15-20 people split across four tracks, some breakout groups could have only 2-3 participants. Small breakouts risk feeling sparse and losing the energy of peer learning. The logistics of four simultaneous tracks also require either four facilitators or carefully staggered scheduling.",
-        implementation: {
-          label: "Minimum viable group size of 3; merge adjacent roles below that",
-          detail: "If any track has fewer than 3 participants, merge with an adjacent role: PE Pre-Sales with Solutions Architect (both customer-conversation oriented), PE Post-Sales with Applied Research (both deeply hands-on). The merged sessions use the more technical track's content with discussion prompts that surface the other role's perspective. This keeps groups viable without losing differentiation.",
-        },
+        problem: "3. Content applicability",
+        analysis: "Combine two measures. First, target \"Realistic work simulation\" score at 4.2+ every day with no Day 3-style dips (was 4.3, 4.4, 3.9). This tells you whether the hands-on, scenario-based restructure is making content feel connected to the actual job throughout the week. Second, add a new daily question: \"Today's content was relevant to my role\" (1-5), segmented by role. If SAs score lower than PEs on shared days, those days need more SA-relevant framing. This tells you whether the role-specific tracks are actually landing or just decorative.",
       },
       {
-        problem: "Build-first may overcorrect from the Evals session failure",
-        analysis: "The Cohort 1 feedback about 'abstract component taxonomy' may be about bad lectures, not all lectures. Some learners need framing before building — jumping straight into a lab without context can create confusion that feels productive but isn't. The risk is replacing one problem (too much lecture) with another (undirected hands-on time).",
-        implementation: {
-          label: "5-minute context-set before every lab, not zero lecture",
-          detail: "Build-first doesn't mean zero framing. Every lab starts with a 5-minute client scenario that provides context and motivation: 'Your customer Meridian Health has this problem. You have 20 minutes to solve it.' This is fundamentally different from a 30-minute taxonomy walkthrough. The scenario IS the framing — it tells you what you're building and why, without front-loading abstract concepts.",
-        },
+        problem: "4. \"Session engagement avg\" floor",
+        analysis: "No session should score below 4.2 (Cohort 1's Evals sessions hit 3.9 against a 4.39 average). Measure engagement per session, not per day — a strong morning can mask a weak afternoon. This is the direct measure of whether the hands-on restructure worked. Any session below 4.0 is a structural problem with that session, not a fluke, and should trigger a redesign of that specific module.",
+      },
+      {
+        problem: "5. 30-day field application rate",
+        analysis: "The metric that matters most and the one Cohort 1 didn't track: are people actually using what they learned? Survey participants 30 days after the program. Ask: \"Have you used a Basecamp skill in a customer engagement? Which one? What was missing?\" A training program that scores well on day-of surveys but doesn't change behavior in the field hasn't worked. This is the only metric that closes the loop on whether self-reported confidence during training translated to actual readiness — the gap that Cohort 1's data can't answer.",
+      },
+      {
+        problem: "6. Segment all survey responses by role",
+        analysis: "Cohort 1's biggest analytical blind spot was that survey data wasn't segmented by role. The flat confidence curve may mask divergent role trajectories — PEs improving while SAs plateau, averaging to flat. The 31% who said \"Too fast\" may cluster in less technical roles, while AR may have found it too slow. Without role-segmented data, we're guessing. For Cohort 2, every metric above should be breakable by PE Pre-Sales, PE Post-Sales, SA, and AR. If confidence is climbing for three roles but flat for one, that's a targeted curriculum problem, not a structural one. If \"Too fast\" is concentrated in SAs, the fix is role-specific pacing, not slowing everything down. This is as important as any individual metric — it turns aggregate averages into actionable, role-specific insights.",
       },
     ],
-    summary: "Every structural change creates new failure modes. The goal isn't to eliminate risk — it's to make the risks visible and build fallbacks so we learn fast from Cohort 2 regardless of which bets land.",
+    summary: "Cohort 2 works if confidence climbs each day, \"Too fast\" drops below 15%, no session scores below 4.2, content feels relevant across all roles — and most importantly, people are using Claude Code with customers within 30 days of finishing the program.",
   },
 ]
 // ─── CURRICULUM PLAN CONTENT (Part 1 Questions) ───
@@ -3214,11 +3765,11 @@ function CurriculumPlanContent() {
   const subheadStyle = { fontFamily: "var(--serif)", fontSize: 20, fontWeight: 400, color: C.dark, margin: "32px 0 12px", lineHeight: 1.3 };
 
   const dayArcData = [
-    { day: "1", title: "First Contact", client: "Meridian Health", clientDetail: "8-person backend team, 2\u20133 days per API endpoint", focus: "Install Claude Code, complete first agentic task, compare terminal vs. IDE", artifact: "Working install + first agentic task + client talking points", prework: "30 min", live: "45 min", lab: "45 min", color: C.orange },
-    { day: "2", title: "Prompt Craft", client: "Lumen Logistics", clientDetail: "40 developers, sprawling Node.js monorepo, zero documentation", focus: "CLAUDE.md authoring, session management, prompt patterns, Plan Mode", artifact: "CLAUDE.md template + prompt cheat sheet + before/after comparison", prework: "30 min", live: "60 min", lab: "60 min", color: C.blue },
-    { day: "3", title: "Extend & Customize", client: "Arcadia Financial", clientDetail: "60 engineers, compliance-gated payment platform", focus: "Hooks, MCP servers, slash commands, composed workflows", artifact: "Custom hook + MCP server + slash command + integration architecture", prework: "45 min", live: "45 min", lab: "75 min", color: C.green },
-    { day: "4", title: "Customer Scenarios", client: "Nova / Atlas / Prism", clientDetail: "CISO security review, VP deployment, Copilot skeptic", focus: "Security objections, deployment architecture, competitive positioning, cost/ROI", artifact: "Security FAQ + deployment template + competitive battlecard + demo scripts", prework: "45 min", live: "90 min", lab: "30 min", color: C.orange },
-    { day: "5", title: "Ship It (Capstone)", client: "Blind brief", clientDetail: "Unknown company, unknown problem", focus: "Analyze brief \u2192 architect solution \u2192 build working demo \u2192 present to cohort", artifact: "Capstone presentation + working demo + peer feedback", integrated: "120 min", color: C.green },
+    { day: "1", title: "First Contact", tag: "Common Core", focus: "What is Claude Code, installation, agentic loop, context window, tools, permissions", handson: "Install, authenticate, complete first agentic task (student-focused, not customer-facing)", artifact: "Working Claude Code installation + completed agentic task", milestone: "Independently install, configure, and complete a multi-step agentic task", prework: "30 min", live: "45 min", lab: "45 min", color: C.orange },
+    { day: "2", title: "Prompt Craft", tag: "Common Core", focus: "CLAUDE.md files (authoring, hierarchy, best practices), settings, CLI flags, plan mode, slash commands, keyboard shortcuts, session management, prompt patterns", handson: "Write a CLAUDE.md, before/after demo, prompt pattern practice", artifact: "CLAUDE.md template + prompt pattern cheat sheet + before/after comparison", milestone: "Write effective CLAUDE.md files and use plan mode, slash commands, and prompt patterns to steer output", prework: "30 min", live: "60 min", lab: "60 min", color: C.blue },
+    { day: "3", title: "Extend & Customize", tag: "Common Core", focus: "Hooks, MCP servers, sub-agents, custom slash commands/skills, IDE integration (VS Code, JetBrains), CI/CD automation, headless mode, GitHub Actions, Agent SDK intro, building MCP servers", handson: "Build a hook, connect an MCP server, create a custom slash command", artifact: "Custom hook + MCP integration + slash command + integration architecture", milestone: "Build a custom hook, connect an MCP server, and create a slash command that extends Claude Code for a specific workflow", prework: "45 min", live: "45 min", lab: "75 min", color: C.green },
+    { day: "4", title: "Role-Specific Scenarios", tag: "Role Breakouts", focus: "Content varies by role (PE Pre-Sales, PE Post-Sales, Solutions Architect, Applied Research), security model & best practices, competitive positioning, deployment architecture, customer objection handling", handson: "4 scenarios for the same company, each with different role-specific aspects — shows how each role connects to others in the org", artifact: "Role-specific deliverables: battlecards, deployment templates, security FAQs, demo scripts", milestone: "Apply Claude Code to a role-specific customer scenario and articulate security, positioning, and architecture decisions", prework: "45 min", live: "90 min", lab: "30 min", color: C.orange },
+    { day: "5", title: "Ship It (Capstone)", tag: "Role-Specific", focus: "Selling Claude, blind brief matched to role, build a working demo/implementation from scratch, present to peers with feedback — integrates all Days 1\u20134 skills", handson: "Blind brief matched to role: decompose, build, present", artifact: "Capstone presentation + working demo + peer feedback", milestone: "Receive a cold customer brief, decompose it, and build a working demo from scratch under time pressure", integrated: "120 min", color: C.green },
   ];
 
   const dependencyChain = [
@@ -3287,14 +3838,37 @@ function CurriculumPlanContent() {
         </div>
       </div>
 
-      {/* \u2500\u2500\u2500 2. THE FIVE-DAY ARC \u2500\u2500\u2500 */}
-      <div style={{ ...sectionGap, ...st.fadeUp, animationDelay: "0.15s" }}>
+      {/* \u2500\u2500\u2500 2. LEARNING MODALITIES \u2500\u2500\u2500 */}
+      <div style={{ ...sectionGap, ...st.fadeUp, animationDelay: "0.12s" }}>
         <div style={{ display: "flex", alignItems: "baseline", gap: 14, marginBottom: 8 }}>
           <span style={{ fontFamily: "var(--serif)", fontSize: 42, color: C.blue, lineHeight: 1, opacity: 0.25 }}>02</span>
+          <h2 style={headingStyle}>Learning Modalities</h2>
+        </div>
+        <div style={accentLine(C.blue)} />
+        <p style={bodyStyle}>Each day follows a three-part structure that moves from self-paced preparation to live, hands-on experience to independent practice.</p>
+
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, marginBottom: 24 }}>
+          {[
+            { label: "Self-paced pre-work", color: C.blue, desc: "Readings and reference materials completed before the live session so participants arrive ready to build. Covers the conceptual foundation for the day\u2019s hands-on work." },
+            { label: "Live instruction + lab", color: C.orange, desc: "Facilitator-led sessions with hands on keyboard. The goal is to get everyone actually experiencing the tool live and learning from one another in the room \u2014 not lecture." },
+            { label: "Leave-behind references", color: C.green, desc: "Informational quick-guides given at the end of each session that recap content. Designed as field references participants can return to after the program ends." },
+          ].map((m, i) => (
+            <div key={i} style={{ padding: "16px 18px", borderRadius: 10, background: m.color + "06", border: `1px solid ${m.color}20` }}>
+              <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, color: m.color, textTransform: "uppercase", marginBottom: 8 }}>{m.label}</div>
+              <p style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted, lineHeight: 1.6, margin: 0 }}>{m.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* \u2500\u2500\u2500 3. THE FIVE-DAY ARC \u2500\u2500\u2500 */}
+      <div style={{ ...sectionGap, ...st.fadeUp, animationDelay: "0.15s" }}>
+        <div style={{ display: "flex", alignItems: "baseline", gap: 14, marginBottom: 8 }}>
+          <span style={{ fontFamily: "var(--serif)", fontSize: 42, color: C.blue, lineHeight: 1, opacity: 0.25 }}>03</span>
           <h2 style={headingStyle}>The Five-Day Arc</h2>
         </div>
         <div style={accentLine(C.blue)} />
-        <p style={bodyStyle}>Each day is framed through a client scenario, produces a concrete artifact, and follows a pre-work → live → lab rhythm. The curriculum builds progressively from individual tool proficiency (Days 1–3) to customer-facing skills (Day 4) to integrated performance under pressure (Day 5).</p>
+        <p style={bodyStyle}>Each day produces a concrete artifact and follows a pre-work → live → lab rhythm. The curriculum builds progressively from individual tool proficiency (Days 1–3) to customer-facing skills (Day 4) to integrated performance under pressure (Day 5).</p>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
           {dayArcData.map((d, i) => (
@@ -3304,13 +3878,19 @@ function CurriculumPlanContent() {
                 <div style={{ fontFamily: "var(--mono)", fontSize: 9, color: C.faint, letterSpacing: 1, marginTop: 2 }}>DAY</div>
               </div>
               <div style={{ flex: 1 }}>
-                <div style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 500, color: C.dark, marginBottom: 3 }}>{d.title}</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 3 }}>
+                  <span style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 500, color: C.dark }}>{d.title}</span>
+                  {d.tag && <span style={{ fontFamily: "var(--mono)", fontSize: 9, color: d.color, background: d.color + "10", padding: "2px 8px", borderRadius: 10 }}>{d.tag}</span>}
+                </div>
                 <div style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted, lineHeight: 1.55, marginBottom: 4 }}>{d.focus}</div>
                 <div style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.faint, marginBottom: 4 }}>
-                  <span style={{ color: d.color }}>{d.client}</span> — {d.clientDetail}
+                  <span style={{ color: d.color }}>Hands-on:</span> {d.handson}
                 </div>
-                <div style={{ fontFamily: "var(--sans)", fontSize: 11, color: C.faint, marginBottom: 8 }}>
+                <div style={{ fontFamily: "var(--sans)", fontSize: 11, color: C.faint, marginBottom: 4 }}>
                   <span style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 0.5, textTransform: "uppercase", color: C.muted }}>Produces:</span> {d.artifact}
+                </div>
+                <div style={{ fontFamily: "var(--sans)", fontSize: 11, color: C.muted, marginBottom: 8, fontStyle: "italic" }}>
+                  <span style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 0.5, textTransform: "uppercase", color: d.color, fontStyle: "normal" }}>Milestone:</span> {d.milestone}
                 </div>
                 <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                   {d.integrated ? (
@@ -3340,14 +3920,14 @@ function CurriculumPlanContent() {
         </div>
       </div>
 
-      {/* \u2500\u2500\u2500 3. ROLE DIFFERENTIATION & COMPETENCY OUTCOMES \u2500\u2500\u2500 */}
+      {/* \u2500\u2500\u2500 4. ROLE DIFFERENTIATION & COMPETENCY OUTCOMES \u2500\u2500\u2500 */}
       <div style={{ ...sectionGap, ...st.fadeUp, animationDelay: "0.25s" }}>
         <div style={{ display: "flex", alignItems: "baseline", gap: 14, marginBottom: 8 }}>
-          <span style={{ fontFamily: "var(--serif)", fontSize: 42, color: C.green, lineHeight: 1, opacity: 0.25 }}>03</span>
+          <span style={{ fontFamily: "var(--serif)", fontSize: 42, color: C.green, lineHeight: 1, opacity: 0.25 }}>04</span>
           <h2 style={headingStyle}>Role Differentiation & Competency Outcomes</h2>
         </div>
         <div style={accentLine(C.green)} />
-        <p style={bodyStyle}>Basecamp serves four roles through a three-layer model: common foundation → shared technical sessions (Days 1–3) → role-specific breakouts (Day 4) and capstone briefs (Day 5).</p>
+        <p style={bodyStyle}>Basecamp serves four roles through a three-layer model: common foundation → shared technical sessions (Days 1–3) → role-specific breakouts (Day 4) and capstone briefs (Day 5). Day 3 introduces topics like CI/CD, headless mode, and Agent SDK that split slightly based on technical depth — these are important concepts for everyone to know, but more technical roles go deeper in hands-on exercises.</p>
 
         {/* Role matrix table */}
         <div style={{ margin: "20px 0 32px", borderRadius: 12, border: `1px solid ${C.lightGray}`, overflow: "hidden", background: C.bg }}>
@@ -3421,38 +4001,42 @@ function CurriculumPlanContent() {
           </div>
         ))}
 
-        {/* Content mode callout */}
-        <div style={{ margin: "28px 0 0", padding: "18px 22px", background: C.cream, borderRadius: 10, border: `1px solid ${C.lightGray}` }}>
-          <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.green, marginBottom: 8 }}>Handling varying technical depth</div>
-          <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.muted, lineHeight: 1.6, margin: 0 }}>
-            Every content page has three depth levels — Simplified, Standard, and Engineer — so participants of any background can access content at their comfort level. Facilitator guides include pacing notes for mixed-depth rooms.
-          </p>
+        {/* Handling skill variance */}
+        <h3 style={subheadStyle}>Handling Varying Skill Levels</h3>
+        <p style={bodyStyle}>If you think about the four roles as bell curves with slightly different midpoints based on technical fluency, different parts of the course spike with different groups at different times. The content can be consumed by everyone, but these mechanisms ensure no one is left behind or held back:</p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          {[
+            { label: "\u201cGo deeper\u201d exercises", color: C.green, desc: "Every hands-on lab includes stretch prompts that let more experienced participants push further while others solidify fundamentals. The core exercise is accessible to all; the go-deeper path adds real complexity." },
+            { label: "Strategic pairing", color: C.blue, desc: "Participants pair up with someone on the opposite end of the skill spectrum to teach and learn from each other, or pair with someone at the same level to explore together. Both configurations are valuable at different points in the week." },
+            { label: "Three content depth levels", color: C.orange, desc: "Every content page has Simplified, Standard, and Engineer modes so participants of any background can access content at their comfort level. Facilitator guides include pacing notes for mixed-depth rooms." },
+          ].map((item, i) => (
+            <div key={i} style={{ padding: "14px 18px", background: C.cream, borderRadius: 10, border: `1px solid ${C.lightGray}` }}>
+              <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: item.color, marginBottom: 6 }}>{item.label}</div>
+              <p style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted, lineHeight: 1.55, margin: 0 }}>{item.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* \u2500\u2500\u2500 4. RATIONALE & TRADE-OFFS \u2500\u2500\u2500 */}
+      {/* \u2500\u2500\u2500 5. RATIONALE & TRADE-OFFS \u2500\u2500\u2500 */}
       <div style={{ ...sectionGap, ...st.fadeUp, animationDelay: "0.35s" }}>
         <div style={{ display: "flex", alignItems: "baseline", gap: 14, marginBottom: 8 }}>
-          <span style={{ fontFamily: "var(--serif)", fontSize: 42, color: C.blue, lineHeight: 1, opacity: 0.25 }}>04</span>
+          <span style={{ fontFamily: "var(--serif)", fontSize: 42, color: C.blue, lineHeight: 1, opacity: 0.25 }}>05</span>
           <h2 style={headingStyle}>Rationale & Trade-offs</h2>
         </div>
         <div style={accentLine(C.blue)} />
 
         <h3 style={subheadStyle}>Why This Sequence</h3>
-        <p style={bodyStyle}>The five-day arc follows the Dreyfus model of skill acquisition:</p>
-        <div style={{ display: "flex", flexDirection: "column", gap: 0, marginBottom: 24 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, marginBottom: 24 }}>
           {[
-            { stage: "Days 1\u20132", level: "Novice \u2192 Advanced Beginner", desc: "Follow rules. Install Claude Code, learn the commands, write a CLAUDE.md by template.", color: C.blue },
-            { stage: "Day 3", level: "Competent", desc: "Make decisions. Which hooks to configure, which MCP servers to connect, how to compose them.", color: C.green },
-            { stage: "Day 4", level: "Proficient", desc: "Handle ambiguity. Customer objections don\u2019t follow scripts. Read the room, differentiate honestly.", color: C.orange },
-            { stage: "Day 5", level: "Expert", desc: "Integrate everything under pressure. Blind brief, time constraint, live audience.", color: C.orange },
-          ].map((s, i) => (
-            <div key={i} style={{ display: "flex", alignItems: "baseline", gap: 12, padding: "10px 0 10px 12px", borderLeft: `2px solid ${s.color}30` }}>
-              <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: s.color, flexShrink: 0, minWidth: 62 }}>{s.stage}</span>
-              <div>
-                <span style={{ fontFamily: "var(--sans)", fontSize: 12.5, fontWeight: 500, color: C.dark }}>{s.level}</span>
-                <span style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted }}> — {s.desc}</span>
-              </div>
+            { label: "Ground in Anthropic first", color: C.orange, text: "Participants are new to the company. Start by grounding everyone in Anthropic\u2019s mission, values, and the full product suite so they understand where Claude Code fits in the bigger picture before touching the tool." },
+            { label: "Experience magic before selling it", color: C.blue, text: "We want people to experience the magic of Claude Code before it becomes their job to sell it. This creates product evangelists \u2014 missionaries \u2014 rather than metric-motivated mercenaries. Days 1\u20133 are pure building; customer-facing skills don\u2019t appear until Day 4." },
+            { label: "Basics \u2192 applied, with natural skill spikes", color: C.green, text: "The four roles are bell curves with slightly different midpoints based on technical fluency. This means different parts of the course spike with different groups at different times. The content is accessible to everyone, but the \u201cgo deeper\u201d prompts are more or less relevant depending on who you are and where you are in the course." },
+            { label: "Role-separated but cross-visible", color: C.orange, text: "Content is separated by role for Days 4\u20135, but the shared Days 1\u20133 deliberately expose everyone to concepts that may not be directly applicable to their day-to-day (e.g. CI/CD for non-technical roles). It\u2019s important to have awareness of what\u2019s out there rather than staying siloed." },
+          ].map((r, i) => (
+            <div key={i} style={{ padding: "14px 18px", background: C.cream, borderRadius: 10, border: `1px solid ${C.lightGray}` }}>
+              <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: r.color, marginBottom: 6 }}>{r.label}</div>
+              <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.muted, lineHeight: 1.65, margin: 0 }}>{r.text}</p>
             </div>
           ))}
         </div>
@@ -3460,23 +4044,19 @@ function CurriculumPlanContent() {
         <h3 style={subheadStyle}>Key Trade-offs</h3>
 
         <div style={{ background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}`, padding: "20px 24px", marginBottom: 16 }}>
-          <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>Shared Days 1–3 vs. earlier role divergence</h4>
-          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}>I chose shared sessions for the first three days despite the audience having different technical depths. The alternative — splitting into technical and non-technical tracks on Day 1 — would mean Pre-Sales PEs never build the hands-on depth needed to handle technical customer conversations. The three-tier content mode selector and facilitator pacing notes mitigate the mixed-depth challenge without sacrificing depth for anyone.</p>
+          <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>Shared Days 1\u20133 vs. earlier role divergence</h4>
+          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}>Shared sessions for the first three days despite different technical depths. The alternative \u2014 splitting into technical and non-technical tracks on Day 1 \u2014 would mean Pre-Sales PEs never build the hands-on depth needed to handle technical customer conversations. The three-tier content mode, \u201cgo deeper\u201d exercises, and strategic pairing mitigate the mixed-depth challenge without sacrificing depth for anyone.</p>
         </div>
         <div style={{ background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}`, padding: "20px 24px", marginBottom: 16 }}>
-          <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>Client scenarios as framing vs. abstract exercises</h4>
-          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}>Every module is framed through a realistic client scenario (Meridian Health, Lumen Logistics, Arcadia Financial, etc.) rather than abstract exercises. This costs development time — each scenario needs a believable company, industry context, and problem statement. The payoff: learners practice the actual cognitive work of a customer engagement rather than just learning features in isolation.</p>
+          <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>Student-focused Day 1 vs. customer scenarios from the start</h4>
+          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}>Day 1 hands-on tasks are about the student, not a customer scenario. This lets people experience Claude Code as a user first \u2014 feeling the product\u2019s value personally before they need to articulate it to someone else. Customer-facing scenarios begin on Day 4 once the technical foundation is solid.</p>
         </div>
         <div style={{ background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}`, padding: "20px 24px", marginBottom: 16 }}>
-          <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>Single-file React app vs. a more scalable architecture</h4>
-          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}>The application is built as a single App.jsx file. This was a deliberate choice for a portfolio piece that needs to be instantly understandable and deployable. For a production curriculum platform, I would split into components, add a proper router, and likely use a content management system for the curriculum data.</p>
-        </div>
-        <div style={{ background: C.cream, borderRadius: 12, border: `1px solid ${C.lightGray}`, padding: "20px 24px", marginBottom: 16 }}>
-          <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>Depth on Day 2 (CLAUDE.md) vs. distributing across days</h4>
-          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}>Day 2 is the deepest module (17 steps with facilitator narration scripts). I chose to invest heavily here because the CLAUDE.md before/after demo is the single most persuasive moment in the entire program. It’s the demo every PE will run in their first customer conversation. Getting this day right has outsized impact on field readiness.</p>
+          <h4 style={{ fontFamily: "var(--sans)", fontSize: 13, fontWeight: 600, color: C.dark, margin: "0 0 8px" }}>One company for Day 4 vs. separate scenarios per role</h4>
+          <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}>All four Day 4 role breakouts use the same fictional company but with different role-specific aspects and instructions. This shows how each role connects to the others in a real org \u2014 a PE Pre-Sales pitch, a PE Post-Sales implementation plan, an SA architecture review, and an AR feasibility study all for the same customer.</p>
         </div>
 
-        <h3 style={subheadStyle}>What I’d Do Differently with More Time</h3>
+        <h3 style={subheadStyle}>What I\u2019d Do Differently with More Time</h3>
         {[
           { label: "Video walkthroughs", text: "Pre-recorded facilitator demos for each module, so learners can watch the \u201cideal\u201d run before attempting it themselves." },
           { label: "Quantitative confidence measurement", text: "Add a 1\u20135 confidence self-rating before and after each module. Currently the knowledge checkpoints are qualitative." },
@@ -3486,7 +4066,7 @@ function CurriculumPlanContent() {
           { label: "Async delivery", text: "The current design assumes a facilitated, synchronous cohort. For global teams, I\u2019d build an async-first version with video content, auto-graded exercises, and optional live office hours." },
         ].map((item, i) => (
           <div key={i} style={{ display: "flex", gap: 10, marginBottom: 10, paddingLeft: 4 }}>
-            <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.blue, flexShrink: 0, paddingTop: 3 }}>•</span>
+            <span style={{ fontFamily: "var(--mono)", fontSize: 10, color: C.blue, flexShrink: 0, paddingTop: 3 }}>{"\u2022"}</span>
             <p style={{ fontFamily: "var(--sans)", fontSize: 13.5, color: C.muted, lineHeight: 1.72, margin: 0 }}><strong>{item.label}:</strong> {item.text}</p>
           </div>
         ))}
@@ -3727,23 +4307,22 @@ export default function App() {
     }
   }, [phase, activeModule]);
 
-  // Show diagnostic quiz on first module open, or restore mode on return
+  // Show week-long diagnostic quiz on Day 1, restore mode on any day
   useEffect(() => {
-    if (phase === "module" && activeModule && DIAGNOSTIC_QUIZZES[activeModule]) {
-      if (!diagnosticResults[activeModule]) {
-        setShowDiagnosticQuiz(activeModule);
-      } else {
-        setContentMode(diagnosticResults[activeModule].chosenMode || "standard");
+    if (phase === "module" && activeModule) {
+      if (diagnosticResults.week) {
+        setContentMode(diagnosticResults.week.chosenMode || "standard");
+      } else if (activeModule === 1) {
+        setShowDiagnosticQuiz("week");
       }
     }
   }, [phase, activeModule]);
 
   const handleDiagnosticComplete = useCallback((chosenMode, answers, score) => {
-    const moduleId = showDiagnosticQuiz;
     const recommendation = score <= 3 ? "simplified" : score <= 5 ? "standard" : "engineer";
     setDiagnosticResults(prev => ({
       ...prev,
-      [moduleId]: {
+      week: {
         score,
         maxScore: 8,
         recommendation,
@@ -3754,7 +4333,7 @@ export default function App() {
     }));
     setContentMode(chosenMode);
     setShowDiagnosticQuiz(null);
-  }, [showDiagnosticQuiz]);
+  }, []);
 
   // Auto-set the default phase tab when opening a module
   useEffect(() => {
@@ -4076,9 +4655,9 @@ export default function App() {
 
             <div style={{ display: "flex", gap: 10, marginBottom: 28 }}>
               {[
-                { label: "Pre-work", icon: "01", color: C.blue, desc: "Self-paced readings from the foundations + reference materials. Done before the live session so you arrive ready to build." },
-                { label: "Live session", icon: "02", color: C.orange, desc: "Facilitator-led demo and walkthrough. Watch the technique, ask questions, see how it's done on a real codebase." },
-                { label: "Lab", icon: "03", color: C.green, desc: "Hands-on practice. You do the work yourself on the same sample repos — building artifacts you'll use in the field." },
+                { label: "Pre-work", icon: "01", color: C.blue, desc: "Self-paced readings from the foundations and reference materials. Done before the live session so you arrive ready to build." },
+                { label: "Live session", icon: "02", color: C.orange, desc: "Facilitator-led demo with hands on keyboard. The goal is to get everyone actually experiencing the tool live and learning from one another in the room." },
+                { label: "Lab", icon: "03", color: C.green, desc: "Hands-on practice on the same sample repos. \"Go deeper\" prompts let more experienced participants push further. Informational quick-guides recap each session as leave-behind reference materials." },
               ].map((part, i) => (
                 <div key={i} style={{
                   flex: 1, padding: "16px 14px", borderRadius: 10,
@@ -4096,11 +4675,11 @@ export default function App() {
             <h2 style={st.sectionHeading}>Your week at a glance</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
               {[
-                { day: "Day 1", title: "First contact", focus: "Install Claude Code, complete your first agentic task", customerFraming: "Run a live install for a prospect and deliver their first \"wow\" moment in under 10 minutes.", prework: "30 min", live: "45 min", lab: "45 min", color: C.orange },
-                { day: "Day 2", title: "Prompt craft", focus: "CLAUDE.md, context management, prompt patterns", customerFraming: "Show a customer how to make Claude Code an expert on their codebase — not just a generic tool.", prework: "30 min", live: "60 min", lab: "60 min", color: C.blue },
-                { day: "Day 3", title: "Extend & customize", focus: "Hooks, MCP servers, slash commands, Agent SDK", customerFraming: "Design the hooks, integrations, and guardrails that make a customer's security and compliance team say yes.", prework: "45 min", live: "45 min", lab: "75 min", color: C.green },
-                { day: "Day 4", title: "Customer scenarios", focus: "Security reviews, deployments, competitive positioning", customerFraming: "Handle the three conversations that close deals: the CISO, the VP of Engineering, and the Copilot skeptic.", prework: "45 min", live: "90 min", lab: "30 min", color: C.orange },
-                { day: "Day 5", title: "Ship it", focus: "Blind brief, working demo, capstone presentation", customerFraming: "Prove you can go from a blind customer brief to a working demo and a compelling pitch — under pressure.", prework: null, live: null, lab: null, integrated: "120 min", color: C.green },
+                { day: "Day 1", title: "First contact", focus: "What is Claude Code, installation, agentic loop, context window, tools, permissions", swbat: "Set up Claude Code, begin to create with it", milestone: "Independently install, configure, and complete a multi-step agentic task", tag: "Common Core", prework: "30 min", live: "45 min", lab: "45 min", color: C.orange },
+                { day: "Day 2", title: "Prompt craft", focus: "CLAUDE.md files, settings, CLI flags, plan mode, slash commands, keyboard shortcuts, session management, prompt patterns", swbat: "Customize Claude Code and work more effectively with it", milestone: "Write effective CLAUDE.md files and use plan mode, slash commands, and prompt patterns to steer output", tag: "Common Core", prework: "30 min", live: "60 min", lab: "60 min", color: C.blue },
+                { day: "Day 3", title: "Extend & customize", focus: "Hooks, MCP servers, sub-agents, custom slash commands, IDE integration, CI/CD automation, headless mode, Agent SDK", swbat: "Connect outside data sources, further customize for more advanced workflows", milestone: "Build a custom hook, connect an MCP server, and create a slash command that extends Claude Code for a specific workflow", tag: "Common Core", prework: "45 min", live: "45 min", lab: "75 min", color: C.green },
+                { day: "Day 4", title: "Role-specific scenarios", focus: "Role breakouts, security model, competitive positioning, deployment architecture, customer objection handling", swbat: "Connect Claude Code to their role and what their customers may need or use it for", milestone: "Apply Claude Code to a role-specific customer scenario and articulate security, positioning, and architecture decisions", tag: "Role Breakouts", prework: "45 min", live: "90 min", lab: "30 min", color: C.orange },
+                { day: "Day 5", title: "Capstone — Ship it", focus: "Selling Claude, blind brief matched to role, build working demo, present to peers with feedback", swbat: "Break customer problem down, identify relevant Claude Code tools, and build custom solution on the fly", milestone: "Receive a cold customer brief, decompose it, and build a working demo from scratch under time pressure", tag: "Role-Specific", prework: null, live: null, lab: null, integrated: "120 min", color: C.green },
               ].map((d, i) => (
                 <div key={i} style={{
                   display: "flex", alignItems: "flex-start", gap: 16, padding: "16px 0",
@@ -4113,7 +4692,9 @@ export default function App() {
                   <div style={{ flex: 1 }}>
                     <div style={{ fontFamily: "var(--sans)", fontSize: 14, fontWeight: 500, color: C.dark, marginBottom: 2 }}>{d.title}</div>
                     <div style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted, lineHeight: 1.5, marginBottom: 4 }}>{d.focus}</div>
-                    <div style={{ fontFamily: "var(--sans)", fontSize: 11.5, color: d.color, lineHeight: 1.4, marginBottom: 8, fontStyle: "italic" }}>{d.customerFraming}</div>
+                    {d.swbat && <div style={{ fontFamily: "var(--mono)", fontSize: 10, color: d.color, marginBottom: 4, letterSpacing: 0.3 }}>{d.swbat}</div>}
+                    {d.milestone && <div style={{ fontFamily: "var(--sans)", fontSize: 11, color: C.muted, marginBottom: 6, lineHeight: 1.4, fontStyle: "italic" }}>Milestone: {d.milestone}</div>}
+                    {d.tag && <span style={{ fontFamily: "var(--mono)", fontSize: 9, color: d.color, background: d.color + "10", padding: "2px 8px", borderRadius: 10, marginBottom: 8, display: "inline-block" }}>{d.tag}</span>}
                     <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                       {d.integrated ? (
                         <span style={{ fontFamily: "var(--mono)", fontSize: 10, padding: "3px 10px", borderRadius: 12, background: d.color + "10", color: d.color }}>Integrated session · {d.integrated}</span>
@@ -4131,12 +4712,42 @@ export default function App() {
             </div>
           </div>
 
-          {/* ── ROLE LENS NOTE ── */}
-          <div style={{ margin: "36px 0 0", padding: "18px 22px", background: C.cream, borderRadius: 10, border: `1px solid ${C.lightGray}`, ...st.fadeUp, animationDelay: "0.45s" }}>
-            <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.blue, marginBottom: 8 }}>How roles work</div>
-            <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.muted, lineHeight: 1.6, margin: 0 }}>
-              Everyone goes through the same five modules. Your role determines the practice scenarios you work through, the deliverables you produce, and the competencies you're assessed on. A pre-sales PE practices live demos and objection handling; a solutions architect designs adoption roadmaps and cost models. Same knowledge, different application.
+          {/* ── AUDIENCE DIFFERENTIATION ── */}
+          <div style={{ ...st.fadeUp, animationDelay: "0.45s" }}>
+            <h2 style={st.sectionHeading}>Audience differentiation</h2>
+
+            {/* Divergence diagram */}
+            <div style={{ display: "flex", gap: 0, marginBottom: 16 }}>
+              {[
+                { days: "Days 1\u20132", label: "Common Core", color: C.blue, desc: "Shared by all roles" },
+                { days: "Day 3", label: "Common Core +", color: C.green, desc: "Shared, with technical depth options" },
+                { days: "Days 4\u20135", label: "Role-Specific", color: C.orange, desc: "Breakouts by role" },
+              ].map((seg, i) => (
+                <div key={i} style={{
+                  flex: i === 1 ? 0.8 : 1, padding: "12px 14px", textAlign: "center",
+                  background: seg.color + "08", borderTop: `3px solid ${seg.color}`,
+                  borderRight: i < 2 ? `1px solid ${C.lightGray}` : "none",
+                }}>
+                  <div style={{ fontFamily: "var(--mono)", fontSize: 10, fontWeight: 600, color: seg.color, marginBottom: 4 }}>{seg.days}</div>
+                  <div style={{ fontFamily: "var(--sans)", fontSize: 12, fontWeight: 500, color: C.dark, marginBottom: 2 }}>{seg.label}</div>
+                  <div style={{ fontFamily: "var(--sans)", fontSize: 11, color: C.muted }}>{seg.desc}</div>
+                </div>
+              ))}
+            </div>
+
+            <p style={{ fontFamily: "var(--sans)", fontSize: 13, color: C.muted, lineHeight: 1.6, margin: "0 0 16px" }}>
+              Everyone goes through the same five modules. Your role determines the practice scenarios, deliverables, and competencies. Day 3 introduces topics like CI/CD and Agent SDK that are important for everyone to know, but more technical roles go deeper in hands-on exercises. Days 4\u20135 fully diverge with role-specific scenarios.
             </p>
+
+            <div style={{ padding: "14px 18px", background: C.cream, borderRadius: 10, border: `1px solid ${C.lightGray}` }}>
+              <div style={{ fontFamily: "var(--mono)", fontSize: 9, letterSpacing: 1.5, textTransform: "uppercase", color: C.green, marginBottom: 8 }}>Handling varying skill levels</div>
+              <p style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted, lineHeight: 1.55, margin: "0 0 8px" }}>
+                <strong style={{ color: C.dark }}>"Go deeper" exercises</strong> — Every hands-on lab includes stretch prompts that let more experienced participants push further while others solidify fundamentals.
+              </p>
+              <p style={{ fontFamily: "var(--sans)", fontSize: 12.5, color: C.muted, lineHeight: 1.55, margin: 0 }}>
+                <strong style={{ color: C.dark }}>Strategic pairing</strong> — Participants pair up across the skill spectrum to teach and learn from each other, or pair with someone at the same level to explore together.
+              </p>
+            </div>
           </div>
 
           {/* ── WHAT YOU'LL PRODUCE ── */}
@@ -4148,6 +4759,7 @@ export default function App() {
                 "A CLAUDE.md template library and prompt pattern cheat sheet",
                 "Custom hooks, MCP integrations, and slash commands you built yourself",
                 "A competitive battlecard and security FAQ for customer conversations",
+                "Quick-guide reference materials for every session — designed for the field",
                 "A capstone presentation — a working demo built from a blind customer brief",
               ].map((item, i) => (
                 <div key={i} style={{ display: "flex", alignItems: "baseline", gap: 10, padding: "8px 0" }}>
@@ -4554,11 +5166,10 @@ export default function App() {
         const guide = FACILITATOR_GUIDES.find(g => g.moduleId === mod.id);
         return (
           <>
-          {showDiagnosticQuiz === mod.id && (
+          {showDiagnosticQuiz === "week" && (
             <DiagnosticQuiz
-              moduleId={mod.id}
               color={mod.color}
-              existingResult={diagnosticResults[mod.id] || null}
+              existingResult={diagnosticResults.week || null}
               onComplete={handleDiagnosticComplete}
             />
           )}
@@ -4573,9 +5184,10 @@ export default function App() {
               </div>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline" }}>
                 <h1 style={{ fontFamily: "var(--serif)", fontSize: 36, fontWeight: 400, color: C.dark, margin: "0 0 8px" }}>{mod.title}</h1>
-                <ContentModeSelect contentMode={contentMode} onChange={setContentMode} moduleId={mod.id} onRetake={() => setShowDiagnosticQuiz(mod.id)} />
+                <ContentModeSelect contentMode={contentMode} onChange={setContentMode} moduleId={mod.id} onRetake={() => setShowDiagnosticQuiz("week")} />
               </div>
-              <p style={{ ...st.bodyText, maxWidth: 540, fontSize: 16, marginBottom: mod.customerFraming ? 10 : 28 }}>{mod.subtitle}</p>
+              <p style={{ ...st.bodyText, maxWidth: 540, fontSize: 16, marginBottom: mod.swbat ? 10 : (mod.customerFraming ? 10 : 28) }}>{mod.subtitle}</p>
+              {mod.swbat && <p style={{ fontFamily: "var(--mono)", fontSize: 11, letterSpacing: 0.5, color: mod.color, margin: "0 0 28px", maxWidth: 540 }}>{mod.swbat}</p>}
               {mod.customerFraming && <p style={{ fontFamily: "var(--sans)", fontSize: 14, color: mod.color, fontStyle: "italic", margin: "0 0 28px", maxWidth: 540, lineHeight: 1.5 }}>{mod.customerFraming}</p>}
             </div>
 
@@ -4966,6 +5578,7 @@ export default function App() {
                         {mod.id === 2 && path === "pe-pre" && <span style={{ fontSize: 10, fontFamily: "var(--sans)", fontWeight: 500, color: C.blue, background: C.blue + "12", padding: "2px 8px", borderRadius: 10 }}>Deep Dive</span>}
                       </div>
                       <div style={{ fontFamily: "var(--sans)", fontSize: 11.5, color: C.muted, marginTop: 3, lineHeight: 1.4, maxWidth: 400 }}>{mod.subtitle.split(". ")[0]}.</div>
+                      {mod.swbat && <div style={{ fontFamily: "var(--mono)", fontSize: 9, color: mod.color, marginTop: 4, letterSpacing: 0.5 }}>{mod.swbat}</div>}
                       {mod.customerFraming && <div style={{ fontFamily: "var(--sans)", fontSize: 11, color: mod.color, marginTop: 4, lineHeight: 1.4, maxWidth: 400, fontStyle: "italic" }}>{mod.customerFraming}</div>}
                     </div>
                   </div>

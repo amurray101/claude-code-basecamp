@@ -161,9 +161,6 @@ export default function M4c_DemoPlanning() {
         {/* Post-Demo Follow-Up */}
         <div style={sectionBox}>
           <h2 style={subHeading}>Post-Demo Follow-Up</h2>
-          <div style={{ fontFamily: 'var(--sans)', fontSize: 10, color: C.faint, marginBottom: 8, fontStyle: 'italic' }}>
-            Real-world follow-up steps. Use after actual customer demos, not during the lab exercise.
-          </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             {[
               'Send summary email within 24 hours',

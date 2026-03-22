@@ -29,8 +29,8 @@ const bodyText = {
 };
 
 const calloutBox = {
-  background: C.cream,
-  border: `1px solid ${C.orange}`,
+  background: '#fff',
+  border: `1px solid ${C.lightGray}`,
   borderLeft: `4px solid ${C.orange}`,
   borderRadius: 6,
   padding: '14px 18px',
@@ -108,22 +108,22 @@ const objections = [
   {
     objection: '"Copilot is cheaper."',
     response:
-      'Copilot is $19-39/seat \u2014 Claude Code averages ~$6/dev/day ($120-180/month). Comparable cost, dramatically different capability. Copilot suggests lines; Claude Code executes multi-file refactors, runs tests, and debugs autonomously. Compare the value delivered, not the price tag.',
+      'Comparable cost (~$6/dev/day vs $19-39/seat), dramatically different capability. Copilot suggests lines; Claude Code executes multi-file refactors autonomously.',
   },
   {
     objection: '"Cursor is more visual."',
     response:
-      "Cursor is a great IDE. Claude Code is an agentic platform. It runs in the terminal, VS Code, JetBrains, desktop, mobile, and web. For teams that need CI/CD integration, headless automation, and enterprise security controls, Claude Code operates where Cursor can't.",
+      "Cursor is a great IDE. Claude Code is an agentic platform \u2014 terminal, VS Code, JetBrains, CI/CD, headless. It runs where Cursor can't.",
   },
   {
     objection: '"Devin is fully autonomous."',
     response:
-      'Devin runs in a cloud sandbox \u2014 Claude Code runs in YOUR environment, with YOUR tools, on YOUR codebase. Developers maintain control and context. At $500/month vs ~$150/month, Claude Code delivers comparable autonomy at a fraction of the cost, with enterprise-grade security.',
+      'Devin runs in a cloud sandbox. Claude Code runs in YOUR environment with YOUR tools. Comparable autonomy at ~$150/mo vs $500/mo, with enterprise security.',
   },
   {
     objection: '"We already use X."',
     response:
-      "Most teams using Claude Code also use other tools. Claude Code isn't a replacement for autocomplete \u2014 it's a different category. Keep Copilot/Cursor for line-level suggestions. Use Claude Code for the project-level work that autocomplete can't touch: migrations, refactors, debugging, architecture.",
+      "Most Claude Code teams also use autocomplete. Different category: keep Copilot/Cursor for line-level, use Claude Code for project-level work they can't touch.",
   },
 ];
 
@@ -152,7 +152,7 @@ export default function M4a_CompetitiveBattlecard() {
     <MaterialLayout
       id="M4a"
       title="Claude Code vs. Competition"
-      subtitle="Know the landscape, win the conversation. Compare your role-play battlecard against this reference."
+      subtitle="Know the landscape, win the conversation"
       color={C.orange}
       category="Day 4"
       format="Battlecard"
@@ -248,9 +248,9 @@ export default function M4a_CompetitiveBattlecard() {
         {/* Competitive Reframe */}
         <div
           style={{
-            background: C.cream,
-            border: `1px solid ${C.blue}`,
-            borderLeft: `4px solid ${C.blue}`,
+            background: '#fff',
+            border: `1px solid ${C.lightGray}`,
+            borderLeft: `4px solid ${C.orange}`,
             borderRadius: 6,
             padding: '14px 18px',
             marginBottom: 16,
@@ -263,7 +263,7 @@ export default function M4a_CompetitiveBattlecard() {
               fontWeight: 700,
               textTransform: 'uppercase',
               letterSpacing: '0.05em',
-              color: C.blue,
+              color: C.orange,
               marginBottom: 6,
             }}
           >

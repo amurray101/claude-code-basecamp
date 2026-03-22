@@ -179,72 +179,6 @@ export default function M2a_ClaudeMdBuilder() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
           {/* Left column */}
           <div>
-            {/* CLAUDE.md Hierarchy */}
-            <h2 style={sectionHeading}>CLAUDE.md Hierarchy</h2>
-            <div style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.muted, lineHeight: 1.6, marginBottom: 12 }}>
-              Works like <span style={inlineCode}>.eslintrc</span> &mdash; cascading configuration that scales from one developer to 200.
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {[
-                {
-                  level: '~/.claude/CLAUDE.md',
-                  scope: 'Personal',
-                  desc: 'Your preferences across all projects. Follows you everywhere.',
-                },
-                {
-                  level: 'repo-root/CLAUDE.md',
-                  scope: 'Project',
-                  desc: 'Project conventions shared with the team via git. Start here.',
-                },
-                {
-                  level: 'repo-root/src/CLAUDE.md',
-                  scope: 'Subdirectory',
-                  desc: 'Team-specific overrides. Inherits from root, can override for this scope.',
-                },
-              ].map((h) => (
-                <div
-                  key={h.level}
-                  style={{
-                    background: C.cream,
-                    border: `1px solid ${C.lightGray}`,
-                    borderLeft: `3px solid ${C.blue}`,
-                    borderRadius: 4,
-                    padding: '10px 14px',
-                  }}
-                >
-                  <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 600, color: C.blue, marginBottom: 2 }}>
-                    {h.level}
-                  </div>
-                  <div style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.dark, lineHeight: 1.5 }}>
-                    <strong>{h.scope}:</strong> {h.desc}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Enterprise scaling note */}
-            <div
-              style={{
-                background: C.blue + '0a',
-                border: `1px solid ${C.blue}25`,
-                borderRadius: 6,
-                padding: '12px 14px',
-                marginTop: 14,
-              }}
-            >
-              <div style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.dark, lineHeight: 1.6 }}>
-                <strong>Enterprise answer:</strong> &ldquo;How does this scale to 200 developers?&rdquo; &mdash; The engineering director writes the root CLAUDE.md with company-wide standards. Each team adds their own file with team-specific conventions. Developers don&apos;t need to know it exists; it just works.
-              </div>
-            </div>
-
-            {/* Cross-references */}
-            <div style={{ fontFamily: 'var(--sans)', fontSize: 10, color: C.faint, marginTop: 14, lineHeight: 1.6 }}>
-              Prompt patterns: see M2b &nbsp;|&nbsp; Session commands: see M1b (Command Glossary)
-            </div>
-          </div>
-
-          {/* Right column */}
-          <div>
             {/* Quality Checklist */}
             <div style={sectionBox}>
               <h2 style={subHeading}>Quality Checklist</h2>
@@ -263,19 +197,13 @@ export default function M2a_ClaudeMdBuilder() {
                 ))}
               </div>
             </div>
+          </div>
 
+          {/* Right column */}
+          <div>
             {/* Iteration Loop */}
-            <div
-              style={{
-                background: C.cream,
-                border: `1px solid ${C.lightGray}`,
-                borderTop: `3px solid ${C.blue}`,
-                borderRadius: 6,
-                padding: '14px 16px',
-                marginBottom: 18,
-              }}
-            >
-              <h2 style={{ ...subHeading, color: C.blue }}>The Iteration Loop</h2>
+            <div style={sectionBox}>
+              <h2 style={subHeading}>The Iteration Loop</h2>
               <div style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.dark, lineHeight: 1.7 }}>
                 <strong>1.</strong> Write CLAUDE.md based on codebase exploration<br />
                 <strong>2.</strong> Run Claude on a task, observe output<br />
@@ -285,20 +213,10 @@ export default function M2a_ClaudeMdBuilder() {
             </div>
 
             {/* Before/After reminder */}
-            <div
-              style={{
-                background: C.blue + '0a',
-                border: `1px solid ${C.blue}25`,
-                borderLeft: `3px solid ${C.blue}`,
-                borderRadius: 6,
-                padding: '12px 14px',
-              }}
-            >
-              <div style={{ fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 600, color: C.blue, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 6 }}>
-                Key demo moment
-              </div>
+            <div style={sectionBox}>
+              <h2 style={subHeading}>Key Demo Moment</h2>
               <div style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.dark, lineHeight: 1.6 }}>
-                The before/after comparison &mdash; Claude without CLAUDE.md vs. with &mdash; is the single most persuasive demo in the program. Same task, same repo, different output. Conventions followed automatically.
+                Show same task with vs. without CLAUDE.md &mdash; conventions followed automatically.
               </div>
             </div>
           </div>

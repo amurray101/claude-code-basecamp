@@ -13,9 +13,17 @@ import F7a_DeploymentPathFinder from "./foundations/F7a_DeploymentPathFinder";
 import F7b_CostROI from "./foundations/F7b_CostROI";
 import M1_InstallFirstRun from "./modules/M1_InstallFirstRun";
 import M1b_CommandGlossary from "./modules/M1b_CommandGlossary";
+import M1c_WhatIsClaudeCode from "./modules/M1c_WhatIsClaudeCode";
+import M1d_HowClaudeCodeWorks from "./modules/M1d_HowClaudeCodeWorks";
 import M2a_ClaudeMdBuilder from "./modules/M2a_ClaudeMdBuilder";
 import M2b_PromptPatterns from "./modules/M2b_PromptPatterns";
+import M2c_ClaudeMdConfig from "./modules/M2c_ClaudeMdConfig";
+import M2d_PlanModeSessionTools from "./modules/M2d_PlanModeSessionTools";
 import M3_IntegrationPatterns from "./modules/M3_IntegrationPatterns";
+import M3b_CoreExtensions from "./modules/M3b_CoreExtensions";
+import M3c_CICDAutomation from "./modules/M3c_CICDAutomation";
+import M3d_AgentSDKMCP from "./modules/M3d_AgentSDKMCP";
+import M3e_IDEIntegration from "./modules/M3e_IDEIntegration";
 import M4a_CompetitiveBattlecard from "./modules/M4a_CompetitiveBattlecard";
 import M4b_EnterpriseConversation from "./modules/M4b_EnterpriseConversation";
 import M4c_DemoPlanning from "./modules/M4c_DemoPlanning";
@@ -38,9 +46,17 @@ const MATERIAL_COMPONENTS = {
   F7b: F7b_CostROI,
   M1: M1_InstallFirstRun,
   M1b: M1b_CommandGlossary,
+  M1c: M1c_WhatIsClaudeCode,
+  M1d: M1d_HowClaudeCodeWorks,
   M2a: M2a_ClaudeMdBuilder,
   M2b: M2b_PromptPatterns,
+  M2c: M2c_ClaudeMdConfig,
+  M2d: M2d_PlanModeSessionTools,
   M3: M3_IntegrationPatterns,
+  M3b: M3b_CoreExtensions,
+  M3c: M3c_CICDAutomation,
+  M3d: M3d_AgentSDKMCP,
+  M3e: M3e_IDEIntegration,
   M4a: M4a_CompetitiveBattlecard,
   M4b: M4b_EnterpriseConversation,
   M4c: M4c_DemoPlanning,
@@ -92,9 +108,17 @@ const MATERIALS = [
   // Modules
   { id: "M1", title: "Install & First Run", format: "Cheat Sheet", pages: "2 pages", category: "Modules" },
   { id: "M1b", title: "Command Glossary", format: "Cheat Sheet", pages: "2 pages", category: "Modules" },
+  { id: "M1c", title: "What is Claude Code", format: "Cheat Sheet", pages: "2 pages", category: "Modules" },
+  { id: "M1d", title: "How Claude Code Works", format: "Quick Reference Card", pages: "1 front/back", category: "Modules" },
   { id: "M2a", title: "CLAUDE.md Builder", format: "Worksheet", pages: "2 pages", category: "Modules" },
   { id: "M2b", title: "Prompt Patterns for Agentic Coding", format: "Cheat Sheet", pages: "1 front/back", category: "Modules" },
+  { id: "M2c", title: "Configuration Reference", format: "Cheat Sheet", pages: "2 pages", category: "Modules" },
+  { id: "M2d", title: "Plan Mode & Session Tools", format: "Quick Reference Card", pages: "1 front/back", category: "Modules" },
   { id: "M3", title: "Integration Patterns", format: "Architecture Reference", pages: "2 pages", category: "Modules" },
+  { id: "M3b", title: "Core Extensions", format: "Cheat Sheet", pages: "2 pages", category: "Modules" },
+  { id: "M3c", title: "CI/CD & Headless Mode", format: "Quick Reference Card", pages: "1 front/back", category: "Modules" },
+  { id: "M3d", title: "Agent SDK & MCP Servers", format: "Quick Reference Card", pages: "1 front/back", category: "Modules" },
+  { id: "M3e", title: "IDE Integration", format: "Quick Reference Card", pages: "1 front/back", category: "Modules" },
   { id: "M4a", title: "Claude Code vs. Competition", format: "Battlecard", pages: "1 front/back", category: "Modules" },
   { id: "M4b", title: "Enterprise Deployment Conversation", format: "Talk Track Script", pages: "2 pages", category: "Modules" },
   { id: "M4c", title: "Demo Planning", format: "Worksheet", pages: "1 page", category: "Modules" },
@@ -110,16 +134,16 @@ const GRAB_AND_GO_IDS = ["F3a", "F4", "F6a", "M4a", "F7b"];
 
 const DISTRIBUTION_SCHEDULE = [
   { day: "Pre-work", ids: ["F1", "F2", "F3a", "F3b", "F4"] },
-  { day: "Day 1", ids: ["M1", "M1b", "F5"] },
-  { day: "Day 2", ids: ["M2a", "M2b"] },
-  { day: "Day 3", ids: ["M3"] },
+  { day: "Day 1", ids: ["M1c", "M1d", "M1b", "F5"] },
+  { day: "Day 2", ids: ["M2c", "M2d", "M2a", "M2b"] },
+  { day: "Day 3", ids: ["M3b", "M3e", "M3c", "M3d", "M3"] },
   { day: "Day 4", ids: ["F6a", "F6b", "F7a", "F7b", "M4a", "M4b", "M4c", "P1", "P2", "P3", "P4"] },
   { day: "Day 5", ids: ["M5"] },
 ];
 
 const CATEGORIES = [
   { name: "Foundations", prefix: "F", color: C.orange, count: 10 },
-  { name: "Modules", prefix: "M", color: C.blue, count: 9 },
+  { name: "Modules", prefix: "M", color: C.blue, count: 17 },
   { name: "Paths", prefix: "P", color: C.green, count: 4 },
 ];
 

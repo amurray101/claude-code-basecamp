@@ -121,21 +121,8 @@ export default function M1b_CommandGlossary() {
           {/* ── Slash Commands ── */}
           <div style={sectionBox(C.orange)}>
             <div style={sectionLabel(C.orange)}>Slash Commands</div>
-            <h2 style={{ ...subHeading, padding: '6px 14px 0' }}>Session Management</h2>
             {[
-              { cmd: '/compact', desc: 'Compress context. Summarizes history to free space. Use every 15\u201320 min or after a major step.' },
-              { cmd: '/clear', desc: 'Reset session completely. Use when switching to an unrelated task.' },
-              { cmd: '/cost', desc: 'Show token usage \u2014 tokens in, out, and total spend.' },
               { cmd: '/model', desc: 'Switch model (Sonnet, Opus, Haiku) mid-conversation.' },
-            ].map(c => (
-              <div key={c.cmd} style={cmdRow}>
-                <span style={cmdName}>{c.cmd}</span>
-                <span style={cmdDesc}>{c.desc}</span>
-              </div>
-            ))}
-
-            <h2 style={{ ...subHeading, padding: '10px 14px 0' }}>Workflow</h2>
-            {[
               { cmd: '/review', desc: 'Code review mode. Reviews staged or recent changes before committing.' },
               { cmd: '/commit', desc: 'Stage and commit with a Claude-generated message.' },
               { cmd: '/test', desc: 'Run the project\u2019s test suite and report results.' },
@@ -149,28 +136,12 @@ export default function M1b_CommandGlossary() {
             ))}
           </div>
 
-          {/* ── Keyboard Shortcuts ── */}
-          <div style={sectionBox(C.green)}>
-            <div style={sectionLabel(C.green)}>Keyboard Shortcuts</div>
-            {[
-              { cmd: 'Shift + Tab', desc: 'Toggle Plan Mode. Claude plans without executing \u2014 great for demos and complex tasks.' },
-              { cmd: 'Escape', desc: 'Interrupt Claude mid-response.' },
-              { cmd: 'Up arrow', desc: 'Recall previous message for editing.' },
-              { cmd: '@ + filename', desc: 'Mention a file to add it to context.' },
-            ].map(c => (
-              <div key={c.cmd} style={cmdRow}>
-                <span style={{ ...cmdName, minWidth: 100 }}>{c.cmd}</span>
-                <span style={cmdDesc}>{c.desc}</span>
-              </div>
-            ))}
-          </div>
-
           {/* ── Custom Commands ── */}
-          <div style={sectionBox(C.blue)}>
-            <div style={sectionLabel(C.blue)}>Custom Slash Commands</div>
+          <div style={sectionBox(C.orange)}>
+            <div style={sectionLabel(C.orange)}>Custom Slash Commands</div>
             <div style={{ padding: '8px 14px' }}>
               <p style={cmdDesc}>
-                Create markdown files in <span style={inlineCode}>.claude/commands/</span> &mdash; shared with the team via git. Invoke with <span style={inlineCode}>/command-name</span>.
+                Create markdown files in <span style={inlineCode}>.claude/commands/</span> &mdash; shared with the team via git. Invoke with <span style={inlineCode}>/command-name</span>. Use <span style={inlineCode}>@ + filename</span> to mention a file in context.
               </p>
               <div style={{ background: C.bg, border: `1px solid ${C.lightGray}`, borderRadius: 4, padding: '8px 10px', marginTop: 6, fontFamily: 'var(--mono)', fontSize: 10, color: C.dark, lineHeight: 1.6 }}>
                 <div style={{ color: C.faint }}>{'# .claude/commands/deploy-check.md'}</div>
@@ -216,8 +187,8 @@ export default function M1b_CommandGlossary() {
           </div>
 
           {/* ── Permission Modes ── */}
-          <div style={sectionBox(C.blue)}>
-            <div style={sectionLabel(C.blue)}>Permission Modes</div>
+          <div style={sectionBox(C.dark)}>
+            <div style={sectionLabel(C.dark)}>Permission Modes</div>
             {[
               { cmd: 'Default', desc: 'Asks before writes, commands, and network requests.', color: C.blue },
               { cmd: 'Plan Mode', desc: 'Reads and proposes but takes no actions. Toggle: Shift+Tab.', color: C.green },
@@ -234,8 +205,8 @@ export default function M1b_CommandGlossary() {
           </div>
 
           {/* ── Configuration Files ── */}
-          <div style={sectionBox(C.gray)}>
-            <div style={sectionLabel(C.muted)}>Configuration Files</div>
+          <div style={sectionBox(C.dark)}>
+            <div style={sectionLabel(C.dark)}>Configuration Files</div>
             {[
               { cmd: 'CLAUDE.md', desc: 'Project context \u2014 architecture, conventions, testing. Read every session. The most impactful configuration.' },
               { cmd: '.claude/settings.json', desc: 'Project settings \u2014 MCP servers, permissions, model preferences.' },
@@ -250,8 +221,8 @@ export default function M1b_CommandGlossary() {
           </div>
 
           {/* ── Environment Variables ── */}
-          <div style={sectionBox(C.green)}>
-            <div style={sectionLabel(C.green)}>Environment Variables</div>
+          <div style={sectionBox(C.dark)}>
+            <div style={sectionLabel(C.dark)}>Environment Variables</div>
             {[
               { cmd: 'ANTHROPIC_API_KEY', desc: 'API key auth. Required for CI/CD and headless mode.' },
               { cmd: 'CLAUDE_CODE_USE_BEDROCK', desc: 'Route through AWS Bedrock.' },

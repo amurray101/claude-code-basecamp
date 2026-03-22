@@ -114,19 +114,19 @@ export default function M2b_PromptPatterns() {
               },
               {
                 bad: '"Do step 1, then step 2, then..."',
-                fix: 'Micromanaging. Describe the destination, not the route.',
+                fix: 'Describe the destination, not the route.',
               },
               {
                 bad: '"Fix the bug"',
-                fix: 'Too vague. Describe symptoms, context, expected behavior.',
+                fix: 'Include symptoms, context, expected behavior.',
               },
               {
                 bad: 'Refactor A, then add feature B, then fix bug C, then update README \u2014 all in one session',
-                fix: 'Kitchen-sink session. Context overload. One job per session, or /compact between tasks.',
+                fix: 'One job per session. /compact between tasks.',
               },
               {
                 bad: '"No, use TypeScript. Actually wait, make it async. Also change the naming..."',
-                fix: 'Correction spiral. Rapid corrections degrade output. Start fresh with a clear, complete prompt.',
+                fix: 'Start fresh with a clear, complete prompt.',
               },
             ].map((a, i) => (
               <div key={i} style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -287,11 +287,6 @@ export default function M2b_PromptPatterns() {
               ))}
             </div>
 
-            {/* Command cross-reference */}
-            <div style={{ fontFamily: 'var(--sans)', fontSize: 10, color: C.faint, marginBottom: 16, lineHeight: 1.6 }}>
-              Command reference: see M1b (Command Glossary). Key commands for today: <span style={inlineCode}>/compact</span> (between tasks), <span style={inlineCode}>/clear</span> (new topic), <span style={inlineCode}>/cost</span> (check spend).
-            </div>
-
             {/* Key Insight */}
             <div
               style={{
@@ -377,6 +372,24 @@ export default function M2b_PromptPatterns() {
                   <span style={{ fontFamily: 'var(--sans)', fontSize: 12, color: C.dark, lineHeight: 1.6 }}>
                     {item}
                   </span>
+                </div>
+              ))}
+            </div>
+
+            {/* Common Workflows */}
+            <h2 style={{ ...sectionHeading, marginTop: 20 }}>Common Workflows</h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {[
+                { name: 'Refactoring', template: '"Refactor [file] to follow [conventions]. Don\'t change the public API."' },
+                { name: 'Adding features', template: '"Add [feature] following the same patterns as [existing]."' },
+                { name: 'Writing tests', template: '"Write tests for [module] using the same patterns as [existing tests]."' },
+                { name: 'Debugging', template: '"This test is failing: [error]. Diagnose the root cause and fix it."' },
+                { name: 'Code review', template: '"Review [file] for: separation of concerns, error handling, test coverage."' },
+                { name: 'Documentation', template: '"Add JSDoc to all exported functions. Follow the existing doc style."' },
+              ].map((w) => (
+                <div key={w.name} style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                  <span style={{ fontFamily: 'var(--sans)', fontSize: 12, fontWeight: 600, color: C.dark }}>{w.name}</span>
+                  <span style={{ fontFamily: 'var(--sans)', fontSize: 11, color: C.muted, lineHeight: 1.5, fontStyle: 'italic' }}>{w.template}</span>
                 </div>
               ))}
             </div>
