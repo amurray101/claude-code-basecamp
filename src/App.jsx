@@ -1043,14 +1043,14 @@ const MODULES = [
   {
     id: 1, number: "01", day: "Day 1",
     title: "First contact",
-    subtitle: "Install Claude Code in the terminal and VS Code, navigate both interfaces, and complete your first agentic task. Everyone starts here.",
+    subtitle: "Install Claude Code, understand the agentic loop, learn the permission system, and complete your first agentic task. Everyone starts here.",
     customerFraming: "Run a live install for a prospect and deliver their first \"wow\" moment in under 10 minutes.",
     clientScenario: { company: "Meridian Health", industry: "Healthcare SaaS", situation: "Meridian Health's 8-person backend team needs 2–3 days to add new API endpoints due to boilerplate and testing overhead. Your job: install Claude Code and deliver their first real productivity win — a new endpoint built in minutes, not days." },
     materials: [
       { id: "M1", label: "Install & First Run cheat sheet", when: "Print before starting — follow alongside steps 1-4" },
       { id: "M1b", label: "Command Glossary", when: "Desk reference — every command, shortcut, and flag in one place" },
     ],
-    skills: ["Terminal install", "VS Code / JetBrains setup", "Basic prompting", "Navigation", "First agentic task"],
+    skills: ["Terminal install", "VS Code / JetBrains setup", "Agentic loop concepts", "Context window basics", "Permission system", "Basic prompting", "First agentic task"],
     modality: { live: "45 min", lab: "45 min", selfPaced: "30 min pre-work" },
 steps: [
       { title: "Install and authenticate", context: "terminal", desc: "Install Claude Code globally, authenticate with your Anthropic account, and verify the installation.", commands: ["curl -fsSL https://cli.anthropic.com/install.sh | sh", "claude auth", "claude --version"], expected: "You should see a success message with the installed version number, a browser window to log in, and the version number confirming everything works.", materialRef: { id: "M1", note: "Follow along with the Install & First Run cheat sheet for troubleshooting tips" }, tip: "If you're on a company network that blocks the browser redirect, ask your facilitator for the manual token flow." },
@@ -1082,14 +1082,14 @@ steps: [
   {
     id: 2, number: "02", day: "Day 2",
     title: "Prompt craft for agentic coding",
-    subtitle: "CLAUDE.md, context and session management, and the art of steering multi-step workflows. The module that separates surface-level users from power users.",
+    subtitle: "CLAUDE.md authoring, settings and CLI flags, session management, Plan mode, and prompt patterns that separate surface-level users from power users.",
     customerFraming: "Show a customer how to make Claude Code an expert on their codebase — not just a generic tool.",
     clientScenario: { company: "Lumen Logistics", industry: "Supply chain / logistics", situation: "Lumen Logistics has 40 developers, a sprawling Node.js monorepo, and zero documentation. New hires take 3 weeks to become productive because conventions are unwritten. Your job: write the CLAUDE.md that makes Claude an effective team member, then prove it by refactoring a messy module to match." },
     materials: [
       { id: "M2a", label: "CLAUDE.md Builder worksheet", when: "Use during step 4 to structure your CLAUDE.md" },
       { id: "M2b", label: "Prompt Patterns cheat sheet", when: "Reference while practicing prompt craft in steps 6-8" },
     ],
-    skills: ["CLAUDE.md authoring", "Context management", "Session hygiene", "Multi-step workflows", "Prompt patterns"],
+    skills: ["CLAUDE.md authoring", "Settings & CLI flags", "Context management", "Session hygiene (/compact, /clear, /cost)", "Plan mode", "Slash commands", "Multi-step workflows", "Prompt patterns"],
     modality: { live: "60 min", lab: "60 min", selfPaced: "30 min pre-work" },
 steps: [
       { title: "Set the scene: Lumen\'s problem", desc: "Before touching any code, internalize the customer scenario. Lumen Logistics has 40 developers, zero documentation, and a 3-week ramp time for new hires. The CTO wants Claude Code to fix this. Your job today: prove that a single file \u2014 CLAUDE.md \u2014 can transform how Claude understands and works within their codebase.", narration: "Open with: 'Imagine you\'re walking into Lumen Logistics. Their CTO tells you: our new hires take three weeks to get productive because nothing is written down. Can Claude Code fix that?' Pause. Let that land. The answer is yes \u2014 and the key is CLAUDE.md.", timing: "2 min" },
@@ -1128,13 +1128,13 @@ steps: [
   {
     id: 3, number: "03", day: "Day 3",
     title: "Extend and customize",
-    subtitle: "Hooks, MCP servers, Skills, Plugins, subagents, and the Agent SDK. Turn Claude Code into your customer's engineering platform.",
+    subtitle: "Hooks, MCP servers, custom slash commands, sub-agents, IDE integration, CI/CD automation, and the Agent SDK. Turn Claude Code into your customer's engineering platform.",
     customerFraming: "Design the hooks, integrations, and guardrails that make a customer's security and compliance team say yes.",
     clientScenario: { company: "Arcadia Financial", industry: "Fintech / regulated", situation: "Arcadia Financial has 60 engineers and hard compliance requirements: nothing ships without lint, type checks, and tests. Their PM team lives in Jira and developers constantly context-switch. Can Claude Code enforce quality gates and pull Jira context automatically?" },
     materials: [
       { id: "M3", label: "Integration Patterns architecture reference", when: "Architecture diagrams for hooks, MCP, and slash commands" },
     ],
-    skills: ["Hooks", "MCP integration", "Skills & Plugins", "Subagents & Agent Teams", "Agent SDK"],
+    skills: ["Hooks", "MCP integration", "Custom slash commands", "Sub-agents & Agent Teams", "IDE integration (VS Code, JetBrains)", "CI/CD & headless mode", "Agent SDK"],
     modality: { live: "45 min", lab: "75 min", selfPaced: "45 min pre-work" },
 steps: [
       { title: "Create a pre-commit hook", context: "file", desc: "Hooks are the answer to 'How do I control what Claude does?' Create a hooks configuration that enforces quality gates before any commit.", code: "// .claude/hooks.json\n{\n  \"pre-commit\": [\n    \"npm run lint\",\n    \"npm run type-check\",\n    \"npm test -- --bail\"\n  ],\n  \"post-edit\": [\n    \"npm test -- --related --bail\"\n  ]\n}", codeTitle: ".claude/hooks.json", tip: "The post-edit hook runs tests only on files related to what Claude just changed. The --bail flag stops on the first failure, saving time. This is the pattern enterprise customers love." },
@@ -1167,6 +1167,7 @@ steps: [
   },
   {
     id: 4, number: "04", day: "Day 4",
+    roleSpecific: true,
     title: "Customer scenarios",
     subtitle: "Role-specific breakouts. Handle security reviews, architect enterprise deployments, navigate cost conversations, and present to real skeptics.",
     customerFraming: "Handle the three conversations that close deals: the CISO, the VP of Engineering, and the Copilot skeptic.",
@@ -1205,6 +1206,7 @@ steps: [
   },
   {
     id: 5, number: "05", day: "Day 5",
+    roleSpecific: true,
     title: "Ship it",
     subtitle: "Blind customer brief. Working demo. Peer review. Make it count.",
     customerFraming: "Prove you can go from a blind customer brief to a working demo and a compelling pitch — under pressure.",
