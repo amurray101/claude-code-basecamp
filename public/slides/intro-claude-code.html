@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Introduction to Claude Code</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css">
+  <link rel="stylesheet" href="shared/theme.css">
+  <link rel="stylesheet" href="shared/icons.css">
+  <link rel="stylesheet" href="shared/diagrams.css">
+  <link rel="stylesheet" href="shared/animations.css">
+  <style>
+    /* === PASTEL THEME OVERRIDES === */
+    /* Apple x Easter x girly: white canvas, soft pastels, lots of air */
+
+    :root {
+      --accent-coral: #EFA0B8;       /* blush pink */
+      --accent-teal: #B8ADE6;        /* soft lavender */
+      --accent-sage: #A8E0CB;        /* seafoam mint */
+      --accent-terracotta: #F4B8C1;  /* soft rose */
+      --bg-primary: #FFFFFF;
+      --bg-secondary: #FDF6F8;       /* barely-there blush */
+      --bg-white: #FFFFFF;
+      --text-primary: #3A3340;       /* warm dark */
+      --text-secondary: #918A96;
+      --text-light: #B8B2BC;
+      --border-light: #F2EBF0;
+      --border-medium: #E8DFE6;
+      --shadow-card: 0 2px 16px rgba(180, 140, 170, 0.08);
+      --radius-lg: 8px;
+      --radius-md: 6px;
+      --radius-xl: 8px;
+    }
+
+    /* Global slide background */
+    .reveal .slides section {
+      background: #FFFFFF;
+    }
+    .reveal {
+      background: #FFFFFF;
+    }
+
+    /* Softer headings */
+    .reveal h2 {
+      color: #3A3340;
+    }
+
+    /* === INTRO DECK LOCAL STYLES === */
+
+    .agentic-loop {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-md);
+      margin: var(--space-xl) auto;
+      max-width: 800px;
+    }
+    .loop-node {
+      padding: var(--space-md) var(--space-lg);
+      border-radius: 8px;
+      text-align: center;
+      font-weight: var(--weight-semibold);
+      font-size: var(--text-base);
+      min-width: 120px;
+      box-shadow: none;
+      border: none;
+    }
+    .loop-node.read  { background: #D4CCFA; color: #3A3340; }  /* lavender */
+    .loop-node.plan  { background: #FAC6D4; color: #3A3340; }  /* blush */
+    .loop-node.act   { background: #B8F0DB; color: #3A3340; }  /* mint */
+    .loop-node.verify { background: #FFDAB9; color: #3A3340; } /* peach */
+    .loop-connector {
+      font-size: var(--text-xl);
+      color: #DDD6E1;
+      font-weight: var(--weight-bold);
+    }
+
+    .four-up {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-md);
+      margin: var(--space-lg) 0;
+    }
+    .four-up-item {
+      background: #FFFFFF;
+      border-radius: 8px;
+      padding: var(--space-lg);
+      box-shadow: 0 2px 16px rgba(180, 140, 170, 0.08);
+      border: 1px solid #F2EBF0;
+    }
+    .four-up-item h4 {
+      color: var(--accent-coral);
+      margin-bottom: var(--space-xs);
+    }
+    .four-up-item p {
+      font-size: var(--text-sm);
+      margin: 0;
+    }
+
+    /* Cards — cleaner, Apple-like */
+    .reveal .card {
+      border-radius: 8px;
+      border: 1px solid #F2EBF0;
+      box-shadow: 0 1px 8px rgba(180, 140, 170, 0.06);
+    }
+
+    /* Section label badge — pastel pills */
+    .section-badge {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-bold);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 5px 16px;
+      border-radius: 8px;
+      margin-bottom: var(--space-md);
+    }
+    .section-badge.what   { background: #FADED4; color: #9E5C72; }  /* pink tint */
+    .section-badge.setup  { background: #E6DEFA; color: #6B5E99; }  /* lavender tint */
+    .section-badge.build  { background: #D1F5E6; color: #4E8A6E; }  /* mint tint */
+    .section-badge.wrap   { background: #F0EAF2; color: #6B5E7A; }  /* mauve tint */
+
+    /* Agenda items */
+    .agenda-row {
+      display: flex;
+      align-items: center;
+      gap: var(--space-lg);
+      padding: var(--space-md) var(--space-lg);
+      border-radius: 8px;
+      margin-bottom: var(--space-sm);
+      background: #FFFFFF;
+      border: 1px solid #F2EBF0;
+      box-shadow: 0 1px 8px rgba(180, 140, 170, 0.06);
+    }
+    .agenda-num {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: var(--weight-bold);
+      font-size: var(--text-base);
+      color: white;
+    }
+    .agenda-text h4 { margin: 0 0 2px; color: #3A3340; }
+    .agenda-text p  { margin: 0; font-size: var(--text-sm); color: #918A96; }
+
+    /* Progress dots */
+    .progress-dots {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: var(--space-xl);
+    }
+    .progress-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #F0E8ED;
+    }
+    .progress-dot.active {
+      width: 40px;
+      border-radius: 6px;
+    }
+
+    /* Exercise card */
+    .exercise-card {
+      max-width: 700px;
+      margin: 0 auto;
+      background: #FFFFFF;
+      border: 1px solid #F2EBF0;
+      border-radius: 8px;
+      padding: var(--space-xl);
+      box-shadow: 0 4px 24px rgba(180, 140, 170, 0.1);
+    }
+    .exercise-label {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      font-weight: var(--weight-bold);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 5px 16px;
+      border-radius: 8px;
+      margin-bottom: var(--space-md);
+      background: #FADED4;
+      color: #9E5C72;
+    }
+    .exercise-prompt {
+      font-size: var(--text-lg);
+      line-height: 1.6;
+      color: #3A3340;
+      margin: var(--space-md) 0;
+      padding: var(--space-md) var(--space-lg);
+      background: #FDF6F8;
+      border-radius: 8px;
+      border-left: 4px solid #EFA0B8;
+    }
+
+    /* Tip callout */
+    .tip-callout {
+      max-width: 700px;
+      margin: var(--space-lg) auto 0;
+      padding: var(--space-md) var(--space-lg);
+      background: #F8F4FC;
+      border-left: 4px solid #B8ADE6;
+      border-radius: 8px;
+      font-size: var(--text-sm);
+      color: #918A96;
+    }
+    .tip-callout strong {
+      color: #7B6DAE;
+    }
+    .tip-callout.mint {
+      background: #F0FCF6;
+      border-left-color: #A8E0CB;
+    }
+    .tip-callout.mint strong {
+      color: #4E8A6E;
+    }
+
+    /* Section dividers — soft blush surface */
+    .reveal .slides section.slide-divider {
+      background: #FDF6F8 !important;
+    }
+
+    /* Course footer */
+    .course-footer {
+      color: #C8BFC9;
+    }
+  </style>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- ============================================================
+           TITLE
+           ============================================================ -->
+      <section class="slide-divider" data-transition="fade" data-background-color="var(--bg-secondary)">
+        <div style="display: flex; justify-content: center; gap: 12px; margin-bottom: 24px;">
+          <div style="width: 48px; height: 48px; background: #FADED4; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 24px;">&#128193;</div>
+          <div style="display: flex; align-items: center; color: #DDD6E1; font-size: 24px;">&#8594;</div>
+          <div style="width: 48px; height: 48px; background: #D1F5E6; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 24px;">&#10024;</div>
+        </div>
+        <div class="day-label">Introduction</div>
+        <h2>What Is Claude Code?</h2>
+        <p class="part-description">An AI that doesn&rsquo;t just suggest code &mdash; it does the work</p>
+        <aside class="notes">
+          <p><strong>[OPEN]</strong> "You've probably heard names like Copilot, ChatGPT, Cursor tossed around. Today we're going to cut through the noise. I'll show you what Claude Code is, we'll get you set up, and then you'll build a real project from scratch — from an empty folder to a working site in about 20 minutes."</p>
+        </aside>
+      </section>
+
+      <!-- ============================================================
+           AGENDA
+           ============================================================ -->
+      <section data-transition="slide">
+        <h2>What We&rsquo;ll Cover</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-xl);">45 minutes: learn it, set it up, build something</p>
+        <div style="max-width: 620px; margin: 0 auto;">
+          <div class="agenda-row">
+            <div class="agenda-num" style="background: var(--accent-coral);">1</div>
+            <div class="agenda-text">
+              <h4>What It Is</h4>
+              <p>How it differs from tools you&rsquo;ve heard of, and how it works</p>
+            </div>
+          </div>
+          <div class="agenda-row">
+            <div class="agenda-num" style="background: var(--accent-teal);">2</div>
+            <div class="agenda-text">
+              <h4>Getting Set Up</h4>
+              <p>Folders, VS Code, Git, models, and modes</p>
+            </div>
+          </div>
+          <div class="agenda-row" style="background: #F0FCF6; border: 2px solid #B8F0DB;">
+            <div class="agenda-num" style="background: var(--accent-sage);">3</div>
+            <div class="agenda-text">
+              <h4>Build Something</h4>
+              <p>Hands-on: go from an empty folder to a working website</p>
+            </div>
+            <div style="font-family: var(--font-mono); font-size: 10px; color: #4E8A6E; background: #D1F5E6; padding: 3px 10px; border-radius: 8px; flex-shrink: 0;">most of our time</div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[FRAMING]</strong> "Parts 1 and 2 are quick — about 15 minutes total. The rest of our time is hands-on. You'll build a real website from nothing."</p>
+        </aside>
+      </section>
+
+
+      <!-- ============================================================
+                    PART 1 — WHAT IT IS
+           ============================================================ -->
+
+      <section class="slide-divider" data-transition="fade" data-background-color="var(--bg-secondary)">
+        <div class="day-label" style="color: var(--accent-coral);">Part 1 &middot; ~7 min</div>
+        <h2>What It Is</h2>
+        <p class="part-description">How Claude Code differs from tools you may have heard of</p>
+        <div class="progress-dots">
+          <div class="progress-dot active" style="background: var(--accent-coral);"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Let's start with the basics. If you've heard of GitHub Copilot or Cursor, Claude Code is in the same universe — but it works in a fundamentally different way."</p>
+        </aside>
+      </section>
+
+      <!-- THE BIG DIFFERENCE -->
+      <section data-transition="slide">
+        <div class="section-badge what">Part 1 &middot; What It Is</div>
+        <h2>The Big Difference</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-xl);">Other tools suggest. Claude Code does.</p>
+
+        <div style="max-width: 800px; margin: 0 auto; display: flex; gap: 32px; align-items: stretch;">
+          <!-- Autocomplete side -->
+          <div style="flex: 1; text-align: center;">
+            <div style="font-size: 48px; margin-bottom: 12px;">&#9999;&#65039;</div>
+            <h4 style="color: #B8B2BC; margin: 0 0 8px;">Autocomplete</h4>
+            <div style="background: #F9F7FA; border-radius: 8px; padding: 16px; margin-bottom: 12px; text-align: left; line-height: 2.2;">
+              <span style="font-size: 13px; color: #3A3340;">Show the user&rsquo;s </span><span style="font-size: 13px; background: #E6DEFA; color: #7B6DAE; padding: 1px 6px; border-radius: 3px;">name and email</span><br>
+              <span style="font-size: 13px; color: #DDD6E1;">&#9612;</span>
+            </div>
+            <p style="font-size: var(--text-sm); color: #B8B2BC; margin: 0;">Finishes your sentence.<br>You do the rest.</p>
+          </div>
+
+          <!-- Divider -->
+          <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
+            <div style="width: 1px; flex: 1; background: #F2EBF0;"></div>
+            <span style="font-size: 12px; color: #DDD6E1; font-weight: var(--weight-bold);">vs</span>
+            <div style="width: 1px; flex: 1; background: #F2EBF0;"></div>
+          </div>
+
+          <!-- Claude Code side -->
+          <div style="flex: 1; text-align: center;">
+            <div style="font-size: 48px; margin-bottom: 12px;">&#10024;</div>
+            <h4 style="color: #9E5C72; margin: 0 0 8px;">Claude Code</h4>
+            <div style="background: #FDF6F8; border-radius: 8px; padding: 16px; margin-bottom: 12px; text-align: left;">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <span style="font-size: 9px; color: #A8E0CB;">&#9679;</span>
+                <span style="font-size: 12px; color: #3A3340;">Updated the login page</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <span style="font-size: 9px; color: #A8E0CB;">&#9679;</span>
+                <span style="font-size: 12px; color: #3A3340;">Added email verification</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <span style="font-size: 9px; color: #B8ADE6;">&#9679;</span>
+                <span style="font-size: 12px; color: #3A3340;">Wrote 3 tests</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span style="font-size: 11px;">&#9989;</span>
+                <span style="font-size: 12px; color: #4E8A6E;">All passing</span>
+              </div>
+            </div>
+            <p style="font-size: var(--text-sm); color: #9E5C72; margin: 0;">Reads, plans, edits, tests.<br>All from one request.</p>
+          </div>
+        </div>
+
+        <aside class="notes">
+          <p><strong>[ANALOGY]</strong> "Autocomplete is like a spell-checker that finishes your sentences. Claude Code is like a colleague you hand a task to — and they do it start to finish."</p>
+        </aside>
+      </section>
+
+      <!-- HOW IT WORKS -->
+      <section data-transition="slide">
+        <div class="section-badge what">Part 1 &middot; What It Is</div>
+        <h2>How It Works</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-md);">Four steps, on repeat</p>
+        <div class="agentic-loop" style="margin-top: var(--space-xl); margin-bottom: var(--space-xl);">
+          <div class="loop-node read">Read</div>
+          <div class="loop-connector">&#8594;</div>
+          <div class="loop-node plan">Plan</div>
+          <div class="loop-connector">&#8594;</div>
+          <div class="loop-node act">Act</div>
+          <div class="loop-connector">&#8594;</div>
+          <div class="loop-node verify">Verify</div>
+        </div>
+        <div style="text-align: center; font-size: var(--text-sm); color: var(--text-light); margin-bottom: var(--space-xl);">&#x21A9; If something&rsquo;s wrong, it goes back and tries again</div>
+        <div style="max-width: 650px; margin: 0 auto; display: flex; gap: 16px;">
+          <div style="flex: 1; background: #F8F4FC; border-radius: 8px; padding: 16px; text-align: center;">
+            <p style="font-size: var(--text-sm); color: #7B6DAE; margin: 0;">&#128064; It <strong>thinks</strong> before it acts &mdash; you can watch it reason in real time</p>
+          </div>
+          <div style="flex: 1; background: #F4FCF7; border-radius: 8px; padding: 16px; text-align: center;">
+            <p style="font-size: var(--text-sm); color: #4E8A6E; margin: 0;">&#128260; If something breaks, it goes <strong>back and fixes it</strong> &mdash; without you asking</p>
+          </div>
+        </div>
+        <p style="text-align: center; margin-top: var(--space-lg); font-size: var(--text-sm); color: #918A96;">You&rsquo;ll see this loop live in Part 3 when you build your project.</p>
+        <aside class="notes">
+          <p><strong>[KEY POINT]</strong> "Watch for the moment Claude catches its own mistake and fixes it — that's the thing that changes people's minds. You'll see it in about 15 minutes."</p>
+        </aside>
+      </section>
+
+
+      <!-- ============================================================
+                    PART 2 — GETTING SET UP
+           ============================================================ -->
+
+      <section class="slide-divider" data-transition="fade" data-background-color="var(--bg-secondary)">
+        <div class="day-label" style="color: var(--accent-teal);">Part 2 &middot; ~8 min</div>
+        <h2>Getting Set Up</h2>
+        <p class="part-description">Everything you need before we start building</p>
+        <div class="progress-dots">
+          <div class="progress-dot" style="background: var(--accent-coral);"></div>
+          <div class="progress-dot active" style="background: var(--accent-teal);"></div>
+          <div class="progress-dot"></div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Now let's get you ready to build. This is the practical stuff — your tools, your workspace, and a few settings that matter."</p>
+        </aside>
+      </section>
+
+      <!-- WHAT YOU NEED — VISUAL WORKSPACE DIAGRAM -->
+      <section data-transition="slide">
+        <div class="section-badge setup">Part 2 &middot; Getting Set Up</div>
+        <h2>Your Development Workspace</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-xl);">Four pieces that work together</p>
+
+        <!-- Visual diagram: nested layers -->
+        <div style="max-width: 780px; margin: 0 auto; position: relative;">
+
+          <!-- Outer layer: VS Code -->
+          <div style="background: #F8F4FC; border: 2px solid #E0D6F0; border-radius: 8px; padding: 20px 24px 24px;">
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
+              <div style="width: 10px; height: 10px; border-radius: 50%; background: #F4B8C1;"></div>
+              <div style="width: 10px; height: 10px; border-radius: 50%; background: #FFDAB9;"></div>
+              <div style="width: 10px; height: 10px; border-radius: 50%; background: #A8E0CB;"></div>
+              <span style="font-family: var(--font-mono); font-size: 11px; color: #7B6DAE; margin-left: 8px;">VS Code</span>
+              <span style="font-size: 11px; color: #918A96;">&mdash; your editor. Where you see and manage everything.</span>
+            </div>
+
+            <div style="display: flex; gap: 16px;">
+
+              <!-- Left: Project folder -->
+              <div style="flex: 1; background: #FFFFFF; border: 1.5px solid #F2EBF0; border-radius: 8px; padding: 16px;">
+                <div style="font-family: var(--font-mono); font-size: 11px; color: #7B6DAE; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px;">Project Folder</div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 14px;">&#128196;</span>
+                    <span style="font-family: var(--font-mono); font-size: 12px; color: #3A3340;">index.html</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 14px;">&#127912;</span>
+                    <span style="font-family: var(--font-mono); font-size: 12px; color: #3A3340;">style.css</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <span style="font-size: 14px;">&#9889;</span>
+                    <span style="font-family: var(--font-mono); font-size: 12px; color: #3A3340;">script.js</span>
+                  </div>
+                </div>
+                <p style="font-size: 11px; color: #918A96; margin: 10px 0 0; line-height: 1.5;">Your code lives here. Claude reads this folder to understand your project.</p>
+              </div>
+
+              <!-- Right: Claude Code panel + Git -->
+              <div style="flex: 1; display: flex; flex-direction: column; gap: 12px;">
+
+                <!-- Claude Code panel -->
+                <div style="flex: 1; background: #FFFFFF; border: 1.5px solid #FAC6D4; border-radius: 8px; padding: 16px;">
+                  <div style="font-family: var(--font-mono); font-size: 11px; color: #9E5C72; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">Claude Code Panel</div>
+                  <div style="background: #FDF6F8; border-radius: 6px; padding: 10px 12px; margin-bottom: 8px;">
+                    <p style="font-size: 12px; color: #3A3340; margin: 0; font-style: italic;">&ldquo;Build me a landing page&hellip;&rdquo;</p>
+                  </div>
+                  <p style="font-size: 11px; color: #918A96; margin: 0; line-height: 1.5;">You talk to Claude here. It reads your files, plans changes, and edits your code.</p>
+                </div>
+
+                <!-- Git -->
+                <div style="background: #FFFFFF; border: 1.5px solid #B8F0DB; border-radius: 8px; padding: 12px 16px;">
+                  <div style="display: flex; align-items: center; gap: 8px;">
+                    <div style="font-family: var(--font-mono); font-size: 11px; color: #4E8A6E; text-transform: uppercase; letter-spacing: 0.05em;">Git</div>
+                    <span style="font-size: 11px; color: #918A96;">&mdash; &ldquo;track changes&rdquo; for code. Undo anything, anytime.</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Claude account badge — floating below -->
+          <div style="display: flex; justify-content: center; margin-top: 16px;">
+            <div style="background: #FFDAB9; border-radius: 8px; padding: 8px 20px; display: flex; align-items: center; gap: 10px;">
+              <span style="font-size: 14px;">&#128100;</span>
+              <span style="font-size: 12px; color: #3A3340;"><strong>Claude account</strong> &mdash; sign in once, connects everything to Anthropic&rsquo;s AI</span>
+            </div>
+          </div>
+
+        </div>
+
+        <aside class="notes">
+          <p><strong>[WALK THROUGH THE DIAGRAM]</strong> "Here's how the pieces fit together. VS Code is the outer shell — it's your workspace. Inside it, on the left, is your project folder with your actual files. On the right is the Claude Code panel — that's where you talk to Claude. And underneath, Git quietly tracks every change so you can always undo. Your Claude account ties it all to the AI."</p>
+          <p><strong>[PAUSE]</strong> Give people a minute to set up if they haven't already. Walk around and help. This is where people get stuck — especially Git and the extension install.</p>
+          <p><strong>[REASSURANCE]</strong> "You don't need to master any of these today. You just need them installed and open. Claude does the heavy lifting."</p>
+        </aside>
+      </section>
+
+      <!-- MODELS -->
+      <section data-transition="slide">
+        <div class="section-badge setup">Part 2 &middot; Getting Set Up</div>
+        <h2>Three Models, One Tool</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Like picking a size &mdash; same great coffee, different strengths</p>
+
+        <div style="max-width: 700px; margin: 0 auto; display: flex; align-items: flex-end; justify-content: center; gap: 32px; margin-bottom: var(--space-xl);">
+          <!-- Haiku -->
+          <div style="text-align: center; flex: 1;">
+            <div style="background: #D1F5E6; width: 80px; height: 80px; border-radius: 8px; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 32px;">&#9889;</div>
+            <h4 style="color: #4E8A6E; margin: 0 0 4px;">Haiku</h4>
+            <p style="font-size: var(--text-sm); color: #918A96; margin: 0;">Quick &amp; light</p>
+            <p style="font-size: 11px; color: #B8B2BC; margin: 4px 0 0;">Simple questions,<br>fast answers</p>
+          </div>
+          <!-- Sonnet -->
+          <div style="text-align: center; flex: 1;">
+            <div style="background: #FADED4; width: 100px; height: 100px; border-radius: 8px; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 40px; position: relative;">&#10024;
+              <div style="position: absolute; top: -8px; right: -8px; background: #EFA0B8; color: white; font-size: 9px; font-weight: var(--weight-bold); padding: 2px 8px; border-radius: 8px; font-family: var(--font-mono);">DEFAULT</div>
+            </div>
+            <h4 style="color: #9E5C72; margin: 0 0 4px;">Sonnet</h4>
+            <p style="font-size: var(--text-sm); color: #918A96; margin: 0;">The sweet spot</p>
+            <p style="font-size: 11px; color: #B8B2BC; margin: 4px 0 0;">Most tasks, best<br>balance of speed &amp; quality</p>
+          </div>
+          <!-- Opus -->
+          <div style="text-align: center; flex: 1;">
+            <div style="background: #E6DEFA; width: 120px; height: 120px; border-radius: 8px; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 48px;">&#129504;</div>
+            <h4 style="color: #7B6DAE; margin: 0 0 4px;">Opus</h4>
+            <p style="font-size: var(--text-sm); color: #918A96; margin: 0;">Deep thinker</p>
+            <p style="font-size: 11px; color: #B8B2BC; margin: 4px 0 0;">Hard problems,<br>complex reasoning</p>
+          </div>
+        </div>
+
+        <div class="tip-callout">
+          <strong>For today:</strong> Stick with Sonnet. It handles everything we&rsquo;ll build. You can explore the others later.
+        </div>
+        <aside class="notes">
+          <p><strong>[KEEP IT SIMPLE]</strong> "Haiku is your quick text, Sonnet is your everyday workhorse, Opus is your deep-thinking expert. Start with Sonnet — you'll know when you need the others."</p>
+        </aside>
+      </section>
+
+      <!-- MODES -->
+      <section data-transition="slide">
+        <div class="section-badge setup">Part 2 &middot; Getting Set Up</div>
+        <h2>How Much Control Do You Want?</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-xl);">Two ways to work &mdash; plus a thinking mode</p>
+
+        <div style="max-width: 700px; margin: 0 auto;">
+          <!-- Trust spectrum: Suggest → Auto-edit -->
+          <div style="display: flex; align-items: center; margin-bottom: 8px;">
+            <span style="font-size: 11px; color: #B8B2BC;">You approve everything</span>
+            <div style="flex: 1; height: 4px; background: linear-gradient(to right, #D4CCFA, #B8F0DB); border-radius: 2px; margin: 0 16px;"></div>
+            <span style="font-size: 11px; color: #B8B2BC;">Claude handles it</span>
+          </div>
+
+          <div style="display: flex; gap: 16px; margin-top: 20px;">
+            <!-- Suggest -->
+            <div style="flex: 1; background: #F8F4FC; border: 2px solid #D4CCFA; border-radius: 8px; padding: 20px; text-align: center; position: relative;">
+              <div style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: #B8ADE6; color: white; font-size: 9px; font-weight: var(--weight-bold); padding: 2px 10px; border-radius: 8px; font-family: var(--font-mono);">START HERE</div>
+              <div style="font-size: 32px; margin-bottom: 8px;">&#128064;</div>
+              <h4 style="color: #7B6DAE; margin: 0 0 6px;">Suggest</h4>
+              <p style="font-size: 12px; color: #918A96; margin: 0; line-height: 1.5;">Claude shows you what it wants to do. You say yes or no.</p>
+            </div>
+            <!-- Auto-edit -->
+            <div style="flex: 1; background: #F4FCF7; border: 1.5px solid #D1F5E6; border-radius: 8px; padding: 20px; text-align: center;">
+              <div style="font-size: 32px; margin-bottom: 8px;">&#9997;&#65039;</div>
+              <h4 style="color: #4E8A6E; margin: 0 0 6px;">Auto-edit</h4>
+              <p style="font-size: 12px; color: #918A96; margin: 0; line-height: 1.5;">Claude edits files freely. Still asks before running commands.</p>
+            </div>
+          </div>
+
+          <!-- Plan mode — separate, different axis -->
+          <div style="margin-top: 16px; background: #FDF6F8; border: 1.5px dashed #FADED4; border-radius: 8px; padding: 14px 20px; display: flex; align-items: center; gap: 16px;">
+            <div style="font-size: 28px; flex-shrink: 0;">&#128161;</div>
+            <div>
+              <h4 style="color: #9E5C72; margin: 0 0 4px;">Plan mode <span style="font-size: 11px; font-weight: normal; color: #918A96;">&mdash; a different tool, not a step further</span></h4>
+              <p style="font-size: 12px; color: #918A96; margin: 0; line-height: 1.5;">Claude thinks out loud but doesn&rsquo;t touch anything. Use it when you want to explore an idea before committing.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="tip-callout">
+          <strong>For today:</strong> We&rsquo;ll use Suggest mode. You&rsquo;ll see exactly what Claude wants to do before it does it &mdash; the best way to learn.
+        </div>
+        <aside class="notes">
+          <p><strong>[KEY MESSAGE]</strong> "Suggest and Auto-edit are a spectrum of trust. Plan mode is a different thing entirely — it's for when you want to think before you build. You're never surprised in any mode."</p>
+          <p><strong>[UP NEXT]</strong> "You're set up. Now let's build."</p>
+        </aside>
+      </section>
+
+
+      <!-- ============================================================
+                    PART 3 — BUILD SOMETHING
+           ============================================================ -->
+
+      <section class="slide-divider" data-transition="fade" data-background-color="var(--bg-secondary)">
+        <div class="day-label" style="color: var(--accent-sage);">Part 3 &middot; ~25 min</div>
+        <h2>Build Something</h2>
+        <p class="part-description">From an empty folder to a working website &mdash; hands-on</p>
+        <div class="progress-dots">
+          <div class="progress-dot" style="background: var(--accent-coral);"></div>
+          <div class="progress-dot" style="background: var(--accent-teal);"></div>
+          <div class="progress-dot active" style="background: var(--accent-sage);"></div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "This is the main event. You're going to build a real website from scratch — starting with an empty folder. Three exercises, each building on the last."</p>
+        </aside>
+      </section>
+
+      <!-- WHAT WE'RE BUILDING — VISUAL STORYBOARD -->
+      <section data-transition="slide">
+        <div class="section-badge build">Part 3 &middot; Build Something</div>
+        <h2>What We&rsquo;re Building</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-xl);">A personal landing page &mdash; three steps, each building on the last</p>
+
+        <!-- Storyboard: 4 frames showing progression -->
+        <div style="max-width: 800px; margin: 0 auto; display: flex; align-items: flex-end; gap: 8px;">
+
+          <!-- Frame 0: Empty folder -->
+          <div style="flex: 1; text-align: center;">
+            <div style="background: #F9F7FA; border: 2px dashed #E0D6F0; border-radius: 8px; height: 120px; display: flex; align-items: center; justify-content: center;">
+              <span style="font-size: 36px; opacity: 0.4;">&#128193;</span>
+            </div>
+            <p style="font-size: 11px; color: #B8B2BC; margin: 8px 0 0;">Start here</p>
+          </div>
+
+          <div style="color: #DDD6E1; font-size: 20px; padding-bottom: 30px;">&#8594;</div>
+
+          <!-- Frame 1: Landing page -->
+          <div style="flex: 1; text-align: center;">
+            <div style="background: #FDF6F8; border: 2px solid #FAC6D4; border-radius: 8px; height: 120px; padding: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;">
+              <div style="width: 40px; height: 40px; background: #FADED4; border-radius: 50%;"></div>
+              <div style="width: 60%; height: 6px; background: #FAC6D4; border-radius: 3px;"></div>
+              <div style="width: 40%; height: 4px; background: #F2EBF0; border-radius: 2px;"></div>
+              <div style="display: flex; gap: 4px; margin-top: 4px;">
+                <div style="width: 8px; height: 8px; background: #D4CCFA; border-radius: 50%;"></div>
+                <div style="width: 8px; height: 8px; background: #D4CCFA; border-radius: 50%;"></div>
+                <div style="width: 8px; height: 8px; background: #D4CCFA; border-radius: 50%;"></div>
+              </div>
+            </div>
+            <p style="font-size: 11px; color: #9E5C72; margin: 8px 0 0; font-weight: var(--weight-semibold);">Ex 1: Create</p>
+          </div>
+
+          <div style="color: #DDD6E1; font-size: 20px; padding-bottom: 30px;">&#8594;</div>
+
+          <!-- Frame 2: With dark mode toggle -->
+          <div style="flex: 1; text-align: center;">
+            <div style="background: #3A3340; border: 2px solid #5A5060; border-radius: 8px; height: 120px; padding: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; position: relative;">
+              <div style="position: absolute; top: 8px; right: 8px; width: 24px; height: 14px; background: #B8ADE6; border-radius: 7px;"></div>
+              <div style="width: 40px; height: 40px; background: #5A5060; border-radius: 50%;"></div>
+              <div style="width: 60%; height: 6px; background: #7B6DAE; border-radius: 3px;"></div>
+              <div style="width: 40%; height: 4px; background: #5A5060; border-radius: 2px;"></div>
+            </div>
+            <p style="font-size: 11px; color: #7B6DAE; margin: 8px 0 0; font-weight: var(--weight-semibold);">Ex 2: Dark mode</p>
+          </div>
+
+          <div style="color: #DDD6E1; font-size: 20px; padding-bottom: 30px;">&#8594;</div>
+
+          <!-- Frame 3: Multi-page with nav -->
+          <div style="flex: 1; text-align: center;">
+            <div style="background: #F4FCF7; border: 2px solid #B8F0DB; border-radius: 8px; height: 120px; padding: 8px; display: flex; flex-direction: column;">
+              <div style="display: flex; gap: 4px; margin-bottom: 6px;">
+                <div style="flex: 1; height: 12px; background: #D1F5E6; border-radius: 3px;"></div>
+                <div style="flex: 1; height: 12px; background: #B8F0DB; border-radius: 3px;"></div>
+              </div>
+              <div style="flex: 1; display: flex; gap: 4px;">
+                <div style="flex: 1; background: #FFFFFF; border: 1px solid #D1F5E6; border-radius: 4px; padding: 6px;">
+                  <div style="width: 100%; height: 5px; background: #D1F5E6; border-radius: 2px; margin-bottom: 4px;"></div>
+                  <div style="width: 70%; height: 3px; background: #E8F5EE; border-radius: 2px;"></div>
+                </div>
+                <div style="flex: 1; background: #FFFFFF; border: 1px solid #D1F5E6; border-radius: 4px; padding: 6px;">
+                  <div style="width: 100%; height: 5px; background: #D1F5E6; border-radius: 2px; margin-bottom: 4px;"></div>
+                  <div style="width: 70%; height: 3px; background: #E8F5EE; border-radius: 2px;"></div>
+                </div>
+              </div>
+            </div>
+            <p style="font-size: 11px; color: #4E8A6E; margin: 8px 0 0; font-weight: var(--weight-semibold);">Ex 3: Multi-page</p>
+          </div>
+        </div>
+
+        <!-- Setup CTA -->
+        <div style="max-width: 600px; margin: var(--space-xl) auto 0; background: #FDF6F8; border: 2px solid #FAC6D4; border-radius: 8px; padding: 16px 24px; display: flex; align-items: center; gap: 16px;">
+          <div style="font-size: 28px; flex-shrink: 0;">&#128640;</div>
+          <div>
+            <p style="font-size: var(--text-base); color: #3A3340; margin: 0; font-weight: var(--weight-semibold);">Before we start</p>
+            <p style="font-size: var(--text-sm); color: #918A96; margin: 4px 0 0;">Open your empty folder in VS Code and launch the Claude Code panel. We&rsquo;ll start together.</p>
+            <p style="font-size: var(--text-sm); color: #B8ADE6; margin: 6px 0 0; font-style: italic;">There&rsquo;s no wrong pace. If this is your first time, you&rsquo;re exactly who this is for.</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[SETUP CHECK]</strong> "Does everyone have an empty folder open in VS Code with the Claude Code panel visible? If not, take 30 seconds. Raise your hand if you need help." Walk around and verify. This is the most common failure point.</p>
+        </aside>
+      </section>
+
+      <!-- EXERCISE 1 — CREATE -->
+      <section data-transition="fade">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: var(--space-md);">
+          <div class="section-badge build" style="margin-bottom: 0;">Part 3 &middot; Exercise 1</div>
+          <div style="font-family: var(--font-mono); font-size: 11px; color: #918A96; background: #F2EBF0; padding: 4px 10px; border-radius: 8px;">~7 min</div>
+        </div>
+        <h2>Create the Page</h2>
+        <div class="exercise-card">
+          <div class="exercise-label">&#128172; Type this into Claude Code</div>
+          <div class="exercise-prompt" style="border-left: none; border-radius: 8px 8px 8px 0;">
+            &ldquo;Build me a personal landing page. Include my name, a short intro about what I&rsquo;m interested in, and a way for people to get in touch. Make it look clean and modern.&rdquo;
+          </div>
+          <p style="font-size: var(--text-sm); color: var(--text-secondary); margin: var(--space-md) 0 0;">Make it yours &mdash; use your real name, or make something up. Then accept the changes and open the file in your browser.</p>
+        </div>
+        <div class="tip-callout mint">
+          <strong>What to watch for:</strong> Claude will pause to think, then create files. This is the Read &rarr; Plan &rarr; Act loop from Part 1, happening in front of you.
+        </div>
+        <aside class="notes">
+          <p><strong>[TIMING]</strong> Give people 5-7 minutes. Walk around. Common issues: people not accepting the changes, not knowing how to open the HTML file in a browser (right-click → Open With), the extension not being signed in.</p>
+          <p><strong>[IF IT GOES WRONG]</strong> If Claude doesn't create any files, they may not have accepted the changes — look for the green checkmarks in the diff view. If the page looks broken, have them tell Claude: "The page isn't displaying correctly — can you check the HTML?" If the extension isn't responding, try reloading VS Code.</p>
+          <p><strong>[NARRATE]</strong> "Notice how Claude read the empty directory, planned what to create, and then built the whole page — HTML, CSS, and content. One prompt. That's exercise 1."</p>
+        </aside>
+      </section>
+
+      <!-- CHECK-IN AFTER EX 1 -->
+      <section data-transition="fade">
+        <div class="section-badge build">Part 3 &middot; Check-in</div>
+        <h2>What Just Happened?</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">You went from an empty folder to a working page in one prompt</p>
+        <div class="agentic-loop" style="margin-top: var(--space-lg); margin-bottom: var(--space-lg);">
+          <div class="loop-node read" style="opacity: 1;">Read</div>
+          <div class="loop-connector">&#8594;</div>
+          <div class="loop-node plan" style="opacity: 1;">Plan</div>
+          <div class="loop-connector">&#8594;</div>
+          <div class="loop-node act" style="opacity: 1;">Act</div>
+          <div class="loop-connector">&#8594;</div>
+          <div class="loop-node verify" style="opacity: 1;">Verify</div>
+        </div>
+        <div class="card-grid card-grid-2" style="max-width: 700px; margin: var(--space-lg) auto 0;">
+          <div class="card" style="padding: var(--space-md); border-top: 3px solid #D4CCFA;">
+            <p style="margin: 0; font-size: var(--text-sm);"><strong>Read:</strong> Saw an empty directory</p>
+          </div>
+          <div class="card" style="padding: var(--space-md); border-top: 3px solid #FAC6D4;">
+            <p style="margin: 0; font-size: var(--text-sm);"><strong>Plan:</strong> Decided what files to create</p>
+          </div>
+          <div class="card" style="padding: var(--space-md); border-top: 3px solid #B8F0DB;">
+            <p style="margin: 0; font-size: var(--text-sm);"><strong>Act:</strong> Created the HTML, CSS, content</p>
+          </div>
+          <div class="card" style="padding: var(--space-md); border-top: 3px solid #FFDAB9;">
+            <p style="margin: 0; font-size: var(--text-sm);"><strong>Verify:</strong> Confirmed the files are valid</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[CELEBRATE FIRST]</strong> "Before we break this down — look at what you just did. You had an empty folder. Now you have a working website. That's real. Take a second to appreciate that."</p>
+          <p><strong>[CONNECT THE DOTS]</strong> "Remember the loop from Part 1? You just watched it happen. Claude read the directory, planned the page, created the files, and verified them. That's not magic — it's the Read, Plan, Act, Verify loop."</p>
+          <p><strong>[PROMPTING TIP]</strong> "Notice how we described what we wanted — 'a landing page about what I'm interested in' — not how to build it. That's the key. Describe the goal, let Claude figure out the approach."</p>
+        </aside>
+      </section>
+
+      <!-- EXERCISE 2 — ADD INTERACTIVITY -->
+      <section data-transition="fade">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: var(--space-md);">
+          <div class="section-badge build" style="margin-bottom: 0;">Part 3 &middot; Exercise 2</div>
+          <div style="font-family: var(--font-mono); font-size: 11px; color: #918A96; background: #F2EBF0; padding: 4px 10px; border-radius: 8px;">~7 min</div>
+        </div>
+        <h2>Add Interactivity</h2>
+        <div class="exercise-card">
+          <div class="exercise-label">&#128172; Type this into Claude Code</div>
+          <div class="exercise-prompt" style="border-left: none; border-radius: 8px 8px 8px 0;">
+            &ldquo;Add a dark mode toggle to the page. It should switch between light and dark themes, and remember my choice when I come back.&rdquo;
+          </div>
+          <p style="font-size: var(--text-sm); color: var(--text-secondary); margin: var(--space-md) 0 0;">Accept the changes and refresh your browser. Try clicking the toggle. Close and reopen the page &mdash; does it remember?</p>
+        </div>
+        <div class="tip-callout mint">
+          <strong>What to watch for:</strong> Claude reads the existing page before making changes &mdash; it doesn&rsquo;t start from scratch. If something doesn&rsquo;t work, that&rsquo;s Claude&rsquo;s mistake, not yours. Just tell it what&rsquo;s wrong.
+        </div>
+        <aside class="notes">
+          <p><strong>[TIMING]</strong> 5-7 minutes. This exercise shows two things: (1) Claude reads existing code before editing, and (2) follow-up requests build on previous context.</p>
+          <p><strong>[IF IT GOES WRONG]</strong> Perfect teaching moment! If the toggle doesn't work, have them tell Claude: "The dark mode toggle doesn't seem to be working — can you check it?" This demonstrates the correction loop: it's OK to tell Claude something is wrong.</p>
+        </aside>
+      </section>
+
+      <!-- EXERCISE 3 — GO MULTI-PAGE (THE BIG MOMENT) -->
+      <section data-transition="fade">
+        <div style="display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: var(--space-md);">
+          <div class="section-badge build" style="margin-bottom: 0;">Part 3 &middot; Exercise 3</div>
+          <div style="font-family: var(--font-mono); font-size: 11px; color: #918A96; background: #F2EBF0; padding: 4px 10px; border-radius: 8px;">~7 min</div>
+          <div style="font-family: var(--font-mono); font-size: 11px; color: #9E5C72; background: #FADED4; padding: 4px 10px; border-radius: 8px;">&#10024; the big one</div>
+        </div>
+        <h2>Go Multi-Page</h2>
+        <div class="exercise-card" style="border: 2px solid #B8F0DB; box-shadow: 0 4px 32px rgba(168, 224, 203, 0.2);">
+          <div class="exercise-label">&#128172; Type this into Claude Code</div>
+          <div class="exercise-prompt" style="border-left: none; border-radius: 8px 8px 8px 0;">
+            &ldquo;Add a second page about my favorite projects, and a way to navigate between the two pages.&rdquo;
+          </div>
+          <p style="font-size: var(--text-sm); color: var(--text-secondary); margin: var(--space-md) 0 0;">Accept the changes. You should be able to click between your two pages. Both should have navigation and your dark mode toggle.</p>
+        </div>
+
+        <!-- Visual: what Claude just did -->
+        <div style="max-width: 700px; margin: var(--space-lg) auto 0; display: flex; gap: 12px; align-items: center; justify-content: center;">
+          <div style="background: #D1F5E6; border-radius: 8px; padding: 8px 14px; font-family: var(--font-mono); font-size: 11px; color: #4E8A6E;">&#128196; projects.html <span style="color: #A8E0CB;">created</span></div>
+          <div style="color: #DDD6E1;">+</div>
+          <div style="background: #FADED4; border-radius: 8px; padding: 8px 14px; font-family: var(--font-mono); font-size: 11px; color: #9E5C72;">&#128196; index.html <span style="color: #EFA0B8;">updated</span></div>
+          <div style="color: #DDD6E1;">=</div>
+          <div style="background: #E6DEFA; border-radius: 8px; padding: 8px 14px; font-size: 12px; color: #7B6DAE; font-weight: var(--weight-semibold);">One request</div>
+        </div>
+
+        <aside class="notes">
+          <p><strong>[TIMING]</strong> 5-7 minutes. This is the "big differentiator" moment. One prompt, multiple files created and updated. The nav bar appears on both pages. The dark mode toggle carries over. Point this out — it understood the whole project, not just one file.</p>
+          <p><strong>[CLAUDE.MD MENTION]</strong> "Imagine doing this with a real project — hundreds of files, your team's conventions, your test setup. That's where the CLAUDE.md file we mentioned earlier makes a huge difference. It tells Claude about your project so it follows your patterns."</p>
+          <p><strong>[IF IT GOES WRONG]</strong> If the nav doesn't link correctly or dark mode doesn't carry over, have them say: "The navigation links are broken — can you fix them?" or "Dark mode isn't showing on the projects page." This is a great correction loop moment.</p>
+        </aside>
+      </section>
+
+
+      <!-- ============================================================
+                    WRAP-UP
+           ============================================================ -->
+
+      <section class="slide-divider" data-transition="fade" data-background-color="var(--bg-secondary)">
+        <div class="day-label">Wrap-up</div>
+        <h2>Before You Go</h2>
+        <p class="part-description">A few things that&rsquo;ll help as you keep exploring</p>
+        <div class="progress-dots">
+          <div class="progress-dot" style="background: var(--accent-coral);"></div>
+          <div class="progress-dot" style="background: var(--accent-teal);"></div>
+          <div class="progress-dot" style="background: var(--accent-sage);"></div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TRANSITION]</strong> "Great work. You just built a multi-page website from an empty folder. Before we wrap up, a few things that'll help as you start using this on your own."</p>
+        </aside>
+      </section>
+
+      <!-- PITFALLS (NOW GROUNDED IN EXPERIENCE) -->
+      <section data-transition="slide">
+        <div class="section-badge wrap">Wrap-up</div>
+        <h2>Three Things to Watch Out For</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">Now that you&rsquo;ve tried it, these will make more sense</p>
+        <div style="max-width: 750px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--space-md);">
+          <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-coral);">
+            <h4 style="color: var(--accent-coral);">&#9203; Long conversations get fuzzy</h4>
+            <p style="font-size: var(--text-sm); margin: 0;">If you keep adding to the same session for a long time, quality drops. Start fresh for new tasks. Our three exercises worked well because each was focused.</p>
+          </div>
+          <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-teal);">
+            <h4 style="color: var(--accent-teal);">&#127919; Vague requests get vague results</h4>
+            <p style="font-size: var(--text-sm); margin: 0;">Notice how our prompts said exactly what we wanted? &ldquo;Add a dark mode toggle that remembers my choice&rdquo; works. &ldquo;Make it better&rdquo; doesn&rsquo;t.</p>
+          </div>
+          <div class="card" style="padding: var(--space-lg); border-left: 4px solid var(--accent-sage);">
+            <h4 style="color: var(--accent-sage);">&#128075; It&rsquo;s not always right &mdash; and that&rsquo;s OK</h4>
+            <p style="font-size: var(--text-sm); margin: 0;">If something didn&rsquo;t work, that&rsquo;s Claude&rsquo;s mistake, not yours. Just tell it what&rsquo;s wrong and let it try again. The more you correct it, the better it gets. That&rsquo;s a skill, not a failure.</p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[GROUNDED]</strong> "These aren't abstract warnings anymore — you've seen the tool. You know what 'be specific' means because you just did it. You know what 'start fresh' means because you felt the session context building."</p>
+        </aside>
+      </section>
+
+      <!-- GOOD TO KNOW -->
+      <section data-transition="fade" data-background-color="#F0E8F5">
+        <div class="section-badge wrap">Wrap-up</div>
+        <h2 style="color: #3A3340;">Good to Know</h2>
+        <div style="max-width: 650px; margin: var(--space-xl) auto 0; text-align: left;">
+          <div style="padding: var(--space-md) 0; border-bottom: 1px solid #DDD6E8;">
+            <p style="font-size: var(--text-base); color: #5A5060; margin: 0; line-height: 1.7;">
+              <strong style="color: #3A3340;">&#128081; You&rsquo;re still in charge.</strong> Claude proposes changes. You review and approve them.
+            </p>
+          </div>
+          <div style="padding: var(--space-md) 0; border-bottom: 1px solid #DDD6E8;">
+            <p style="font-size: var(--text-base); color: #5A5060; margin: 0; line-height: 1.7;">
+              <strong style="color: #3A3340;">&#127793; It gets better with context.</strong> The CLAUDE.md file tells Claude about your real project &mdash; your conventions, your tools, your patterns.
+            </p>
+          </div>
+          <div style="padding: var(--space-md) 0;">
+            <p style="font-size: var(--text-base); color: #5A5060; margin: 0; line-height: 1.7;">
+              <strong style="color: #3A3340;">&#129309; It&rsquo;s a tool, not a replacement.</strong> It handles the tedious parts so you can focus on the interesting ones.
+            </p>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[TONE]</strong> This slide builds trust. They've now seen it work — they know it's real. But they may still have concerns about control and relevance. Address both.</p>
+        </aside>
+      </section>
+
+      <!-- RECAP -->
+      <section data-transition="fade" data-background-color="var(--bg-secondary)">
+        <div style="font-size: 48px; margin-bottom: 8px;">&#127881;</div>
+        <h2>Look What You Just Built</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-lg);">45 minutes ago you had an empty folder. Now you have a multi-page website with dark mode.</p>
+
+        <!-- Visual: the journey -->
+        <div style="max-width: 600px; margin: 0 auto var(--space-xl); display: flex; align-items: center; justify-content: center; gap: 16px;">
+          <div style="background: #FFFFFF; border-radius: 8px; padding: 12px 20px; text-align: center; box-shadow: 0 1px 8px rgba(180,140,170,0.06);">
+            <div style="font-size: 24px; margin-bottom: 4px;">&#128193;</div>
+            <div style="font-size: 11px; color: #B8B2BC;">Empty folder</div>
+          </div>
+          <div style="color: #DDD6E1; font-size: 20px;">&#8594;</div>
+          <div style="background: #FFFFFF; border-radius: 8px; padding: 12px 20px; text-align: center; box-shadow: 0 1px 8px rgba(180,140,170,0.06);">
+            <div style="font-size: 24px; margin-bottom: 4px;">&#128196;</div>
+            <div style="font-size: 11px; color: #9E5C72;">Landing page</div>
+          </div>
+          <div style="color: #DDD6E1; font-size: 20px;">&#8594;</div>
+          <div style="background: #FFFFFF; border-radius: 8px; padding: 12px 20px; text-align: center; box-shadow: 0 1px 8px rgba(180,140,170,0.06);">
+            <div style="font-size: 24px; margin-bottom: 4px;">&#127763;</div>
+            <div style="font-size: 11px; color: #7B6DAE;">Dark mode</div>
+          </div>
+          <div style="color: #DDD6E1; font-size: 20px;">&#8594;</div>
+          <div style="background: #FFFFFF; border: 2px solid #B8F0DB; border-radius: 8px; padding: 12px 20px; text-align: center; box-shadow: 0 1px 8px rgba(180,140,170,0.06);">
+            <div style="font-size: 24px; margin-bottom: 4px;">&#10024;</div>
+            <div style="font-size: 11px; color: #4E8A6E; font-weight: var(--weight-semibold);">Multi-page site</div>
+          </div>
+        </div>
+
+        <div style="max-width: 500px; margin: 0 auto; display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; align-items: center; gap: 10px; font-size: var(--text-sm); color: #3A3340;">
+            <span style="color: #EFA0B8;">&#10003;</span> You know what Claude Code is and how it&rsquo;s different
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; font-size: var(--text-sm); color: #3A3340;">
+            <span style="color: #B8ADE6;">&#10003;</span> Your workspace is set up and ready
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; font-size: var(--text-sm); color: #3A3340;">
+            <span style="color: #A8E0CB;">&#10003;</span> You&rsquo;ve built something real with it
+          </div>
+        </div>
+
+        <aside class="notes">
+          <p><strong>[CELEBRATE]</strong> "Take a second to appreciate this. You started with nothing and built a working multi-page site with a dark mode toggle — in three prompts. Most people's first reaction is 'wait, that's it?' Yes. That's it."</p>
+        </aside>
+      </section>
+
+      <!-- WHAT'S NEXT -->
+      <section data-transition="fade">
+        <h2>Keep Going</h2>
+        <p style="color: var(--text-secondary); margin-bottom: var(--space-xl);">Resources for when you&rsquo;re ready to explore more</p>
+        <div style="max-width: 650px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--space-md);">
+          <div class="card" style="padding: var(--space-md) var(--space-lg); display: flex; align-items: center; gap: 16px; border-left: 4px solid #FAC6D4;">
+            <div style="font-size: 24px; flex-shrink: 0;">&#128218;</div>
+            <div>
+              <h4 style="margin: 0; color: #3A3340;">Documentation</h4>
+              <p style="font-size: var(--text-sm); color: #918A96; margin: 2px 0 0;">docs.anthropic.com/claude-code &mdash; guides, tutorials, and reference</p>
+            </div>
+          </div>
+          <div class="card" style="padding: var(--space-md) var(--space-lg); display: flex; align-items: center; gap: 16px; border-left: 4px solid #D4CCFA;">
+            <div style="font-size: 24px; flex-shrink: 0;">&#128172;</div>
+            <div>
+              <h4 style="margin: 0; color: #3A3340;">CLAUDE.md</h4>
+              <p style="font-size: var(--text-sm); color: #918A96; margin: 2px 0 0;">Your next step &mdash; write one for a real project and see the difference</p>
+            </div>
+          </div>
+          <div class="card" style="padding: var(--space-md) var(--space-lg); display: flex; align-items: center; gap: 16px; border-left: 4px solid #B8F0DB;">
+            <div style="font-size: 24px; flex-shrink: 0;">&#127919;</div>
+            <div>
+              <h4 style="margin: 0; color: #3A3340;">Try a real task</h4>
+              <p style="font-size: var(--text-sm); color: #918A96; margin: 2px 0 0;">Open your own project and ask Claude to explain it, write a test, or add a small feature</p>
+            </div>
+          </div>
+        </div>
+        <aside class="notes">
+          <p><strong>[CLOSE]</strong> "These three things will take you from 'I've tried it' to 'I use it.' The docs are thorough, CLAUDE.md transforms the experience on real projects, and the best way to learn is to try a real task on code you know."</p>
+        </aside>
+      </section>
+
+    </div>
+  </div>
+
+  <div class="course-footer">Introduction to Claude Code &mdash; Anthropic</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/notes/notes.js"></script>
+  <script>
+    Reveal.initialize({
+      hash: true,
+      slideNumber: 'c/t',
+      showSlideNumber: 'all',
+      transition: 'none',
+      transitionSpeed: 'default',
+      backgroundTransition: 'fade',
+      center: true,
+      width: 1280,
+      height: 800,
+      margin: 0.04,
+      plugins: [RevealNotes]
+    });
+  </script>
+</body>
+</html>
